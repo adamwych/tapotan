@@ -1,0 +1,47 @@
+{
+  "name": "tetempoan-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-dev": "node ./devserver/devserver.js",
+    "start-api": "node ./devserver/api-server.js",
+    "watch": "webpack --watch",
+    "production": "cross-env NODE_ENV=production webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/file-saver": "^2.0.1",
+    "@types/howler": "^2.1.1",
+    "@types/js-base64": "^2.3.1",
+    "@types/matter-js": "^0.10.2",
+    "@types/p2": "^0.7.34",
+    "@types/pako": "^1.0.1",
+    "@types/pixi.js": "^4.8.8",
+    "axios": "^0.19.0",
+    "cross-env": "^5.2.0",
+    "file-saver": "^2.0.2",
+    "howler": "^2.1.2",
+    "ifdef-loader": "^2.1.4",
+    "js-base64": "^2.5.1",
+    "mariadb": "^2.1.0",
+    "matter-js": "^0.14.2",
+    "mysql": "^2.17.1",
+    "p2": "^0.7.1",
+    "pako": "^1.0.10",
+    "pixi-viewport": "^4.0.0-beta.3",
+    "pixi.js": "^5.0.4",
+    "simple-progress-webpack-plugin": "^1.1.2",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.2",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "fs-extra": "^8.1.0"
+  }
+}
