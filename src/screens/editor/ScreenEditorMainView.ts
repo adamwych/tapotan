@@ -59,6 +59,7 @@ import TileSign from '../../world/tiles/TileSign';
 import WidgetEditorSignTextModal from './modals/WidgetEditorSignTextModal';
 import TileWater from '../../world/tiles/TileWater';
 import TileWaterBlock from '../../world/tiles/TileWaterBlock';
+import WidgetEditorSidebar from './widgets/sidebar/WidgetEditorSidebar';
 
 export default class ScreenEditorMainView extends Screen {
 
@@ -249,6 +250,11 @@ export default class ScreenEditorMainView extends Screen {
         );
         this.uiContainer.addChild(this.musicToggleButton);
 
+        // ===
+        /*let sidebar = new WidgetEditorSidebar();
+        this.uiContainer.addChild(sidebar);*/
+        //
+
         this.uiContainer.sortableChildren = true;
         this.game.addUIObject(this.uiContainer);
 
@@ -371,18 +377,26 @@ export default class ScreenEditorMainView extends Screen {
 
         this.drawer.zIndex = 9;
         this.uiContainer.addChild(this.drawer);
+
+        this.drawer.position.x = (Tapotan.getGameWidth() - this.drawer.width + 100) / 2;
     }
 
     private initializeDrawerTilesCategory(category: TilesetEditorCategory) {
         const tileset = this.world.getTileset();
         const drawerItem = new WidgetEditorDrawerItem(this.drawer, 'basic_blocks', tileset.getResourceByID('ui_editor_drawercategory_' + category.name));
         drawerItem.setTooltip(category.label);
+        drawerItem.on('mousedown', () => {
+            this.activeObject.setActiveObject(null);
+        });
         drawerItem.setClickCallback(() => {
             if (this.objectSelectorDrawer.getCurrentCategoryName() === category.name) {
                 this.objectSelectorDrawer.hide();
+                this.drawer.beginObjectSelectorDrawerSynchronization(this.objectSelectorDrawer);
                 return;
             }
 
+            this.drawer.beginObjectSelectorDrawerSynchronization(this.objectSelectorDrawer);
+            
             this.objectSelectorDrawer.setCurrentCategoryName(category.name);
             this.objectSelectorDrawer.playTransition(() => {
                 this.objectSelectorDrawer.clearItems();
@@ -529,6 +543,7 @@ export default class ScreenEditorMainView extends Screen {
                             this.selectedObjectOutline.setObject(null);
 
                             this.objectSelectorDrawer.hide();
+                            this.drawer.beginObjectSelectorDrawerSynchronization(this.objectSelectorDrawer);
                             this.activeObject.setActiveObject(activeObject);
                             this.activeObject.visible = true;
                             this.grid.visible = true;
@@ -554,6 +569,7 @@ export default class ScreenEditorMainView extends Screen {
             this.selectedObjectOutline.setObject(null);
 
             this.objectSelectorDrawer.hide();
+            this.drawer.beginObjectSelectorDrawerSynchronization(this.objectSelectorDrawer);
             this.activeObject.setActiveObject(spawnPointSetObject);
             this.activeObject.visible = true;
             this.grid.visible = true;
@@ -575,6 +591,7 @@ export default class ScreenEditorMainView extends Screen {
             this.selectedObjectOutline.setObject(null);
 
             this.objectSelectorDrawer.hide();
+            this.drawer.beginObjectSelectorDrawerSynchronization(this.objectSelectorDrawer);
             this.activeObject.setActiveObject(spawnPointSetObject);
             this.activeObject.visible = true;
             this.grid.visible = true;
@@ -844,6 +861,7 @@ export default class ScreenEditorMainView extends Screen {
             this.drawer.playExitAnimation();
             this.topbar.playExitAnimation();
             this.objectSelectorDrawer.hide();
+            this.drawer.beginObjectSelectorDrawerSynchronization(this.objectSelectorDrawer);
             this.endPlaythroughText.visible = true;
             this.exitEditorButton.visible = false;
             this.cameraPositionText.visible = false;
@@ -1081,6 +1099,7 @@ export default class ScreenEditorMainView extends Screen {
         this.selectedObjectOutline.visible = false;
         this.selectedObjectOutline.setObject(null);
         this.objectSelectorDrawer.hide();
+        this.drawer.beginObjectSelectorDrawerSynchronization(this.objectSelectorDrawer);
         this.activeObject.setActiveObject(null);
         this.grid.visible = this.keepGridVisible;
         this.grid.children.forEach(tile => {
@@ -1119,6 +1138,7 @@ export default class ScreenEditorMainView extends Screen {
 
             this.drawer.playExitAnimation();
             this.objectSelectorDrawer.hide();
+            this.drawer.beginObjectSelectorDrawerSynchronization(this.objectSelectorDrawer);
 
             this.selectedObjectOutline.visible = false;
 

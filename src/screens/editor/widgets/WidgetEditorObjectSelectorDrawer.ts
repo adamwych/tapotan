@@ -75,13 +75,17 @@ export default class WidgetEditorObjectSelectorDrawer extends PIXI.Container {
             this.animator.play(new EditorObjectSelectorDrawerExitAnimation(), () => {
                 inBetweenCallback();
                 Tapotan.addResizeCallback(this.handleGameResize);
-                this.animator.play(new EditorObjectSelectorDrawerEnterAnimation());
+                this.animator.play(new EditorObjectSelectorDrawerEnterAnimation(), () => {
+                    this.emit('animationEnd');
+                });
             });
         } else {
             this.visible = true;
             inBetweenCallback();
             Tapotan.addResizeCallback(this.handleGameResize);
-            this.animator.play(new EditorObjectSelectorDrawerEnterAnimation());
+            this.animator.play(new EditorObjectSelectorDrawerEnterAnimation(), () => {
+                this.emit('animationEnd');
+            });
         }
     }
 
@@ -90,6 +94,7 @@ export default class WidgetEditorObjectSelectorDrawer extends PIXI.Container {
         this.currentCategoryName = null;
         this.animator.play(new EditorObjectSelectorDrawerExitAnimation(), () => {
             this.visible = false;
+            this.emit('animationEnd');
         });
     }
 

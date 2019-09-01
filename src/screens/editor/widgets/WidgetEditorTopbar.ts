@@ -16,7 +16,7 @@ export default class WidgetEditorTopbar extends PIXI.Container {
         this.playEnterAnimation();
 
         this.itemsContainer = new PIXI.Container();
-        this.itemsContainer.position.y = 28;
+        this.itemsContainer.position.y = 36;
         this.addChild(this.itemsContainer);
 
         this.zIndex = 8;
@@ -32,7 +32,7 @@ export default class WidgetEditorTopbar extends PIXI.Container {
 
     public addItem(item: WidgetEditorTopbarItem) {
         const lastChild = this.itemsContainer.children[this.itemsContainer.children.length - 1];
-        const paddingLeft = 8;
+        const paddingLeft = 0;
         item.position.set(lastChild ? lastChild.position.x + lastChild.getBounds().width + paddingLeft : paddingLeft, 0);
         this.itemsContainer.addChild(item);
     }

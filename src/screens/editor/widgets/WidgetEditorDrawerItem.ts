@@ -38,14 +38,16 @@ export default class WidgetEditorDrawerItem extends PIXI.Container {
 
         this.interactive = true;
         this.on('click', this.handleMouseClick);
-        this.on('mousedown', () => {
+        this.on('mousedown', (e) => {
             this.animator.play(new EditorDrawerItemClickAnimation());
         });
         this.on('mouseover', this.handleMouseOver);
         this.on('mouseout', this.handleMouseOut);
     }
 
-    private handleMouseClick = (x: number, y: number) => {
+    private handleMouseClick = (e) => {
+        e.stopPropagation();
+
         if (this.clickCallback !== null) {
             this.clickCallback();
         }
@@ -81,7 +83,10 @@ export default class WidgetEditorDrawerItem extends PIXI.Container {
 
         this.tooltip = new WidgetEditorDrawerItemTooltip(tooltip, 12);
         this.tooltip.visible = false;
-        this.tooltip.position.set(this.width + 4, (this.height - this.tooltip.height) / 2);
+        this.tooltip.position.set(
+            Math.floor((this.width - this.tooltip.width) / 2), 
+            Math.floor(-this.tooltip.height - 12)
+        );
         this.addChild(this.tooltip);
     }
 

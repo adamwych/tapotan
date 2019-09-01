@@ -21,7 +21,7 @@ export default class WidgetEditorTopbarItem extends PIXI.Container {
         texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         this.sprite = new PIXI.Sprite(texture);
         this.sprite.pivot.set(16, 16);
-        this.sprite.scale.set(2, 2);
+        this.sprite.scale.set(2.5, 2.5);
         this.addChild(this.sprite);
 
         this.interactive = true;

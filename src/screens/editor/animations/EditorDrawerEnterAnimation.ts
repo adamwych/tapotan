@@ -1,4 +1,5 @@
 import ContainerAnimation from "../../../graphics/animation/ContainerAnimation";
+import Tapotan from "../../../core/Tapotan";
 
 export default class EditorDrawerEnterAnimation extends ContainerAnimation {
 
@@ -10,15 +11,15 @@ export default class EditorDrawerEnterAnimation extends ContainerAnimation {
             this.notifyEnd();
         }
 
-        let start = -128;
-        let end = 0;
+        let start = (Tapotan.getGameHeight() - container.height) + 128;
+        let end = (Tapotan.getGameHeight() - container.height) + 24;
         let val = (start + (end - start) * (alpha * alpha * (3 - 2 * alpha)));
 
-        container.position.x = val;
+        container.position.y = val;
     }
 
     public beforeStart(container: PIXI.Container): void {
-        container.position.x = -128;
+        
     }
 
     public beforeEnd(container: PIXI.Container): void {
