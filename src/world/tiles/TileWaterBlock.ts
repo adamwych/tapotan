@@ -23,6 +23,7 @@ export default class TileWaterBlock extends WorldObject {
             TileWaterBlock.sharedAnimatorTimer = new SpritesheetAnimatorTimer();
         }
 
+        this.sensor = true;
         this.name = 'WATERBLOCK';
         this.worldObjectType = WorldObjectType.WaterBlock;
 
