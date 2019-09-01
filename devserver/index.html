@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf8" />
+    <title>TAPOTAN</title>
+
+    <link rel="icon" type="image/x-icon" href="/favicon.jpg" />
+    
+    <meta name="title" content="TAPOTAN">
+    <meta name="description" content="Tapotan is a free, browser platformer game where you can play levels made by other players and build your own levels using the integrated level editor!">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="TAPOTAN">
+    <meta property="og:site_name" content="TAPOTAN">
+    <meta property="og:url" content="https://tapotan.com">
+    <meta property="og:description" content="Tapotan is a free, browser platformer game where you can play levels made by other players and build your own levels using the integrated level editor!">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://tapotan.com/meta/image2.png">
+    <meta property="og:video:width" content="741" />
+    <meta property="og:video:height" content="544" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tapotan.com">
+    <meta property="twitter:title" content="TAPOTAN">
+    <meta property="twitter:description" content="Tapotan is a free, browser platformer game where you can play levels made by other players and build your own levels using the integrated level editor!">
+    <meta property="twitter:image" content="https://tapotan.com/meta/image2.png">
+
+    <script src="/build/tapotan.js?v=2"></script>
+
+    <style>
+        body, html {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            background: #000000;
+            cursor: url('/assets/tilesets/pixelart/UI/Cursor.ico'), auto;
+            font-family: 'Joystix';
+        }
+
+        body.CursorDefault {
+            cursor: url('/assets/tilesets/pixelart/UI/Cursor.ico'), auto;
+        }
+
+        body.CursorText {
+            cursor: url('/assets/tilesets/pixelart/UI/CursorText.ico'), auto;
+        }
+
+        body.CursorPointer {
+            cursor: url('/assets/tilesets/pixelart/UI/CursorHover.ico'), auto;
+        }
+
+        @font-face {
+            font-family: 'Joystix';
+            src: url('/assets/Fonts/Joystix.ttf');
+        }
+
+        #webglerror,
+        #loading,
+        #resizerefresh {
+            position: absolute;
+            color: rgb(206, 70, 70);
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            width: 100vw;
+            height: 100vh;
+
+            text-align: center;
+            font-size: 26px;
+
+            font-smooth: never;
+            -webkit-font-smoothing: none;
+            user-select: none;
+        }
+
+        #webglerror > div:first-child,
+        #loading > div:first-child {
+            font-size: 48px;
+            margin-bottom: 3rem;
+        }
+
+        #loading {
+            background: #000000;
+            color: #ffffff;
+            display: flex;
+            transition: opacity 250ms;
+            opacity: 1;
+            position: absolute;
+            z-index: 9;
+        }
+
+        #loading > div:first-child {
+            font-size: 16px;
+            animation-name: fade-and-scale;
+        }
+
+        #loadingBar {
+            position: relative;
+            width: 50%;
+            height: 4px;
+        }
+
+        #loadingBar > div:nth-child(1) {
+            width: 100%;
+            height: 100%;
+            background: #1c1c1c;
+        }
+
+        #loadingBar > #loadingBarForeground {
+            position: absolute;
+            top: 0;
+            width: 0%;
+            height: 100%;
+            background: #8df52d;
+            transition: width 200ms;
+        }
+
+        @keyframes fade-and-scale {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+
+        #resizerefresh {
+            background: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+
+            animation-name: resizerefresh-enter;
+            animation-duration: 250ms;
+            animation-fill-mode: forwards;
+        }
+
+        #resizerefresh button {
+            border: 0;
+            background: #ffffff;
+            padding: 2rem;
+            margin-top: 2rem;
+            font-family: 'Joystix';
+            font-size: 2rem;
+            transform: scale(1);
+            transition: all 150ms;
+        }
+
+        #resizerefresh button:hover {
+            transform: scale(1.05);
+            cursor: url('/assets/tilesets/pixelart/UI/Cursor.ico'), auto;
+        }
+
+        #resizerefresh button:active {
+            transform: scale(0.95);
+        }
+
+        #resizerefresh button.attr--busy {
+            opacity: 0.7;
+        }
+
+        #resizerefresh button.attr--busy,
+        #resizerefresh button.attr--busy:hover,
+        #resizerefresh button.attr--busy:active {
+            transform: scale(1);
+        }
+
+        @keyframes resizerefresh-enter {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="webglerror">
+        <div>:(</div>
+        <div>
+            It looks like your browser is outdated.<br />
+            Please upgrade to the latest version.
+        </div>
+    </div>
+
+    <div id="loading">
+        <div>Loading...</div>
+        <div id="loadingBar">
+            <div></div>
+            <div id="loadingBarForeground"></div>
+        </div>
+    </div>
+
+    <div id="resizerefresh">
+        <div>Game needs to be restarted<br />after changing the resolution.<br /><br />Your level will be saved.</div>
+        <button id="resizerefreshButton">
+            Restart now
+        </button>
+    </div>
+
+    <div id="tetempoan"></div>
+</body>
+</html>

@@ -148,9 +148,6 @@ export default class Tapotan {
             this.resizeCallbacks.forEach(callback => {
                 callback(Tapotan.getGameWidth(), Tapotan.getGameHeight());
             });
-
-            //this.uiObjectsContainer.scale.set(0.5);
-            //this.uiObjectsContainer.pivot.set(-Tapotan.getGameWidth() / 2, -Tapotan.getGameHeight() / 2);
         });
 
         this.viewport.interactive = false;
@@ -226,7 +223,7 @@ export default class Tapotan {
                 }
 
                 if (!isLoadingSnapshot) {
-                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading').style.opacity = '0';
                     //this.startEditor();
                     this.startMainMenu();
                     //this.startDevLevel();
