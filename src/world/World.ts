@@ -75,7 +75,7 @@ export default class World extends PIXI.Container {
         this.sky.beginFill(0xffffff);
         this.sky.drawRect(-width / 2, -height / 2, width, height);
         this.sky.endFill();
-        this.sky.tint = 0x66faff;
+        this.sky.tint = 0x1bf3ff;
         this.sky.zIndex = 0;
         this.addChild(this.sky);
 

@@ -60,6 +60,7 @@ import WidgetEditorSignTextModal from './modals/WidgetEditorSignTextModal';
 import TileWater from '../../world/tiles/TileWater';
 import TileWaterBlock from '../../world/tiles/TileWaterBlock';
 import WidgetEditorSidebar from './widgets/sidebar/WidgetEditorSidebar';
+import WorldObjectParallaxBackground from '../../world/background/WorldObjectParallaxBackground';
 
 export default class ScreenEditorMainView extends Screen {
 
@@ -126,6 +127,8 @@ export default class ScreenEditorMainView extends Screen {
         /// #endif
 
         if (this.world.isNewWorld()) {
+            this.initializeStarterLevelTemplate();
+
             /// #if ENV_PRODUCTION
             setTimeout(() => {
                 this.openModal(new WidgetEditorHelpModal());
@@ -145,6 +148,8 @@ export default class ScreenEditorMainView extends Screen {
                 }
             });
         }
+
+        this.timeTravelCoordinator.handlePlaythroughEnd();
     }
 
     public onGameResized(width: number, height: number) {
@@ -188,6 +193,34 @@ export default class ScreenEditorMainView extends Screen {
     }
 
     // ==============================================================================================
+
+    private initializeStarterLevelTemplate(): void {
+        for (let i = 0; i < 3; i++) {
+            let background = new WorldObjectParallaxBackground(
+                this.world,
+                ['backgrounds_clouds_layer0', 'backgrounds_clouds_layer1', 'backgrounds_clouds_layer2', 'backgrounds_clouds_layer3'],
+                [0.2, 0.5, 0.66, 0.8]
+            );
+    
+            background.setContinuousMove(true);
+            background.setContinuousMoveSpeed(1);
+    
+            background.position.x = i * 28;
+            background.position.y = 0;
+            background.positionUpdated();
+            this.world.addObject(background);
+        }
+
+        for (let i = 0; i < 24; i++) {
+            let ground = new TileBlock(this.world, this.world.getTileset(), 'ground_grass_variation0', true, true);
+            ground.pivot.set(ground.width / 2, ground.height / 2);
+            ground.position.set(i + 0.5, Tapotan.getViewportHeight() - 1 + 0.5);
+            ground.positionUpdated();
+            this.world.addObject(ground);
+        }
+
+        this.setSpawnPoint(3, Tapotan.getViewportHeight() - 2);
+    }
 
     private initializeEndPlaythroughHelpText(): void {
         this.endPlaythroughText = new WidgetText("Press B to end.", WidgetText.Size.Medium, 0xffffff);
@@ -772,6 +805,33 @@ export default class ScreenEditorMainView extends Screen {
                     Math.floor((Tapotan.getGameWidth() - this.timeoutTimerText.width) / 2),
                     50
                 );
+            }
+        } else {
+            const inputManager = this.game.getInputManager();
+            const viewport = this.game.getViewport();
+
+            if (inputManager.isKeyDown(InputManager.KeyCodes.KeyW) || inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowUp)) {
+                viewport.top -= 15 * dt;
+            }
+            
+            if (inputManager.isKeyDown(InputManager.KeyCodes.KeyS) || inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowDown)) {
+                viewport.top += 15 * dt;
+            }
+
+            if (inputManager.isKeyDown(InputManager.KeyCodes.KeyA) || inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowLeft)) {
+                viewport.left -= 15 * dt;
+            }
+
+            if (inputManager.isKeyDown(InputManager.KeyCodes.KeyD) || inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowRight)) {
+                viewport.left += 15 * dt;
+            }
+
+            if (viewport.left < 0) {
+                viewport.left = 0;
+            }
+
+            if (viewport.top > 0) {
+                viewport.top = 0;
             }
         }
     }

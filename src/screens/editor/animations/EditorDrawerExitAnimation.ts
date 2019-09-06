@@ -12,7 +12,7 @@ export default class EditorDrawerExitAnimation extends ContainerAnimation {
         }
 
         let start = (Tapotan.getGameHeight() - container.height) + 24;
-        let end = (Tapotan.getGameHeight() - container.height) + 128;
+        let end = Tapotan.getGameHeight() + container.height;
         let val = (start + (end - start) * (alpha * alpha * (3 - 2 * alpha)));
 
         container.position.y = val;

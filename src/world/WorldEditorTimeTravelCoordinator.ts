@@ -3,14 +3,14 @@ import World from './World';
 import EntityMonster from './entities/EntityMonster';
 import * as p2 from 'p2';
 import TileLockKey from './tiles/TileLockKey';
+import WorldObjectParallaxBackground from './background/WorldObjectParallaxBackground';
 
 export default class WorldEditorTimeTravelCoordinator {
 
     private world: World;
 
-    private monsters: any[];
-
-    private lockKeys: TileLockKey[];
+    private monsters: any[] = [];
+    private lockKeys: TileLockKey[] = [];
 
     constructor(world: World) {
         this.world = world;
@@ -31,6 +31,8 @@ export default class WorldEditorTimeTravelCoordinator {
                 });
             } else if (object instanceof TileLockKey) {
                 this.lockKeys.push(object);
+            } else if (object instanceof WorldObjectParallaxBackground) {
+                object.setPaused(false);
             }
         });
     }
@@ -51,6 +53,13 @@ export default class WorldEditorTimeTravelCoordinator {
 
             if (key.getConnection()) {
                 key.getConnection().reset();
+            }
+        });
+
+        this.world.getObjects().forEach(object => {
+            if (object instanceof WorldObjectParallaxBackground) {
+                object.setPaused(true);
+                object.resetContinuousMoveTimer();
             }
         });
     }
