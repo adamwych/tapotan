@@ -12,6 +12,7 @@ import WorldObject from './WorldObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
 import PhysicsMaterials from './physics/PhysicsMaterials';
 import EntityMonster from './entities/EntityMonster';
+import GameObject from './GameObject';
 
 export default class World extends PIXI.Container {
 
@@ -61,6 +62,13 @@ export default class World extends PIXI.Container {
 
     private paused: boolean = false;
 
+    // ================
+    
+    /**
+     * List of all game objects in this world.
+     */
+    private gameObjects: Array<GameObject> = [];
+
     constructor(game: Tapotan, width: number, height: number, tileset: Tileset) {
         super();
 
@@ -99,6 +107,10 @@ export default class World extends PIXI.Container {
     private tick = (dt: number) => {
         if (!this.paused) {
             this.physicsWorld.step(1 / 60, dt * 1000, 10);
+
+            this.gameObjects.forEach(gameObject => {
+                gameObject.tick(dt);
+            });
         }
 
         this.sky.position.x = this.game.getViewport().left;
@@ -168,7 +180,7 @@ export default class World extends PIXI.Container {
         this.addObject(this.player);
     }
 
-    public addPhysicsBody(parent: WorldObject, body: p2.Body) {
+    public addPhysicsBody(parent: any, body: p2.Body) {
         this.physicsBodies[body.id] = parent;
         this.physicsWorld.addBody(body);
     }
@@ -205,7 +217,7 @@ export default class World extends PIXI.Container {
             }
         });
 
-        // PhysicsDebugRenderer.create(this.physicsWorld);
+        PhysicsDebugRenderer.create(this.physicsWorld);
     }
 
     public handleGameStart() {
@@ -282,6 +294,59 @@ export default class World extends PIXI.Container {
         if (idx > -1) {
             this.lockConnections.splice(idx, 1);
         }
+    }
+
+    /**
+     * Creates a new {@link GameObject} and adds it to this world.
+     * @return {GameObject}
+     */
+    public createGameObject(): GameObject {
+        const gameObject = new GameObject();
+        this.addGameObject(gameObject);
+        return gameObject;
+    }
+
+    /**
+     * Adds specified object to the world.
+     * @param gameObject 
+     */
+    public addGameObject(gameObject: GameObject): void {
+        gameObject.setWorld(this);
+
+        this.gameObjects.push(gameObject);
+        this.addChild(gameObject);
+    }
+
+    /**
+     * Removes specified object from the world.
+     * @param gameObject 
+     */
+    public removeGameObject(gameObject: GameObject): void {
+        gameObject.setWorld(null);
+
+        let idx = this.gameObjects.indexOf(gameObject);
+        if (idx > -1) {
+            this.gameObjects.splice(idx, 1);
+            this.removeChild(gameObject);
+        }
+    }
+
+    /**
+     * Attempts to find game object with given ID within this world
+     * and returns it if it's found.
+     * 
+     * @param id 
+     * @return {GameObject | null}
+     */
+    public getGameObjectById(id: number): GameObject | null {
+        return this.gameObjects.find(x => x.getId() === id);
+    }
+
+    /**
+     * Returns all game objects that are in this world.
+     */
+    public getGameObjects(): Array<GameObject> {
+        return this.gameObjects;
     }
 
     public getLockConnections() {

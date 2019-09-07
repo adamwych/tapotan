@@ -133,4 +133,8 @@ export default class SpritesheetAnimator extends PIXI.Container {
         this.transformMultiplier = transformMultiplier;
     }
 
+    public getCurrentAnimation() {
+        return this.currentAnimation;
+    }
+
 }

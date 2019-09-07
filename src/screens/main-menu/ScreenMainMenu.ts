@@ -9,6 +9,8 @@ import APIRequest from '../../api/APIRequest';
 import WidgetMainMenuButton from './widgets/WidgetMainMenuButton';
 import ScreenTransitionBlocky from '../transitions/ScreenTransitionBlocky';
 import WidgetMusicToggleButton from '../widgets/WidgetMusicToggleButton';
+import Prefabs from '../../world/prefabs/Prefabs';
+import { GameObjectVerticalAlignment } from '../../world/components/GameObjectComponentTransform';
 
 export default class ScreenMainMenu extends Screen {
 
@@ -75,14 +77,50 @@ export default class ScreenMainMenu extends Screen {
     }
 
     private generateFakeWorldObjects(world: World) {
-        const makePositionBottomAligned = (y: number) => {
-            return Tapotan.getViewportHeight() - y - 1;
-        }
-
         const viewportWidth = Tapotan.getViewportWidth();
 
+        for (let blockIndex = 0; blockIndex < viewportWidth * 2; blockIndex++) {
+            const ground = Prefabs.BasicBlock(world, blockIndex, 0, {
+                resource: 'ground_grass_variation0',
+                ignoresPhysics: true
+            });
+
+            const groundGrass = Prefabs.BasicBlock(world, blockIndex, 1, {
+                resource: 'ground_decals_grass_variation0',
+                ignoresPhysics: true
+            });
+
+            ground.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+            groundGrass.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+
+            if (Math.random() < 0.075) {
+                const randomTreeIndex = Math.floor(1 + (Math.random() * 9));
+                const tree = Prefabs.BasicBlock(world, blockIndex, 0, {
+                    resource: 'background_decals_trees_tree' + randomTreeIndex,
+                    ignoresPhysics: true
+                });
+
+                tree.transformComponent.translate(0, tree.height - (1 / 16));
+                tree.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+                
+                if (blockIndex < viewportWidth) {
+                    this.worldObjectsGroupOne.push(tree);
+                } else {
+                    this.worldObjectsGroupTwo.push(tree);
+                }
+            }
+
+            if (blockIndex < viewportWidth) {
+                this.worldObjectsGroupOne.push(ground);
+                this.worldObjectsGroupOne.push(groundGrass);
+            } else {
+                this.worldObjectsGroupTwo.push(ground);
+                this.worldObjectsGroupTwo.push(groundGrass);
+            }
+        }
+
         // Clouds
-        {
+        /*{
             const clouds = [
                 [0, 1],
                 [viewportWidth - 6, 0.5],
@@ -123,60 +161,7 @@ export default class ScreenMainMenu extends Screen {
                 this.worldObjectsGroupTwo.push(cloud);
                 world.addObject(cloud);
             });
-        }
-
-        // Ground
-        {
-            for (let blockIndex = 0; blockIndex < viewportWidth; blockIndex++) {
-                let ground = new TileBlock(world, world.getTileset(), 'ground_grass_variation0', false, false);
-                ground.position.x = blockIndex;
-                ground.position.y = makePositionBottomAligned(0);
-
-                let groundDecal = new TileBlock(world, world.getTileset(), 'ground_decals_grass_variation0', false, false);
-                groundDecal.position.x = ground.position.x;
-                groundDecal.position.y = makePositionBottomAligned(1);
-
-                this.worldObjectsGroupOne.push(ground);
-                this.worldObjectsGroupOne.push(groundDecal);
-                
-                world.addObject(ground);
-                world.addObject(groundDecal);
-
-                if (Math.random() < 0.075) {
-                    const randomTreeIndex = Math.floor(1 + (Math.random() * 9));
-                    let groundDecal2 = new TileBlock(world, world.getTileset(), 'background_decals_trees_tree' + randomTreeIndex, false, false);
-                    groundDecal2.position.x = ground.position.x;
-                    groundDecal2.position.y = makePositionBottomAligned(groundDecal2.height - 0.05);
-                    this.worldObjectsGroupOne.push(groundDecal2);
-                    world.addObject(groundDecal2);
-                }
-            }
-
-            for (let blockIndex = 0; blockIndex < viewportWidth; blockIndex++) {
-                let ground = new TileBlock(world, world.getTileset(), 'ground_grass_variation0', false, false);
-                ground.position.x = viewportWidth + blockIndex;
-                ground.position.y = makePositionBottomAligned(0);
-
-                let groundDecal = new TileBlock(world, world.getTileset(), 'ground_decals_grass_variation0', false, false);
-                groundDecal.position.x = ground.position.x;
-                groundDecal.position.y = makePositionBottomAligned(1);
-
-                this.worldObjectsGroupTwo.push(ground);
-                this.worldObjectsGroupTwo.push(groundDecal);
-
-                world.addObject(ground);
-                world.addObject(groundDecal);
-
-                if (Math.random() < 0.075) {
-                    const randomTreeIndex = Math.floor(1 + (Math.random() * 9));
-                    let groundDecal2 = new TileBlock(world, world.getTileset(), 'background_decals_trees_tree' + randomTreeIndex, false, false);
-                    groundDecal2.position.x = ground.position.x;
-                    groundDecal2.position.y = makePositionBottomAligned(groundDecal2.height - 0.05);
-                    this.worldObjectsGroupTwo.push(groundDecal2);
-                    world.addObject(groundDecal2);
-                }
-            }
-        }
+        }*/
     }
 
     private createUI() {

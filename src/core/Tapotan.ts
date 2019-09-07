@@ -225,9 +225,9 @@ export default class Tapotan {
                 if (!isLoadingSnapshot) {
                     document.getElementById('loading').style.opacity = '0';
                     document.getElementById('loading').style.pointerEvents = 'none';
-                    this.startEditor();
-                    //this.startMainMenu();
-                    //this.startDevLevel();
+
+                    //this.startEditor();
+                    this.startMainMenu();
                 }
             });
         });

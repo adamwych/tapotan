@@ -1,5 +1,5 @@
 import Tapotan from "../../core/Tapotan";
-import { LoaderResource } from "pixi.js";
+import { LoaderResource, SCALE_MODES } from "pixi.js";
 import TilesetEditorCategory from "../../tilesets/TilesetEditorCategory";
 import TilesetEditorCategoryTilesGroup from "../../tilesets/TilesetEditorCategoryTilesGroup";
 
@@ -15,6 +15,7 @@ export default class Tileset {
     private resources: {[k: string]: TilesetResource} = {};
     private editorCategories: TilesetEditorCategory[] = [];
     private backgroundResources: string[] = [];
+    private textureFiltering: string = 'linear';
 
     constructor(id: string, name: string) {
         this.id = id;
@@ -24,11 +25,21 @@ export default class Tileset {
     public addResource(id: string, resourcePath: string) {
         let fullResourcePath = 'assets/tilesets/' + this.id + '/' + resourcePath;
         Tapotan.getInstance().getAssetManager().schedule(fullResourcePath, resource => {
+            if (this.textureFiltering === 'nearest') {
+                if (resourcePath.endsWith('.png')) {
+                    resource.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
+                }
+            }
+
             this.resources[id] = {
                 resource: resource,
                 path: resourcePath.substr(0, resourcePath.lastIndexOf('.')).toLowerCase()
             };
         });
+    }
+
+    public setTextureFiltering(filtering: 'linear' | 'nearest') {
+        this.textureFiltering = filtering;
     }
 
     public setResourceAsBackground(resource: string) {
@@ -83,6 +94,10 @@ export default class Tileset {
     public static loadFromXMLDocument(document: XMLDocument) {
         const rootNode = document.childNodes[0] as Element;
         const tileset = new Tileset(rootNode.getAttribute('id'), rootNode.getAttribute('name'));
+
+        if (rootNode.hasAttribute('texture-filter')) {
+            tileset.setTextureFiltering(rootNode.getAttribute('texture-filter') as any);
+        }
 
         rootNode.querySelectorAll('editor-category').forEach(categoryNode => {
             let groups: TilesetEditorCategoryTilesGroup[] = [];
