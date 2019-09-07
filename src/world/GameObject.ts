@@ -38,6 +38,7 @@ export default class GameObject extends PIXI.Container {
      * Whether this game object has been destroyed.
      */
     private destroyed: boolean;
+    private _duringDestroy: boolean;
 
     private debuggerAttached: boolean;
     private debuggerCallback: Function;
@@ -82,12 +83,15 @@ export default class GameObject extends PIXI.Container {
     public destroy() {
         super.destroy({ children: true });
 
+        this._duringDestroy = true;
         this.components.forEach(component => {
             component.removeComponent();
         });
+        this.components = [];
         this.removeChildren();
         this.destroyed = true;
         this.emit('destroyed');
+        this._duringDestroy = false;
     }
 
     /**
@@ -109,12 +113,24 @@ export default class GameObject extends PIXI.Container {
         }
     }
 
-    public onCollisionStart(another, event) {
-
+    /**
+     * Called after a collision with another physical body starts.
+     * 
+     * @param another 
+     * @param event 
+     */
+    public onCollisionStart(another: GameObject, event) {
+        this.emit('collisionStart', another, event);
     }
     
-    public onCollisionEnd(another, pair) {
-
+    /**
+     * Called after a collision with another physical body ends.
+     * 
+     * @param another 
+     * @param event 
+     */
+    public onCollisionEnd(another: GameObject, event) {
+        this.emit('collisionEnd', another, event);
     }
 
     /**
@@ -153,8 +169,15 @@ export default class GameObject extends PIXI.Container {
      * @param component 
      */
     public removeComponent(component: GameObjectComponent) {
+
+        // If we're during destroy then components array will be cleared
+        // for us, and it's better to not mess with position of components in the array.
+        if (this._duringDestroy) {
+            return;
+        }
+
         if (this.hasComponent(component)) {
-            this.components.splice(this.components.indexOf(component));
+            this.components.splice(this.components.indexOf(component), 1);
         }
     }
 
