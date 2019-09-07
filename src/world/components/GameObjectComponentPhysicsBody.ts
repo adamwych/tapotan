@@ -7,11 +7,6 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
     protected body: p2.Body;
     protected shape: p2.Shape;
 
-    /**
-     * 
-     * @param bodyOptions 
-     * @param shape 
-     */
     public initialize(bodyOptions: p2.BodyOptions, shape: p2.Shape): void {
         this.shape = shape;
         this.body = new p2.Body({

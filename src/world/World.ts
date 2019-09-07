@@ -5,14 +5,11 @@ import Tapotan from '../core/Tapotan';
 import TickHelper from '../core/TickHelper';
 import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
 import CameraShake from './CameraShake';
-import EntityPlayer from './entities/EntityPlayer';
-import Tileset from './tiles/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
-import WorldObject from './WorldObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
 import PhysicsMaterials from './physics/PhysicsMaterials';
-import EntityMonster from './entities/EntityMonster';
 import GameObject from './GameObject';
+import Tileset from './tiles/Tileset';
 
 export default class World extends PIXI.Container {
 
@@ -26,13 +23,12 @@ export default class World extends PIXI.Container {
     private worldName: string = '';
     private authorName: string = '';
 
-    private player: EntityPlayer;
+    private player: GameObject;
     private tileset: Tileset;
     
     private physicsWorld: p2.World;
     public static PHYSICS_SCALE = 16;
     private physicsBodies = {};
-    private worldObjects: WorldObject[] = [];
 
     private playerSpawnPoint: PIXI.Point = new PIXI.Point();
 
@@ -69,6 +65,8 @@ export default class World extends PIXI.Container {
      */
     private gameObjects: Array<GameObject> = [];
 
+    private _duringRemove: boolean = false;
+
     constructor(game: Tapotan, width: number, height: number, tileset: Tileset) {
         super();
 
@@ -95,13 +93,17 @@ export default class World extends PIXI.Container {
     }
 
     public beforeRemove() {
+        this._duringRemove = true;
+
         TickHelper.remove(this.tick);
 
         this.lockConnections = [];
 
-        this.worldObjects.forEach(object => {
-            this.removeObject(object);
+        this.gameObjects.forEach(object => {
+            this.removeGameObject(object);
         });
+
+        this._duringRemove = false;
     }
 
     private tick = (dt: number) => {
@@ -118,7 +120,7 @@ export default class World extends PIXI.Container {
         if (this.shake) {
             this.shake.tick(dt);
         } else {
-            if (this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
+            /*if (this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
                 let viewport = this.game.getViewport();
 
                 switch (this.behaviourRules.getCameraBehaviour()) {
@@ -145,7 +147,7 @@ export default class World extends PIXI.Container {
 
                 if (viewport.left < 0) viewport.left = 0;
                 if (viewport.top > 0) viewport.top = 0;
-            }
+            }*/
         }
 
         if (this.behaviourRules.getGameOverTimeout() !== WorldGameOverTimeout.Unlimited &&
@@ -168,7 +170,7 @@ export default class World extends PIXI.Container {
     public spawnPlayer(x: number, y: number) {
         this.playerSpawnPoint.set(x, y);
 
-        this.player = new EntityPlayer(this);
+        /*this.player = new EntityPlayer(this);
         this.player.setPosition(x + 0.5, y);
         this.player.zIndex = 999;
 
@@ -177,7 +179,7 @@ export default class World extends PIXI.Container {
             this.game.getViewport().left = 0;
         }
 
-        this.addObject(this.player);
+        this.addGameObject(this.player);*/
     }
 
     public addPhysicsBody(parent: any, body: p2.Body) {
@@ -198,8 +200,8 @@ export default class World extends PIXI.Container {
         PhysicsMaterials.setupContactMaterials(this.physicsWorld);
 
         this.physicsWorld.on('beginContact', (event) => {
-            let worldObjectA = this.getWorldObjectByPhysicsBodyId(event.bodyA.id) as WorldObject;
-            let worldObjectB = this.getWorldObjectByPhysicsBodyId(event.bodyB.id) as WorldObject;
+            let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.id) as GameObject;
+            let worldObjectB = this.getGameObjectByPhysicsBodyId(event.bodyB.id) as GameObject;
 
             if (worldObjectA && worldObjectB) {
                 worldObjectA.onCollisionStart(worldObjectB, event);
@@ -208,8 +210,8 @@ export default class World extends PIXI.Container {
         });
 
         this.physicsWorld.on('endContact', (event) => {
-            let worldObjectA = this.getWorldObjectByPhysicsBodyId(event.bodyA.id) as WorldObject;
-            let worldObjectB = this.getWorldObjectByPhysicsBodyId(event.bodyB.id) as WorldObject;
+            let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.id) as GameObject;
+            let worldObjectB = this.getGameObjectByPhysicsBodyId(event.bodyB.id) as GameObject;
 
             if (worldObjectA && worldObjectB) {
                 worldObjectA.onCollisionEnd(worldObjectB, event);
@@ -225,8 +227,8 @@ export default class World extends PIXI.Container {
 
         if (this.behaviourRules.getCameraBehaviour() === WorldCameraBehaviour.EverMoving) {
             const viewport = this.game.getViewport();
-            viewport.top = (this.player.getPosition().y - Tapotan.getViewportHeight() / 2) + 1;
-            viewport.left = (this.player.getPosition().x - Tapotan.getViewportWidth() / 2) + 2;
+            //viewport.top = (this.player.getPosition().y - Tapotan.getViewportHeight() / 2) + 1;
+            //viewport.left = (this.player.getPosition().x - Tapotan.getViewportWidth() / 2) + 2;
         }
     }
 
@@ -237,38 +239,6 @@ export default class World extends PIXI.Container {
                 this.shake = null;
             });
         }
-    }
-
-    public addObject(obj: WorldObject) {
-        this.worldObjects.push(obj);
-        this.addChild(obj);
-        obj.onAddedToWorld();
-    }
-
-    public removeObject(obj: WorldObject) {
-        obj.beforeRemove();
-
-        let idx = this.worldObjects.findIndex(x => x.is(obj));
-        if (idx > -1) {
-            this.worldObjects.splice(idx, 1);
-        }
-        
-        this.removeChild(obj);
-        obj.onRemovedFromWorld();
-    }
-
-    public findObjectByPosition(x: number, y: number) {
-        let results = this.worldObjects.filter(child => {
-            if (!child.transform) {
-                this.removeObject(child);
-                return false;
-            }
-
-            const position = child.getPosition();
-            return position.x === x && position.y === y;
-        });
-
-        return results[results.length - 1];
     }
 
     public calculatePlayerScore() {
@@ -324,6 +294,10 @@ export default class World extends PIXI.Container {
     public removeGameObject(gameObject: GameObject): void {
         gameObject.setWorld(null);
 
+        if (this._duringRemove) {
+            return;
+        }
+
         let idx = this.gameObjects.indexOf(gameObject);
         if (idx > -1) {
             this.gameObjects.splice(idx, 1);
@@ -342,6 +316,11 @@ export default class World extends PIXI.Container {
         return this.gameObjects.find(x => x.getId() === id);
     }
 
+    public getGameObjectsAtPosition(x: number, y: number): Array<GameObject> {
+        let result = [];
+        return result;
+    }
+
     /**
      * Returns all game objects that are in this world.
      */
@@ -353,16 +332,12 @@ export default class World extends PIXI.Container {
         return this.lockConnections;
     }
 
-    public getPlayer(): EntityPlayer {
+    public getPlayer(): GameObject {
         return this.player;
     }
 
     public getTileset(): Tileset {
         return this.tileset;
-    }
-
-    public getObjects(): WorldObject[] {
-        return this.worldObjects;
     }
 
     public setSpawnPointPosition(x: number, y: number): void {
@@ -418,22 +393,22 @@ export default class World extends PIXI.Container {
     }
 
     public pause() {
-        this.worldObjects.forEach(object => {
+        /*this.worldObjects.forEach(object => {
             if (object instanceof EntityMonster) {
                 object.setAIEnabled(false);
             }
-        });
+        });*/
 
         this.paused = true;
         this.emit(World.Events.Paused);
     }
 
     public resume() {
-        this.worldObjects.forEach(object => {
+        /*this.worldObjects.forEach(object => {
             if (object instanceof EntityMonster) {
                 object.setAIEnabled(true);
             }
-        });
+        });*/
 
         this.paused = false;
         this.emit(World.Events.Resumed);
@@ -492,7 +467,7 @@ export default class World extends PIXI.Container {
         return this.physicsWorld;
     }
 
-    public getWorldObjectByPhysicsBodyId(id): WorldObject {
+    public getGameObjectByPhysicsBodyId(id): GameObject {
         return this.physicsBodies[id];
     }
 

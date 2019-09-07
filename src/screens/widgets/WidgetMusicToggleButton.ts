@@ -1,10 +1,10 @@
 import * as PIXI from 'pixi.js';
-import Tileset from '../../world/tiles/Tileset';
-import ContainerAnimator from '../../graphics/animation/ContainerAnimator';
-import EditorDrawerItemHoverAnimation from '../editor/animations/EditorDrawerItemHoverAnimation';
-import EditorDrawerItemHoverEndAnimation from '../editor/animations/EditorDrawerItemHoverEndAnimation';
-import EditorDrawerItemClickAnimation from '../editor/animations/EditorDrawerItemClickAnimation';
+import ContainerAnimationButtonMouseDown from '../../animations/ContainerAnimationButtonMouseDown';
+import ContainerAnimationButtonMouseOut from '../../animations/ContainerAnimationButtonMouseOut';
+import ContainerAnimationButtonMouseOver from '../../animations/ContainerAnimationButtonMouseOver';
 import Tapotan from '../../core/Tapotan';
+import ContainerAnimator from '../../graphics/animation/ContainerAnimator';
+import Tileset from '../../world/tiles/Tileset';
 
 export default class WidgetMusicToggleButton extends PIXI.Container {
 
@@ -41,15 +41,15 @@ export default class WidgetMusicToggleButton extends PIXI.Container {
 
         this.interactive = true;
         this.on('mouseover', () => {
-            this.animator.play(new EditorDrawerItemHoverAnimation(4));
+            this.animator.play(new ContainerAnimationButtonMouseOver());
         });
 
         this.on('mouseout', () => {
-            this.animator.play(new EditorDrawerItemHoverEndAnimation(4));
+            this.animator.play(new ContainerAnimationButtonMouseOut());
         });
 
         this.on('mousedown', () => {
-            this.animator.play(new EditorDrawerItemClickAnimation(4));
+            this.animator.play(new ContainerAnimationButtonMouseDown(4));
         });
 
         this.on('click', () => {

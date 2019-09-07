@@ -1,6 +1,5 @@
 import * as PIXI from 'pixi.js';
 import Tapotan from '../../../core/Tapotan';
-import SaveModalNameInputEditAnimation from '../../editor/animations/save-modal/SaveModalNameInputEditAnimation';
 import WidgetText from '../../widgets/WidgetText';
 import ContainerAnimator from '../../../graphics/animation/ContainerAnimator';
 
@@ -51,7 +50,7 @@ export default class WidgetMainMenuLevelSelectorSearch extends PIXI.Container {
             this.justClickedInside = true;
             this.isEditing = true;
 
-            this.textAnimator.play(new SaveModalNameInputEditAnimation());
+            // this.textAnimator.play(new SaveModalNameInputEditAnimation());
 
             window.addEventListener('click', this.handleWindowClick);
             window.addEventListener('keydown', this.handleKeyDown);

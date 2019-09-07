@@ -1,7 +1,7 @@
-import ContainerAnimation from "../../../graphics/animation/ContainerAnimation";
-import Interpolation from "../../../utils/Interpolation";
+import ContainerAnimation from "../graphics/animation/ContainerAnimation";
+import Interpolation from "../utils/Interpolation";
 
-export default class EditorDrawerItemClickAnimation extends ContainerAnimation {
+export default class ContainerAnimationButtonMouseDown extends ContainerAnimation {
 
     private multiplier: number = 1;
     private stage: number = 0;

@@ -1,7 +1,6 @@
 import * as PIXIViewport from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
 import APIRequest from '../api/APIRequest';
-import ScreenEditorMainView from '../screens/editor/ScreenEditorMainView';
 import ScreenIngame from '../screens/ingame/ScreenIngame';
 import ScreenMainMenu from '../screens/main-menu/ScreenMainMenu';
 import World from '../world/World';
@@ -15,6 +14,8 @@ import WorldLoader from '../world/WorldLoader';
 import convertWorldToPixels from '../utils/converWorldToPixels';
 import Axios from 'axios';
 import Tileset from '../world/tiles/Tileset';
+import ScreenTest from '../screens/ScreenTest';
+import ScreenLevelEditor from '../screens/editor/ScreenLevelEditor';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -138,7 +139,7 @@ export default class Tapotan {
             this.viewport.fit(false, Tapotan.getViewportWidth(), Tapotan.getViewportHeight());
 
             if (this.gameManager.getWorld()) {
-                this.gameManager.getWorld().getObjects().forEach(x => x.setPosition(x.getPosition().x, x.getPosition().y));
+                //this.gameManager.getWorld().getObjects().forEach(x => x.setPosition(x.getPosition().x, x.getPosition().y));
             }
 
             if (this.screenManager.getTopScreen()) {
@@ -226,8 +227,9 @@ export default class Tapotan {
                     document.getElementById('loading').style.opacity = '0';
                     document.getElementById('loading').style.pointerEvents = 'none';
 
-                    //this.startEditor();
-                    this.startMainMenu();
+                    this.startEditor();
+                    //this.startMainMenu();
+                    //this.startTestScreen();
                 }
             });
         });
@@ -334,7 +336,7 @@ export default class Tapotan {
         this.gameManager.setGameState(GameState.InEditor);
         this.gameManager.setWorld(editorWorld);
 
-        let editorScreen = new ScreenEditorMainView(this);
+        let editorScreen = new ScreenLevelEditor(this);
         this.screenManager.transitionToScreen(editorScreen);
         
         if (!world) {
@@ -342,6 +344,19 @@ export default class Tapotan {
         } else {
             this.audioManager.playBackgroundMusic(editorWorld.getBackgroundMusicID());
         }
+    }
+
+    private startTestScreen() {
+        this.gameManager = new GameManager(this);
+                
+        const world = new World(this, 100, 100, this.assetManager.getTilesetByName('pixelart'));
+        world.handleGameStart();
+        
+        this.gameManager.setGameState(GameState.Playing);
+        this.gameManager.setWorld(world);
+
+        let screen = new ScreenTest(this);
+        this.screenManager.transitionToScreen(screen);
     }
 
     private tick = (dt: number) => {
@@ -363,9 +378,9 @@ export default class Tapotan {
         button.innerHTML = 'Saving...';
 
         const topScreen = this.screenManager.getTopScreen();
-        if (topScreen instanceof ScreenEditorMainView) {
+        /*if (topScreen instanceof ScreenEditorMainView) {
             if (this.gameManager.getGameState() === GameState.Playing) {
-                topScreen.toggleTestPlaythrough();
+                //topScreen.toggleTestPlaythrough();
             }
 
             let snapshot = WorldSerializer.serialize(this.gameManager.getWorld());
@@ -390,7 +405,7 @@ export default class Tapotan {
             });
         } else {
             location.reload();
-        }
+        }*/
     }
 
     public setCursor(cursor: TapotanCursor) {

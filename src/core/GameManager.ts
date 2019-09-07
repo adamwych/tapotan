@@ -1,7 +1,6 @@
 import World from "../world/World";
 import Tapotan from "./Tapotan";
 import ScreenIngame from "../screens/ingame/ScreenIngame";
-import ScreenEditorMainView from "../screens/editor/ScreenEditorMainView";
 
 export enum GameState {
     InMenu, Playing, InEditor, Unknown
@@ -35,10 +34,10 @@ export default class GameManager {
         this.hasEnded = true;
         this.endReason = reason;
 
-        let topScreen = this.game.getScreenManager().getTopScreen();
+        /*let topScreen = this.game.getScreenManager().getTopScreen();
         if (topScreen instanceof ScreenEditorMainView || topScreen instanceof ScreenIngame) {
             (topScreen as any).handleGameEnd(reason);
-        }
+        }*/
 
         this.world.handleGameEnd(reason);
     }

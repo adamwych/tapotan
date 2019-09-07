@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js';
 import Screen from "../Screen";
 import Tapotan from "../../core/Tapotan";
 import World from '../../world/World';
-import TileBlock from '../../world/tiles/TileBlock';
 import WidgetMainMenuLevelSelector from './widgets/WidgetMainMenuLevelSelector';
 import WidgetText from '../widgets/WidgetText';
 import APIRequest from '../../api/APIRequest';

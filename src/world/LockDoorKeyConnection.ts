@@ -1,14 +1,13 @@
-import TileLockKey from "./tiles/TileLockKey";
-import TileLockDoor from "./tiles/TileLockDoor";
 import World from "./World";
 import Tapotan from "../core/Tapotan";
+import GameObject from "./GameObject";
 
 export default class LockDoorKeyConnection {
 
     private id: number = -1;
 
-    private keys: TileLockKey[] = [];
-    private doors: TileLockDoor[] = [];
+    private keys: GameObject[] = [];
+    private doors: GameObject[] = [];
 
     private collectedKeys: number = 0;
 
@@ -36,7 +35,7 @@ export default class LockDoorKeyConnection {
         const connection = new LockDoorKeyConnection();
         connection.setId(json.id);
 
-        world.once('worldLoaded', () => {
+        /*world.once('worldLoaded', () => {
             let objects = world.getObjects();
             objects.forEach(object => {
                 if (json.keys.includes(object.getId()) && object instanceof TileLockKey) {
@@ -45,7 +44,7 @@ export default class LockDoorKeyConnection {
                     connection.addDoor(object as TileLockDoor);
                 }
             })
-        });
+        });*/
 
         LockDoorKeyConnection.cache[json.id] = connection;
         return connection;
@@ -57,12 +56,12 @@ export default class LockDoorKeyConnection {
             Tapotan.getInstance().getAudioManager().playSoundEffect('lock_door_open', true);
 
             this.doors.forEach(door => {
-                door.unlock();
+                // door.unlock();
             });
         }
     }
 
-    public addKey(key: TileLockKey) {
+    public addKey(key: GameObject) {
         this.keys.push(key);
 
         key.on('removed', () => {
@@ -78,15 +77,15 @@ export default class LockDoorKeyConnection {
         });
     }
 
-    public addDoor(door: TileLockDoor) {
+    public addDoor(door: GameObject) {
         this.doors.push(door);
     }
 
-    public removeDoor(door: TileLockDoor) {
+    public removeDoor(door: GameObject) {
         this.doors.splice(this.doors.indexOf(door), 1);
     }
 
-    public hasDoor(door: TileLockDoor) {
+    public hasDoor(door: GameObject) {
         return this.doors.includes(door);
     }
 
@@ -97,7 +96,7 @@ export default class LockDoorKeyConnection {
     public reset() {
         this.collectedKeys = 0;
         this.doors.forEach(door => {
-            door.lock();
+            // door.lock();
         });
     }
 
