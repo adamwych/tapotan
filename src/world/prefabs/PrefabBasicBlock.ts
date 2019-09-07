@@ -12,10 +12,10 @@ export interface PrefabBasicBlockProps {
 };
 
 export default createPrefabSpawnFunction<PrefabBasicBlockProps>('PREFAB_BASIC_BLOCK', (gameObject: GameObject, world: World, props: PrefabBasicBlockProps) => {
-    const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
     if (props.ignoresPhysics) {
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
+        const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
         body.initializeBox(1, 1, {
             mass: 0,
             fixedRotation: true
