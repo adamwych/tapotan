@@ -1,6 +1,11 @@
 import LevelEditorCommand from "./LevelEditorCommand";
 import LevelEditorContext from "../LevelEditorContext";
 
+type LevelEditorCommandQueueEntry = {
+    command: LevelEditorCommand;
+    callback: Function;
+}
+
 export default class LevelEditorCommandQueue {
 
     /**
@@ -11,7 +16,7 @@ export default class LevelEditorCommandQueue {
     /**
      * List of all pending commands.
      */
-    private queue: Array<LevelEditorCommand> = [];
+    private queue: Array<LevelEditorCommandQueueEntry> = [];
 
     /**
      * List of last N executed commands.
@@ -37,12 +42,17 @@ export default class LevelEditorCommandQueue {
      * @param command 
      */
     public enqueueCommand(command: LevelEditorCommand) {
-        this.queue.push(command);
+        return new Promise((resolve, reject) => {
+            this.queue.push({
+                command: command,
+                callback: resolve
+            });
 
-        // Do not try to execute multiple commands at the same time.
-        if (!this.duringExecution) {
-            this.executeCommandsFromQueue();
-        }
+            // Do not try to execute multiple commands at the same time.
+            if (!this.duringExecution) {
+                this.executeCommandsFromQueue();
+            }            
+        });
     }
 
     private executeCommandsFromQueue() {
@@ -53,14 +63,15 @@ export default class LevelEditorCommandQueue {
         this.duringExecution = true;
 
         // Execute first command from the queue.
-        const command = this.queue[0];
-        command.execute(this.context);
+        const entry = this.queue[0];
+        entry.command.execute(this.context);
+        entry.callback();
 
         if (this.history.length >= this.maxHistoryEntries) {
             this.history.splice(0, 1);
         }
 
-        this.history.push(command);
+        this.history.push(entry.command);
         this.queue.splice(0, 1);
 
         this.duringExecution = false;
@@ -71,7 +82,7 @@ export default class LevelEditorCommandQueue {
         }
     }
 
-    public getQueue(): Array<LevelEditorCommand> {
+    public getQueue(): Array<LevelEditorCommandQueueEntry> {
         return this.queue;
     }
 

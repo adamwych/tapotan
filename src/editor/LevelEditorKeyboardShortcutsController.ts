@@ -1,6 +1,7 @@
 import Tapotan from "../core/Tapotan";
 import InputManager from "../core/InputManager";
 import LevelEditorContext from "./LevelEditorContext";
+import LevelEditorCommandRemoveObject from "./commands/LevelEditorCommandRemoveObject";
 
 export default class LevelEditorKeyboardShortcutsController {
 
@@ -8,7 +9,7 @@ export default class LevelEditorKeyboardShortcutsController {
 
     constructor(context: LevelEditorContext) {
         this.context = context;
-        this.startListening()
+        this.startListening();
     }
 
     private startListening() {
@@ -38,10 +39,25 @@ export default class LevelEditorKeyboardShortcutsController {
         
     }
 
+    private handleDeleteObjectsShortcutClick = () => {
+        let promises = [];
+
+        this.context.getSelectedObjects().forEach(selectedObject => {
+            promises.push(
+                this.context.getCommandQueue().enqueueCommand(new LevelEditorCommandRemoveObject(selectedObject))
+            );
+        });
+
+        Promise.all(promises).then(() => {
+            this.context.getEditorScreen().blurActiveAndHoveredObjectOutline();
+        });
+    }
+
     private getKeyboardShortcuts() {
         return {
             [InputManager.KeyCodes.KeyG]: this.handleGridToggleShortcutClick,
-            [InputManager.KeyCodes.KeyB]: this.handlePlaythroughToggleShortcutClick
+            [InputManager.KeyCodes.KeyB]: this.handlePlaythroughToggleShortcutClick,
+            [InputManager.KeyCodes.KeyDelete]: this.handleDeleteObjectsShortcutClick
         }
     }
 }

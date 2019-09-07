@@ -158,7 +158,9 @@ export default class ScreenLevelEditor extends Screen {
         }
     }
 
-    private blurActiveAndHoveredObjectOutline() {
+    public blurActiveAndHoveredObjectOutline() {
+        this.objectHoverDepthLevel = 0;
+
         if (this.objectOutlineHover) {
             this.objectOutlineHover.destroy({ children: true });
             this.objectOutlineHover = null;

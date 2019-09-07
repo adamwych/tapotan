@@ -13,9 +13,8 @@ export default class GameObjectComponentSprite extends GameObjectComponent {
     }
     
     protected destroy(): void {
-        this.gameObject.removeChild(this.sprite);
-
-        this.sprite.destroy();
+        // Sprite will be destroyed by the GameObject itself,
+        // because the sprite is its child.
         this.sprite = null;
     }
 
