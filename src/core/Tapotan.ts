@@ -15,12 +15,13 @@ import convertWorldToPixels from '../utils/converWorldToPixels';
 import Axios from 'axios';
 import Tileset from '../world/tiles/Tileset';
 import ScreenTest from '../screens/ScreenTest';
-import ScreenLevelEditor from '../screens/editor/ScreenLevelEditor';
+import ScreenLevelEditor from '../editor/ScreenLevelEditor';
 
 export enum TapotanCursor {
     Default = 'Default',
     Text = 'Text',
-    Pointer = 'Pointer'
+    Pointer = 'Pointer',
+    Move = 'Move'
 }
 
 export default class Tapotan {
@@ -271,6 +272,12 @@ export default class Tapotan {
         this.application.loader.add('Graphics/UI/LevelThumbnails/LevelThumbnail1', 'assets/Graphics/UI/LevelThumbnails/LevelThumbnail1.png');
         this.application.loader.add('Graphics/UI/MainMenuOpenEditorButton', 'assets/Graphics/UI/MainMenuOpenEditorButton.png');
         this.application.loader.add('Graphics/UI/LevelTopPopup', 'assets/Graphics/UI/LevelTopPopup.png');
+        this.application.loader.add('ui_editor_grid_tile_16', 'assets/Graphics/UI/GridTile16.png');
+        this.application.loader.add('ui_editor_grid_tile_32', 'assets/Graphics/UI/GridTile32.png');
+        this.application.loader.add('ui_editor_grid_tile_64', 'assets/Graphics/UI/GridTile64.png');
+        this.application.loader.add('ui_editor_grid_tile_16_double', 'assets/Graphics/UI/GridTile16_Double.png');
+        this.application.loader.add('ui_editor_grid_tile_32_double', 'assets/Graphics/UI/GridTile32_Double.png');
+        this.application.loader.add('ui_editor_grid_tile_64_double', 'assets/Graphics/UI/GridTile64_Double.png');
     }
 
     public startMainMenu() {

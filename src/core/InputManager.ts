@@ -35,6 +35,7 @@ export default class InputManager {
     private mouseUpListeners = {};
     private mouseDragListeners = {};
     private keysDown: number[] = [];
+    private mouseWheelListeners = [];
 
     private mouseX: number = -100;
     private mouseY: number = -100;
@@ -50,6 +51,7 @@ export default class InputManager {
         window.addEventListener('mousedown', this.handleMouseDown);
         window.addEventListener('mousemove', this.handleMouseMove);
         window.addEventListener('mouseup', this.handleMouseUp);
+        window.addEventListener('wheel', this.handleMouseWheel);
     }
 
     public tick = () => {
@@ -65,21 +67,25 @@ export default class InputManager {
     }
 
     private handleMouseMove = (e): void => {
-        
+
         // If any button is pressed.
         if (this.mouseDownCurrentButton !== -1) {
             let deltaX = e.clientX - this.mouseX;
             let deltaY = e.clientY - this.mouseY;
 
-            let callbacks = this.mouseDragListeners[this.mouseDownCurrentButton];
-            if (callbacks) {
-                callbacks.forEach(fn => fn({
-                    x: e.clientX,
-                    y: e.clientY,
-                    deltaX: deltaX,
-                    deltaY: deltaY,
-                    event: e
-                }));
+            // For some reason mousemove is called after click with same
+            // coordinates, which is unnecessary so skip callbacks if the mouse didn't actually move.
+            if (deltaX !== 0 || deltaY !== 0) {
+                let callbacks = this.mouseDragListeners[this.mouseDownCurrentButton];
+                if (callbacks) {
+                    callbacks.forEach(fn => fn({
+                        x: e.clientX,
+                        y: e.clientY,
+                        deltaX: deltaX,
+                        deltaY: deltaY,
+                        event: e
+                    }));
+                }
             }
         }
 
@@ -110,6 +116,12 @@ export default class InputManager {
         if (e.which in this.mouseUpListeners) {
             this.mouseUpListeners[e.which].forEach(fn => fn(e.clientX, e.clientY, e));
         }
+    }
+
+    private handleMouseWheel = (e) => {
+        this.mouseWheelListeners.forEach(callback => {
+            callback(e);
+        });
     }
 
     public isMouseDown(button): boolean {
@@ -191,6 +203,17 @@ export default class InputManager {
             this.mouseDragListeners[button].push(callback);
         } else {
             this.mouseDragListeners[button] = [callback];
+        }
+    }
+
+    public listenMouseWheel(callback) {
+        this.mouseWheelListeners.push(callback);
+    }
+
+    public removeMouseWheelListener(callback) {
+        let idx = this.mouseWheelListeners.indexOf(callback);
+        if (idx > -1) {
+            this.mouseWheelListeners.splice(idx, 1);
         }
     }
 

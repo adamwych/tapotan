@@ -169,6 +169,16 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     }
 
     /**
+     * Checks whether current position is equal to specified one.
+     * 
+     * @param x 
+     * @param y 
+     */
+    public isAtPosition(x: number, y: number): boolean {
+        return this.positionX === x && this.positionY === y;
+    }
+
+    /**
      * Sets the pivot.
      * 
      * @param x 
