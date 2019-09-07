@@ -37,7 +37,14 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
 
         this.gameObject.position.set(this.positionX, this.positionY);
         this.gameObject.angle = this.angle;
-        //console.log(this.physicsBody.angle);
+
+        if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
+            this.positionX = Tapotan.getViewportWidth() - this.positionX - 1;
+        }
+
+        if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
+            this.positionY = Tapotan.getViewportHeight() - this.positionY - 1;
+        }
     }
 
     public setPosition(x: number, y: number, force: boolean = false) {
@@ -53,17 +60,11 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
             let containerTargetY = this.positionY + this.pivotY;
 
             if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
-                let viewportWidth = Tapotan.getViewportWidth();
-                let alignedX = viewportWidth - containerTargetX - 1;
-
-                containerTargetX = alignedX;
+                containerTargetX = Tapotan.getViewportWidth() - containerTargetX - 1;
             }
 
             if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
-                let viewportHeight = Tapotan.getViewportHeight();
-                let alignedY = viewportHeight - containerTargetY - 1;
-
-                containerTargetY = alignedY;
+                containerTargetY = Tapotan.getViewportHeight() - containerTargetY - 1;
             }
 
             this.physicsBody.position[0] = containerTargetX * World.PHYSICS_SCALE;
