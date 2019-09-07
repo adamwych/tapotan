@@ -12,7 +12,7 @@ export default class ContainerAnimationEditorPrefabCategoryTileEnter extends Con
         }
 
         let start = (Tapotan.getGameHeight() - container.height) + 128;
-        let end = (Tapotan.getGameHeight() - container.height);
+        let end = (Tapotan.getGameHeight() - container.height) + 16;
         let val = (start + (end - start) * (alpha * alpha * (3 - 2 * alpha)));
 
         container.position.y = val;

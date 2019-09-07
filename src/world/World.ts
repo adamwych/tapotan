@@ -219,7 +219,7 @@ export default class World extends PIXI.Container {
             }
         });
 
-        PhysicsDebugRenderer.create(this.physicsWorld);
+        // PhysicsDebugRenderer.create(this.physicsWorld);
     }
 
     public handleGameStart() {

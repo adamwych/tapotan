@@ -10,6 +10,8 @@ import WidgetLevelEditorPrefabCategoryTilesContainer from '../prefab-drawer/Widg
 import WidgetLevelEditorPrefabDrawer from '../prefab-drawer/WidgetLevelEditorPrefabDrawer';
 import WidgetLevelEditorPrefabDrawerGroup from '../prefab-drawer/WidgetLevelEditorPrefabDrawerGroup';
 import WidgetLevelEditorPrefabDrawerGroupItem from '../prefab-drawer/WidgetLevelEditorPrefabDrawerGroupItem';
+import WidgetLevelEditorLayerSelector from '../layer-selector/WidgetLevelEditorLayerSelector';
+import Tapotan from '../../core/Tapotan';
 
 export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
 
@@ -19,6 +21,7 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
     private prefabDrawer: WidgetLevelEditorPrefabDrawer;
     private world: World;
     private spawnPrefabAsShade: Function;
+    private layerSelector: WidgetLevelEditorLayerSelector;
 
     constructor(world: World, prefabDrawer: WidgetLevelEditorPrefabDrawer, spawnPrefabAsShade: Function) {
         super();
@@ -28,6 +31,7 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         this.spawnPrefabAsShade = spawnPrefabAsShade;
 
         this.initializePrefabDrawer();
+        this.initializeLayerSelector();
 
         this.animator = new ContainerAnimator(this);
         this.playEnterAnimation();
@@ -51,6 +55,12 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         });
 
         this.addChild(this.prefabCategoryTilesContainer);
+    }
+
+    private initializeLayerSelector() {
+        this.layerSelector = new WidgetLevelEditorLayerSelector(this.world);
+        this.layerSelector.position.x = Tapotan.getGameWidth() - this.layerSelector.width - 12;
+        this.addChild(this.layerSelector);
     }
 
     public destroy() {

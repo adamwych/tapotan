@@ -91,7 +91,6 @@ export default class ScreenLevelEditor extends Screen {
             this.uiContainer.addChild(this.prefabDrawer);
 
             this.bottomContainer = new WidgetLevelEditorBottomContainer(this.world, this.prefabDrawer, this.spawnPrefabAsShade);
-            this.bottomContainer.position.y = Math.floor((Tapotan.getGameHeight() - this.bottomContainer.height));
             this.uiContainer.addChild(this.bottomContainer);
         }
         this.game.getPixiApplication().stage.addChild(this.uiContainer);
