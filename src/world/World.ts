@@ -316,9 +316,38 @@ export default class World extends PIXI.Container {
         return this.gameObjects.find(x => x.getId() === id);
     }
 
-    public getGameObjectsAtPosition(x: number, y: number): Array<GameObject> {
-        let result = [];
-        return result;
+    /**
+     * Returns game objects at specified position.
+     * 
+     * @param x 
+     * @param y 
+     * @param topLeftAligned Whether `x` and `y` are aligned as if (0, 0) was at the top left corner.
+     */
+    public getGameObjectsAtPosition(x: number, y: number, topLeftAligned: boolean): Array<GameObject> {
+        const roundTo4th = x => Math.round(x * 10000) / 10000;
+
+        let results = [];
+
+        // All positions must be rounded to 4 decimal places for this to work!
+
+        x = roundTo4th(x);
+        y = roundTo4th(y);
+
+        this.gameObjects.forEach(gameObject => {
+            if (gameObject.transformComponent) {
+                let gameObjectX = gameObject.transformComponent.getUnalignedPositionX();
+                let gameObjectY = gameObject.transformComponent.getUnalignedPositionY();
+
+                gameObjectX = roundTo4th(gameObjectX);
+                gameObjectY = roundTo4th(gameObjectY);
+
+                if (x === gameObjectX && y === gameObjectY) {
+                    results.push(gameObject);
+                }
+            }
+        });
+
+        return results;
     }
 
     /**

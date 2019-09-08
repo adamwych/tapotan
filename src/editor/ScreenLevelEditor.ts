@@ -34,7 +34,7 @@ export default class ScreenLevelEditor extends Screen {
 
     private bottomContainer: WidgetLevelEditorBottomContainer;
 
-    private newGameObjectShade: GameObject;
+    private newGameObjectShade: GameObject = null;
 
     private objectHoverDepthLevel: number = 0;
 
@@ -133,6 +133,10 @@ export default class ScreenLevelEditor extends Screen {
     private initializeGameObjectInteractivity(gameObject: GameObject) {
         gameObject.interactive = true;
         gameObject.on('mouseover', () => {
+            if (!this.context.canInteractWithEditor() || this.newGameObjectShade !== null) {
+                return;
+            }
+
             this.objectHoverDepthLevel++;
 
             if (this.objectOutlineHover) {
@@ -146,6 +150,10 @@ export default class ScreenLevelEditor extends Screen {
         });
 
         gameObject.on('mouseout', () => {
+            if (!this.context.canInteractWithEditor() || this.newGameObjectShade !== null) {
+                return;
+            }
+
             this.objectHoverDepthLevel--;
 
             setTimeout(() => {
@@ -161,6 +169,10 @@ export default class ScreenLevelEditor extends Screen {
         });
 
         gameObject.on('mousedown', (e) => {
+            if (!this.context.canInteractWithEditor() || this.newGameObjectShade !== null) {
+                return;
+            }
+
             if (
                 this.context.getSelectedObjects().length > 0 &&
                 this.context.getSelectedObjects().includes(gameObject)
@@ -245,7 +257,6 @@ export default class ScreenLevelEditor extends Screen {
     private handleApplicationMouseMove = (e) => {
         if (this.isMouseDown) {
             if (this.newGameObjectShade) {
-                FrameDebugger.instance.start();
                 this.handlePlaceObjectOnMouseCoordinates(e);
             }
         }
@@ -256,22 +267,31 @@ export default class ScreenLevelEditor extends Screen {
         const mouseY = e.data.global.y;
         const worldCoords = screenPointToWorld(mouseX, mouseY);
 
-        // Flip Y because objects are bottom-aligned.
-        worldCoords.y = Tapotan.getViewportHeight() - worldCoords.y - 1;
+        const collidingGameObjects = this.world.getGameObjectsAtPosition(worldCoords.x, worldCoords.y, true);
+        if (
+            // We're not colliding with any object, or...
+            (collidingGameObjects.length === 0) ||
 
-        // Place prefab on current coordinates if there's no object there, yet,
-        // or the object is a background object.
-        const objectName = this.newGameObjectShade.getCustomProperty('__objectName');
+            // We are colliding with an object, but it's the shade in which case it's okay.
+            (collidingGameObjects.length === 1 && collidingGameObjects[0].getId() === this.newGameObjectShade.getId())
+        ) {
+            // Flip Y because objects are bottom-aligned.
+            worldCoords.y = Tapotan.getViewportHeight() - worldCoords.y - 1;
 
-        let prefab = Prefabs[objectName] || Prefabs.BasicBlock;
-        if (prefab) {
-            let gameObject: GameObject = prefab(this.world, worldCoords.x, worldCoords.y, {
-                resource: objectName,
-                ignoresPhysics: false
-            });
+            // Place prefab on current coordinates if there's no object there, yet,
+            // or the object is a background object.
+            const objectName = this.newGameObjectShade.getCustomProperty('__objectName');
 
-            gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
-            this.initializeGameObjectInteractivity(gameObject);
+            let prefab = Prefabs[objectName] || Prefabs.BasicBlock;
+            if (prefab) {
+                let gameObject: GameObject = prefab(this.world, worldCoords.x, worldCoords.y, {
+                    resource: objectName,
+                    ignoresPhysics: false
+                });
+
+                gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+                this.initializeGameObjectInteractivity(gameObject);
+            }
         }
     }
 

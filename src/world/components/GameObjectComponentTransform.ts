@@ -162,9 +162,31 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     }
 
     /**
+     * Returns position on the X axis as if (0, 0) was at the top left corner.
+     */
+    public getUnalignedPositionX(): number {
+        if (this.horizontalAlignment !== GameObjectHorizontalAlignment.Left) {
+            return Tapotan.getViewportWidth() - this.positionX - 1;
+        }
+
+        return this.positionX;
+    }
+
+    /**
      * Returns position on the X axis.
      */
     public getPositionY(): number {
+        return this.positionY;
+    }
+
+    /**
+     * Returns position on the Y axis as if (0, 0) was at the top left corner.
+     */
+    public getUnalignedPositionY(): number {
+        if (this.verticalAlignment !== GameObjectVerticalAlignment.Top) {
+            return Tapotan.getViewportHeight() - this.positionY - 1;
+        }
+
         return this.positionY;
     }
 
