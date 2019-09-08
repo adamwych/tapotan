@@ -15,7 +15,7 @@ export default class LevelEditorContext {
     private commandQueue: LevelEditorCommandQueue;
     private selectedObjects: Array<GameObject> = [];
 
-    private currentLayerIndex: number = 0;
+    private currentLayerIndex: number = 5;
     private layers: Array<LevelEditorLayer> = [];
 
     private world: World;
@@ -57,6 +57,7 @@ export default class LevelEditorContext {
 
     public setCurrentLayerIndex(currentLayerIndex: number) {
         this.currentLayerIndex = currentLayerIndex;
+        this.editorScreen.handleCurrentLayerChange(this.getCurrentLayer());
     }
 
     public getCurrentLayerIndex() {

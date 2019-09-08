@@ -18,6 +18,7 @@ import WidgetLevelEditorPrefabDrawer from './prefab-drawer/WidgetLevelEditorPref
 import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomContainer';
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
+import LevelEditorLayer from './LevelEditorLayer';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -109,7 +110,7 @@ export default class ScreenLevelEditor extends Screen {
 
             this.bottomContainer = new WidgetLevelEditorBottomContainer(this.world, this.prefabDrawer, this.spawnPrefabAsShade);
             this.bottomContainer.interactive = true;
-            this.bottomContainer.on('click', () => {
+            this.bottomContainer.on('mousedown', () => {
                 this.blurActiveAndHoveredObjectOutline();
             });
             this.uiContainer.addChild(this.bottomContainer);
@@ -133,7 +134,7 @@ export default class ScreenLevelEditor extends Screen {
     private initializeGameObjectInteractivity(gameObject: GameObject) {
         gameObject.interactive = true;
         gameObject.on('mouseover', () => {
-            if (!this.context.canInteractWithEditor() || this.newGameObjectShade !== null) {
+            if (!this.canInteractWithGameObject(gameObject)) {
                 return;
             }
 
@@ -150,7 +151,7 @@ export default class ScreenLevelEditor extends Screen {
         });
 
         gameObject.on('mouseout', () => {
-            if (!this.context.canInteractWithEditor() || this.newGameObjectShade !== null) {
+            if (!this.canInteractWithGameObject(gameObject)) {
                 return;
             }
 
@@ -169,7 +170,7 @@ export default class ScreenLevelEditor extends Screen {
         });
 
         gameObject.on('mousedown', (e) => {
-            if (!this.context.canInteractWithEditor() || this.newGameObjectShade !== null) {
+            if (!this.canInteractWithGameObject(gameObject)) {
                 return;
             }
 
@@ -214,6 +215,7 @@ export default class ScreenLevelEditor extends Screen {
         this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
         this.newGameObjectShade.setCustomProperty('__objectName', resourceName);
+        this.newGameObjectShade.setLayer(7);
 
         this.grid.alpha = 1;
         this.grid.visible = true;
@@ -235,6 +237,18 @@ export default class ScreenLevelEditor extends Screen {
         const outline = new WidgetLevelEditorObjectOutline(gameObject, true);
         this.objectOutlineActive.push(outline);
         this.uiContainer.addChild(outline);
+    }
+
+    public handleCurrentLayerChange(currentLayer: LevelEditorLayer) {
+
+        // Disable interactivity with game objects from different layers, and make them less visible.
+        this.world.getGameObjects().forEach(gameObject => {
+            gameObject.interactive = (gameObject.getLayer() === currentLayer.getIndex());
+            gameObject.alpha = gameObject.interactive ? 1 : 0.75;
+        });
+
+        this.blurActiveAndHoveredObjectOutline();
+
     }
 
     private handleApplicationMouseDown = e => {
@@ -267,14 +281,8 @@ export default class ScreenLevelEditor extends Screen {
         const mouseY = e.data.global.y;
         const worldCoords = screenPointToWorld(mouseX, mouseY);
 
-        const collidingGameObjects = this.world.getGameObjectsAtPosition(worldCoords.x, worldCoords.y, true);
-        if (
-            // We're not colliding with any object, or...
-            (collidingGameObjects.length === 0) ||
-
-            // We are colliding with an object, but it's the shade in which case it's okay.
-            (collidingGameObjects.length === 1 && collidingGameObjects[0].getId() === this.newGameObjectShade.getId())
-        ) {
+        const collidingGameObjects = this.world.getGameObjectsAtPosition(worldCoords.x, worldCoords.y, true, this.context.getCurrentLayerIndex());
+        if (collidingGameObjects.length === 0) {
             // Flip Y because objects are bottom-aligned.
             worldCoords.y = Tapotan.getViewportHeight() - worldCoords.y - 1;
 
@@ -290,6 +298,8 @@ export default class ScreenLevelEditor extends Screen {
                 });
 
                 gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+                gameObject.setLayer(this.context.getCurrentLayerIndex());
+                this.context.getCurrentLayer().addGameObject(gameObject);
                 this.initializeGameObjectInteractivity(gameObject);
             }
         }
@@ -332,6 +342,18 @@ export default class ScreenLevelEditor extends Screen {
         if (this.objectOutlineHover) {
             this.objectOutlineHover.tick(dt);
         }
+    }
+
+    /**
+     * Checks whether user should be able to interact with specified game object.
+     * @param gameObject 
+     */
+    public canInteractWithGameObject(gameObject: GameObject): boolean {
+        return (
+            this.context.canInteractWithEditor() &&
+            this.newGameObjectShade === null &&
+            gameObject.getLayer() === this.context.getCurrentLayerIndex()
+        );
     }
 
     public getGridWidget(): WidgetLevelEditorGrid {

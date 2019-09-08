@@ -322,8 +322,9 @@ export default class World extends PIXI.Container {
      * @param x 
      * @param y 
      * @param topLeftAligned Whether `x` and `y` are aligned as if (0, 0) was at the top left corner.
+     * @param layer Layer to look in. `-1` for all.
      */
-    public getGameObjectsAtPosition(x: number, y: number, topLeftAligned: boolean): Array<GameObject> {
+    public getGameObjectsAtPosition(x: number, y: number, topLeftAligned: boolean, layer: number = -1): Array<GameObject> {
         const roundTo4th = x => Math.round(x * 10000) / 10000;
 
         let results = [];
@@ -334,6 +335,10 @@ export default class World extends PIXI.Container {
         y = roundTo4th(y);
 
         this.gameObjects.forEach(gameObject => {
+            if (layer !== -1 && gameObject.getLayer() !== layer) {
+                return;
+            }
+
             if (gameObject.transformComponent) {
                 let gameObjectX = gameObject.transformComponent.getUnalignedPositionX();
                 let gameObjectY = gameObject.transformComponent.getUnalignedPositionY();

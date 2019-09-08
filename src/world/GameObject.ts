@@ -35,6 +35,11 @@ export default class GameObject extends PIXI.Container {
     protected enabled: boolean;
 
     /**
+     * Layer at which this object is.
+     */
+    protected layer: number = 0;
+
+    /**
      * Whether this game object has been destroyed.
      */
     private destroyed: boolean;
@@ -44,11 +49,6 @@ export default class GameObject extends PIXI.Container {
     private debuggerCallback: Function;
 
     /**
-     * World that this game object is in.
-     */
-    protected world: World;
-
-    /**
      * An instance of {@link GameObjectComponentTransform} component that is 
      * attached to this component or NULL if this object has no transform component attached.
      * 
@@ -56,6 +56,11 @@ export default class GameObject extends PIXI.Container {
      * automatically be re-assigned if previous component has been destroyed.
      */
     private _transformComponent: GameObjectComponentTransform = null;
+
+    /**
+     * World that this game object is in.
+     */
+    protected world: World;
 
     constructor() {
         super();
@@ -283,6 +288,22 @@ export default class GameObject extends PIXI.Container {
      */
     public isEnabled() {
         return this.enabled;
+    }
+
+    /**
+     * Sets the layer at which this game object is.
+     * @param layer 
+     */
+    public setLayer(layer: number) {
+        this.layer = layer;
+        this.zIndex = layer;
+    }
+
+    /**
+     * Returns at which layer this game object is.
+     */
+    public getLayer(): number {
+        return this.layer;
     }
 
     /**

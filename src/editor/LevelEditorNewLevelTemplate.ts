@@ -10,6 +10,7 @@ export default class LevelEditorNewLevelTemplate {
                 resource: 'ground_grass_variation0'
             });
             ground.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+            ground.setLayer(5);
         }
     }
 }
