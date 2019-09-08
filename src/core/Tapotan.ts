@@ -16,6 +16,7 @@ import Axios from 'axios';
 import Tileset from '../world/tiles/Tileset';
 import ScreenTest from '../screens/ScreenTest';
 import ScreenLevelEditor from '../editor/ScreenLevelEditor';
+import FrameDebugger from './FrameDebugger';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -37,6 +38,7 @@ export default class Tapotan {
     private uiObjectsContainer: PIXI.Container;
     private cameraAwareUIObjectsContainer: PIXI.Container;
     private audioManager: AudioManager;
+    private frameDebugger: FrameDebugger;
 
     private sessionId: string;
 
@@ -159,10 +161,12 @@ export default class Tapotan {
         this.uiObjectsContainer = new PIXI.Container();
         this.uiObjectsContainer.sortableChildren = true;
         this.uiObjectsContainer.zIndex = 2;
-
+        
         this.cameraAwareUIObjectsContainer = new PIXI.Container();
         this.cameraAwareUIObjectsContainer.sortableChildren = true;
         this.cameraAwareUIObjectsContainer.zIndex = 1000;
+        
+        this.frameDebugger = new FrameDebugger();
 
         this.application.stage.name = '__application__stage__';
         this.application.stage.addChild(this.viewport);
@@ -367,6 +371,10 @@ export default class Tapotan {
     }
 
     private tick = (dt: number) => {
+        /// #if ENV_DEVELOPMENT
+        this.frameDebugger.frame();
+        /// #endif
+
         this.cameraAwareUIObjectsContainer.position.x = -convertWorldToPixels(this.viewport.left);
         this.cameraAwareUIObjectsContainer.position.y = -convertWorldToPixels(this.viewport.top);
     }

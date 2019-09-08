@@ -11,7 +11,7 @@ export interface PrefabBasicBlockProps {
     ignoresPhysics?: boolean;
 };
 
-export default createPrefabSpawnFunction<PrefabBasicBlockProps>('PREFAB_BASIC_BLOCK', (gameObject: GameObject, world: World, props: PrefabBasicBlockProps) => {
+export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (gameObject: GameObject, world: World, props: PrefabBasicBlockProps) => {
     if (props.ignoresPhysics) {
         gameObject.createComponent(GameObjectComponentTransform);
     } else {

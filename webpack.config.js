@@ -27,7 +27,8 @@ module.exports = {
                     {
                         loader: 'ifdef-loader',
                         options: {
-                            'ENV_PRODUCTION': isProduction
+                            'ENV_PRODUCTION': isProduction,
+                            'ENV_DEVELOPMENT': !isProduction
                         }
                     }
                 ],

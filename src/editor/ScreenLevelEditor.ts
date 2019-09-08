@@ -1,8 +1,11 @@
 import * as PIXI from 'pixi.js';
+import FrameDebugger from '../core/FrameDebugger';
 import InputManager from '../core/InputManager';
 import Tapotan from "../core/Tapotan";
 import Screen from "../screens/Screen";
+import screenPointToWorld from '../utils/screenPointToWorld';
 import GameObjectComponentEditorShade from '../world/components/GameObjectComponentEditorShade';
+import { GameObjectVerticalAlignment } from '../world/components/GameObjectComponentTransform';
 import GameObject from '../world/GameObject';
 import Prefabs from '../world/prefabs/Prefabs';
 import World from '../world/World';
@@ -38,6 +41,8 @@ export default class ScreenLevelEditor extends Screen {
     private cameraMovementController: LevelEditorCameraMovementController;
     private keyboardShortcutsController: LevelEditorKeyboardShortcutsController;
 
+    private isMouseDown: boolean = false;
+
     private world: World;
 
     constructor(game: Tapotan) {
@@ -60,6 +65,10 @@ export default class ScreenLevelEditor extends Screen {
         this.initializeGeneralInteractivity();
     }
 
+    /**
+     * Called after the screen is removed from the screen manager.
+     * Frees all allocated resources and removes listeners.
+     */
     public onRemovedFromScreenManager() {
         this.destroy({ children: true });
 
@@ -67,9 +76,14 @@ export default class ScreenLevelEditor extends Screen {
         this.activeObjectDragController.destroy();
         
         this.uiContainer.destroy({ children: true });
-        this.game.getPixiApplication().stage.off('mousedown', this.handleApplicationMouseDown);
-        this.game.getPixiApplication().stage.off('mouseup', this.handleApplicationMouseUp);
+
+        const applicationStage = this.game.getPixiApplication().stage;
+        applicationStage.off('mousedown', this.handleApplicationMouseDown);
+        applicationStage.off('mouseup', this.handleApplicationMouseUp);
+        applicationStage.off('mousemove', this.handleApplicationMouseMove);
+        
         InputManager.instance.removeMouseClickListener(this.handleRightMouseButtonClick);
+        InputManager.instance.removeKeyDownListener(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
 
         this.prefabDrawer.destroy({ children: true });
         this.bottomContainer.destroy();
@@ -78,6 +92,9 @@ export default class ScreenLevelEditor extends Screen {
         this.world.destroy({ children: true });
     }
 
+    /**
+     * Initializes editor's UI widgets.
+     */
     private initializeWidgets() {
         this.uiContainer = new PIXI.Container();
         this.uiContainer.zIndex = 9999;
@@ -91,59 +108,73 @@ export default class ScreenLevelEditor extends Screen {
             this.uiContainer.addChild(this.prefabDrawer);
 
             this.bottomContainer = new WidgetLevelEditorBottomContainer(this.world, this.prefabDrawer, this.spawnPrefabAsShade);
+            this.bottomContainer.interactive = true;
+            this.bottomContainer.on('click', () => {
+                this.blurActiveAndHoveredObjectOutline();
+            });
             this.uiContainer.addChild(this.bottomContainer);
         }
         this.game.getPixiApplication().stage.addChild(this.uiContainer);
     }
 
+    /**
+     * Calls `initializeGameObjectInteractivity` with every object in the world.
+     */
     private initializeGameObjectsInteractivity() {
         this.world.getGameObjects().forEach(gameObject => {
-            gameObject.interactive = true;
-            gameObject.on('mouseover', () => {
-                this.objectHoverDepthLevel++;
+            this.initializeGameObjectInteractivity(gameObject);
+        });
+    }
 
-                if (this.objectOutlineHover) {
-                    this.objectOutlineHover.destroy({ children: true });
-                    this.objectOutlineHover = null;
-                }
+    /**
+     * Initializes interactivity with specified game object.
+     * @param gameObject 
+     */
+    private initializeGameObjectInteractivity(gameObject: GameObject) {
+        gameObject.interactive = true;
+        gameObject.on('mouseover', () => {
+            this.objectHoverDepthLevel++;
 
-                this.objectOutlineHover = new WidgetLevelEditorObjectOutline(gameObject);
-                this.uiContainer.addChild(this.objectOutlineHover);
-                this.game.setCursor(Tapotan.Cursor.Move);
-            });
+            if (this.objectOutlineHover) {
+                this.objectOutlineHover.destroy({ children: true });
+                this.objectOutlineHover = null;
+            }
 
-            gameObject.on('mouseout', () => {
-                this.objectHoverDepthLevel--;
+            this.objectOutlineHover = new WidgetLevelEditorObjectOutline(gameObject);
+            this.uiContainer.addChild(this.objectOutlineHover);
+            this.game.setCursor(Tapotan.Cursor.Move);
+        });
 
-                setTimeout(() => {
-                    if (this.objectHoverDepthLevel === 0) {
-                        if (this.objectOutlineHover && this.objectOutlineHover.getObject() === gameObject) {
-                            this.objectOutlineHover.destroy({ children: true });
-                            this.objectOutlineHover = null;
-                        }
+        gameObject.on('mouseout', () => {
+            this.objectHoverDepthLevel--;
 
-                        this.game.setCursor(Tapotan.Cursor.Default);
+            setTimeout(() => {
+                if (this.objectHoverDepthLevel === 0) {
+                    if (this.objectOutlineHover && this.objectOutlineHover.getObject() === gameObject) {
+                        this.objectOutlineHover.destroy({ children: true });
+                        this.objectOutlineHover = null;
                     }
-                }, 32);
-            });
 
-            gameObject.on('mousedown', (e) => {
-                if (
-                    this.context.getSelectedObjects().length > 0 &&
-                    this.context.getSelectedObjects().includes(gameObject)
-                ) {
-                    return;
+                    this.game.setCursor(Tapotan.Cursor.Default);
                 }
+            }, 32);
+        });
 
-                // If we're not doing multi-select the first empty
-                // the selected objects array.
-                if (!e.data.originalEvent.shiftKey) {
-                    this.clearSelectedObjects();
-                }
+        gameObject.on('mousedown', (e) => {
+            if (
+                this.context.getSelectedObjects().length > 0 &&
+                this.context.getSelectedObjects().includes(gameObject)
+            ) {
+                return;
+            }
 
-                this.markObjectAsSelected(gameObject);
+            // If we're not doing multi-select the first empty
+            // the selected objects array.
+            if (!e.data.originalEvent.shiftKey) {
+                this.clearSelectedObjects();
+            }
 
-            });
+            this.markObjectAsSelected(gameObject);
         });
     }
 
@@ -152,12 +183,15 @@ export default class ScreenLevelEditor extends Screen {
         applicationStage.interactive = true;
         applicationStage.on('mousedown', this.handleApplicationMouseDown);
         applicationStage.on('mouseup', this.handleApplicationMouseUp);
+        applicationStage.on('mousemove', this.handleApplicationMouseMove);
         InputManager.instance.listenMouseClick(InputManager.MouseButton.Right, this.handleRightMouseButtonClick);
+        InputManager.instance.listenKeyDown(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
     }
 
     private spawnPrefabAsShade = (resourceName: string) => {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
+            this.newGameObjectShade = null;
         }
 
         this.newGameObjectShade = Prefabs.BasicBlock(this.world, 0, 0, {
@@ -167,6 +201,7 @@ export default class ScreenLevelEditor extends Screen {
         this.newGameObjectShade.visible = false;
         this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
+        this.newGameObjectShade.setCustomProperty('__objectName', resourceName);
 
         this.grid.alpha = 1;
         this.grid.visible = true;
@@ -191,21 +226,59 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private handleApplicationMouseDown = e => {
+        this.isMouseDown = true;
+
         if (e.data.originalEvent.which !== 2 && e.target.name === '__application__stage__') {
             this.blurActiveAndHoveredObjectOutline();
         }
     }
     
     private handleApplicationMouseUp = (e) => {
+        this.isMouseDown = false;
+
         if (this.objectOutlineActive.length > 0) {
             this.grid.alpha = 1;
             this.grid.visible = false;
         }
     }
 
+    private handleApplicationMouseMove = (e) => {
+        if (this.isMouseDown) {
+            if (this.newGameObjectShade) {
+                FrameDebugger.instance.start();
+                this.handlePlaceObjectOnMouseCoordinates(e);
+            }
+        }
+    }
+
+    private handlePlaceObjectOnMouseCoordinates = (e) => {
+        const mouseX = e.data.global.x;
+        const mouseY = e.data.global.y;
+        const worldCoords = screenPointToWorld(mouseX, mouseY);
+
+        // Flip Y because objects are bottom-aligned.
+        worldCoords.y = Tapotan.getViewportHeight() - worldCoords.y - 1;
+
+        // Place prefab on current coordinates if there's no object there, yet,
+        // or the object is a background object.
+        const objectName = this.newGameObjectShade.getCustomProperty('__objectName');
+
+        let prefab = Prefabs[objectName] || Prefabs.BasicBlock;
+        if (prefab) {
+            let gameObject: GameObject = prefab(this.world, worldCoords.x, worldCoords.y, {
+                resource: objectName,
+                ignoresPhysics: false
+            });
+
+            gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+            this.initializeGameObjectInteractivity(gameObject);
+        }
+    }
+
     private handleRightMouseButtonClick = () => {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
+            this.newGameObjectShade = null;
 
             this.grid.alpha = 1;
             this.grid.visible = false;
