@@ -9,6 +9,7 @@ export default class InputManager {
         KeySpace: 32,
         KeyB: 66,
         KeyG: 71,
+        KeyQ: 81,
         KeyEscape: 27,
         KeyDelete: 46,
         KeyShift: 16,

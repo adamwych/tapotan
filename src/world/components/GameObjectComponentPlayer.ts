@@ -243,6 +243,13 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
                 this.touchingSide = GameObjectFaceDirection.Right;
             }
         }
+
+        if (this.touchingSide) {
+            let touchingBody = this.gameObject.getWorld().getGameObjectByPhysicsBodyId(result.body.id);
+            if (touchingBody.getLayer() !== this.gameObject.getLayer()) {
+                this.touchingSide = null;
+            }
+        }
     }
 
     public getDebugProperties(): Array<GameObjectComponentDebugProperty> {

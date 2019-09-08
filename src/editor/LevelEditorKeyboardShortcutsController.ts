@@ -36,7 +36,7 @@ export default class LevelEditorKeyboardShortcutsController {
     }
 
     private handlePlaythroughToggleShortcutClick = () => {
-        
+        this.context.getPlaythroughController().toggle();
     }
 
     private handleDeleteObjectsShortcutClick = () => {
@@ -56,7 +56,7 @@ export default class LevelEditorKeyboardShortcutsController {
     private getKeyboardShortcuts() {
         return {
             [InputManager.KeyCodes.KeyG]: this.handleGridToggleShortcutClick,
-            [InputManager.KeyCodes.KeyB]: this.handlePlaythroughToggleShortcutClick,
+            [InputManager.KeyCodes.KeyQ]: this.handlePlaythroughToggleShortcutClick,
             [InputManager.KeyCodes.KeyDelete]: this.handleDeleteObjectsShortcutClick
         }
     }
