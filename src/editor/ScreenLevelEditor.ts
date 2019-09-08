@@ -45,6 +45,14 @@ export default class ScreenLevelEditor extends Screen {
     private playthroughController: LevelEditorPlaythroughController;
 
     private isMouseDown: boolean = false;
+    
+    private isSettingSpawnPoint: boolean = false;
+    private isSpawnPointSet: boolean = false;
+
+    private isSettingEndPoint: boolean = false;
+    private isEndPointSet: boolean = false;
+
+    private spawnPointShadeObject: GameObject;
 
     private world: World;
 
@@ -60,11 +68,14 @@ export default class ScreenLevelEditor extends Screen {
         this.keyboardShortcutsController = new LevelEditorKeyboardShortcutsController(this.context);
         this.playthroughController = new LevelEditorPlaythroughController(this.context);
         
+        this.initializeWidgets();
+        
         if (this.world.isNewWorld()) {
             LevelEditorNewLevelTemplate.createGameObjects(this.world);
+            this.world.setSpawnPointPosition(4, 1);
+            this.handleSpawnPointSet(this.world.getSpawnPointPosition());
         }
-        
-        this.initializeWidgets();
+
         this.initializeGameObjectsInteractivity();
         this.initializeGeneralInteractivity();
     }
@@ -113,7 +124,7 @@ export default class ScreenLevelEditor extends Screen {
 
             this.bottomContainer = new WidgetLevelEditorBottomContainer(this.context, this.prefabDrawer);
             this.bottomContainer.interactive = true;
-            this.bottomContainer.on('mousedown', () => {
+            this.bottomContainer.on('mousedown', (e) => {
                 this.blurActiveAndHoveredObjectOutline();
             });
             this.uiContainer.addChild(this.bottomContainer);
@@ -222,6 +233,9 @@ export default class ScreenLevelEditor extends Screen {
 
         this.grid.alpha = 1;
         this.grid.visible = true;
+
+        this.isSettingSpawnPoint = false;
+        this.isSettingEndPoint = false;
     }
 
     private clearSelectedObjects() {
@@ -247,15 +261,43 @@ export default class ScreenLevelEditor extends Screen {
         // Disable interactivity with game objects from different layers, and make them less visible.
         this.world.getGameObjects().forEach(gameObject => {
             gameObject.interactive = (gameObject.getLayer() === currentLayer.getIndex());
-            gameObject.alpha = gameObject.interactive ? 1 : 0.75;
+            gameObject.alpha = gameObject.interactive || gameObject.getLayer() === 7 ? 1 : 0.75;
         });
 
         this.blurActiveAndHoveredObjectOutline();
 
     }
 
+    public handleSetSpawnPointTileClick() {
+        if (this.newGameObjectShade) {
+            this.newGameObjectShade.destroy();
+            this.newGameObjectShade = null;
+        }
+
+        this.newGameObjectShade = Prefabs.SpawnPointShade(this.world, 0, 0);
+        this.newGameObjectShade.visible = false;
+        this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
+        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
+        this.newGameObjectShade.setLayer(7);
+
+        this.grid.alpha = 1;
+        this.grid.visible = true;
+
+        this.isSettingSpawnPoint = true;
+        this.isSettingEndPoint = false;
+    }
+
+    public handleSetEndPointTileClick() {
+        this.isSettingSpawnPoint = false;
+        this.isSettingEndPoint = true;
+    }
+
     private handleApplicationMouseDown = e => {
         this.isMouseDown = true;
+
+        if (e.data.originalEvent.which === 1 && this.newGameObjectShade !== null) {
+            this.handlePlaceObjectOnMouseCoordinates(e);
+        }
 
         if (e.data.originalEvent.which !== 2 && e.target.name === '__application__stage__') {
             this.blurActiveAndHoveredObjectOutline();
@@ -286,15 +328,20 @@ export default class ScreenLevelEditor extends Screen {
 
         const collidingGameObjects = this.world.getGameObjectsAtPosition(worldCoords.x, worldCoords.y, true, this.context.getCurrentLayerIndex());
         if (collidingGameObjects.length === 0) {
+
             // Flip Y because objects are bottom-aligned.
             worldCoords.y = Tapotan.getViewportHeight() - worldCoords.y - 1;
 
-            // Place prefab on current coordinates if there's no object there, yet,
-            // or the object is a background object.
-            const objectName = this.newGameObjectShade.getCustomProperty('__objectName');
+            if (this.isSettingSpawnPoint) {
+                this.handleSpawnPointSet(worldCoords);
+            } else if (this.isSettingEndPoint) {
+                this.handleEndPointSet(worldCoords);
+            } else {
+                // Place prefab on current coordinates if there's no object there, yet,
+                // or the object is a background object.
+                const objectName = this.newGameObjectShade.getCustomProperty('__objectName');
 
-            let prefab = Prefabs[objectName] || Prefabs.BasicBlock;
-            if (prefab) {
+                let prefab = Prefabs[objectName] || Prefabs.BasicBlock;
                 let gameObject: GameObject = prefab(this.world, worldCoords.x, worldCoords.y, {
                     resource: objectName,
                     ignoresPhysics: false
@@ -306,6 +353,27 @@ export default class ScreenLevelEditor extends Screen {
                 this.initializeGameObjectInteractivity(gameObject);
             }
         }
+    }
+
+    private handleSpawnPointSet(worldCoords: PIXI.Point) {
+        if (this.isSpawnPointSet) {
+            this.spawnPointShadeObject.destroy();
+            this.world.removeGameObject(this.spawnPointShadeObject);
+        }
+
+        this.spawnPointShadeObject = Prefabs.SpawnPointShade(this.world, worldCoords.x, worldCoords.y);
+        this.spawnPointShadeObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+        this.spawnPointShadeObject.setLayer(this.context.getCurrentLayerIndex());
+
+        this.world.setSpawnPointPosition(worldCoords.x, worldCoords.y);
+        this.isSpawnPointSet = true;
+
+        this.handleRightMouseButtonClick();
+        this.bottomContainer.getPlayButton().setEnabled(true);
+    }
+
+    private handleEndPointSet(worldCoords: PIXI.Point) {
+
     }
 
     private handleRightMouseButtonClick = () => {
@@ -365,6 +433,10 @@ export default class ScreenLevelEditor extends Screen {
 
     public getPlaythroughController(): LevelEditorPlaythroughController {
         return this.playthroughController;
+    }
+
+    public getSpawnPointShadeObject(): GameObject {
+        return this.spawnPointShadeObject;
     }
 
 }

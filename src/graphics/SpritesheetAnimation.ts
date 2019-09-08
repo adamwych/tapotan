@@ -1,17 +1,19 @@
 import * as PIXI from 'pixi.js';
+import Spritesheet from './Spritesheet';
 
 export default class SpritesheetAnimation extends PIXI.Graphics {
+
+    private spritesheet: Spritesheet;
     private currentCellIndex: number = 0;
-    private cellTime: number = 0;
-    private cellsNumber: number = 0;
-    private playing: boolean = false;
+    private time: number = 0;
     private timer: number = 0;
+    private playing: boolean = false;
     
-    constructor(cellsNumber: number, cellTime: number) {
+    constructor(spritesheet: Spritesheet, time: number) {
         super();
 
-        this.cellsNumber = cellsNumber;
-        this.cellTime = cellTime;
+        this.spritesheet = spritesheet;
+        this.time = time;
     }
 
     public play(): void {
@@ -30,11 +32,11 @@ export default class SpritesheetAnimation extends PIXI.Graphics {
 
         this.timer += dt;
 
-        if (this.timer * 1000 > this.cellTime) {
+        if (this.timer * 1000 > this.time) {
             this.timer = 0;
 
             this.currentCellIndex++;
-            if (this.currentCellIndex >= this.cellsNumber) {
+            if (this.currentCellIndex >= this.spritesheet.getCellsNumber()) {
                 this.currentCellIndex = 0;
             }
         }

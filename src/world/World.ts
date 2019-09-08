@@ -10,6 +10,8 @@ import LockDoorKeyConnection from './LockDoorKeyConnection';
 import PhysicsMaterials from './physics/PhysicsMaterials';
 import GameObject from './GameObject';
 import Tileset from './tiles/Tileset';
+import Prefabs from './prefabs/Prefabs';
+import { GameObjectVerticalAlignment } from './components/GameObjectComponentTransform';
 
 export default class World extends PIXI.Container {
 
@@ -167,19 +169,9 @@ export default class World extends PIXI.Container {
         }
     }
 
-    public spawnPlayer(x: number, y: number) {
-        this.playerSpawnPoint.set(x, y);
-
-        /*this.player = new EntityPlayer(this);
-        this.player.setPosition(x + 0.5, y);
-        this.player.zIndex = 999;
-
-        this.game.getViewport().left = this.playerSpawnPoint.x - (Tapotan.getViewportWidth() / 2);
-        if (this.game.getViewport().left < 0) {
-            this.game.getViewport().left = 0;
-        }
-
-        this.addGameObject(this.player);*/
+    public spawnPlayer() {
+        this.player = Prefabs.CharacterLawrence(this, this.playerSpawnPoint.x, this.playerSpawnPoint.y);
+        this.player.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
     }
 
     public addPhysicsBody(parent: any, body: p2.Body) {
@@ -330,6 +322,10 @@ export default class World extends PIXI.Container {
         let results = [];
 
         // All positions must be rounded to 4 decimal places for this to work!
+
+        if (!topLeftAligned) {
+            y = Tapotan.getViewportHeight() - y - 1;
+        }
 
         x = roundTo4th(x);
         y = roundTo4th(y);

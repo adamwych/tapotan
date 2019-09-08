@@ -1,4 +1,4 @@
-import GameObjectComponent from "../GameObjectComponent";
+import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 
 /**
  * Base component that all living entities should have attached.
@@ -24,6 +24,14 @@ export default class GameObjectComponentLivingEntity extends GameObjectComponent
     protected removeUponDeath: boolean = true;
 
     protected destroy(): void { }
+
+    public getDebugProperties(): Array<GameObjectComponentDebugProperty> {
+        return [
+            ['Is Dead?', this.dead],
+            ['Is Invulnerable?', this.invulnerable],
+            ['Remove Upon Death', this.removeUponDeath]
+        ];
+    }
 
     /**
      * Marks this entity as alive.

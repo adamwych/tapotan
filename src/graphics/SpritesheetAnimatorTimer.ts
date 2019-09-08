@@ -1,5 +1,4 @@
 import TickHelper from "../core/TickHelper";
-import { runInThisContext } from "vm";
 
 export default class SpritesheetAnimatorTimer {
 

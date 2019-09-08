@@ -23,7 +23,7 @@ export default class WidgetLevelEditorInlineCheckbox extends PIXI.Container {
         this.container = new PIXI.Container();
         this.animator = new ContainerAnimator(this);
 
-        const texture = world.getTileset().getResourceByID('ui_inline_checkbox_background').texture;
+        const texture = world.getTileset().getResourceById('ui_inline_checkbox_background').texture;
         this.background = new PIXI.Sprite(texture);
         this.background.scale.set(4);
         this.container.addChild(this.background);

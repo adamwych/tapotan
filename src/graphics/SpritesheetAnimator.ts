@@ -1,15 +1,16 @@
 import * as PIXI from 'pixi.js';
 import SpritesheetAnimatorTimer from './SpritesheetAnimatorTimer';
+import Spritesheet from './Spritesheet';
 
 type SpritesheetAnimatorAnimation = {
-    spritesheet: PIXI.Sprite;
+    spritesheet: Spritesheet;
+    sprite: PIXI.Sprite;
     cells: number;
     speed: number;
 }
 
 export default class SpritesheetAnimator extends PIXI.Container {
     
-    private container: PIXI.Container;
     private animations: {[k: string]: SpritesheetAnimatorAnimation} = {};
     
     private currentAnimation: string;
@@ -24,7 +25,7 @@ export default class SpritesheetAnimator extends PIXI.Container {
     private cellHeight = 16;
     private transformMultiplier = 1;
 
-    constructor(container: PIXI.Container, timer: SpritesheetAnimatorTimer = null) {
+    constructor(timer: SpritesheetAnimatorTimer = null) {
         super();
 
         if (!timer) {
@@ -33,8 +34,6 @@ export default class SpritesheetAnimator extends PIXI.Container {
 
         this.timer = timer;
         this.timer.addTickCallback(this.tick);
-
-        this.container = container;
     }
 
     public tick = (cellIndex: number) => {
@@ -82,7 +81,7 @@ export default class SpritesheetAnimator extends PIXI.Container {
                 this.sprite.removeChild(this.sprite.mask);
             }
 
-            this.sprite = animation.spritesheet;
+            this.sprite = animation.sprite;
             this.sprite.mask = new PIXI.Graphics();
             this.sprite.addChild(this.sprite.mask);
 
@@ -113,10 +112,11 @@ export default class SpritesheetAnimator extends PIXI.Container {
         this.sprite.removeChild(this.sprite.mask);
     }
 
-    public addAnimation(name: string, spritesheet: PIXI.Sprite, cellsNumber: number, cellTime: number) {
+    public addAnimation(name: string, spritesheet: Spritesheet, cellTime: number) {
         this.animations[name] = {
             spritesheet: spritesheet,
-            cells: cellsNumber,
+            sprite: new PIXI.Sprite(spritesheet.getTexture()),
+            cells: spritesheet.getCellsNumber(),
             speed: cellTime
         };
     }

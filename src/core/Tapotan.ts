@@ -319,7 +319,7 @@ export default class Tapotan {
 
         this.gameManager = new GameManager(this);
 
-        world.spawnPlayer(world.getSpawnPointPosition().x, world.getSpawnPointPosition().y);
+        world.spawnPlayer();
         world.handleGameStart();
         
         this.gameManager.setGameState(GameState.Playing);

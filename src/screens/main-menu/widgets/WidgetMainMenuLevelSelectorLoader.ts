@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import SpritesheetAnimator from '../../../graphics/SpritesheetAnimator';
 import Tapotan from '../../../core/Tapotan';
+import Spritesheet from '../../../graphics/Spritesheet';
 
 export default class WidgetMainMenuLevelSelectorLoader extends PIXI.Container {
 
@@ -21,11 +22,11 @@ export default class WidgetMainMenuLevelSelectorLoader extends PIXI.Container {
 
         const loaderSpritesheet = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/Loader'];
         loaderSpritesheet.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-        this.animator = new SpritesheetAnimator(this);
+        this.animator = new SpritesheetAnimator();
         this.animator.setCellWidth(16);
         this.animator.setCellHeight(16);
         this.animator.setTransformMultiplier(16);
-        this.animator.addAnimation('default', new PIXI.Sprite(loaderSpritesheet.texture), 4, 150);
+        // this.animator.addAnimation('default', new Spritesheet(loaderSpritesheet.texture, ), 4, 150);
         this.animator.playAnimation('default');
         
         this.animatorWrapper = new PIXI.Container();

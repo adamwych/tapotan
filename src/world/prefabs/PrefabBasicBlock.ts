@@ -5,6 +5,8 @@ import GameObjectComponentTransform from "../components/GameObjectComponentTrans
 import GameObject from "../GameObject";
 import World from "../World";
 import createPrefabSpawnFunction from "./createPrefabSpawnFunction";
+import PhysicsBodyCollisionGroup from "../physics/PhysicsBodyCollisionGroup";
+import PhysicsMaterials from "../physics/PhysicsMaterials";
 
 export interface PrefabBasicBlockProps {
     resource: string;
@@ -21,10 +23,14 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
             fixedRotation: true
         });
 
+        body.setCollisionGroup(PhysicsBodyCollisionGroup.Block);
+        body.setMaterial(PhysicsMaterials.Ground);
+        body.setCollisionMask(PhysicsBodyCollisionGroup.Entity | PhysicsBodyCollisionGroup.Player);
+
         gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
     }
     
-    const texture = world.getTileset().getResourceByID(props.resource).texture;
+    const texture = world.getTileset().getResourceById(props.resource).texture;
     const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
     spriteComponent.initialize(texture);
 });

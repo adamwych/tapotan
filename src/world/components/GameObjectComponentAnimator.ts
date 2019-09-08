@@ -2,13 +2,14 @@ import * as PIXI from 'pixi.js';
 import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 import SpritesheetAnimator from '../../graphics/SpritesheetAnimator';
 import SpritesheetAnimatorTimer from '../../graphics/SpritesheetAnimatorTimer';
+import Spritesheet from '../../graphics/Spritesheet';
 
-export default class GameObjectComponentSpritesheet extends GameObjectComponent {
+export default class GameObjectComponentAnimator extends GameObjectComponent {
 
     private animator: SpritesheetAnimator;
 
     public initialize(timer?: SpritesheetAnimatorTimer): void {
-        this.animator = new SpritesheetAnimator(this.gameObject, timer);
+        this.animator = new SpritesheetAnimator(timer);
         this.animator.scale.set(1 / 16, 1 / 16);
 
         this.gameObject.addChild(this.animator);
@@ -21,8 +22,8 @@ export default class GameObjectComponentSpritesheet extends GameObjectComponent 
         this.animator = null;
     }
     
-    public addAnimation(name: string, spritesheet: PIXI.Sprite, cellsNumber: number, cellTime: number) {
-        this.animator.addAnimation(name, spritesheet, cellsNumber, cellTime);
+    public addAnimation(name: string, spritesheet: Spritesheet, time: number) {
+        this.animator.addAnimation(name, spritesheet, time);
     }
 
     public playAnimation(name: string, startFrame: number = 0) {

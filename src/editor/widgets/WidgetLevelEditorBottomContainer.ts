@@ -55,12 +55,32 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         this.prefabCategoryTilesContainer.position.x = 12;
 
         this.context.getWorld().getTileset().getEditorCategories().forEach(editorCategory => {
-            let categoryTile = new WidgetLevelEditorPrefabCategoryTile(this.context.getWorld(), editorCategory.name);
+            const categoryTile = new WidgetLevelEditorPrefabCategoryTile(this.context.getWorld(), editorCategory.name);
             categoryTile.on('click', () => {
                 this.openPrefabCategoryDrawer(editorCategory);
             });
             this.prefabCategoryTilesContainer.addCategoryTile(categoryTile);
         });
+
+        {
+            const spawnPointCategoryTile = new WidgetLevelEditorPrefabCategoryTile(this.context.getWorld(), 'spawnpoint');
+            spawnPointCategoryTile.on('click', () => {
+                this.beginSynchronization();
+                this.prefabDrawer.hide();
+                this.context.getEditorScreen().handleSetSpawnPointTileClick();
+            });
+            this.prefabCategoryTilesContainer.addCategoryTile(spawnPointCategoryTile);
+        }
+
+        {
+            const endPointCategoryTile = new WidgetLevelEditorPrefabCategoryTile(this.context.getWorld(), 'endpoint');
+            endPointCategoryTile.on('click', () => {
+                this.beginSynchronization();
+                this.prefabDrawer.hide();
+                this.context.getEditorScreen().handleSetEndPointTileClick();
+            });
+            this.prefabCategoryTilesContainer.addCategoryTile(endPointCategoryTile);
+        }
 
         this.addChild(this.prefabCategoryTilesContainer);
     }
@@ -76,6 +96,10 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         this.playButton.position.x = Math.floor(Tapotan.getGameWidth() / 2);
         this.playButton.position.y = 24;
         this.playButton.on('click', () => {
+            if (!this.playButton.isEnabled()) {
+                return;
+            }
+
             const controller = this.context.getPlaythroughController();
             const playing = controller.toggle();
             this.playButton.setPlaying(playing);
@@ -130,7 +154,7 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
                 groups.push(group);
 
                 groupDescriptor.resources.forEach(resourceName => {
-                    const drawerItem = new WidgetLevelEditorPrefabDrawerGroupItem(this.context.getWorld().getTileset().getResourceByID(resourceName));
+                    const drawerItem = new WidgetLevelEditorPrefabDrawerGroupItem(this.context.getWorld().getTileset().getResourceById(resourceName));
                     drawerItem.on('click', () => {
                         this.beginSynchronization();
                         this.prefabDrawer.hide();

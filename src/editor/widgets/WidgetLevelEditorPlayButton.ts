@@ -12,25 +12,35 @@ export default class WidgetLevelEditorPlayButton extends PIXI.Container {
 
     private redBackground: PIXI.Sprite;
     private greenBackground: PIXI.Sprite;
+    private grayBackground: PIXI.Sprite;
 
     private label: WidgetText;
+
+    private enabled: boolean = false;
+    private playing: boolean = false;
 
     constructor(world: World) {
         super();
 
         this.animator = new ContainerAnimator(this);
 
-        const redTexture = world.getTileset().getResourceByID('ui_stop_button').texture;
+        const redTexture = world.getTileset().getResourceById('ui_stop_button').texture;
         this.redBackground = new PIXI.Sprite(redTexture);
         this.redBackground.scale.set(4);
         this.redBackground.visible = false;
         this.addChild(this.redBackground);
 
-        const greenTexture = world.getTileset().getResourceByID('ui_play_button').texture;
+        const greenTexture = world.getTileset().getResourceById('ui_play_button').texture;
         this.greenBackground = new PIXI.Sprite(greenTexture);
         this.greenBackground.scale.set(4);
         this.greenBackground.visible = false;
         this.addChild(this.greenBackground);
+
+        const grayTexture = world.getTileset().getResourceById('ui_play_button_notallowed').texture;
+        this.grayBackground = new PIXI.Sprite(grayTexture);
+        this.grayBackground.scale.set(4);
+        this.grayBackground.visible = false;
+        this.addChild(this.grayBackground);
         
         this.pivot.set(this.redBackground.width / 2, this.redBackground.height / 2);
 
@@ -40,23 +50,53 @@ export default class WidgetLevelEditorPlayButton extends PIXI.Container {
         this.addChild(this.label);
 
         this.interactive = true;
-        this.on('mousedown', () => this.animator.play(new ContainerAnimationButtonMouseDown()));
-        this.on('mouseover', () => this.animator.play(new ContainerAnimationButtonMouseOver()));
-        this.on('mouseout', () => this.animator.play(new ContainerAnimationButtonMouseOut()));
+        this.on('mousedown', () => this.enabled ? this.animator.play(new ContainerAnimationButtonMouseDown()) : void 0);
+        this.on('mouseover', () => this.enabled ? this.animator.play(new ContainerAnimationButtonMouseOver()) : void 0);
+        this.on('mouseout', () => this.enabled ? this.animator.play(new ContainerAnimationButtonMouseOut()) : void 0);
 
         this.setPlaying(false);
+        this.setEnabled(true);
     }
 
     public setPlaying(playing: boolean) {
-        if (playing) {
-            this.label.setText('STOP');
-            this.greenBackground.visible = false;
-            this.redBackground.visible = true;
+        this.playing = playing;
+        this.updateBackground();
+    }
+
+    public setEnabled(enabled: boolean) {
+        this.enabled = enabled;
+        this.updateBackground();
+    }
+
+    private updateBackground() {
+        this.redBackground.visible = false;
+        this.greenBackground.visible = false;
+        this.grayBackground.visible = false;
+
+        if (this.enabled) {
+            if (this.playing) {
+                this.label.setText('STOP');
+                this.redBackground.visible = true;
+            } else {
+                this.label.setText('PLAY');
+                this.greenBackground.visible = true;
+            }
         } else {
-            this.label.setText('PLAY');
-            this.greenBackground.visible = true;
-            this.redBackground.visible = false;
+            if (this.playing) {
+                // Not possible.
+            } else {
+                this.label.setText('PLAY');
+                this.grayBackground.visible = true;
+            }
         }
+    }
+
+    public isEnabled() {
+        return this.enabled;
+    }
+
+    public isPlaying() {
+        return this.playing;
     }
 
 }

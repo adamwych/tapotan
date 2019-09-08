@@ -54,7 +54,7 @@ export default class Tileset {
         this.editorCategories.push(category);
     }
 
-    public getEditorCategoryByID(id: string) {
+    public getEditorCategoryById(id: string) {
         return this.editorCategories.find(x => x.name === id);
     }
 
@@ -62,7 +62,7 @@ export default class Tileset {
         return this.editorCategories;
     }
 
-    public getResourceByID(id: string): LoaderResource {
+    public getResourceById(id: string): LoaderResource {
         let res = this.resources[id];
         if (res) {
             return res.resource;
@@ -133,7 +133,7 @@ export default class Tileset {
                 tileset.setResourceAsBackground(resourceID);
             }
 
-            tileset.getEditorCategoryByID(categoryID).resources.push(resourceID);
+            tileset.getEditorCategoryById(categoryID).resources.push(resourceID);
         });
 
         rootNode.querySelectorAll('additional-resource').forEach(additionalResourceNode => {

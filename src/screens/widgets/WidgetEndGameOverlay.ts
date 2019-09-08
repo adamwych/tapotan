@@ -49,8 +49,8 @@ export default class WidgetEndGameOverlay extends PIXI.Container {
         topTextureResource.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
         let topAnimatorWrapper = new PIXI.Container();
-        this.topAnimator = new SpritesheetAnimator(null);
-        this.topAnimator.addAnimation('default', new PIXI.Sprite(topTextureResource.texture), 16, 50);
+        this.topAnimator = new SpritesheetAnimator();
+        //this.topAnimator.addAnimation('default', new PIXI.Sprite(topTextureResource.texture), 16, 50);
         this.topAnimator.playAnimation('default');
         this.topAnimator.setCellWidth(160);
         this.topAnimator.setCellHeight(42);
