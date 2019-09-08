@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js';
 import TickHelper from '../../core/TickHelper';
 import ContainerAnimator from '../../graphics/animation/ContainerAnimator';
 import TilesetEditorCategory from '../../tilesets/TilesetEditorCategory';
-import World from '../../world/World';
 import ContainerAnimationEditorPrefabCategoryTileEnter from '../animations/ContainerAnimationEditorPrefabCategoryTileEnter';
 import ContainerAnimationEditorPrefabCategoryTileExit from '../animations/ContainerAnimationEditorPrefabCategoryTileExit';
 import WidgetLevelEditorPrefabCategoryTile from '../prefab-drawer/WidgetLevelEditorPrefabCategoryTile';
@@ -12,26 +11,28 @@ import WidgetLevelEditorPrefabDrawerGroup from '../prefab-drawer/WidgetLevelEdit
 import WidgetLevelEditorPrefabDrawerGroupItem from '../prefab-drawer/WidgetLevelEditorPrefabDrawerGroupItem';
 import WidgetLevelEditorLayerSelector from '../layer-selector/WidgetLevelEditorLayerSelector';
 import Tapotan from '../../core/Tapotan';
+import WidgetLevelEditorPlayButton from './WidgetLevelEditorPlayButton';
+import LevelEditorContext from '../LevelEditorContext';
 
 export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
 
+    private context: LevelEditorContext;
     private animator: ContainerAnimator;
     private prefabCategoryTilesContainer: WidgetLevelEditorPrefabCategoryTilesContainer;
     private doSynchronizePositionToSelectorDrawer: boolean = false;
     private prefabDrawer: WidgetLevelEditorPrefabDrawer;
-    private world: World;
-    private spawnPrefabAsShade: Function;
     private layerSelector: WidgetLevelEditorLayerSelector;
+    private playButton: WidgetLevelEditorPlayButton;
 
-    constructor(world: World, prefabDrawer: WidgetLevelEditorPrefabDrawer, spawnPrefabAsShade: Function) {
+    constructor(context: LevelEditorContext, prefabDrawer: WidgetLevelEditorPrefabDrawer) {
         super();
 
-        this.world = world;
+        this.context = context;
         this.prefabDrawer = prefabDrawer;
-        this.spawnPrefabAsShade = spawnPrefabAsShade;
 
         this.initializePrefabDrawer();
         this.initializeLayerSelector();
+        this.initializePlayButton();
 
         this.animator = new ContainerAnimator(this);
         this.playEnterAnimation();
@@ -42,12 +43,19 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         TickHelper.add(this.tick);
     }
 
+    public destroy() {
+        super.destroy({ children: true });
+        TickHelper.remove(this.tick);
+        this.prefabCategoryTilesContainer.destroy();
+        this.playButton.destroy({ children: true });
+    }
+
     private initializePrefabDrawer() {
         this.prefabCategoryTilesContainer = new WidgetLevelEditorPrefabCategoryTilesContainer();
         this.prefabCategoryTilesContainer.position.x = 12;
 
-        this.world.getTileset().getEditorCategories().forEach(editorCategory => {
-            let categoryTile = new WidgetLevelEditorPrefabCategoryTile(this.world, editorCategory.name);
+        this.context.getWorld().getTileset().getEditorCategories().forEach(editorCategory => {
+            let categoryTile = new WidgetLevelEditorPrefabCategoryTile(this.context.getWorld(), editorCategory.name);
             categoryTile.on('click', () => {
                 this.openPrefabCategoryDrawer(editorCategory);
             });
@@ -58,15 +66,27 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
     }
 
     private initializeLayerSelector() {
-        this.layerSelector = new WidgetLevelEditorLayerSelector(this.world);
+        this.layerSelector = new WidgetLevelEditorLayerSelector(this.context.getWorld());
         this.layerSelector.position.x = Tapotan.getGameWidth() - this.layerSelector.width - 12;
         this.addChild(this.layerSelector);
     }
 
-    public destroy() {
-        super.destroy({ children: true });
-        TickHelper.remove(this.tick);
-        this.prefabCategoryTilesContainer.destroy();
+    private initializePlayButton() {
+        this.playButton = new WidgetLevelEditorPlayButton(this.context.getWorld());
+        this.playButton.position.x = Math.floor(Tapotan.getGameWidth() / 2);
+        this.playButton.position.y = 24;
+        this.playButton.on('click', () => {
+            const controller = this.context.getPlaythroughController();
+            const playing = controller.toggle();
+            this.playButton.setPlaying(playing);
+
+            if (playing) {
+                this.handlePlaythroughStarted();
+            } else {
+                this.handlePlaythroughStopped();
+            }
+        });
+        this.addChild(this.playButton);
     }
 
     private tick = (dt: number) => {
@@ -110,12 +130,12 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
                 groups.push(group);
 
                 groupDescriptor.resources.forEach(resourceName => {
-                    const drawerItem = new WidgetLevelEditorPrefabDrawerGroupItem(this.world.getTileset().getResourceByID(resourceName));
+                    const drawerItem = new WidgetLevelEditorPrefabDrawerGroupItem(this.context.getWorld().getTileset().getResourceByID(resourceName));
                     drawerItem.on('click', () => {
                         this.beginSynchronization();
                         this.prefabDrawer.hide();
 
-                        this.spawnPrefabAsShade(resourceName);
+                        this.context.getEditorScreen().spawnPrefabAsShade(resourceName);
                     });
                     group.addItem(drawerItem);
                 });
@@ -124,4 +144,21 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
             groups.forEach(group => this.prefabDrawer.addGroup(group));
         });
     }
+
+    private handlePlaythroughStarted() {
+        this.beginSynchronization();
+        this.layerSelector.hide();
+        this.prefabCategoryTilesContainer.hide();
+        this.prefabDrawer.hide();
+    }
+
+    public handlePlaythroughStopped() {
+        this.layerSelector.show();
+        this.prefabCategoryTilesContainer.show();
+    }
+
+    public getPlayButton() {
+        return this.playButton;
+    }
+
 }

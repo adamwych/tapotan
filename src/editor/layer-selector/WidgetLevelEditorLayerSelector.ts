@@ -3,13 +3,19 @@ import World from '../../world/World';
 import WidgetText from '../../screens/widgets/WidgetText';
 import WidgetLevelEditorLayerSelectorItem from './WidgetLevelEditorLayerSelectorItem';
 import LevelEditorContext from '../LevelEditorContext';
+import ContainerAnimator from '../../graphics/animation/ContainerAnimator';
+import ContainerAnimationEditorLevelSelectorEnter from '../animations/ContainerAnimationEditorLevelSelectorEnter';
+import ContainerAnimationEditorLevelSelectorExit from '../animations/ContainerAnimationEditorLevelSelectorExit';
 
 export default class WidgetLevelEditorLayerSelector extends PIXI.Container {
 
+    private animator: ContainerAnimator;
     private items: Array<WidgetLevelEditorLayerSelectorItem> = [];
 
     constructor(world: World) {
         super();
+
+        this.animator = new ContainerAnimator(this);
 
         for (let i = 0; i < 6; i++) {
             let layer = new WidgetLevelEditorLayerSelectorItem(world, i, i === 5);
@@ -36,6 +42,14 @@ export default class WidgetLevelEditorLayerSelector extends PIXI.Container {
         });
 
         LevelEditorContext.current.setCurrentLayerIndex(index);
+    }
+
+    public show() {
+        this.animator.play(new ContainerAnimationEditorLevelSelectorEnter());
+    }
+
+    public hide() {
+        this.animator.play(new ContainerAnimationEditorLevelSelectorExit());
     }
 
 }

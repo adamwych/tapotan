@@ -5,6 +5,7 @@ import { GameState } from "../core/GameManager";
 import LevelEditorCommandQueue from "./commands/LevelEditorCommandQueue";
 import GameObject from "../world/GameObject";
 import LevelEditorLayer from "./LevelEditorLayer";
+import LevelEditorPlaythroughController from "./LevelEditorPlaythroughController";
 
 export default class LevelEditorContext {
 
@@ -96,6 +97,10 @@ export default class LevelEditorContext {
 
     public getGame(): Tapotan {
         return this.game;
+    }
+
+    public getPlaythroughController(): LevelEditorPlaythroughController {
+        return this.editorScreen.getPlaythroughController();
     }
 
     /**

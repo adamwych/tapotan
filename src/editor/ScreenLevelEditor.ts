@@ -19,6 +19,7 @@ import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomC
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import LevelEditorLayer from './LevelEditorLayer';
+import LevelEditorPlaythroughController from './LevelEditorPlaythroughController';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -41,6 +42,7 @@ export default class ScreenLevelEditor extends Screen {
 
     private cameraMovementController: LevelEditorCameraMovementController;
     private keyboardShortcutsController: LevelEditorKeyboardShortcutsController;
+    private playthroughController: LevelEditorPlaythroughController;
 
     private isMouseDown: boolean = false;
 
@@ -56,6 +58,7 @@ export default class ScreenLevelEditor extends Screen {
         this.activeObjectDragController = new LevelEditorActiveObjectDragController(this.context);
         this.cameraMovementController = new LevelEditorCameraMovementController(this.context);
         this.keyboardShortcutsController = new LevelEditorKeyboardShortcutsController(this.context);
+        this.playthroughController = new LevelEditorPlaythroughController(this.context);
         
         if (this.world.isNewWorld()) {
             LevelEditorNewLevelTemplate.createGameObjects(this.world);
@@ -108,7 +111,7 @@ export default class ScreenLevelEditor extends Screen {
             this.prefabDrawer.visible = false;
             this.uiContainer.addChild(this.prefabDrawer);
 
-            this.bottomContainer = new WidgetLevelEditorBottomContainer(this.world, this.prefabDrawer, this.spawnPrefabAsShade);
+            this.bottomContainer = new WidgetLevelEditorBottomContainer(this.context, this.prefabDrawer);
             this.bottomContainer.interactive = true;
             this.bottomContainer.on('mousedown', () => {
                 this.blurActiveAndHoveredObjectOutline();
@@ -201,7 +204,7 @@ export default class ScreenLevelEditor extends Screen {
         InputManager.instance.listenKeyDown(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
     }
 
-    private spawnPrefabAsShade = (resourceName: string) => {
+    public spawnPrefabAsShade = (resourceName: string) => {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
             this.newGameObjectShade = null;
@@ -359,4 +362,9 @@ export default class ScreenLevelEditor extends Screen {
     public getGridWidget(): WidgetLevelEditorGrid {
         return this.grid;
     }
+
+    public getPlaythroughController(): LevelEditorPlaythroughController {
+        return this.playthroughController;
+    }
+
 }
