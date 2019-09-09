@@ -344,7 +344,7 @@ export default class ScreenLevelEditor extends Screen {
                 let prefab = Prefabs[objectName] || Prefabs.BasicBlock;
                 let gameObject: GameObject = prefab(this.world, worldCoords.x, worldCoords.y, {
                     resource: objectName,
-                    ignoresPhysics: false
+                    ignoresPhysics: this.world.getTileset().isResourceConsideredBackground(objectName)
                 });
 
                 gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
