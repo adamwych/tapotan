@@ -14,11 +14,15 @@ export interface PrefabBasicBlockProps {
 };
 
 export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (gameObject: GameObject, world: World, props: PrefabBasicBlockProps) => {
+    const texture = world.getTileset().getResourceById(props.resource).texture;
+    const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
+    spriteComponent.initialize(texture);
+
     if (props.ignoresPhysics) {
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(1, 1, {
+        body.initializeBox(gameObject.width, gameObject.height, {
             mass: 0,
             fixedRotation: true
         });
@@ -28,11 +32,6 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
         body.setCollisionMask(PhysicsBodyCollisionGroup.Entity | PhysicsBodyCollisionGroup.Player);
 
         gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
+        gameObject.transformComponent.setPivot(gameObject.width / 2, gameObject.height / 2);
     }
-
-    gameObject.transformComponent.setPivot(0.5, 0.5);
-    
-    const texture = world.getTileset().getResourceById(props.resource).texture;
-    const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
-    spriteComponent.initialize(texture);
 });
