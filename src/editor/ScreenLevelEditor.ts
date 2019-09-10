@@ -113,6 +113,7 @@ export default class ScreenLevelEditor extends Screen {
      */
     private initializeWidgets() {
         this.uiContainer = new PIXI.Container();
+        this.uiContainer.sortableChildren = true;
         this.uiContainer.zIndex = 9999;
         {
             this.grid = new WidgetLevelEditorGrid();
@@ -124,6 +125,7 @@ export default class ScreenLevelEditor extends Screen {
             this.uiContainer.addChild(this.prefabDrawer);
 
             this.bottomContainer = new WidgetLevelEditorBottomContainer(this.context, this.prefabDrawer);
+            this.bottomContainer.zIndex = 2;
             this.bottomContainer.interactive = true;
             this.bottomContainer.on('mousedown', (e) => {
                 this.blurActiveAndHoveredObjectOutline();
