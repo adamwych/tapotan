@@ -11,18 +11,15 @@ export default class WidgetLevelEditorObjectOutline extends PIXI.Container {
         super();
 
         const blockSize = Tapotan.getGameHeight() / Tapotan.getViewportHeight();
-        let spriteSize = 16;
-        if (blockSize >= 32) spriteSize = 32;
-        if (blockSize >= 48) spriteSize = 64;
 
         this.object = object;
 
-        const texture = Tapotan.getInstance().getPixiApplication().loader.resources['ui_editor_grid_tile_' + spriteSize + (doubleBorder ? '_double' : '')].texture;
-        texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-        this.sprite = new PIXI.Sprite(texture);
-        this.addChild(this.sprite);
+        const gfx = new PIXI.Graphics();
+        gfx.lineStyle(2, 0xffffff);
+        gfx.drawRect(0, 0, object.width * blockSize, object.height * blockSize);
 
-        this.scale.set(blockSize / spriteSize);
+        this.sprite = new PIXI.Sprite(Tapotan.getInstance().getPixiApplication().renderer.generateTexture(gfx, PIXI.SCALE_MODES.NEAREST, 1));
+        this.addChild(this.sprite);
     }
 
     public tick = (dt: number) => {
