@@ -331,7 +331,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public setVerticalAlignment(alignment: GameObjectVerticalAlignment) {
         this.verticalAlignment = alignment;
-        this.setPosition(this.positionX, this.positionY, true);
+        this.setPosition(this.positionX - this.pivotX, this.positionY - this.pivotY, true);
 
         if (this.gameObject) {
             this.gameObject.emit('transform.verticalAlignmentChanged', alignment);
@@ -351,7 +351,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public setHorizontalAlignment(alignment: GameObjectHorizontalAlignment) {
         this.horizontalAlignment = alignment;
-        this.setPosition(this.positionX, this.positionY, true);
+        this.setPosition(this.positionX - this.pivotX, this.positionY - this.pivotY, true);
         
         if (this.gameObject) {
             this.gameObject.emit('transform.horizontalAlignmentChanged', alignment);

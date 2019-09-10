@@ -29,6 +29,8 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
 
         gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
     }
+
+    gameObject.transformComponent.setPivot(0.5, 0.5);
     
     const texture = world.getTileset().getResourceById(props.resource).texture;
     const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);

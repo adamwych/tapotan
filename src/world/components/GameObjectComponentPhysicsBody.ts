@@ -13,7 +13,7 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
             ...bodyOptions,
             id: this.gameObject.getId()
         });
-        
+
         this.body.addShape(shape);
 
         this.gameObject.getWorld().addPhysicsBody(this.gameObject, this.body);
@@ -27,10 +27,11 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
      * @param height Height in world scale.
      * @param options 
      */
-    public initializeBox(width: number, height: number, options: p2.BodyOptions) {
+    public initializeBox(width: number, height: number, options: p2.BodyOptions, shapeOptions: p2.ShapeOptions = {}) {
         this.initialize(options, new p2.Box({
+            ...shapeOptions,
             width: width * World.PHYSICS_SCALE,
-            height: height * World.PHYSICS_SCALE
+            height: height * World.PHYSICS_SCALE,
         }));
     }
 

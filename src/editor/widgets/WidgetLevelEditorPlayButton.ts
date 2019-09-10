@@ -42,11 +42,11 @@ export default class WidgetLevelEditorPlayButton extends PIXI.Container {
         this.grayBackground.visible = false;
         this.addChild(this.grayBackground);
         
-        this.pivot.set(this.redBackground.width / 2, this.redBackground.height / 2);
+        this.pivot.set(Math.floor(this.redBackground.width / 2), Math.floor(this.redBackground.height / 2));
 
         this.label = new WidgetText('PLAY', WidgetText.Size.Big, 0xffffff);
         this.label.position.x = 90;
-        this.label.position.y = (this.redBackground.height - this.label.height) / 2 - 6;
+        this.label.position.y = Math.floor((this.redBackground.height - this.label.height) / 2 - 6);
         this.addChild(this.label);
 
         this.interactive = true;

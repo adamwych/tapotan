@@ -31,14 +31,16 @@ export default class LevelEditorPlaythroughController {
 
         this.context.getGame().getGameManager().setGameState(GameState.Playing);
         world.spawnPlayer();
-        world.getPlayer().setLayer(this.context.getEditorScreen().getSpawnPointShadeObject().getLayer());
         this.context.getEditorScreen().getSpawnPointShadeObject().visible = false;
+
+        this.context.emit('playthroughStarted');
     }
 
     public stop() {
         this.playing = false;
 
         this.context.getGame().getGameManager().setGameState(GameState.InEditor);
+        this.context.getGame().getGameManager().setHasEnded(false);
 
         const world = this.context.getWorld();
         const player = world.getPlayer();
@@ -47,6 +49,8 @@ export default class LevelEditorPlaythroughController {
 
         this.context.getEditorScreen().getSpawnPointShadeObject().visible = true;
         this.context.getEditorScreen().handleCurrentLayerChange(this.context.getCurrentLayer());
+
+        this.context.emit('playthroughStopped');
     }
 
 }

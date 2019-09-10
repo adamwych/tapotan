@@ -21,7 +21,8 @@ export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameO
     body.setCollisionGroup(PhysicsBodyCollisionGroup.Player);
     body.setCollisionMask(PhysicsBodyCollisionMasks.Entity);
 
-    gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
+    const transformComponent = gameObject.createComponent<GameObjectComponentPhysicsAwareTransform>(GameObjectComponentPhysicsAwareTransform);
+    transformComponent.setPivot(0.5, 0.5);
 
     const tileset = world.getTileset();
     const idleSpritesheetTexture = tileset.getResourceById('characters_lawrence_idle').texture;

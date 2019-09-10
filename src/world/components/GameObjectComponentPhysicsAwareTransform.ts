@@ -40,6 +40,7 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         this.positionY = this.physicsBody.position[1] / World.PHYSICS_SCALE;
         this.angle = this.physicsBody.angle;
 
+        this.gameObject.pivot.set(this.pivotX, this.pivotY);
         this.gameObject.position.set(this.positionX, this.positionY);
         this.gameObject.angle = this.angle;
 
@@ -53,10 +54,6 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
     }
 
     public setPosition(x: number, y: number, force: boolean = false) {
-        if (!force && (x === this.positionX && y === this.positionY)) {
-            return;
-        }
-
         this.positionX = x;
         this.positionY = y;
         
@@ -64,11 +61,11 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         let containerTargetY = this.positionY + this.pivotY;
 
         if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
-            containerTargetX = Tapotan.getViewportWidth() - containerTargetX - 1;
+            containerTargetX = Tapotan.getViewportWidth() - containerTargetX - 1 + (this.pivotX * 2);
         }
 
         if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
-            containerTargetY = Tapotan.getViewportHeight() - containerTargetY - 1;
+            containerTargetY = Tapotan.getViewportHeight() - containerTargetY - 1 + (this.pivotY * 2);
         }
 
         this.physicsBody.position[0] = containerTargetX * World.PHYSICS_SCALE;
@@ -80,6 +77,15 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         // before it happened, then object's position and angle will be 0 instead of
         // whatever we actually want. `tick` is called here manully to fix that.
         this.synchronizeObjectTransformWithBody();
+    }
+
+    public setPivot(x: number, y: number) {
+        if (x === this.pivotX && y === this.pivotY) {
+            return;
+        }
+
+        this.pivotX = x;
+        this.pivotY = y;
     }
 
     public setAngle(angle: number) {

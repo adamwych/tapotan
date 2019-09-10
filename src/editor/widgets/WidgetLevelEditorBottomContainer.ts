@@ -40,6 +40,9 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         this.zIndex = 9;
         this.sortableChildren = true;
 
+        this.context.on('playthroughStarted', this.handlePlaythroughStarted);
+        this.context.on('playthroughStopped', this.handlePlaythroughStopped);
+
         TickHelper.add(this.tick);
     }
 
@@ -100,15 +103,7 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
                 return;
             }
 
-            const controller = this.context.getPlaythroughController();
-            const playing = controller.toggle();
-            this.playButton.setPlaying(playing);
-
-            if (playing) {
-                this.handlePlaythroughStarted();
-            } else {
-                this.handlePlaythroughStopped();
-            }
+            this.context.getPlaythroughController().toggle();
         });
         this.addChild(this.playButton);
     }
@@ -169,16 +164,18 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         });
     }
 
-    private handlePlaythroughStarted() {
+    private handlePlaythroughStarted = () => {
         this.beginSynchronization();
         this.layerSelector.hide();
         this.prefabCategoryTilesContainer.hide();
         this.prefabDrawer.hide();
+        this.playButton.setPlaying(true);
     }
 
-    public handlePlaythroughStopped() {
+    public handlePlaythroughStopped = () => {
         this.layerSelector.show();
         this.prefabCategoryTilesContainer.show();
+        this.playButton.setPlaying(false);
     }
 
     public getPlayButton() {

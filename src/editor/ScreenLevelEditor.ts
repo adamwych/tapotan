@@ -53,6 +53,7 @@ export default class ScreenLevelEditor extends Screen {
     private isEndPointSet: boolean = false;
 
     private spawnPointShadeObject: GameObject;
+    private endPointObject: GameObject;
 
     private world: World;
 
@@ -72,7 +73,7 @@ export default class ScreenLevelEditor extends Screen {
         
         if (this.world.isNewWorld()) {
             LevelEditorNewLevelTemplate.createGameObjects(this.world);
-            this.world.setSpawnPointPosition(4, 1);
+            this.world.setSpawnPointPosition(4, 1, 5);
             this.handleSpawnPointSet(this.world.getSpawnPointPosition());
         }
 
@@ -268,6 +269,8 @@ export default class ScreenLevelEditor extends Screen {
 
     }
 
+    // TODO: Fix code reuse
+
     public handleSetSpawnPointTileClick() {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
@@ -288,6 +291,20 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     public handleSetEndPointTileClick() {
+        if (this.newGameObjectShade) {
+            this.newGameObjectShade.destroy();
+            this.newGameObjectShade = null;
+        }
+
+        this.newGameObjectShade = Prefabs.VictoryFlag(this.world, 0, 0);
+        this.newGameObjectShade.visible = false;
+        this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
+        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
+        this.newGameObjectShade.setLayer(7);
+
+        this.grid.alpha = 1;
+        this.grid.visible = true;
+
         this.isSettingSpawnPoint = false;
         this.isSettingEndPoint = true;
     }
@@ -365,7 +382,7 @@ export default class ScreenLevelEditor extends Screen {
         this.spawnPointShadeObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
         this.spawnPointShadeObject.setLayer(this.context.getCurrentLayerIndex());
 
-        this.world.setSpawnPointPosition(worldCoords.x, worldCoords.y);
+        this.world.setSpawnPointPosition(worldCoords.x, worldCoords.y, this.context.getCurrentLayerIndex());
         this.isSpawnPointSet = true;
 
         this.handleRightMouseButtonClick();
@@ -373,7 +390,18 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private handleEndPointSet(worldCoords: PIXI.Point) {
+        if (this.isEndPointSet) {
+            this.endPointObject.destroy();
+            this.world.removeGameObject(this.endPointObject);
+        }
 
+        this.endPointObject = Prefabs.VictoryFlag(this.world, worldCoords.x, worldCoords.y);
+        this.endPointObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+        this.endPointObject.setLayer(7);
+
+        this.isEndPointSet = true;
+
+        this.handleRightMouseButtonClick();
     }
 
     private handleRightMouseButtonClick = () => {

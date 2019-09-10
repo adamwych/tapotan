@@ -50,6 +50,10 @@ export default class GameObjectComponentAnimator extends GameObjectComponent {
         this.animator.setTransformMultiplier(transformMultiplier);
     }
 
+    public getAnimator(): SpritesheetAnimator {
+        return this.animator;
+    }
+
     public getDebugProperties(): GameObjectComponentDebugProperty[] {
         return [
             ['Current Animation', this.animator.getCurrentAnimation() || 'None']

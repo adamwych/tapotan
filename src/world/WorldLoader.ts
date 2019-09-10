@@ -44,10 +44,10 @@ export default class WorldLoader {
         world.getBehaviourRules().setCameraBehaviour(levelData.world.behaviourRules.cameraBehaviour);
         world.getBehaviourRules().setCameraSpeed(levelData.world.behaviourRules.cameraSpeed);
         world.getBehaviourRules().setGameOverTimeout(levelData.world.behaviourRules.timeout);
-        world.setSpawnPointPosition(
+        /*world.setSpawnPointPosition(
             levelData.world.spawnPoint.x,
             Tapotan.getViewportHeight() - levelData.world.spawnPoint.y - 1
-        );
+        );*/
         world.setBackgroundMusicID(levelData.world.backgroundMusic);
 
         levelData.world.objects.forEach(object => {

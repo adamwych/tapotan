@@ -6,8 +6,9 @@ import LevelEditorCommandQueue from "./commands/LevelEditorCommandQueue";
 import GameObject from "../world/GameObject";
 import LevelEditorLayer from "./LevelEditorLayer";
 import LevelEditorPlaythroughController from "./LevelEditorPlaythroughController";
+import { EventEmitter } from "events";
 
-export default class LevelEditorContext {
+export default class LevelEditorContext extends EventEmitter {
 
     public static current: LevelEditorContext;
 
@@ -22,6 +23,7 @@ export default class LevelEditorContext {
     private world: World;
 
     constructor(world: World, game: Tapotan, editorScreen: ScreenLevelEditor) {
+        super();
         LevelEditorContext.current = this;
 
         this.world = world;

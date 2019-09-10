@@ -26,6 +26,8 @@ export default class World extends PIXI.Container {
     private authorName: string = '';
 
     private player: GameObject;
+    private playerLayer: number = 0;
+
     private tileset: Tileset;
     
     private physicsWorld: p2.World;
@@ -172,6 +174,8 @@ export default class World extends PIXI.Container {
     public spawnPlayer() {
         this.player = Prefabs.CharacterLawrence(this, this.playerSpawnPoint.x, this.playerSpawnPoint.y);
         this.player.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+        this.player.setLayer(this.playerLayer);
+        this.player.setCustomProperty('player', true);
     }
 
     public addPhysicsBody(parent: any, body: p2.Body) {
@@ -211,7 +215,7 @@ export default class World extends PIXI.Container {
             }
         });
 
-        // PhysicsDebugRenderer.create(this.physicsWorld);
+        PhysicsDebugRenderer.create(this.physicsWorld);
     }
 
     public handleGameStart() {
@@ -219,8 +223,8 @@ export default class World extends PIXI.Container {
 
         if (this.behaviourRules.getCameraBehaviour() === WorldCameraBehaviour.EverMoving) {
             const viewport = this.game.getViewport();
-            //viewport.top = (this.player.getPosition().y - Tapotan.getViewportHeight() / 2) + 1;
-            //viewport.left = (this.player.getPosition().x - Tapotan.getViewportWidth() / 2) + 2;
+            viewport.top = (this.player.transformComponent.getPositionY() - Tapotan.getViewportHeight() / 2) + 1;
+            viewport.left = (this.player.transformComponent.getPositionX() - Tapotan.getViewportWidth() / 2) + 2;
         }
     }
 
@@ -370,8 +374,10 @@ export default class World extends PIXI.Container {
         return this.tileset;
     }
 
-    public setSpawnPointPosition(x: number, y: number): void {
+    public setSpawnPointPosition(x: number, y: number, layer: number): void {
         this.playerSpawnPoint.set(x, y);
+        this.playerLayer = layer;
+        this.emit('spawnPointChanged');
     }
 
     public getSpawnPointPosition() {
@@ -508,6 +514,10 @@ export default class World extends PIXI.Container {
 
     public getBackgroundMusicID() {
         return this.backgroundMusicId;
+    }
+
+    public getPlayerLayer() {
+        return this.playerLayer;
     }
 
 }
