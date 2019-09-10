@@ -12,6 +12,7 @@ export default class WidgetLevelEditorLayerSelectorItem extends PIXI.Container {
 
     private background: PIXI.Sprite;
     private text: WidgetText;
+    private playerHead: PIXI.Sprite;
 
     private selected: boolean = false;
 
@@ -39,6 +40,23 @@ export default class WidgetLevelEditorLayerSelectorItem extends PIXI.Container {
 
         this.pivot.set(this.background.width / 2, this.background.height / 2);
         this.setSelected(initialSelected);
+
+        world.on('spawnPointChanged', () => {
+            if (world.getPlayerLayer() === index && !this.playerHead) {
+                this.playerHead = new PIXI.Sprite(world.getTileset().getResourceById('characters_lawrence_head').texture);
+                this.playerHead.scale.set(2);
+                this.playerHead.position.set(
+                    this.background.width - this.playerHead.width - 16,
+                    this.background.height - this.playerHead.height - 16
+                );
+
+                this.addChild(this.playerHead);
+            } else if (world.getPlayerLayer() !== index && this.playerHead) {
+                this.playerHead.destroy({ children: true });
+                this.playerHead = null;
+                this.removeChild(this.playerHead);
+            }
+        });
     }
 
     public setSelected(selected: boolean) {
