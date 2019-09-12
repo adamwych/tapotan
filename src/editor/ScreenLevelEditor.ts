@@ -45,6 +45,7 @@ export default class ScreenLevelEditor extends Screen {
     private playthroughController: LevelEditorPlaythroughController;
 
     private isMouseDown: boolean = false;
+    private canPlaceObject: boolean = true;
     
     private isSettingSpawnPoint: boolean = false;
     private isSpawnPointSet: boolean = false;
@@ -229,10 +230,9 @@ export default class ScreenLevelEditor extends Screen {
             ignoresPhysics: true
         });
         this.newGameObjectShade.visible = false;
-        this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
         this.newGameObjectShade.setCustomProperty('__objectName', resourceName);
-        this.newGameObjectShade.setLayer(7);
+        this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
 
         this.grid.alpha = 1;
         this.grid.visible = true;
@@ -283,7 +283,7 @@ export default class ScreenLevelEditor extends Screen {
         this.newGameObjectShade.visible = false;
         this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
-        this.newGameObjectShade.setLayer(7);
+        this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
 
         this.grid.alpha = 1;
         this.grid.visible = true;
@@ -300,9 +300,8 @@ export default class ScreenLevelEditor extends Screen {
 
         this.newGameObjectShade = Prefabs.VictoryFlag(this.world, 0, 0);
         this.newGameObjectShade.visible = false;
-        this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
-        this.newGameObjectShade.setLayer(7);
+        this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
 
         this.grid.alpha = 1;
         this.grid.visible = true;
@@ -341,12 +340,26 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private handlePlaceObjectOnMouseCoordinates = (e) => {
+        if (!this.canPlaceObject) {
+            return;
+        }
+
+        this.canPlaceObject = false;
+
         const mouseX = e.data.global.x;
         const mouseY = e.data.global.y;
         const worldCoords = screenPointToWorld(mouseX, mouseY);
 
-        const collidingGameObjects = this.world.getGameObjectsAtPosition(worldCoords.x, worldCoords.y, true, this.context.getCurrentLayerIndex());
-        if (collidingGameObjects.length === 0) {
+        const collidingGameObjects = this.world.getGameObjectsIntersectingRectangle(
+            worldCoords.x,
+            worldCoords.y,
+            this.newGameObjectShade.width,
+            this.newGameObjectShade.height,
+            true,
+            this.context.getCurrentLayerIndex()
+        );
+
+        if (collidingGameObjects.length === 1) {
 
             // Flip Y because objects are bottom-aligned.
             worldCoords.y = Tapotan.getViewportHeight() - worldCoords.y - 1;
@@ -360,8 +373,16 @@ export default class ScreenLevelEditor extends Screen {
                 // or the object is a background object.
                 const objectName = this.newGameObjectShade.getCustomProperty('__objectName');
 
+                let targetX = worldCoords.x;
+                let targetY = worldCoords.y;
+
+                if (this.newGameObjectShade.height > 1) {
+                    targetX = worldCoords.x - ((this.newGameObjectShade.width - 1) / 2);
+                    targetY = worldCoords.y + this.newGameObjectShade.height - 1;
+                }
+
                 let prefab = Prefabs[objectName] || Prefabs.BasicBlock;
-                let gameObject: GameObject = prefab(this.world, worldCoords.x, worldCoords.y, {
+                let gameObject: GameObject = prefab(this.world, targetX, targetY, {
                     resource: objectName,
                     ignoresPhysics: this.world.getTileset().isResourceConsideredBackground(objectName)
                 });
@@ -399,7 +420,7 @@ export default class ScreenLevelEditor extends Screen {
 
         this.endPointObject = Prefabs.VictoryFlag(this.world, worldCoords.x, worldCoords.y);
         this.endPointObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
-        this.endPointObject.setLayer(7);
+        this.endPointObject.setLayer(this.context.getCurrentLayerIndex());
 
         this.isEndPointSet = true;
 
@@ -443,6 +464,8 @@ export default class ScreenLevelEditor extends Screen {
         if (this.objectOutlineHover) {
             this.objectOutlineHover.tick(dt);
         }
+
+        this.canPlaceObject = true;
     }
 
     /**

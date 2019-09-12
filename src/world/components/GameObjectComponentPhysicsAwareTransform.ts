@@ -12,7 +12,6 @@ import GameObjectComponentPhysicsBody from "./GameObjectComponentPhysicsBody";
 export default class GameObjectComponentPhysicsAwareTransform extends GameObjectComponentTransform {
 
     private physicsBody: p2.Body;
-    private firstTickDone: boolean = false;
 
     constructor(gameObject: GameObject) {
         super(gameObject);
@@ -30,7 +29,6 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
 
     public tick(dt: number): void {
         this.synchronizeObjectTransformWithBody();
-        this.firstTickDone = true;
     }
 
     private synchronizeObjectTransformWithBody() {

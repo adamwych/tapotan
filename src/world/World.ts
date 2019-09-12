@@ -317,10 +317,19 @@ export default class World extends PIXI.Container {
      * 
      * @param x 
      * @param y 
+     * @param width 
+     * @param height 
      * @param topLeftAligned Whether `x` and `y` are aligned as if (0, 0) was at the top left corner.
      * @param layer Layer to look in. `-1` for all.
      */
-    public getGameObjectsAtPosition(x: number, y: number, topLeftAligned: boolean, layer: number = -1): Array<GameObject> {
+    public getGameObjectsIntersectingRectangle(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        topLeftAligned: boolean,
+        layer: number = -1
+    ): Array<GameObject> {
         const roundTo4th = x => Math.round(x * 10000) / 10000;
 
         let results = [];
@@ -333,6 +342,8 @@ export default class World extends PIXI.Container {
 
         x = roundTo4th(x);
         y = roundTo4th(y);
+        width = roundTo4th(width);
+        height = roundTo4th(height);
 
         this.gameObjects.forEach(gameObject => {
             if (layer !== -1 && gameObject.getLayer() !== layer) {
@@ -340,13 +351,18 @@ export default class World extends PIXI.Container {
             }
 
             if (gameObject.transformComponent) {
-                let gameObjectX = gameObject.transformComponent.getUnalignedPositionX();
-                let gameObjectY = gameObject.transformComponent.getUnalignedPositionY();
+                let gameObjectX = roundTo4th(gameObject.transformComponent.getUnalignedPositionX());
+                let gameObjectY = roundTo4th(gameObject.transformComponent.getUnalignedPositionY());
+                let gameObjectWidth = roundTo4th(gameObject.width);
+                let gameObjectHeight = roundTo4th(gameObject.height);
+                
+                if (
+                    x >= gameObjectX &&
+                    x < (gameObjectX + gameObjectWidth) &&
 
-                gameObjectX = roundTo4th(gameObjectX);
-                gameObjectY = roundTo4th(gameObjectY);
-
-                if (x === gameObjectX && y === gameObjectY) {
+                    y >= gameObjectY &&
+                    y < (gameObjectY + gameObjectHeight)
+                ) {
                     results.push(gameObject);
                 }
             }

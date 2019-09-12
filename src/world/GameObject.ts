@@ -267,6 +267,13 @@ export default class GameObject extends PIXI.Container {
     }
 
     /**
+     * Returns all custom properties assigned to this game object.
+     */
+    public getCustomProperties() {
+        return this.customProperties;
+    }
+
+    /**
      * Returns whether this game object is destroyed.
      */
     public isDestroyed(): boolean {

@@ -166,10 +166,10 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public getUnalignedPositionX(): number {
         if (this.horizontalAlignment !== GameObjectHorizontalAlignment.Left) {
-            return Tapotan.getViewportWidth() - this.positionX - 1;
+            return (Tapotan.getViewportWidth() - this.positionX - 1) - this.pivotX;
         }
 
-        return this.positionX;
+        return this.positionX - this.pivotX;
     }
 
     /**
@@ -184,10 +184,10 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public getUnalignedPositionY(): number {
         if (this.verticalAlignment !== GameObjectVerticalAlignment.Top) {
-            return Tapotan.getViewportHeight() - this.positionY - 1;
+            return (Tapotan.getViewportHeight() - this.positionY - 1) - this.pivotY;
         }
 
-        return this.positionY;
+        return this.positionY - this.pivotY;
     }
 
     /**
