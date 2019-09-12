@@ -26,11 +26,11 @@ export default class GameObjectComponentEditorShade extends GameObjectComponent 
         if (snapToGrid) {
             const worldCoords = screenPointToWorld(mouseX, mouseY);
 
+            let y = worldCoords.y;
             if (this.gameObject.height > 1) {
-                this.gameObject.transformComponent.setPosition(worldCoords.x - ((this.gameObject.width - 1) / 2), worldCoords.y - this.gameObject.height + 1);
-            } else {
-                this.gameObject.transformComponent.setPosition(worldCoords.x, worldCoords.y);
+                y = worldCoords.y - this.gameObject.height + 1;
             }
+            this.gameObject.transformComponent.setPosition(worldCoords.x, y);
         } else {
             let x = mouseX / (Tapotan.getGameHeight() / Tapotan.getViewportHeight());
             let y = mouseY / (Tapotan.getGameHeight() / Tapotan.getViewportHeight());

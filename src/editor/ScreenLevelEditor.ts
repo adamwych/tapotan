@@ -377,7 +377,6 @@ export default class ScreenLevelEditor extends Screen {
                 let targetY = worldCoords.y;
 
                 if (this.newGameObjectShade.height > 1) {
-                    targetX = worldCoords.x - ((this.newGameObjectShade.width - 1) / 2);
                     targetY = worldCoords.y + this.newGameObjectShade.height - 1;
                 }
 
