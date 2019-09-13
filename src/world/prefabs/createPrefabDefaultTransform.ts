@@ -1,23 +1,12 @@
 import GameObjectComponentPhysicsAwareTransform from "../components/GameObjectComponentPhysicsAwareTransform";
 import GameObjectComponentPhysicsBody from "../components/GameObjectComponentPhysicsBody";
-import GameObjectComponentSprite from "../components/GameObjectComponentSprite";
 import GameObjectComponentTransform from "../components/GameObjectComponentTransform";
 import GameObject from "../GameObject";
-import World from "../World";
-import createPrefabSpawnFunction from "./createPrefabSpawnFunction";
 import PhysicsBodyCollisionGroup from "../physics/PhysicsBodyCollisionGroup";
 import PhysicsMaterials from "../physics/PhysicsMaterials";
 import { PrefabBasicProps } from "./Prefabs";
 
-export interface PrefabBasicBlockProps extends PrefabBasicProps {
-    resource: string;
-};
-
-export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (gameObject: GameObject, world: World, props: PrefabBasicBlockProps) => {
-    const texture = world.getTileset().getResourceById(props.resource).texture;
-    const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
-    spriteComponent.initialize(texture);
-
+export default function createPrefabDefaultTransform(gameObject: GameObject, props: PrefabBasicProps) {
     if (props.ignoresPhysics) {
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
@@ -25,6 +14,8 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
         body.initializeBox(gameObject.width, gameObject.height, {
             mass: 0,
             fixedRotation: true
+        }, {
+            sensor: true
         });
 
         body.setCollisionGroup(PhysicsBodyCollisionGroup.Block);
@@ -34,4 +25,4 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
         gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
         gameObject.transformComponent.setPivot(gameObject.width / 2, gameObject.height / 2);
     }
-});
+}

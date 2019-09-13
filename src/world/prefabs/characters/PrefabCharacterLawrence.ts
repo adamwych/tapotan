@@ -1,14 +1,14 @@
-import GameObject from "../../GameObject";
-import World from "../../World";
-import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
-import GameObjectComponentLivingEntity from "../../components/GameObjectComponentLivingEntity";
-import GameObjectComponentPhysicsBody from "../../components/GameObjectComponentPhysicsBody";
-import PhysicsBodyCollisionGroup, { PhysicsBodyCollisionMasks } from "../../physics/PhysicsBodyCollisionGroup";
-import PhysicsMaterials from "../../physics/PhysicsMaterials";
-import GameObjectComponentPhysicsAwareTransform from "../../components/GameObjectComponentPhysicsAwareTransform";
-import GameObjectComponentPlayer from "../../components/GameObjectComponentPlayer";
 import Spritesheet from "../../../graphics/Spritesheet";
 import GameObjectComponentAnimator from "../../components/GameObjectComponentAnimator";
+import GameObjectComponentLivingEntity from "../../components/GameObjectComponentLivingEntity";
+import GameObjectComponentPhysicsAwareTransform from "../../components/GameObjectComponentPhysicsAwareTransform";
+import GameObjectComponentPhysicsBody from "../../components/GameObjectComponentPhysicsBody";
+import GameObjectComponentPlayer from "../../components/GameObjectComponentPlayer";
+import GameObject from "../../GameObject";
+import PhysicsBodyCollisionGroup, { PhysicsBodyCollisionMasks } from "../../physics/PhysicsBodyCollisionGroup";
+import PhysicsMaterials from "../../physics/PhysicsMaterials";
+import World from "../../World";
+import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
 
 export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameObject, world: World, props: any) => {
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
