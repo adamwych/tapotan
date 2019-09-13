@@ -23,6 +23,7 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
     private prefabDrawer: WidgetLevelEditorPrefabDrawer;
     private layerSelector: WidgetLevelEditorLayerSelector;
     private playButton: WidgetLevelEditorPlayButton;
+    private tiles: Array<TilesetEditorCategory> = [];
 
     constructor(context: LevelEditorContext, prefabDrawer: WidgetLevelEditorPrefabDrawer) {
         super();
@@ -42,15 +43,22 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
 
         this.context.on('playthroughStarted', this.handlePlaythroughStarted);
         this.context.on('playthroughStopped', this.handlePlaythroughStopped);
+        this.context.on('requestOpenPrefabDrawer', this.handleRequestOpenPrefabDrawer);
 
         TickHelper.add(this.tick);
     }
 
     public destroy() {
         super.destroy({ children: true });
+
         TickHelper.remove(this.tick);
+
         this.prefabCategoryTilesContainer.destroy();
         this.playButton.destroy({ children: true });
+
+        this.context.off('playthroughStarted', this.handlePlaythroughStarted);
+        this.context.off('playthroughStopped', this.handlePlaythroughStopped);
+        this.context.off('requestOpenPrefabDrawer', this.handleRequestOpenPrefabDrawer);
     }
 
     private initializePrefabDrawer() {
@@ -63,6 +71,7 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
                 this.openPrefabCategoryDrawer(editorCategory);
             });
             this.prefabCategoryTilesContainer.addCategoryTile(categoryTile);
+            this.tiles.push(editorCategory);
         });
 
         {
@@ -176,6 +185,14 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         this.layerSelector.show();
         this.prefabCategoryTilesContainer.show();
         this.playButton.setPlaying(false);
+    }
+
+    private handleRequestOpenPrefabDrawer = (index: number) => {
+        if (index > this.tiles.length) {
+            return;
+        }
+        
+        this.openPrefabCategoryDrawer(this.tiles[index]);
     }
 
     public getPlayButton() {

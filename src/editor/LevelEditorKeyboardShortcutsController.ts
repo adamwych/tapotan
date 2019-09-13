@@ -53,11 +53,41 @@ export default class LevelEditorKeyboardShortcutsController {
         });
     }
 
+    private handleKey1Click = () => {
+        this.context.emit('requestOpenPrefabDrawer', 0);
+    }
+
+    private handleKey2Click = () => {
+        this.context.emit('requestOpenPrefabDrawer', 1);
+    }
+
+    private handleKey3Click = () => {
+        this.context.emit('requestOpenPrefabDrawer', 2);
+    }
+
+    private handleKey4Click = () => {
+        this.context.emit('requestOpenPrefabDrawer', 3);
+    }
+
+    private handleKey5Click = () => {
+        this.context.emit('requestOpenPrefabDrawer', 4);
+    }
+
+    private handleKey6Click = () => {
+        this.context.emit('requestOpenPrefabDrawer', 5);
+    }
+
     private getKeyboardShortcuts() {
         return {
             [InputManager.KeyCodes.KeyG]: this.handleGridToggleShortcutClick,
             [InputManager.KeyCodes.KeyQ]: this.handlePlaythroughToggleShortcutClick,
-            [InputManager.KeyCodes.KeyDelete]: this.handleDeleteObjectsShortcutClick
+            [InputManager.KeyCodes.KeyDelete]: this.handleDeleteObjectsShortcutClick,
+            [InputManager.KeyCodes.Key1]: this.handleKey1Click,
+            [InputManager.KeyCodes.Key2]: this.handleKey2Click,
+            [InputManager.KeyCodes.Key3]: this.handleKey3Click,
+            [InputManager.KeyCodes.Key4]: this.handleKey4Click,
+            [InputManager.KeyCodes.Key5]: this.handleKey5Click,
+            [InputManager.KeyCodes.Key6]: this.handleKey6Click,
         }
     }
 }

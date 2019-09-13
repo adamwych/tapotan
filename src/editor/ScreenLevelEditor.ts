@@ -150,6 +150,10 @@ export default class ScreenLevelEditor extends Screen {
      * @param gameObject 
      */
     private initializeGameObjectInteractivity(gameObject: GameObject) {
+        if (gameObject.hasCustomProperty('spawnPoint')) {
+            return;
+        }
+
         gameObject.interactive = true;
         gameObject.on('mouseover', () => {
             if (!this.canInteractWithGameObject(gameObject)) {
@@ -215,6 +219,7 @@ export default class ScreenLevelEditor extends Screen {
         applicationStage.on('mousedown', this.handleApplicationMouseDown);
         applicationStage.on('mouseup', this.handleApplicationMouseUp);
         applicationStage.on('mousemove', this.handleApplicationMouseMove);
+
         InputManager.instance.listenMouseClick(InputManager.MouseButton.Right, this.handleRightMouseButtonClick);
         InputManager.instance.listenKeyDown(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
     }
@@ -403,6 +408,7 @@ export default class ScreenLevelEditor extends Screen {
         this.spawnPointShadeObject = Prefabs.SpawnPointShade(this.world, worldCoords.x, worldCoords.y);
         this.spawnPointShadeObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
         this.spawnPointShadeObject.setLayer(this.context.getCurrentLayerIndex());
+        this.spawnPointShadeObject.setCustomProperty('spawnPoint', true);
 
         this.world.setSpawnPointPosition(worldCoords.x, worldCoords.y, this.context.getCurrentLayerIndex());
         this.isSpawnPointSet = true;

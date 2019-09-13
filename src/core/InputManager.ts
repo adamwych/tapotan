@@ -18,7 +18,18 @@ export default class InputManager {
         KeyArrowLeft: 37,
         KeyArrowUp: 38,
         KeyArrowRight: 39,
-        KeyArrowDown: 40
+        KeyArrowDown: 40,
+
+        Key0: 48,
+        Key1: 49,
+        Key2: 50,
+        Key3: 51,
+        Key4: 52,
+        Key5: 53,
+        Key6: 54,
+        Key7: 55,
+        Key8: 56,
+        Key9: 57,
     }
 
     public static MouseButton = {

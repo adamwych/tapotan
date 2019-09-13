@@ -8,13 +8,42 @@ export default class LevelEditorActiveObjectDragController {
 
     private context: LevelEditorContext;
 
+    private offsetX: number;
+    private offsetY: number;
+
     constructor(context: LevelEditorContext) {
         this.context = context;
+
+        this.context.getGame().getInputManager().listenMouseClick(InputManager.MouseButton.Left, this.handleMouseDown);
         this.context.getGame().getInputManager().listenMouseDrag(InputManager.MouseButton.Left, this.handleMouseDrag);
     }
 
     public destroy() {
+        this.context.getGame().getInputManager().removeMouseClickListener(this.handleMouseDown);
         this.context.getGame().getInputManager().removeMouseDragListener(InputManager.MouseButton.Left, this.handleMouseDrag);
+    }
+
+    public handleMouseDown = (x, y) => {
+        setTimeout(() => {
+            if (this.context.getSelectedObjects().length > 0) {
+                const mouseDownCoords = screenPointToWorld(x, y);
+                mouseDownCoords.y = Tapotan.getViewportHeight() - mouseDownCoords.y - 1;
+    
+                const selectedObject = this.context.getSelectedObjects()[0];
+
+                if (selectedObject.width > 1) {
+                    this.offsetX = Math.floor(mouseDownCoords.x - (selectedObject.transformComponent.getPositionX() - selectedObject.transformComponent.getPivotX()));
+                } else {
+                    this.offsetX = 0;
+                }
+
+                if (selectedObject.height > 1) {
+                    this.offsetY = Math.floor(mouseDownCoords.y - (selectedObject.transformComponent.getPositionY() - selectedObject.transformComponent.getPivotY()));
+                } else {
+                    this.offsetY = 0;
+                }
+            }
+        });
     }
 
     public handleMouseDrag = ({ x, y, deltaX, deltaY }) => {
@@ -38,7 +67,9 @@ export default class LevelEditorActiveObjectDragController {
             }
 
             if (!selectedObjects[0].transformComponent.isAtPosition(targetX, targetY)) {
-                this.context.getCommandQueue().enqueueCommand(new LevelEditorCommandMoveObject(selectedObjects[0], [targetX, targetY]));
+                this.context.getCommandQueue().enqueueCommand(
+                    new LevelEditorCommandMoveObject(selectedObjects[0], [targetX - Math.floor(this.offsetX), targetY - Math.floor(this.offsetY)])
+                );
 
                 gridWidget.alpha = 0.33;
                 gridWidget.visible = true;
