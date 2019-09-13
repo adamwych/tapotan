@@ -124,23 +124,23 @@ export default class World extends PIXI.Container {
         if (this.shake) {
             this.shake.tick(dt);
         } else {
-            /*if (this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
+            if (this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
                 let viewport = this.game.getViewport();
 
                 switch (this.behaviourRules.getCameraBehaviour()) {
                     case WorldCameraBehaviour.FollowingPlayer: {
                         if (this.player) {
-                            viewport.top = (this.player.getPosition().y - Tapotan.getViewportHeight() / 2) + 1;
-                            viewport.left = (this.player.getPosition().x - Tapotan.getViewportWidth() / 2) + 2;
+                            viewport.top = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
+                            viewport.left = (this.player.transformComponent.getUnalignedPositionX() - Tapotan.getViewportWidth() / 2) + 2;
                         }
 
                         break;
                     }
 
                     case WorldCameraBehaviour.EverMoving: {
-                        let playerScreenY = this.player.getPosition().y;
+                        let playerScreenY = this.player.transformComponent.getUnalignedPositionY();
                         if (playerScreenY <= (Tapotan.getViewportHeight() / 2) + 1) {
-                            viewport.top = (this.player.getPosition().y - Tapotan.getViewportHeight() / 2) + 1;
+                            viewport.top = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
                         }
                         
                         viewport.left += this.behaviourRules.getCameraSpeed() * dt;
@@ -151,7 +151,7 @@ export default class World extends PIXI.Container {
 
                 if (viewport.left < 0) viewport.left = 0;
                 if (viewport.top > 0) viewport.top = 0;
-            }*/
+            }
         }
 
         if (this.behaviourRules.getGameOverTimeout() !== WorldGameOverTimeout.Unlimited &&
@@ -209,7 +209,7 @@ export default class World extends PIXI.Container {
 
     private initializePhysics() {
         this.physicsWorld = new p2.World({
-            gravity: [0, 9.82],
+            gravity: [0, 9.82]
         });
 
         PhysicsMaterials.setupContactMaterials(this.physicsWorld);
