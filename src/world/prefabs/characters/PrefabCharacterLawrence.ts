@@ -15,6 +15,7 @@ export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameO
     body.initializeBox(0.5, 1, {
         mass: 5,
         fixedRotation: true,
+        ccdSpeedThreshold: 10
     });
 
     body.setMaterial(PhysicsMaterials.Player);

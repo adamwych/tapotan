@@ -35,6 +35,36 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
         }));
     }
 
+    /**
+     * Creates a body in shape of a capsule of specified length and radius.
+     * 
+     * @param radius 
+     * @param length 
+     * @param options 
+     * @param shapeOptions 
+     */
+    public initializeCapsule(radius: number, length: number, options: p2.BodyOptions, shapeOptions: p2.ShapeOptions = {}) {
+        this.initialize(options, new p2.Capsule({
+            ...shapeOptions,
+            radius: radius * World.PHYSICS_SCALE,
+            length: length * World.PHYSICS_SCALE
+        }));
+    }
+
+    /**
+     * Creates a body in shape of a circle of specified radius.
+     * 
+     * @param radius 
+     * @param options 
+     * @param shapeOptions 
+     */
+    public initializeCircle(radius: number, options: p2.BodyOptions, shapeOptions: p2.ShapeOptions = {}) {
+        this.initialize(options, new p2.Circle({
+            ...shapeOptions,
+            radius: radius * World.PHYSICS_SCALE
+        }));
+    }
+
     protected destroy(): void {
         this.gameObject.getWorld().removePhysicsBody(this.body);
         this.gameObject.off('transform.scaleChanged', this.handleTransformScaleChanged);
