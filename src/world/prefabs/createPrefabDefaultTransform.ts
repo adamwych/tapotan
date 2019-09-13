@@ -6,17 +6,17 @@ import PhysicsBodyCollisionGroup from "../physics/PhysicsBodyCollisionGroup";
 import PhysicsMaterials from "../physics/PhysicsMaterials";
 import { PrefabBasicProps } from "./Prefabs";
 
-export default function createPrefabDefaultTransform(gameObject: GameObject, props: PrefabBasicProps) {
+export default function createPrefabDefaultTransform(
+    gameObject: GameObject,
+    props: PrefabBasicProps,
+    bodyOptions: p2.BodyOptions,
+    shapeOptions: p2.ShapeOptions = {},
+) {
     if (props.ignoresPhysics) {
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(gameObject.width, gameObject.height, {
-            mass: 0,
-            fixedRotation: true
-        }, {
-            sensor: true
-        });
+        body.initializeBox(gameObject.width, gameObject.height, bodyOptions, shapeOptions);
 
         body.setCollisionGroup(PhysicsBodyCollisionGroup.Block);
         body.setMaterial(PhysicsMaterials.Ground);

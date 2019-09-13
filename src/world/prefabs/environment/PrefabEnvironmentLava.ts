@@ -22,5 +22,8 @@ export default createPrefabSpawnFunction('environment_lava', (gameObject: GameOb
 
     gameObject.createComponent<GameObjectComponentKillOnTouch>(GameObjectComponentKillOnTouch).initialize();
 
-    createPrefabDefaultTransform(gameObject, props);
+    createPrefabDefaultTransform(gameObject, props, {
+        mass: 0,
+        fixedRotation: true
+    });
 });
