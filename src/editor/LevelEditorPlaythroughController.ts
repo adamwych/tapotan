@@ -20,7 +20,7 @@ export default class LevelEditorPlaythroughController {
         return this.playing;
     }
 
-    public play() {
+    public play(spawnPlayer: boolean = true) {
         this.playing = true;
 
         const world = this.context.getWorld();
@@ -29,8 +29,11 @@ export default class LevelEditorPlaythroughController {
             gameObject.alpha = 1;
         });
 
+        if (spawnPlayer) {
+            world.spawnPlayer();
+        }
+
         this.context.getGame().getGameManager().setGameState(GameState.Playing);
-        world.spawnPlayer();
         this.context.getEditorScreen().getSpawnPointShadeObject().visible = false;
 
         this.context.emit('playthroughStarted');

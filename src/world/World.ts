@@ -171,10 +171,29 @@ export default class World extends PIXI.Container {
         }
     }
 
+    /**
+     * Spawns the player at its spawn position.
+     */
     public spawnPlayer() {
-        this.player = Prefabs.CharacterLawrence(this, this.playerSpawnPoint.x, this.playerSpawnPoint.y);
+        this.spawnPlayerAt(this.playerSpawnPoint.x, this.playerSpawnPoint.y, this.playerLayer);
+    }
+
+    /**
+     * Spawns the player at specified position.
+     * 
+     * @param x 
+     * @param y 
+     * @param layer (optional) 
+     */
+    public spawnPlayerAt(x: number, y: number, layer: number = -1) {
+        if (this.player) {
+            this.player.destroy();
+            this.removeGameObject(this.player);
+        }
+
+        this.player = Prefabs.CharacterLawrence(this, x, y);
         this.player.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
-        this.player.setLayer(this.playerLayer);
+        this.player.setLayer(layer !== -1 ? layer : this.playerLayer);
         this.player.setCustomProperty('player', true);
     }
 

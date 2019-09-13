@@ -56,6 +56,8 @@ export default class ScreenLevelEditor extends Screen {
     private spawnPointShadeObject: GameObject;
     private endPointObject: GameObject;
 
+    private spawnPlayerAtPositionActionActive: boolean = false;
+
     private world: World;
 
     constructor(game: Tapotan) {
@@ -355,6 +357,16 @@ export default class ScreenLevelEditor extends Screen {
         const mouseY = e.data.global.y;
         const worldCoords = screenPointToWorld(mouseX, mouseY);
 
+        if (this.spawnPlayerAtPositionActionActive) {
+            worldCoords.y = Tapotan.getViewportHeight() - worldCoords.y - 1;
+            this.world.spawnPlayerAt(worldCoords.x, worldCoords.y);
+            this.getPlaythroughController().play(false);
+            this.grid.visible = false;
+            this.canPlaceObject = true;
+            this.handleRightMouseButtonClick();
+            return;
+        }
+
         const collidingGameObjects = this.world.getGameObjectsIntersectingRectangle(
             worldCoords.x,
             worldCoords.y,
@@ -445,6 +457,10 @@ export default class ScreenLevelEditor extends Screen {
             this.bottomContainer.beginSynchronization();
             this.prefabDrawer.hide();
         }
+
+        this.spawnPlayerAtPositionActionActive = false;
+        this.isSettingSpawnPoint = false;
+        this.isSettingEndPoint = false;
     }
 
     public blurActiveAndHoveredObjectOutline() {
@@ -457,6 +473,22 @@ export default class ScreenLevelEditor extends Screen {
 
         this.clearSelectedObjects();
         this.game.setCursor(Tapotan.Cursor.Default);
+    }
+
+    public beingSpawnPlayerAtPositionAction() {
+        this.handleRightMouseButtonClick();
+        this.blurActiveAndHoveredObjectOutline();
+
+        this.newGameObjectShade = Prefabs.SpawnPointShade(this.world, 0, 0);
+        this.newGameObjectShade.visible = false;
+        this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
+        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
+        this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
+
+        this.grid.alpha = 1;
+        this.grid.visible = true;
+
+        this.spawnPlayerAtPositionActionActive = true;
     }
     
     protected tick(dt: number): void {

@@ -2,6 +2,7 @@ import Tapotan from "../core/Tapotan";
 import InputManager from "../core/InputManager";
 import LevelEditorContext from "./LevelEditorContext";
 import LevelEditorCommandRemoveObject from "./commands/LevelEditorCommandRemoveObject";
+import { GameState } from "../core/GameManager";
 
 export default class LevelEditorKeyboardShortcutsController {
 
@@ -37,6 +38,12 @@ export default class LevelEditorKeyboardShortcutsController {
 
     private handlePlaythroughToggleShortcutClick = () => {
         this.context.getPlaythroughController().toggle();
+    }
+
+    private handleSpawnPlayerAtPositionShortcutClick = () => {
+        if (this.context.getGame().getGameManager().getGameState() === GameState.InEditor) {
+            this.context.getEditorScreen().beingSpawnPlayerAtPositionAction();
+        }
     }
 
     private handleDeleteObjectsShortcutClick = () => {
@@ -82,6 +89,7 @@ export default class LevelEditorKeyboardShortcutsController {
             [InputManager.KeyCodes.KeyG]: this.handleGridToggleShortcutClick,
             [InputManager.KeyCodes.KeyQ]: this.handlePlaythroughToggleShortcutClick,
             [InputManager.KeyCodes.KeyDelete]: this.handleDeleteObjectsShortcutClick,
+            [InputManager.KeyCodes.KeyE]: this.handleSpawnPlayerAtPositionShortcutClick,
             [InputManager.KeyCodes.Key1]: this.handleKey1Click,
             [InputManager.KeyCodes.Key2]: this.handleKey2Click,
             [InputManager.KeyCodes.Key3]: this.handleKey3Click,
