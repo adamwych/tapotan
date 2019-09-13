@@ -136,7 +136,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
 
     private tickJump(dt: number): void {
         const inputManager = Tapotan.getInstance().getInputManager();
-        const spaceDown = inputManager.isKeyDown(InputManager.KeyCodes.KeySpace);
+        const spaceDown = inputManager.isKeyDown(InputManager.KeyCodes.KeySpacebar);
 
         if (spaceDown) {
             if (this.canJump && this.touchingGround) {
