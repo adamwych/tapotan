@@ -171,7 +171,6 @@ export default class ScreenLevelEditor extends Screen {
 
             this.objectOutlineHover = new WidgetLevelEditorObjectOutline(gameObject);
             this.uiContainer.addChild(this.objectOutlineHover);
-            this.game.setCursor(Tapotan.Cursor.Move);
         });
 
         gameObject.on('mouseout', () => {
@@ -186,11 +185,11 @@ export default class ScreenLevelEditor extends Screen {
                     if (this.objectOutlineHover && this.objectOutlineHover.getObject() === gameObject) {
                         this.objectOutlineHover.destroy({ children: true });
                         this.objectOutlineHover = null;
-                    }
 
-                    this.game.setCursor(Tapotan.Cursor.Default);
+                        this.game.setCursor(Tapotan.Cursor.Default);
+                    }
                 }
-            }, 32);
+            }, 16);
         });
 
         gameObject.on('mousedown', (e) => {
