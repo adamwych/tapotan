@@ -93,6 +93,10 @@ export default class SpritesheetAnimator extends PIXI.Container {
     }
 
     public playAnimationOnce(name: string, startFrame: number = 0, callback: Function) {
+        if (this.currentAnimation === name) {
+            return;
+        }
+
         this.playAnimation(name, startFrame);
 
         const loopCallback = () => {

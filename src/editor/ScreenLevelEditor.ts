@@ -25,6 +25,7 @@ import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomC
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
+import WidgetLevelEditorTopBar from './top-bar/WidgetLevelEditorTopBar';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -41,6 +42,7 @@ export default class ScreenLevelEditor extends Screen {
 
     private prefabDrawer: WidgetLevelEditorPrefabDrawer;
 
+    private topBar: WidgetLevelEditorTopBar;
     private bottomContainer: WidgetLevelEditorBottomContainer;
 
     private newGameObjectShade: GameObject = null;
@@ -141,6 +143,12 @@ export default class ScreenLevelEditor extends Screen {
             this.prefabDrawer = new WidgetLevelEditorPrefabDrawer();
             this.prefabDrawer.visible = false;
             this.uiContainer.addChild(this.prefabDrawer);
+
+            this.topBar = new WidgetLevelEditorTopBar(this.context);
+            this.topBar.position.set(
+                16, 16
+            );
+            this.uiContainer.addChild(this.topBar);
 
             this.bottomContainer = new WidgetLevelEditorBottomContainer(this.context, this.prefabDrawer);
             this.bottomContainer.zIndex = 2;
@@ -492,7 +500,6 @@ export default class ScreenLevelEditor extends Screen {
         this.isSpawnPointSet = true;
 
         this.handleRightMouseButtonClick();
-        this.bottomContainer.getPlayButton().setEnabled(true);
     }
 
     private handleEndPointSet(worldCoords: PIXI.Point) {

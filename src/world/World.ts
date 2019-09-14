@@ -123,7 +123,9 @@ export default class World extends PIXI.Container {
             });
         }
 
-        this.sky.position.x = this.game.getViewport().left;
+        if (this.sky.transform) {
+            this.sky.position.x = this.game.getViewport().left;
+        }
 
         if (this.shake) {
             this.shake.tick(dt);

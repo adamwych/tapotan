@@ -11,7 +11,6 @@ import WidgetLevelEditorPrefabDrawerGroup from '../prefab-drawer/WidgetLevelEdit
 import WidgetLevelEditorPrefabDrawerGroupItem from '../prefab-drawer/WidgetLevelEditorPrefabDrawerGroupItem';
 import WidgetLevelEditorLayerSelector from '../layer-selector/WidgetLevelEditorLayerSelector';
 import Tapotan from '../../core/Tapotan';
-import WidgetLevelEditorPlayButton from './WidgetLevelEditorPlayButton';
 import LevelEditorContext from '../LevelEditorContext';
 
 export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
@@ -22,7 +21,6 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
     private doSynchronizePositionToSelectorDrawer: boolean = false;
     private prefabDrawer: WidgetLevelEditorPrefabDrawer;
     private layerSelector: WidgetLevelEditorLayerSelector;
-    private playButton: WidgetLevelEditorPlayButton;
     private tiles: Array<TilesetEditorCategory> = [];
 
     constructor(context: LevelEditorContext, prefabDrawer: WidgetLevelEditorPrefabDrawer) {
@@ -33,7 +31,6 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
 
         this.initializePrefabDrawer();
         this.initializeLayerSelector();
-        this.initializePlayButton();
 
         this.animator = new ContainerAnimator(this);
         this.playEnterAnimation();
@@ -54,7 +51,6 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         TickHelper.remove(this.tick);
 
         this.prefabCategoryTilesContainer.destroy();
-        this.playButton.destroy({ children: true });
 
         this.context.off('playthroughStarted', this.handlePlaythroughStarted);
         this.context.off('playthroughStopped', this.handlePlaythroughStopped);
@@ -101,20 +97,6 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         this.layerSelector = new WidgetLevelEditorLayerSelector(this.context.getWorld());
         this.layerSelector.position.x = Tapotan.getGameWidth() - this.layerSelector.width - 12;
         this.addChild(this.layerSelector);
-    }
-
-    private initializePlayButton() {
-        this.playButton = new WidgetLevelEditorPlayButton(this.context.getWorld());
-        this.playButton.position.x = Math.floor(Tapotan.getGameWidth() / 2);
-        this.playButton.position.y = 24;
-        this.playButton.on('click', () => {
-            if (!this.playButton.isEnabled()) {
-                return;
-            }
-
-            this.context.getPlaythroughController().toggle();
-        });
-        this.addChild(this.playButton);
     }
 
     private tick = (dt: number) => {
@@ -178,13 +160,11 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         this.layerSelector.hide();
         this.prefabCategoryTilesContainer.hide();
         this.prefabDrawer.hide();
-        this.playButton.setPlaying(true);
     }
 
     public handlePlaythroughStopped = () => {
         this.layerSelector.show();
         this.prefabCategoryTilesContainer.show();
-        this.playButton.setPlaying(false);
     }
 
     private handleRequestOpenPrefabDrawer = (index: number) => {
@@ -193,10 +173,6 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         }
         
         this.openPrefabCategoryDrawer(this.tiles[index]);
-    }
-
-    public getPlayButton() {
-        return this.playButton;
     }
 
 }
