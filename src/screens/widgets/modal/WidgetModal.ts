@@ -75,7 +75,7 @@ export default class WidgetModal extends PIXI.Container {
         this.bodyContainer.addChild(this.closeButton);
 
         this.footerContainer = new PIXI.Container();
-        this.footerContainer.position.y = Math.floor(this.sprite.height / 2 - 140);
+        this.footerContainer.position.y = Math.floor(this.sprite.height / 2 - 110);
 
         this.modalWrapper.addChild(this.footerContainer);
         this.modalWrapper.addChild(this.bodyContainer);

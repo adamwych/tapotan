@@ -26,6 +26,7 @@ import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
 import WidgetLevelEditorTopBar from './top-bar/WidgetLevelEditorTopBar';
+import WidgetModal from '../screens/widgets/modal/WidgetModal';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -69,6 +70,8 @@ export default class ScreenLevelEditor extends Screen {
     private spawnPlayerAtPositionActionActive: boolean = false;
 
     private remainingMouseMoves: Array<{x: number, y: number}> = [];
+
+    private modal: WidgetModal;
 
     private world: World;
 
@@ -543,6 +546,11 @@ export default class ScreenLevelEditor extends Screen {
         this.isSettingSpawnPoint = false;
         this.isSettingEndPoint = false;
 
+        if (this.modal) {
+            this.modal.destroy({ children: true });
+            this.modal = null;
+        }
+
         this.grid.restoreTilesAlpha();
     }
 
@@ -623,6 +631,20 @@ export default class ScreenLevelEditor extends Screen {
             this.handlePlaceObjectOnMouseCoordinates(move);
         })
         this.remainingMouseMoves = [];
+    }
+
+    public showModal(modal: WidgetModal) {
+        if (this.modal) {
+            this.modal.destroy({ children: true });
+            this.modal = null;
+        }
+
+        this.modal = modal;
+        this.modal.on('close', () => {
+            this.modal = null;
+        });
+
+        this.uiContainer.addChild(this.modal);
     }
 
     /**

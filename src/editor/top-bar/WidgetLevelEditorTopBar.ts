@@ -6,6 +6,7 @@ import WidgetLevelEditorTopBarItemPublishButton from './WidgetLevelEditorTopbarI
 import ContainerAnimationEditorTopBarItemExit from '../animations/ContainerAnimationEditorTopBarItemExit';
 import ContainerAnimationEditorTopBarItemEnter from '../animations/ContainerAnimationEditorTopBarItemEnter';
 import WidgetLevelEditorTopBarItemSettingsButton from './WidgetLevelEditorTopBarItemSettingsButton';
+import WidgetLevelEditorSettingsModal from '../modals/WidgetLevelEditorSettingsModal';
 
 export default class WidgetLevelEditorTopBar extends PIXI.Container {
 
@@ -26,6 +27,9 @@ export default class WidgetLevelEditorTopBar extends PIXI.Container {
         this.addItem(this.playButton);
 
         this.settingsButton = new WidgetLevelEditorTopBarItemSettingsButton(context);
+        this.settingsButton.on('click', () => {
+            this.context.getEditorScreen().showModal(new WidgetLevelEditorSettingsModal(this.context.getWorld()));
+        });
         this.addItem(this.settingsButton);
 
         this.publishButton = new WidgetLevelEditorTopBarItemPublishButton(context);
