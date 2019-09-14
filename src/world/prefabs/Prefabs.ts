@@ -11,6 +11,7 @@ import PrefabEnvironmentSpring from "./environment/PrefabEnvironmentSpring";
 import PrefabEnvironmentAccelerator from "./environment/PrefabEnvironmentAccelerator";
 import PrefabEnvironmentLadder from "./environment/PrefabEnvironmentLadder";
 import PrefabEnvironmentSign from "./environment/PrefabEnvironmentSign";
+import PrefabSkyStar from "./sky/PrefabSkyStar";
 
 export interface PrefabBasicProps {
 
@@ -31,6 +32,8 @@ export default {
     BasicBlock: PrefabBasicBlock,
     SpawnPointShade: PrefabSpawnPointShade,
     VictoryFlag: PrefabVictoryFlag,
+
+    'sky_stars_variation0': PrefabSkyStar,
 
     'environment_lava': PrefabEnvironmentLava,
     'environment_water': PrefabEnvironmentWater,
