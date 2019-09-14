@@ -19,6 +19,8 @@ import WidgetLevelEditorPrefabDrawer from './prefab-drawer/WidgetLevelEditorPref
 import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomContainer';
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
+import ContainerAnimator from '../graphics/animation/ContainerAnimator';
+import ContainerAnimationNewBlockPlaced from './animations/ContainerAnimationNewBlockPlaced';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -406,6 +408,10 @@ export default class ScreenLevelEditor extends Screen {
 
                 gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
                 gameObject.setLayer(this.context.getCurrentLayerIndex());
+
+                const animator = new ContainerAnimator(gameObject);
+                animator.play(new ContainerAnimationNewBlockPlaced());
+
                 this.context.getCurrentLayer().addGameObject(gameObject);
                 this.initializeGameObjectInteractivity(gameObject);
             }
@@ -446,7 +452,7 @@ export default class ScreenLevelEditor extends Screen {
         this.handleRightMouseButtonClick();
     }
 
-    private handleRightMouseButtonClick = () => {
+    public handleRightMouseButtonClick = () => {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
             this.world.removeGameObject(this.newGameObjectShade);

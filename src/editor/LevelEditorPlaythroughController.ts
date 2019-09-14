@@ -39,6 +39,8 @@ export default class LevelEditorPlaythroughController {
         this.context.getEditorScreen().getSpawnPointShadeObject().visible = false;
 
         this.context.emit('playthroughStarted');
+
+        this.context.getEditorScreen().handleRightMouseButtonClick();
         this.context.getEditorScreen().blurActiveAndHoveredObjectOutline();
     }
 
