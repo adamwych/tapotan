@@ -1,13 +1,19 @@
-import PrefabBasicBlock from "./PrefabBasicBlock";
-import PrefabSpawnPointShade from "./PrefabSpawnPointShade";
 import PrefabCharacterLawrence from "./characters/PrefabCharacterLawrence";
-import PrefabVictoryFlag from "./PrefabVictoryFlag";
+import PrefabEnvironmentCoin from "./environment/PrefabEnvironmentCoin";
 import PrefabEnvironmentLava from "./environment/PrefabEnvironmentLava";
+import PrefabEnvironmentSpike from "./environment/PrefabEnvironmentSpike";
 import PrefabEnvironmentWater from "./environment/PrefabEnvironmentWater";
 import PrefabEnvironmentWaterBlock from "./environment/PrefabEnvironmentWaterBlock";
-import PrefabEnvironmentCoin from "./environment/PrefabEnvironmentCoin";
+import PrefabBasicBlock from "./PrefabBasicBlock";
+import PrefabSpawnPointShade from "./PrefabSpawnPointShade";
+import PrefabVictoryFlag from "./PrefabVictoryFlag";
 
 export interface PrefabBasicProps {
+
+    /**
+     * ID of the resource.
+     */
+    resource: string;
 
     /**
      * Whether this prefab should be spawn with no physics involved. 
@@ -26,6 +32,10 @@ export default {
     'environment_water': PrefabEnvironmentWater,
     'environment_waterblock': PrefabEnvironmentWaterBlock,
     'environment_coin': PrefabEnvironmentCoin,
+
+    'environment_spikes_variation0': PrefabEnvironmentSpike,
+    'environment_spikes_variation1': PrefabEnvironmentSpike,
+    'environment_spikes_variation2': PrefabEnvironmentSpike,
 
     CharacterLawrence: PrefabCharacterLawrence,
 };
