@@ -12,6 +12,7 @@ import PrefabEnvironmentAccelerator from "./environment/PrefabEnvironmentAcceler
 import PrefabEnvironmentLadder from "./environment/PrefabEnvironmentLadder";
 import PrefabEnvironmentSign from "./environment/PrefabEnvironmentSign";
 import PrefabSkyStar from "./sky/PrefabSkyStar";
+import PrefabParticlesPlayerDeathBubbles from "./particles/PrefabParticlesPlayerDeathBubbles";
 
 export interface PrefabBasicProps {
 
@@ -59,4 +60,5 @@ export default {
     'environment_sign_variation11': PrefabEnvironmentSign,
 
     CharacterLawrence: PrefabCharacterLawrence,
+    CharacterDeathBubbles: PrefabParticlesPlayerDeathBubbles
 };

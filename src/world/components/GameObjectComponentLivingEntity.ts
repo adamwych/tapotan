@@ -64,6 +64,7 @@ export default class GameObjectComponentLivingEntity extends GameObjectComponent
 
         if (this.removeUponDeath) {
             this.gameObject.destroy();
+            this.gameObject.getWorld().removeGameObject(this.gameObject);
         }
     }
 

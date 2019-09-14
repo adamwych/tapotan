@@ -1,14 +1,16 @@
 import * as p2 from 'p2';
-import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
+import GameManager, { GameEndReason } from '../../core/GameManager';
 import InputManager from '../../core/InputManager';
-import GameObjectComponentAnimator from './GameObjectComponentAnimator';
-import GameManager from '../../core/GameManager';
 import Tapotan from '../../core/Tapotan';
-import GameObjectComponentPhysicsBody from './GameObjectComponentPhysicsBody';
+import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 import GameObjectFaceDirection from '../GameObjectFaceDirection';
 import PhysicsBodyCollisionGroup from '../physics/PhysicsBodyCollisionGroup';
+import Prefabs from '../prefabs/Prefabs';
 import World from '../World';
+import GameObjectComponentAnimator from './GameObjectComponentAnimator';
 import GameObjectComponentLivingEntity from './GameObjectComponentLivingEntity';
+import GameObjectComponentPhysicsBody from './GameObjectComponentPhysicsBody';
+import { GameObjectVerticalAlignment } from './GameObjectComponentTransform';
 
 export default class GameObjectComponentPlayer extends GameObjectComponent {
 
@@ -44,10 +46,11 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         this.animator = this.gameObject.getComponentByType<GameObjectComponentAnimator>(GameObjectComponentAnimator);
         this.livingEntity = this.gameObject.getComponentByType<GameObjectComponentLivingEntity>(GameObjectComponentLivingEntity);
         this.gameManager = Tapotan.getInstance().getGameManager();
+        this.gameObject.on('livingEntity.died', this.handleLivingEntityDied);
     }
     
     protected destroy(): void {
-
+        this.gameObject.off('livingEntity.died', this.handleLivingEntityDied);
     }
 
     public getDebugProperties(): Array<GameObjectComponentDebugProperty> {
@@ -87,7 +90,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
                 if (
                     transform.getPositionX() < viewport.left || 
                     transform.getPositionX() > viewport.left + Tapotan.getViewportWidth() ||
-                    transform.getPositionY() < 0
+                    transform.getPositionY() < -1
                 ) {
                     this.livingEntity.die();
                 }
@@ -298,6 +301,19 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
                 this.touchingSide = null;
             }
         }
+    }
+
+    private handleLivingEntityDied = () => {
+        let bubbles = Prefabs.CharacterDeathBubbles(
+            this.gameObject.getWorld(),
+            this.gameObject.transformComponent.getPositionX(),
+            this.gameObject.transformComponent.getPositionY()
+        );
+        bubbles.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+        bubbles.setLayer(10);
+
+        this.gameObject.visible = false;
+        this.gameManager.endGame(GameEndReason.Death);
     }
 
     public incrementLadderCounter() {

@@ -466,6 +466,10 @@ export default class ScreenLevelEditor extends Screen {
         this.isSettingEndPoint = false;
     }
 
+    public handleGameEnd = () => {
+        this.playthroughController.stop();
+    }
+
     public blurActiveAndHoveredObjectOutline() {
         this.objectHoverDepthLevel = 0;
 
