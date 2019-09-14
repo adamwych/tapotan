@@ -33,6 +33,9 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private touchingGround: boolean = false;
 
     private frameIdx: number = 0;
+
+    private ladderCounter: number = 0;
+    private isClimbingLadder: boolean = false;
     
     private firstTick: boolean = true;
 
@@ -45,6 +48,19 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     
     protected destroy(): void {
 
+    }
+
+    public getDebugProperties(): Array<GameObjectComponentDebugProperty> {
+        return [
+            ['Face Direction', this.faceDirection === GameObjectFaceDirection.Left ? 'left' : 'right'],
+            ['Is Touching ground?', this.touchingGround],
+            ['Is Touching side?', this.touchingSide],
+            ['Can Jump?', this.canJump],
+
+            ['Ground Speed', this.speedForce],
+            ['Air Speed', this.airSpeedForce],
+            ['Jump Force', this.jumpForce]
+        ];
     }
 
     public tick(dt: number) {
@@ -95,8 +111,28 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
 
         let ignoreAnimationSet = false;
 
+        if (this.isOnLadder()) {
+            if (
+                inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowUp) ||
+                inputManager.isKeyDown(InputManager.KeyCodes.KeyW)
+            ) {
+                ignoreAnimationSet = true;
+                this.animator.playAnimation('climb', 0);
+                this.physicsBody.velocity[1] = -12;
+                this.isClimbingLadder = true;
+            } else {
+                this.isClimbingLadder = false;
+            }
+        } else {
+            this.isClimbingLadder = false;
+        }
+
         if (Math.abs(this.physicsBody.velocity[0]) < this.speed) {
             let speed = (this.touchingGround ? this.speedForce : this.airSpeedForce);
+            
+            if (this.isOnLadder() && Math.abs(this.physicsBody.velocity[0]) > 3) {
+                speed /= 2;
+            }
 
             if (wantsToRunLeft) {
                 this.faceDirection = GameObjectFaceDirection.Left;
@@ -143,6 +179,10 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     }
 
     private tickJump(dt: number): void {
+        if (this.isOnLadder() || this.isClimbingLadder) {
+            return;
+        }
+
         const inputManager = Tapotan.getInstance().getInputManager();
         const spaceDown = inputManager.isKeyDown(InputManager.KeyCodes.KeySpacebar);
 
@@ -260,17 +300,16 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         }
     }
 
-    public getDebugProperties(): Array<GameObjectComponentDebugProperty> {
-        return [
-            ['Face Direction', this.faceDirection === GameObjectFaceDirection.Left ? 'left' : 'right'],
-            ['Is Touching ground?', this.touchingGround],
-            ['Is Touching side?', this.touchingSide],
-            ['Can Jump?', this.canJump],
+    public incrementLadderCounter() {
+        this.ladderCounter++;
+    }
 
-            ['Ground Speed', this.speedForce],
-            ['Air Speed', this.airSpeedForce],
-            ['Jump Force', this.jumpForce]
-        ];
+    public decrementLadderCounter() {
+        this.ladderCounter--;
+    }
+
+    private isOnLadder() {
+        return this.ladderCounter > 0;
     }
 
 }

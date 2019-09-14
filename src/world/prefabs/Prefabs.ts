@@ -9,6 +9,7 @@ import PrefabSpawnPointShade from "./PrefabSpawnPointShade";
 import PrefabVictoryFlag from "./PrefabVictoryFlag";
 import PrefabEnvironmentSpring from "./environment/PrefabEnvironmentSpring";
 import PrefabEnvironmentAccelerator from "./environment/PrefabEnvironmentAccelerator";
+import PrefabEnvironmentLadder from "./environment/PrefabEnvironmentLadder";
 
 export interface PrefabBasicProps {
 
@@ -39,6 +40,7 @@ export default {
     'environment_spikes_variation2': PrefabEnvironmentSpike,
     'environment_spring': PrefabEnvironmentSpring,
     'environment_speeder': PrefabEnvironmentAccelerator,
+    'environment_ladder': PrefabEnvironmentLadder,
 
     CharacterLawrence: PrefabCharacterLawrence,
 };
