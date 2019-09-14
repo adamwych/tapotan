@@ -32,6 +32,7 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
         body.setCollisionMask(PhysicsBodyCollisionGroup.Entity | PhysicsBodyCollisionGroup.Player);
 
         gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
-        gameObject.transformComponent.setPivot(gameObject.width / 2, gameObject.height / 2);
     }
+
+    gameObject.transformComponent.setPivot(gameObject.width / 2, gameObject.height / 2);
 });

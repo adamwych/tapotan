@@ -38,9 +38,15 @@ export default class GameObjectComponentEditorShade extends GameObjectComponent 
             x += Tapotan.getInstance().getViewport().left;
             y += Tapotan.getInstance().getViewport().top;
 
+            if (this.gameObject.height > 1) {
+                y = y - (this.gameObject.height);
+            } else {
+                y = y - (this.gameObject.height / 2);
+            }
+
             this.gameObject.transformComponent.setPosition(
-                x - this.gameObject.transformComponent.getPivotX() - (this.gameObject.width / 2),
-                y - this.gameObject.transformComponent.getPivotY() - (this.gameObject.height > 1 ? this.gameObject.height : 0.5)
+                x - (this.gameObject.width / 2),
+                y
             );
         }
 

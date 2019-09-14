@@ -23,8 +23,11 @@ export default class WidgetLevelEditorObjectOutline extends PIXI.Container {
     }
 
     public tick = (dt: number) => {
-        this.position.x = this.object.transformComponent.getScreenX();
-        this.position.y = this.object.transformComponent.getScreenY();
+        this.pivot.x = this.object.transformComponent.getPivotX() * Tapotan.getBlockSize();
+        this.pivot.y = this.object.transformComponent.getPivotY() * Tapotan.getBlockSize();
+        this.position.x = this.object.transformComponent.getScreenX() + this.pivot.x;
+        this.position.y = this.object.transformComponent.getScreenY() + this.pivot.y;
+        this.angle = this.object.transformComponent.getAngle();
     }
 
     public getObject() {

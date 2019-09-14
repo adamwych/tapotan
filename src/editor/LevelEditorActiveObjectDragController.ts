@@ -28,20 +28,11 @@ export default class LevelEditorActiveObjectDragController {
             if (this.context.getSelectedObjects().length > 0) {
                 const mouseDownCoords = screenPointToWorld(x, y);
                 mouseDownCoords.y = Tapotan.getViewportHeight() - mouseDownCoords.y - 1;
-    
+                
                 const selectedObject = this.context.getSelectedObjects()[0];
-
-                if (selectedObject.width > 1) {
-                    this.offsetX = Math.floor(mouseDownCoords.x - (selectedObject.transformComponent.getPositionX() - selectedObject.transformComponent.getPivotX()));
-                } else {
-                    this.offsetX = 0;
-                }
-
-                if (selectedObject.height > 1) {
-                    this.offsetY = Math.floor(mouseDownCoords.y - (selectedObject.transformComponent.getPositionY() - selectedObject.transformComponent.getPivotY()));
-                } else {
-                    this.offsetY = 0;
-                }
+                
+                this.offsetX = (mouseDownCoords.x - selectedObject.transformComponent.getPositionX());
+                this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY());
             }
         });
     }

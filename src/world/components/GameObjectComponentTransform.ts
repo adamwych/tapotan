@@ -134,24 +134,24 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         this.positionY = y;
         
         if (this.gameObject) {
-            let containerTargetX = this.positionX + this.pivotX;
-            let containerTargetY = this.positionY + this.pivotY;
+            let containerTargetX = this.positionX;
+            let containerTargetY = this.positionY;
 
             if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
                 let viewportWidth = Tapotan.getViewportWidth();
-                let alignedX = viewportWidth - containerTargetX - 1;
+                let alignedX = viewportWidth - containerTargetX;
 
-                containerTargetX = alignedX;
+                containerTargetX = alignedX - this.gameObject.width;
             }
 
             if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
                 let viewportHeight = Tapotan.getViewportHeight();
-                let alignedY = viewportHeight - containerTargetY - 1;
+                let alignedY = viewportHeight - containerTargetY;
 
-                containerTargetY = alignedY;
+                containerTargetY = alignedY - this.gameObject.height;
             }
 
-            this.gameObject.position.set(containerTargetX, containerTargetY);
+            this.gameObject.position.set(containerTargetX + this.pivotX, containerTargetY + this.pivotY);
             this.gameObject.emit('transform.positionChanged', x, y);
         }
     }
@@ -225,7 +225,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         
         if (this.gameObject) {
             this.gameObject.pivot.set(x, y);
-            this.gameObject.position.set(this.positionX + this.pivotX, this.positionY + this.pivotY);
+            //this.gameObject.position.set(this.positionX + this.pivotX, this.positionY + this.pivotY);
             this.gameObject.emit('transform.pivotChanged', x, y);
         }
     }
@@ -340,7 +340,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public setVerticalAlignment(alignment: GameObjectVerticalAlignment) {
         this.verticalAlignment = alignment;
-        this.setPosition(this.positionX - this.pivotX, this.positionY - this.pivotY, true);
+        this.setPosition(this.positionX, this.positionY, true);
 
         if (this.gameObject) {
             this.gameObject.emit('transform.verticalAlignmentChanged', alignment);
@@ -360,7 +360,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public setHorizontalAlignment(alignment: GameObjectHorizontalAlignment) {
         this.horizontalAlignment = alignment;
-        this.setPosition(this.positionX - this.pivotX, this.positionY - this.pivotY, true);
+        this.setPosition(this.positionX, this.positionY, true);
         
         if (this.gameObject) {
             this.gameObject.emit('transform.horizontalAlignmentChanged', alignment);
@@ -401,16 +401,17 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     public getScreenX(): number {
         const blockSize = Tapotan.getBlockSize();
         const viewport = Tapotan.getInstance().getViewport();
-        return ((this.getPositionX() - this.getPivotX()) * blockSize) - (viewport.left * blockSize);
+        return (this.getPositionX() * blockSize) - (viewport.left * blockSize);
     }
 
     /**
-     * Returns position of the object on the Y axis in screen coordinates. 
+     * Returns position of the object on the Y axis in screen coordinates.
      */
     public getScreenY(): number {
         const blockSize = Tapotan.getBlockSize();
         const viewport = Tapotan.getInstance().getViewport();
-        return Tapotan.getGameHeight() - ((this.getPositionY() + this.getPivotY()) * blockSize) - blockSize - (viewport.top * blockSize);
+
+        return Tapotan.getGameHeight() - (this.getPositionY() * blockSize) - (this.gameObject.height * blockSize) - (viewport.top * blockSize);
     }
 
 }

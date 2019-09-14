@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import GameObjectComponent from "./GameObjectComponent";
-import GameObjectComponentTransform from "./components/GameObjectComponentTransform";
 import GameObjectComponentPhysicsAwareTransform from "./components/GameObjectComponentPhysicsAwareTransform";
+import GameObjectComponentTransform from "./components/GameObjectComponentTransform";
+import GameObjectComponent from "./GameObjectComponent";
 import World from './World';
 
 type Constructor<T> = { new (...args: any[]): T };
@@ -13,7 +13,7 @@ type Constructor<T> = { new (...args: any[]): T };
  * they are built out of {@link GameObjectComponent} that provide them with functionality.
  */
 export default class GameObject extends PIXI.Container {
-    
+
     /**
      * A number that uniquely identifies this object.
      */

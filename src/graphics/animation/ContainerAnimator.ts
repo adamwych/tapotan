@@ -13,6 +13,10 @@ export default class ContainerAnimator {
         TickHelper.add(this.tick);
     }
 
+    public destroy() {
+        TickHelper.remove(this.tick);
+    }
+
     public tick = (dt: number) => {
         if (this.currentAnimation) {
 

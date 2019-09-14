@@ -25,6 +25,7 @@ import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditor
 import WidgetLevelEditorObjectActionButtons from './object-action-buttons/WidgetLevelEditorObjectActionButtons';
 import LevelEditorCommandRemoveObject from './commands/LevelEditorCommandRemoveObject';
 import LevelEditorCommandRotateObject from './commands/LevelEditorCommandRotateObject';
+import TickHelper from '../core/TickHelper';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -177,6 +178,10 @@ export default class ScreenLevelEditor extends Screen {
             }
 
             this.objectHoverDepthLevel++;
+
+            if (this.objectOutlineHover && this.objectOutlineHover.getObject() === gameObject) {
+                return;
+            }
 
             if (this.objectOutlineHover) {
                 this.objectOutlineHover.destroy({ children: true });
@@ -443,20 +448,19 @@ export default class ScreenLevelEditor extends Screen {
                     targetX -= ((this.newGameObjectShade.width - 2));
                 }
 
-                if (this.newGameObjectShade.height > 1) {
-                    targetY = worldCoords.y + this.newGameObjectShade.height - 1;
-                }
-
                 let prefab = Prefabs[objectName] || Prefabs.BasicBlock;
                 let gameObject: GameObject = prefab(this.world, targetX, targetY, {
                     resource: objectName,
                     ignoresPhysics: this.world.getTileset().isResourceConsideredBackground(objectName)
                 });
-
+                
                 gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
                 gameObject.setLayer(this.context.getCurrentLayerIndex());
-
-                new ContainerAnimator(gameObject).play(new ContainerAnimationNewBlockPlaced());
+                
+                const animator = new ContainerAnimator(gameObject);
+                animator.play(new ContainerAnimationNewBlockPlaced(), () => {
+                    animator.destroy();
+                });
 
                 this.context.getCurrentLayer().addGameObject(gameObject);
                 this.initializeGameObjectInteractivity(gameObject);

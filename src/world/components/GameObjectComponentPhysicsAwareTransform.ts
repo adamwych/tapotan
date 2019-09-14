@@ -1,9 +1,9 @@
-import GameObject from "../GameObject";
-import GameObjectComponentTransform, { GameObjectVerticalAlignment, GameObjectHorizontalAlignment } from "./GameObjectComponentTransform";
 import * as p2 from 'p2';
 import Tapotan from "../../core/Tapotan";
+import GameObject from "../GameObject";
 import World from "../World";
 import GameObjectComponentPhysicsBody from "./GameObjectComponentPhysicsBody";
+import GameObjectComponentTransform, { GameObjectHorizontalAlignment, GameObjectVerticalAlignment } from "./GameObjectComponentTransform";
 
 const DEGREES_TO_RADIANS = Math.PI / 180;
 const RADIANS_TO_DEGREES = 180 / Math.PI;
@@ -43,7 +43,7 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         this.angle = this.physicsBody.angle * RADIANS_TO_DEGREES;
 
         this.gameObject.pivot.set(this.pivotX, this.pivotY);
-        this.gameObject.position.set(this.positionX, this.positionY);
+        this.gameObject.position.set(this.positionX + this.pivotX, this.positionY + this.pivotY);
         this.gameObject.angle = this.angle;
 
         if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
@@ -60,15 +60,15 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         this.positionX = x;
         this.positionY = y;
         
-        let containerTargetX = this.positionX + this.pivotX;
-        let containerTargetY = this.positionY + this.pivotY;
+        let containerTargetX = this.positionX;
+        let containerTargetY = this.positionY;
 
         if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
-            containerTargetX = Tapotan.getViewportWidth() - containerTargetX - 1 + (this.pivotX * 2);
+            containerTargetX = Tapotan.getViewportWidth() - containerTargetX - this.gameObject.width;
         }
 
         if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
-            containerTargetY = Tapotan.getViewportHeight() - containerTargetY - 1 + (this.pivotY * 2);
+            containerTargetY = Tapotan.getViewportHeight() - containerTargetY - this.gameObject.height;
         }
 
         this.physicsBody.position[0] = containerTargetX * World.PHYSICS_SCALE;

@@ -33,8 +33,8 @@ export default class LevelEditorPlaythroughController {
 
             if (gameObject.hasComponentOfType(GameObjectComponentAI)) {
                 gameObject.getComponentByType<GameObjectComponentAI>(GameObjectComponentAI).setAIEnabled(true);
-                gameObject.setCustomProperty('monster.startPositionX', gameObject.transformComponent.getUnalignedPositionX());
-                gameObject.setCustomProperty('monster.startPositionY', (gameObject.transformComponent.getPositionY() + gameObject.transformComponent.getPivotY()));
+                gameObject.setCustomProperty('monster.startPositionX', gameObject.transformComponent.getPositionX());
+                gameObject.setCustomProperty('monster.startPositionY', gameObject.transformComponent.getPositionY());
             }
         });
 
