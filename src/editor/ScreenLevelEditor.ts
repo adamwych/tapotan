@@ -44,7 +44,6 @@ export default class ScreenLevelEditor extends Screen {
     private playthroughController: LevelEditorPlaythroughController;
 
     private isMouseDown: boolean = false;
-    private canPlaceObject: boolean = true;
     
     private isSettingSpawnPoint: boolean = false;
     private isSpawnPointSet: boolean = false;
@@ -56,6 +55,8 @@ export default class ScreenLevelEditor extends Screen {
     private endPointObject: GameObject;
 
     private spawnPlayerAtPositionActionActive: boolean = false;
+
+    private remainingMouseMoves: Array<{x: number, y: number}> = [];
 
     private world: World;
 
@@ -322,7 +323,10 @@ export default class ScreenLevelEditor extends Screen {
         this.isMouseDown = true;
 
         if (e.data.originalEvent.which === 1 && this.newGameObjectShade !== null) {
-            this.handlePlaceObjectOnMouseCoordinates(e);
+            this.handlePlaceObjectOnMouseCoordinates({
+                x: e.data.global.x,
+                y: e.data.global.y
+            });
         }
 
         if (e.data.originalEvent.which !== 2 && e.target.name === '__application__stage__') {
@@ -342,20 +346,17 @@ export default class ScreenLevelEditor extends Screen {
     private handleApplicationMouseMove = (e) => {
         if (this.isMouseDown) {
             if (this.newGameObjectShade) {
-                this.handlePlaceObjectOnMouseCoordinates(e);
+                this.remainingMouseMoves.push({
+                    x: e.data.global.x,
+                    y: e.data.global.y
+                });
             }
         }
     }
 
-    private handlePlaceObjectOnMouseCoordinates = (e) => {
-        if (!this.canPlaceObject) {
-            return;
-        }
-
-        this.canPlaceObject = false;
-
-        const mouseX = e.data.global.x;
-        const mouseY = e.data.global.y;
+    private handlePlaceObjectOnMouseCoordinates = (mouseCoords) => {
+        const mouseX = mouseCoords.x;
+        const mouseY = mouseCoords.y;
         const worldCoords = screenPointToWorld(mouseX, mouseY);
 
         if (this.spawnPlayerAtPositionActionActive) {
@@ -363,7 +364,6 @@ export default class ScreenLevelEditor extends Screen {
             this.world.spawnPlayerAt(worldCoords.x, worldCoords.y);
             this.getPlaythroughController().play(false);
             this.grid.visible = false;
-            this.canPlaceObject = true;
             this.handleRightMouseButtonClick();
             return;
         }
@@ -377,7 +377,7 @@ export default class ScreenLevelEditor extends Screen {
             this.context.getCurrentLayerIndex()
         );
 
-        if (collidingGameObjects.length === 1) {
+        if (collidingGameObjects.length === 0 || (collidingGameObjects.length === 1 && collidingGameObjects[0].hasCustomProperty('__objectName'))) {
 
             // Flip Y because objects are bottom-aligned.
             worldCoords.y = Tapotan.getViewportHeight() - worldCoords.y - 1;
@@ -409,6 +409,7 @@ export default class ScreenLevelEditor extends Screen {
                 this.context.getCurrentLayer().addGameObject(gameObject);
                 this.initializeGameObjectInteractivity(gameObject);
             }
+
         }
     }
 
@@ -504,7 +505,17 @@ export default class ScreenLevelEditor extends Screen {
             this.objectOutlineHover.tick(dt);
         }
 
-        this.canPlaceObject = true;
+        if (this.isMouseDown && this.newGameObjectShade !== null) {
+            this.remainingMouseMoves.push({
+                x: InputManager.instance.getMouseX(),
+                y: InputManager.instance.getMouseY()
+            });
+        }
+        
+        this.remainingMouseMoves.forEach(move => {
+            this.handlePlaceObjectOnMouseCoordinates(move);
+        })
+        this.remainingMouseMoves = [];
     }
 
     /**
