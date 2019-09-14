@@ -8,22 +8,28 @@ import PhysicsMaterials from "../physics/PhysicsMaterials";
 import PhysicsBodyCollisionGroup, { PhysicsBodyCollisionMasks } from "../physics/PhysicsBodyCollisionGroup";
 import GameObjectComponentPhysicsAwareTransform from "../components/GameObjectComponentPhysicsAwareTransform";
 import GameObjectComponentVictoryFlag from "../components/GameObjectComponentVictoryFlag";
+import { PrefabBasicProps } from "./Prefabs";
+import GameObjectComponentTransform from "../components/GameObjectComponentTransform";
 
-export default createPrefabSpawnFunction('VictoryFlag', (gameObject: GameObject, world: World, props: any) => {
-    const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-    body.initializeBox(2.5, 1, {
-        mass: 0,
-        fixedRotation: true,
-    }, {
-        sensor: true
-    });
-
-    body.setMaterial(PhysicsMaterials.Ground);
-    body.setCollisionGroup(PhysicsBodyCollisionGroup.Sensor);
-    body.setCollisionMask(PhysicsBodyCollisionMasks.Entity);
-
-    const transformComponent = gameObject.createComponent<GameObjectComponentPhysicsAwareTransform>(GameObjectComponentPhysicsAwareTransform);
-    transformComponent.setPivot(1.25, 0.5);
+export default createPrefabSpawnFunction('VictoryFlag', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
+    if (props.ignoresPhysics) {
+        gameObject.createComponent(GameObjectComponentTransform);
+    } else {
+        const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
+        body.initializeBox(1, 1, {
+            mass: 0,
+            fixedRotation: true,
+        }, {
+            sensor: true
+        });
+    
+        body.setMaterial(PhysicsMaterials.Ground);
+        body.setCollisionGroup(PhysicsBodyCollisionGroup.Sensor);
+        body.setCollisionMask(PhysicsBodyCollisionMasks.Entity);
+    
+        const transformComponent = gameObject.createComponent<GameObjectComponentPhysicsAwareTransform>(GameObjectComponentPhysicsAwareTransform);
+        transformComponent.setPivot(0.5, 0.5);
+    }
 
     const victoryFlagComponent = gameObject.createComponent<GameObjectComponentVictoryFlag>(GameObjectComponentVictoryFlag);
     victoryFlagComponent.initialize();
@@ -33,12 +39,6 @@ export default createPrefabSpawnFunction('VictoryFlag', (gameObject: GameObject,
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize();
-    animatorComponent.addAnimation('animating', new Spritesheet(texture, 64, 24), 250);
-    animatorComponent.setCellWidth(64);
-    animatorComponent.setCellHeight(24);
-    animatorComponent.setTransformMultiplier(2.6667);
-    animatorComponent.getAnimator().scale.set(1 / 24, 1 / 24);
+    animatorComponent.addAnimation('animating', new Spritesheet(texture, 16, 16), 110);
     animatorComponent.playAnimation('animating');
-
-
 });

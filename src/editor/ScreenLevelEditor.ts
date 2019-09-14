@@ -22,6 +22,7 @@ import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOut
 import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import ContainerAnimationNewBlockPlaced from './animations/ContainerAnimationNewBlockPlaced';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
+import WidgetLevelEditorObjectActionButtons from './object-action-buttons/WidgetLevelEditorObjectActionButtons';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -33,6 +34,7 @@ export default class ScreenLevelEditor extends Screen {
     private objectOutlineHover: WidgetLevelEditorObjectOutline;
     private objectOutlineActive: Array<WidgetLevelEditorObjectOutline> = [];
     private activeObjectDragController: LevelEditorActiveObjectDragController;
+    private activeObjectActionButtons: WidgetLevelEditorObjectActionButtons;
     private objectShadeGridOutline: WidgetLevelEditorObjectShadeGridOutline;
 
     private prefabDrawer: WidgetLevelEditorPrefabDrawer;
@@ -276,6 +278,13 @@ export default class ScreenLevelEditor extends Screen {
         const outline = new WidgetLevelEditorObjectOutline(gameObject, true);
         this.objectOutlineActive.push(outline);
         this.uiContainer.addChild(outline);
+
+        if (this.activeObjectActionButtons) {
+            this.activeObjectActionButtons.destroy({ children: true });
+        }
+
+        this.activeObjectActionButtons = new WidgetLevelEditorObjectActionButtons(gameObject);
+        this.uiContainer.addChild(this.activeObjectActionButtons);
     }
 
     public handleCurrentLayerChange(currentLayer: LevelEditorLayer) {
@@ -301,9 +310,9 @@ export default class ScreenLevelEditor extends Screen {
 
         this.newGameObjectShade = Prefabs.SpawnPointShade(this.world, 0, 0);
         this.newGameObjectShade.visible = false;
-        this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
+        this.newGameObjectShade.setCustomProperty('__objectName', '');
 
         this.grid.alpha = 1;
         this.grid.visible = true;
@@ -319,10 +328,12 @@ export default class ScreenLevelEditor extends Screen {
             this.newGameObjectShade = null;
         }
 
-        this.newGameObjectShade = Prefabs.VictoryFlag(this.world, 0, 0);
+        this.newGameObjectShade = Prefabs.VictoryFlag(this.world, 0, 0, { ignoresPhysics: true });
         this.newGameObjectShade.visible = false;
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
+        this.newGameObjectShade.setCustomProperty('__objectName', '');
+        this.newGameObjectShade.transformComponent.setPivot(0, 0);
 
         this.grid.alpha = 1;
         this.grid.visible = true;
@@ -452,7 +463,7 @@ export default class ScreenLevelEditor extends Screen {
             this.world.removeGameObject(this.endPointObject);
         }
 
-        this.endPointObject = Prefabs.VictoryFlag(this.world, worldCoords.x, worldCoords.y);
+        this.endPointObject = Prefabs.VictoryFlag(this.world, worldCoords.x, worldCoords.y, { ignoresPhysics: false });
         this.endPointObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
         this.endPointObject.setLayer(this.context.getCurrentLayerIndex());
 
@@ -510,7 +521,6 @@ export default class ScreenLevelEditor extends Screen {
 
         this.newGameObjectShade = Prefabs.SpawnPointShade(this.world, 0, 0);
         this.newGameObjectShade.visible = false;
-        this.newGameObjectShade.transformComponent.setPivot(0.5, 0.5);
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
 

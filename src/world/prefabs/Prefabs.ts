@@ -22,7 +22,7 @@ export interface PrefabBasicProps {
     /**
      * ID of the resource.
      */
-    resource: string;
+    resource?: string;
 
     /**
      * Whether this prefab should be spawn with no physics involved. 
