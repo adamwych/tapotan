@@ -7,6 +7,7 @@ import PrefabEnvironmentWaterBlock from "./environment/PrefabEnvironmentWaterBlo
 import PrefabBasicBlock from "./PrefabBasicBlock";
 import PrefabSpawnPointShade from "./PrefabSpawnPointShade";
 import PrefabVictoryFlag from "./PrefabVictoryFlag";
+import PrefabEnvironmentSpring from "./environment/PrefabEnvironmentSpring";
 
 export interface PrefabBasicProps {
 
@@ -36,6 +37,8 @@ export default {
     'environment_spikes_variation0': PrefabEnvironmentSpike,
     'environment_spikes_variation1': PrefabEnvironmentSpike,
     'environment_spikes_variation2': PrefabEnvironmentSpike,
+
+    'environment_spring': PrefabEnvironmentSpring,
 
     CharacterLawrence: PrefabCharacterLawrence,
 };

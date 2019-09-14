@@ -4,6 +4,8 @@ import SpritesheetAnimator from '../../graphics/SpritesheetAnimator';
 import SpritesheetAnimatorTimer from '../../graphics/SpritesheetAnimatorTimer';
 import Spritesheet from '../../graphics/Spritesheet';
 
+const emptyFunction = () => {};
+
 export default class GameObjectComponentAnimator extends GameObjectComponent {
 
     private animator: SpritesheetAnimator;
@@ -30,7 +32,7 @@ export default class GameObjectComponentAnimator extends GameObjectComponent {
         this.animator.playAnimation(name, startFrame);
     }
 
-    public playAnimationOnce(name: string, startFrame: number = 0, callback: Function) {
+    public playAnimationOnce(name: string, startFrame: number = 0, callback: Function = emptyFunction) {
         this.animator.playAnimationOnce(name, startFrame, callback);
     }
 

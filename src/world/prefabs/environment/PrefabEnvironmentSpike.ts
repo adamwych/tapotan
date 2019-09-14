@@ -1,7 +1,6 @@
 import GameObjectComponentKillOnTouch from "../../components/GameObjectComponentKillOnTouch";
 import GameObjectComponentSprite from "../../components/GameObjectComponentSprite";
 import GameObject from "../../GameObject";
-import PhysicsBodyCollisionGroup from "../../physics/PhysicsBodyCollisionGroup";
 import World from "../../World";
 import createPrefabDefaultTransform from "../createPrefabDefaultTransform";
 import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
@@ -19,5 +18,5 @@ export default createPrefabSpawnFunction('environment_spike', (gameObject: GameO
         fixedRotation: true
     }, {
         sensor: true
-    }, PhysicsBodyCollisionGroup.Collectable);
+    });
 });
