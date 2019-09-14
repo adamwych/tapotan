@@ -89,13 +89,22 @@ export default class GameObject extends PIXI.Container {
         super.destroy({ children: true });
 
         this._duringDestroy = true;
+
         this.components.forEach(component => {
             component.removeComponent();
         });
+
+        this.children.forEach(child => {
+            if (child instanceof GameObject) {
+                child.destroy();
+            }
+        });
+
         this.components = [];
         this.removeChildren();
         this.destroyed = true;
         this.emit('destroyed');
+        
         this._duringDestroy = false;
     }
 
@@ -110,6 +119,12 @@ export default class GameObject extends PIXI.Container {
         this.components.forEach(component => {
             if (component.isEnabled()) {
                 component.tick(dt);
+            }
+        });
+
+        this.children.forEach(child => {
+            if (child instanceof GameObject) {
+                child.tick(dt);
             }
         });
 

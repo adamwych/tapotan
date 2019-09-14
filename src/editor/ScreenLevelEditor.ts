@@ -1,5 +1,4 @@
 import * as PIXI from 'pixi.js';
-import FrameDebugger from '../core/FrameDebugger';
 import InputManager from '../core/InputManager';
 import Tapotan from "../core/Tapotan";
 import Screen from "../screens/Screen";
@@ -13,13 +12,13 @@ import LevelEditorActiveObjectDragController from './LevelEditorActiveObjectDrag
 import LevelEditorCameraMovementController from './LevelEditorCameraMovementController';
 import LevelEditorContext from './LevelEditorContext';
 import LevelEditorKeyboardShortcutsController from './LevelEditorKeyboardShortcutsController';
+import LevelEditorLayer from './LevelEditorLayer';
 import LevelEditorNewLevelTemplate from './LevelEditorNewLevelTemplate';
+import LevelEditorPlaythroughController from './LevelEditorPlaythroughController';
 import WidgetLevelEditorPrefabDrawer from './prefab-drawer/WidgetLevelEditorPrefabDrawer';
 import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomContainer';
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
-import LevelEditorLayer from './LevelEditorLayer';
-import LevelEditorPlaythroughController from './LevelEditorPlaythroughController';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -228,6 +227,7 @@ export default class ScreenLevelEditor extends Screen {
     public spawnPrefabAsShade = (resourceName: string) => {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
+            this.world.removeGameObject(this.newGameObjectShade);
             this.newGameObjectShade = null;
         }
 
@@ -282,6 +282,7 @@ export default class ScreenLevelEditor extends Screen {
     public handleSetSpawnPointTileClick() {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
+            this.world.removeGameObject(this.newGameObjectShade);
             this.newGameObjectShade = null;
         }
 
@@ -301,6 +302,7 @@ export default class ScreenLevelEditor extends Screen {
     public handleSetEndPointTileClick() {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
+            this.world.removeGameObject(this.newGameObjectShade);
             this.newGameObjectShade = null;
         }
 
@@ -446,6 +448,7 @@ export default class ScreenLevelEditor extends Screen {
     private handleRightMouseButtonClick = () => {
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
+            this.world.removeGameObject(this.newGameObjectShade);
             this.newGameObjectShade = null;
 
             this.grid.alpha = 1;
