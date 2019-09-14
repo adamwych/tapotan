@@ -14,6 +14,8 @@ import PrefabEnvironmentSign from "./environment/PrefabEnvironmentSign";
 import PrefabSkyStar from "./sky/PrefabSkyStar";
 import PrefabParticlesPlayerDeathBubbles from "./particles/PrefabParticlesPlayerDeathBubbles";
 import PrefabMonsterCuddlyApple from "./monsters/PrefabMonsterCuddlyApple";
+import PrefabMonsterHappyCarrot from "./monsters/PrefabMonsterHappyCarrot";
+import PrefabMonsterSnake from "./monsters/PrefabMonsterSnake";
 
 export interface PrefabBasicProps {
 
@@ -61,6 +63,8 @@ export default {
     'environment_sign_variation11': PrefabEnvironmentSign,
 
     'monsters_apple': PrefabMonsterCuddlyApple,
+    'monsters_carrot': PrefabMonsterHappyCarrot,
+    'monsters_snake': PrefabMonsterSnake,
 
     CharacterLawrence: PrefabCharacterLawrence,
     CharacterDeathBubbles: PrefabParticlesPlayerDeathBubbles
