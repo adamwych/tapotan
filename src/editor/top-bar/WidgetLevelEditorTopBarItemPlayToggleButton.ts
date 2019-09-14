@@ -24,13 +24,13 @@ export default class WidgetLevelEditorTopBarItemPlayToggleButton extends WidgetL
 
         const redTexture = world.getTileset().getResourceById('ui_stop_button').texture;
         this.redBackground = new PIXI.Sprite(redTexture);
-        this.redBackground.scale.set(3);
+        this.redBackground.scale.set(3.5);
         this.redBackground.visible = false;
         this.addChild(this.redBackground);
 
         const greenTexture = world.getTileset().getResourceById('ui_play_button').texture;
         this.greenBackground = new PIXI.Sprite(greenTexture);
-        this.greenBackground.scale.set(3);
+        this.greenBackground.scale.set(3.5);
         this.greenBackground.visible = false;
         this.addChild(this.greenBackground);
         

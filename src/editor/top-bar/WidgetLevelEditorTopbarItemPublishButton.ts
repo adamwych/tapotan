@@ -26,17 +26,18 @@ export default class WidgetLevelEditorTopBarItemPublishButton extends WidgetLeve
 
         const texture = world.getTileset().getResourceById('ui_publish_button').texture;
         
-        const width = 72 * 3;
-        const height = 24 * 3;
+        const scale = 3.5;
+        const width = 72 * scale;
+        const height = 24 * scale;
 
         this.spritesheetAnimator = new SpritesheetAnimator();
         this.spritesheetAnimator.addAnimation('idle', new Spritesheet(texture, 72, 24), 999999);
         this.spritesheetAnimator.addAnimation('animation', new Spritesheet(texture, 72, 24), 50);
         this.spritesheetAnimator.setCellWidth(72);
         this.spritesheetAnimator.setCellHeight(24);
-        this.spritesheetAnimator.setTransformMultiplier(72 * 3);
+        this.spritesheetAnimator.setTransformMultiplier(72 * scale);
         this.spritesheetAnimator.playAnimation('idle');
-        this.spritesheetAnimator.scale.set(3);
+        this.spritesheetAnimator.scale.set(scale);
         this.spritesheetAnimator.interactive = false;
         this.addChild(this.spritesheetAnimator);
 
@@ -44,7 +45,7 @@ export default class WidgetLevelEditorTopBarItemPublishButton extends WidgetLeve
 
         this.label = new WidgetText('Publish', WidgetText.Size.Medium, 0xffffff);
         this.label.position.set(
-            Math.floor(72),
+            Math.floor(90),
             Math.floor(((height - this.label.height) / 2) - 2)
         );
         this.addChild(this.label);
