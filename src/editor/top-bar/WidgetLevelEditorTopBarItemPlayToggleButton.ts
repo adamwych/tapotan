@@ -1,14 +1,11 @@
 import * as PIXI from 'pixi.js';
 import WidgetLevelEditorTopBarItem from "./WidgetLevelEditorTopBarItem";
 import LevelEditorContext from "../LevelEditorContext";
-import ContainerAnimator from '../../graphics/animation/ContainerAnimator';
 import ContainerAnimationButtonMouseDown from '../../animations/ContainerAnimationButtonMouseDown';
 import ContainerAnimationButtonMouseOver from '../../animations/ContainerAnimationButtonMouseOver';
 import ContainerAnimationButtonMouseOut from '../../animations/ContainerAnimationButtonMouseOut';
 
 export default class WidgetLevelEditorTopBarItemPlayToggleButton extends WidgetLevelEditorTopBarItem {
-
-    private animator: ContainerAnimator;
 
     private redBackground: PIXI.Sprite;
     private greenBackground: PIXI.Sprite;
@@ -17,8 +14,6 @@ export default class WidgetLevelEditorTopBarItemPlayToggleButton extends WidgetL
 
     constructor(context: LevelEditorContext) {
         super();
-
-        this.animator = new ContainerAnimator(this);
 
         const world = context.getWorld();
 

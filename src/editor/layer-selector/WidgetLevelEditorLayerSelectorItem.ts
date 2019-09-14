@@ -24,7 +24,7 @@ export default class WidgetLevelEditorLayerSelectorItem extends PIXI.Container {
 
         const texture = world.getTileset().getResourceById('ui_layer_rect_background').texture;
         this.background = new PIXI.Sprite(texture);
-        this.background.scale.set(4);
+        this.background.scale.set(3.5);
         this.addChild(this.background);
 
         this.text = new WidgetText(String(index + 1), WidgetText.Size.Big, 0x272727);

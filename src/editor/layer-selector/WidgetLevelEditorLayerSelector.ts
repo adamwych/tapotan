@@ -19,7 +19,7 @@ export default class WidgetLevelEditorLayerSelector extends PIXI.Container {
 
         for (let i = 0; i < 6; i++) {
             let layer = new WidgetLevelEditorLayerSelectorItem(world, i, i === 5);
-            layer.position.x = Math.floor(layer.pivot.x + (i * layer.width));
+            layer.position.x = Math.floor(layer.pivot.x + (i * (layer.width + 6)));
             layer.position.y = Math.floor(layer.pivot.y / 2);
             layer.on('click', (e) => {
                 e.stopPropagation();

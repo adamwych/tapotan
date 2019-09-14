@@ -19,7 +19,7 @@ export default class WidgetLevelEditorPrefabCategoryTile extends PIXI.Container 
 
         const texture = world.getTileset().getResourceById('ui_editor_drawercategory_' + name).texture;
         this.sprite = new PIXI.Sprite(texture);
-        this.sprite.scale.set(4);
+        this.sprite.scale.set(3.5);
         this.pivot.set(this.sprite.width / 2, this.sprite.height / 2);
         this.addChild(this.sprite);
 

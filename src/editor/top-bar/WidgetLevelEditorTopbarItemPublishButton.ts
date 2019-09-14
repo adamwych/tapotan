@@ -1,7 +1,6 @@
 import * as PIXI from 'pixi.js';
 import WidgetLevelEditorTopBarItem from "./WidgetLevelEditorTopBarItem";
 import LevelEditorContext from "../LevelEditorContext";
-import ContainerAnimator from '../../graphics/animation/ContainerAnimator';
 import ContainerAnimationButtonMouseDown from '../../animations/ContainerAnimationButtonMouseDown';
 import ContainerAnimationButtonMouseOver from '../../animations/ContainerAnimationButtonMouseOver';
 import ContainerAnimationButtonMouseOut from '../../animations/ContainerAnimationButtonMouseOut';
@@ -11,16 +10,11 @@ import Spritesheet from '../../graphics/Spritesheet';
 
 export default class WidgetLevelEditorTopBarItemPublishButton extends WidgetLevelEditorTopBarItem {
 
-    private animator: ContainerAnimator;
     private spritesheetAnimator: SpritesheetAnimator;
-
-    private background: PIXI.Sprite;
     private label: WidgetText;
 
     constructor(context: LevelEditorContext) {
         super();
-
-        this.animator = new ContainerAnimator(this);
 
         const world = context.getWorld();
 
@@ -70,10 +64,6 @@ export default class WidgetLevelEditorTopBarItemPublishButton extends WidgetLeve
             this.animator.play(new ContainerAnimationButtonMouseOut())
             this.spritesheetAnimator.playAnimation('idle');
         });
-    }
-
-    public getAnimator(): ContainerAnimator {
-        return this.animator;
     }
 
 }

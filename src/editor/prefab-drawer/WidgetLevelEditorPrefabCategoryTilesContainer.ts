@@ -22,7 +22,13 @@ export default class WidgetLevelEditorPrefabCategoryTilesContainer extends PIXI.
     }
 
     public addCategoryTile(tile: WidgetLevelEditorPrefabCategoryTile) {
-        tile.position.x = (this.children.length - 1) * tile.width + tile.pivot.x;
+        if (this.children.length > 1) {
+            const lastChild = this.children[this.children.length - 1] as PIXI.Container;
+            tile.position.x = tile.pivot.x + (lastChild.position.x - lastChild.pivot.x) + lastChild.width + 6;
+        } else {
+            tile.position.x = tile.pivot.x;
+        }
+
         tile.position.y = tile.pivot.y / 2;
         this.addChild(tile);
     }

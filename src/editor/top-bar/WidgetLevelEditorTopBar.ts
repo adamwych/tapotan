@@ -5,12 +5,14 @@ import WidgetLevelEditorTopBarItemPlayToggleButton from './WidgetLevelEditorTopB
 import WidgetLevelEditorTopBarItemPublishButton from './WidgetLevelEditorTopbarItemPublishButton';
 import ContainerAnimationEditorTopBarItemExit from '../animations/ContainerAnimationEditorTopBarItemExit';
 import ContainerAnimationEditorTopBarItemEnter from '../animations/ContainerAnimationEditorTopBarItemEnter';
+import WidgetLevelEditorTopBarItemSettingsButton from './WidgetLevelEditorTopBarItemSettingsButton';
 
 export default class WidgetLevelEditorTopBar extends PIXI.Container {
 
     private context: LevelEditorContext;
     private playButton: WidgetLevelEditorTopBarItemPlayToggleButton;
     private publishButton: WidgetLevelEditorTopBarItemPublishButton;
+    private settingsButton: WidgetLevelEditorTopBarItemSettingsButton;
 
     constructor(context: LevelEditorContext) {
         super();
@@ -22,6 +24,9 @@ export default class WidgetLevelEditorTopBar extends PIXI.Container {
             this.context.getPlaythroughController().toggle();
         });
         this.addItem(this.playButton);
+
+        this.settingsButton = new WidgetLevelEditorTopBarItemSettingsButton(context);
+        this.addItem(this.settingsButton);
 
         this.publishButton = new WidgetLevelEditorTopBarItemPublishButton(context);
         this.addItem(this.publishButton);
@@ -45,11 +50,13 @@ export default class WidgetLevelEditorTopBar extends PIXI.Container {
 
     private handlePlaythroughStarted = () => {
         this.publishButton.getAnimator().play(new ContainerAnimationEditorTopBarItemExit());
+        this.settingsButton.getAnimator().play(new ContainerAnimationEditorTopBarItemExit());
         this.playButton.setPlaying(true);
     }
 
     private handlePlaythroughStopped = () => {
         this.publishButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
+        this.settingsButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
         this.playButton.setPlaying(false);
     }
 
