@@ -16,6 +16,7 @@ import PrefabParticlesPlayerDeathBubbles from "./particles/PrefabParticlesPlayer
 import PrefabMonsterCuddlyApple from "./monsters/PrefabMonsterCuddlyApple";
 import PrefabMonsterHappyCarrot from "./monsters/PrefabMonsterHappyCarrot";
 import PrefabMonsterSnake from "./monsters/PrefabMonsterSnake";
+import PrefabMonsterGhost from "./monsters/PrefabMonsterGhost";
 
 export interface PrefabBasicProps {
 
@@ -65,6 +66,7 @@ export default {
     'monsters_apple': PrefabMonsterCuddlyApple,
     'monsters_carrot': PrefabMonsterHappyCarrot,
     'monsters_snake': PrefabMonsterSnake,
+    'monsters_ghost': PrefabMonsterGhost,
 
     CharacterLawrence: PrefabCharacterLawrence,
     CharacterDeathBubbles: PrefabParticlesPlayerDeathBubbles
