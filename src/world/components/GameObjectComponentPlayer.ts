@@ -33,6 +33,8 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private touchingGround: boolean = false;
 
     private frameIdx: number = 0;
+    
+    private firstTick: boolean = true;
 
     public initialize(): void {
         this.physicsBody = this.gameObject.getComponentByType<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody).getBody();
@@ -63,14 +65,20 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             this.tickJump(dt);
 
             // Game over if player is out of camera bounds.
-            if (
-                transform.getPositionX() < viewport.left || 
-                transform.getPositionX() > viewport.left + Tapotan.getViewportWidth() ||
-                transform.getPositionY() < 0
-            ) {
-                this.livingEntity.die();
+            // Skip first tick because the camera may not be positioned correctly, yet, so
+            // the player would "die" instantly.
+            if (!this.firstTick) {
+                if (
+                    transform.getPositionX() < viewport.left || 
+                    transform.getPositionX() > viewport.left + Tapotan.getViewportWidth() ||
+                    transform.getPositionY() < 0
+                ) {
+                    this.livingEntity.die();
+                }
             }
         }
+
+        this.firstTick = false;
     }
 
     private tickMovement(dt: number): void {
