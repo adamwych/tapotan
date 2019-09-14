@@ -394,5 +394,23 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     public getFaceDirection(): GameObjectFaceDirection {
         return this.faceDirection;
     }
+    
+    /**
+     * Returns position of the object on the X axis in screen coordinates. 
+     */
+    public getScreenX(): number {
+        const blockSize = Tapotan.getBlockSize();
+        const viewport = Tapotan.getInstance().getViewport();
+        return ((this.getPositionX() - this.getPivotX()) * blockSize) - (viewport.left * blockSize);
+    }
+
+    /**
+     * Returns position of the object on the Y axis in screen coordinates. 
+     */
+    public getScreenY(): number {
+        const blockSize = Tapotan.getBlockSize();
+        const viewport = Tapotan.getInstance().getViewport();
+        return Tapotan.getGameHeight() - ((this.getPositionY() + this.getPivotY()) * blockSize) - blockSize - (viewport.top * blockSize);
+    }
 
 }

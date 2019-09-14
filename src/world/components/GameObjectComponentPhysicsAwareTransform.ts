@@ -5,6 +5,9 @@ import Tapotan from "../../core/Tapotan";
 import World from "../World";
 import GameObjectComponentPhysicsBody from "./GameObjectComponentPhysicsBody";
 
+const DEGREES_TO_RADIANS = Math.PI / 180;
+const RADIANS_TO_DEGREES = 180 / Math.PI;
+
 /**
  * An extension of {@link GameObjectComponentTransform} component that synchronizes
  * its properties with the physical body of a game object.
@@ -33,10 +36,11 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
 
     private synchronizeObjectTransformWithBody() {
         // TODO: What will happen if this get called multiple times during one frame?
+        // TODO: Do this only if anything has changed.
 
         this.positionX = this.physicsBody.position[0] / World.PHYSICS_SCALE;
         this.positionY = this.physicsBody.position[1] / World.PHYSICS_SCALE;
-        this.angle = this.physicsBody.angle;
+        this.angle = this.physicsBody.angle * RADIANS_TO_DEGREES;
 
         this.gameObject.pivot.set(this.pivotX, this.pivotY);
         this.gameObject.position.set(this.positionX, this.positionY);
@@ -49,6 +53,7 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
             this.positionY = Tapotan.getViewportHeight() - this.positionY - 1;
         }
+
     }
 
     public setPosition(x: number, y: number, force: boolean = false) {
@@ -92,7 +97,7 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
 
     public setAngle(angle: number) {
         this.angle = angle;
-        this.physicsBody.angle = angle;
+        this.physicsBody.angle = angle * DEGREES_TO_RADIANS;
         
         this.gameObject.emit('transform.angleChanged', angle);
     }

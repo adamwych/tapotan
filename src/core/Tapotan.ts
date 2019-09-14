@@ -491,6 +491,10 @@ export default class Tapotan {
         return document.body.offsetHeight;
     }
 
+    public static getBlockSize(): number {
+        return Tapotan.getGameHeight() / Tapotan.getViewportHeight();
+    }
+
     public static addResizeCallback(callback: Function) {
         Tapotan.getInstance().addResizeCallbackImpl(callback);
     }

@@ -23,10 +23,8 @@ export default class WidgetLevelEditorObjectOutline extends PIXI.Container {
     }
 
     public tick = (dt: number) => {
-        const blockSize = Tapotan.getGameHeight() / Tapotan.getViewportHeight();
-        const viewport = Tapotan.getInstance().getViewport();
-        this.position.x = ((this.object.transformComponent.getPositionX() - this.object.transformComponent.getPivotX()) * blockSize) - (viewport.left * blockSize);
-        this.position.y = Tapotan.getGameHeight() - ((this.object.transformComponent.getPositionY() + this.object.transformComponent.getPivotY()) * blockSize) - blockSize - (viewport.top * blockSize);
+        this.position.x = this.object.transformComponent.getScreenX();
+        this.position.y = this.object.transformComponent.getScreenY();
     }
 
     public getObject() {

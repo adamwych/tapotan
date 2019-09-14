@@ -23,6 +23,8 @@ import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import ContainerAnimationNewBlockPlaced from './animations/ContainerAnimationNewBlockPlaced';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
 import WidgetLevelEditorObjectActionButtons from './object-action-buttons/WidgetLevelEditorObjectActionButtons';
+import LevelEditorCommandRemoveObject from './commands/LevelEditorCommandRemoveObject';
+import LevelEditorCommandRotateObject from './commands/LevelEditorCommandRotateObject';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -102,6 +104,10 @@ export default class ScreenLevelEditor extends Screen {
         this.keyboardShortcutsController.destroy();
         this.activeObjectDragController.destroy();
         
+        if (this.activeObjectActionButtons) {
+            this.activeObjectActionButtons.destroy({ children: true });
+        }
+
         this.uiContainer.destroy({ children: true });
 
         const applicationStage = this.game.getPixiApplication().stage;
@@ -281,9 +287,29 @@ export default class ScreenLevelEditor extends Screen {
 
         if (this.activeObjectActionButtons) {
             this.activeObjectActionButtons.destroy({ children: true });
+            this.activeObjectActionButtons = null;
         }
 
         this.activeObjectActionButtons = new WidgetLevelEditorObjectActionButtons(gameObject);
+        this.activeObjectActionButtons.on('rotateAction', () => {
+            let angle = gameObject.transformComponent.getAngle() + 90;
+            if (angle === 360) {
+                angle = 0;
+            }
+
+            this.context.getCommandQueue().enqueueCommand(
+                new LevelEditorCommandRotateObject(gameObject, angle)
+            );
+        });
+
+        this.activeObjectActionButtons.on('removeAction', () => {
+            this.blurActiveAndHoveredObjectOutline();
+            this.context.getCommandQueue().enqueueCommand(
+                new LevelEditorCommandRemoveObject(gameObject)
+            );
+        });
+
+        this.activeObjectActionButtons.show();
         this.uiContainer.addChild(this.activeObjectActionButtons);
     }
 
@@ -473,6 +499,8 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     public handleRightMouseButtonClick = () => {
+        this.blurActiveAndHoveredObjectOutline();
+
         if (this.newGameObjectShade) {
             this.newGameObjectShade.destroy();
             this.world.removeGameObject(this.newGameObjectShade);
@@ -511,6 +539,11 @@ export default class ScreenLevelEditor extends Screen {
             this.objectOutlineHover = null;
         }
 
+        if (this.activeObjectActionButtons) {
+            this.activeObjectActionButtons.destroy({ children: true });
+            this.activeObjectActionButtons = null;
+        }
+
         this.clearSelectedObjects();
         this.game.setCursor(Tapotan.Cursor.Default);
     }
@@ -543,6 +576,10 @@ export default class ScreenLevelEditor extends Screen {
 
         if (this.objectShadeGridOutline) {
             this.objectShadeGridOutline.tick(dt);
+        }
+
+        if (this.activeObjectActionButtons) {
+            this.activeObjectActionButtons.tick(dt);
         }
 
         if (this.newGameObjectShade !== null) {

@@ -3,6 +3,7 @@ import InputManager from "../core/InputManager";
 import LevelEditorContext from "./LevelEditorContext";
 import LevelEditorCommandRemoveObject from "./commands/LevelEditorCommandRemoveObject";
 import { GameState } from "../core/GameManager";
+import LevelEditorCommandRotateObject from "./commands/LevelEditorCommandRotateObject";
 
 export default class LevelEditorKeyboardShortcutsController {
 
@@ -60,6 +61,17 @@ export default class LevelEditorKeyboardShortcutsController {
         });
     }
 
+    private handleRotateObjectShortcutClick = () => {
+        this.context.getSelectedObjects().forEach(object => {
+            let angle = object.transformComponent.getAngle() + 90;
+            if (angle === 360) {
+                angle = 0;
+            }
+
+            this.context.getCommandQueue().enqueueCommand(new LevelEditorCommandRotateObject(object, angle));
+        });
+    }
+
     private handleKey1Click = () => {
         this.context.emit('requestOpenPrefabDrawer', 0);
     }
@@ -88,6 +100,7 @@ export default class LevelEditorKeyboardShortcutsController {
         return {
             [InputManager.KeyCodes.KeyG]: this.handleGridToggleShortcutClick,
             [InputManager.KeyCodes.KeyQ]: this.handlePlaythroughToggleShortcutClick,
+            [InputManager.KeyCodes.KeyR]: this.handleRotateObjectShortcutClick,
             [InputManager.KeyCodes.KeyDelete]: this.handleDeleteObjectsShortcutClick,
             [InputManager.KeyCodes.KeyE]: this.handleSpawnPlayerAtPositionShortcutClick,
             [InputManager.KeyCodes.Key1]: this.handleKey1Click,
