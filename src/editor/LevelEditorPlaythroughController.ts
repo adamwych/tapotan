@@ -2,6 +2,7 @@ import LevelEditorContext from "./LevelEditorContext";
 import { GameState } from "../core/GameManager";
 import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
 import WidgetSignTextBubble from "../screens/widgets/WidgetSignTextBubble";
+import GameObjectComponentAI from "../world/components/ai/GameObjectComponentAI";
 
 export default class LevelEditorPlaythroughController {
 
@@ -29,6 +30,12 @@ export default class LevelEditorPlaythroughController {
         world.getGameObjects().forEach(gameObject => {
             gameObject.interactive = false;
             gameObject.alpha = 1;
+
+            if (gameObject.hasComponentOfType(GameObjectComponentAI)) {
+                gameObject.getComponentByType<GameObjectComponentAI>(GameObjectComponentAI).setAIEnabled(true);
+                gameObject.setCustomProperty('monster.startPositionX', gameObject.transformComponent.getUnalignedPositionX());
+                gameObject.setCustomProperty('monster.startPositionY', (gameObject.transformComponent.getPositionY() + gameObject.transformComponent.getPivotY()));
+            }
         });
 
         if (spawnPlayer) {
@@ -52,6 +59,17 @@ export default class LevelEditorPlaythroughController {
 
         const world = this.context.getWorld();
         const player = world.getPlayer();
+
+        world.getGameObjects().forEach(gameObject => {
+            if (gameObject.hasComponentOfType(GameObjectComponentAI)) {
+                gameObject.getComponentByType<GameObjectComponentAI>(GameObjectComponentAI).setAIEnabled(false);
+
+                gameObject.transformComponent.setPosition(
+                    gameObject.getCustomProperty('monster.startPositionX'),
+                    gameObject.getCustomProperty('monster.startPositionY')
+                );
+            }
+        });
 
         // Bring back collected collectables.
         const collector = player.getComponentByType<GameObjectComponentCollectableCollector>(GameObjectComponentCollectableCollector);

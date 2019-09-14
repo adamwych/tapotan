@@ -1,6 +1,7 @@
 import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 import GameObject from "../GameObject";
 import Tapotan from "../../core/Tapotan";
+import GameObjectFaceDirection from "../GameObjectFaceDirection";
 
 export enum GameObjectVerticalAlignment {
     Top = 'top',
@@ -25,6 +26,7 @@ export enum GameObjectHorizontalAlignment {
  * @emits transform.angleChanged
  * @emits transform.verticalAlignmentChanged
  * @emits transform.horizontalAlignmentChanged
+ * @emits transform.faceDirectionChanged
  */
 export default class GameObjectComponentTransform extends GameObjectComponent {
 
@@ -42,6 +44,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     protected verticalAlignment: GameObjectVerticalAlignment = GameObjectVerticalAlignment.Top;
     protected horizontalAlignment: GameObjectHorizontalAlignment = GameObjectHorizontalAlignment.Left;
 
+    protected faceDirection: GameObjectFaceDirection = GameObjectFaceDirection.Right;
+
     protected destroy(): void { }
 
     public readCustomSerializationProperties(props: any) {
@@ -57,6 +61,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         this.verticalAlignment = props.verticalAlignment === 'top' ? GameObjectVerticalAlignment.Top : GameObjectVerticalAlignment.Bottom;
         this.horizontalAlignment = props.horizontalAlignment === 'left' ? GameObjectHorizontalAlignment.Left : GameObjectHorizontalAlignment.Right;
 
+        this.faceDirection = props.faceDirection === 'left' ? GameObjectFaceDirection.Left : GameObjectFaceDirection.Right;
+
         this.angle = props.angle;
     }
 
@@ -70,6 +76,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
             ['Scale Y', this.scaleY.toFixed(2)],
             ['Vertical Alignment', this.verticalAlignment],
             ['Horizontal Alignment', this.horizontalAlignment],
+            ['Face Direction', this.faceDirection],
             ['Angle', this.angle.toFixed(2)],
         ];
     }
@@ -87,6 +94,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
 
             verticalAlignment: this.verticalAlignment,
             horizontalAlignment: this.horizontalAlignment,
+            
+            faceDirection: this.faceDirection,
 
             angle: this.angle
         }
@@ -363,6 +372,27 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public getHorizontalAlignment(): GameObjectHorizontalAlignment {
         return this.horizontalAlignment;
+    }
+
+    /**
+     * Sets the direction in which the object is facing.
+     * This, by itself, does not have any visual effect on the object.
+     * 
+     * @param faceDirection 
+     */
+    public setFaceDirection(faceDirection: GameObjectFaceDirection) {
+        this.faceDirection = faceDirection;
+
+        if (this.gameObject) {
+            this.gameObject.emit('transform.faceDirectionChanged', faceDirection);
+        }
+    }
+
+    /**
+     * Returns the direction in which the object is facing.
+     */
+    public getFaceDirection(): GameObjectFaceDirection {
+        return this.faceDirection;
     }
 
 }

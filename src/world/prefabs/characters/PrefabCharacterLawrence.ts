@@ -15,7 +15,7 @@ export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameO
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
     body.initializeBox(0.5, 1, {
         mass: 5,
-        fixedRotation: true,
+        fixedRotation: true
     });
 
     body.setMaterial(PhysicsMaterials.Player);

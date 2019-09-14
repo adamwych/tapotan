@@ -1,5 +1,6 @@
 enum GameObjectFaceDirection {
-    Left, Right
+    Left = 'left',
+    Right = 'right'
 };
 
 export default GameObjectFaceDirection;

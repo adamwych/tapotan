@@ -48,6 +48,8 @@ export default class ScreenLevelEditor extends Screen {
     private playthroughController: LevelEditorPlaythroughController;
 
     private isMouseDown: boolean = false;
+    private lastMouseX: number = 0;
+    private lastMouseY: number = 0;
     
     private isSettingSpawnPoint: boolean = false;
     private isSpawnPointSet: boolean = false;
@@ -332,13 +334,6 @@ export default class ScreenLevelEditor extends Screen {
     private handleApplicationMouseDown = e => {
         this.isMouseDown = true;
 
-        if (e.data.originalEvent.which === 1 && this.newGameObjectShade !== null) {
-            this.handlePlaceObjectOnMouseCoordinates({
-                x: e.data.global.x,
-                y: e.data.global.y
-            });
-        }
-
         if (e.data.originalEvent.which !== 2 && e.target.name === '__application__stage__') {
             this.blurActiveAndHoveredObjectOutline();
         }
@@ -362,6 +357,9 @@ export default class ScreenLevelEditor extends Screen {
                 });
             }
         }
+
+        this.lastMouseX = InputManager.instance.getMouseX();
+        this.lastMouseY = InputManager.instance.getMouseY();
     }
 
     private handlePlaceObjectOnMouseCoordinates = (mouseCoords) => {
@@ -539,10 +537,18 @@ export default class ScreenLevelEditor extends Screen {
 
         if (this.newGameObjectShade !== null) {
             if (this.isMouseDown) {
-                this.remainingMouseMoves.push({
-                    x: InputManager.instance.getMouseX(),
-                    y: InputManager.instance.getMouseY()
-                });
+                let dx = InputManager.instance.getMouseX() - this.lastMouseX;
+                let dy = InputManager.instance.getMouseY() - this.lastMouseY;
+
+                if (dx !== 0 || dy !== 0) {
+                    this.remainingMouseMoves.push({
+                        x: InputManager.instance.getMouseX(),
+                        y: InputManager.instance.getMouseY()
+                    });
+                }
+
+                this.lastMouseX = InputManager.instance.getMouseX();
+                this.lastMouseY = InputManager.instance.getMouseY();
             }
         }
         
