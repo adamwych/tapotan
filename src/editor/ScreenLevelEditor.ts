@@ -21,6 +21,7 @@ import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import ContainerAnimationNewBlockPlaced from './animations/ContainerAnimationNewBlockPlaced';
+import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -32,6 +33,7 @@ export default class ScreenLevelEditor extends Screen {
     private objectOutlineHover: WidgetLevelEditorObjectOutline;
     private objectOutlineActive: Array<WidgetLevelEditorObjectOutline> = [];
     private activeObjectDragController: LevelEditorActiveObjectDragController;
+    private objectShadeGridOutline: WidgetLevelEditorObjectShadeGridOutline;
 
     private prefabDrawer: WidgetLevelEditorPrefabDrawer;
 
@@ -232,6 +234,9 @@ export default class ScreenLevelEditor extends Screen {
             this.newGameObjectShade.destroy();
             this.world.removeGameObject(this.newGameObjectShade);
             this.newGameObjectShade = null;
+
+            this.objectShadeGridOutline.destroy({ children: true });
+            this.objectShadeGridOutline = null;
         }
 
         this.newGameObjectShade = Prefabs.BasicBlock(this.world, 0, 0, {
@@ -243,8 +248,11 @@ export default class ScreenLevelEditor extends Screen {
         this.newGameObjectShade.setCustomProperty('__objectName', resourceName);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
 
-        this.grid.alpha = 1;
+        this.grid.alpha = 0.25;
         this.grid.visible = true;
+
+        this.objectShadeGridOutline = new WidgetLevelEditorObjectShadeGridOutline(this.newGameObjectShade);
+        this.uiContainer.addChild(this.objectShadeGridOutline);
 
         this.isSettingSpawnPoint = false;
         this.isSettingEndPoint = false;
@@ -396,6 +404,10 @@ export default class ScreenLevelEditor extends Screen {
                 let targetX = worldCoords.x;
                 let targetY = worldCoords.y;
 
+                if (this.newGameObjectShade.width > 1) {
+                    targetX -= ((this.newGameObjectShade.width - 2));
+                }
+
                 if (this.newGameObjectShade.height > 1) {
                     targetY = worldCoords.y + this.newGameObjectShade.height - 1;
                 }
@@ -409,8 +421,7 @@ export default class ScreenLevelEditor extends Screen {
                 gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
                 gameObject.setLayer(this.context.getCurrentLayerIndex());
 
-                const animator = new ContainerAnimator(gameObject);
-                animator.play(new ContainerAnimationNewBlockPlaced());
+                new ContainerAnimator(gameObject).play(new ContainerAnimationNewBlockPlaced());
 
                 this.context.getCurrentLayer().addGameObject(gameObject);
                 this.initializeGameObjectInteractivity(gameObject);
@@ -460,6 +471,11 @@ export default class ScreenLevelEditor extends Screen {
 
             this.grid.alpha = 1;
             this.grid.visible = false;
+
+            if (this.objectShadeGridOutline) {
+                this.objectShadeGridOutline.destroy();
+                this.objectShadeGridOutline = null;
+            }
         }
 
         if (this.prefabDrawer.visible) {
@@ -470,6 +486,8 @@ export default class ScreenLevelEditor extends Screen {
         this.spawnPlayerAtPositionActionActive = false;
         this.isSettingSpawnPoint = false;
         this.isSettingEndPoint = false;
+
+        this.grid.restoreTilesAlpha();
     }
 
     public handleGameEnd = () => {
@@ -515,11 +533,17 @@ export default class ScreenLevelEditor extends Screen {
             this.objectOutlineHover.tick(dt);
         }
 
-        if (this.isMouseDown && this.newGameObjectShade !== null) {
-            this.remainingMouseMoves.push({
-                x: InputManager.instance.getMouseX(),
-                y: InputManager.instance.getMouseY()
-            });
+        if (this.objectShadeGridOutline) {
+            this.objectShadeGridOutline.tick(dt);
+        }
+
+        if (this.newGameObjectShade !== null) {
+            if (this.isMouseDown) {
+                this.remainingMouseMoves.push({
+                    x: InputManager.instance.getMouseX(),
+                    y: InputManager.instance.getMouseY()
+                });
+            }
         }
         
         this.remainingMouseMoves.forEach(move => {

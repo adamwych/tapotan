@@ -17,7 +17,7 @@ export default class GameObjectComponentEditorShade extends GameObjectComponent 
     public tick = (dt: number) => {
         super.tick(dt);
 
-        const snapToGrid = true;
+        const snapToGrid = false;
         
         const inputManager = InputManager.instance;
         const mouseX = inputManager.getMouseX();
@@ -34,7 +34,14 @@ export default class GameObjectComponentEditorShade extends GameObjectComponent 
         } else {
             let x = mouseX / (Tapotan.getGameHeight() / Tapotan.getViewportHeight());
             let y = mouseY / (Tapotan.getGameHeight() / Tapotan.getViewportHeight());
-            this.gameObject.transformComponent.setPosition(x - this.gameObject.transformComponent.getPivotX(), y - this.gameObject.transformComponent.getPivotY());
+
+            x += Tapotan.getInstance().getViewport().left;
+            y += Tapotan.getInstance().getViewport().top;
+
+            this.gameObject.transformComponent.setPosition(
+                x - this.gameObject.transformComponent.getPivotX() - (this.gameObject.width / 2),
+                y - this.gameObject.transformComponent.getPivotY() - (this.gameObject.height > 1 ? this.gameObject.height : 0.5)
+            );
         }
 
         this.gameObject.visible = true;

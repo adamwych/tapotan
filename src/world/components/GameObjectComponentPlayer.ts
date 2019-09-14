@@ -264,7 +264,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         this.touchingSide = null;
 
         let rayStartPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1]);
-        let rayEndPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0] - (World.PHYSICS_SCALE / 3), this.physicsBody.position[1]);
+        let rayEndPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0] - (World.PHYSICS_SCALE / 4), this.physicsBody.position[1]);
 
         const rayLeft = new p2.Ray({
             from: rayStartPositionLeft,
@@ -280,7 +280,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             result.reset();
 
             let rayStartPositionRight = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1]);
-            let rayEndPositionRight = p2.vec2.fromValues(this.physicsBody.position[0] + (World.PHYSICS_SCALE / 2), this.physicsBody.position[1]);
+            let rayEndPositionRight = p2.vec2.fromValues(this.physicsBody.position[0] + (World.PHYSICS_SCALE / 4), this.physicsBody.position[1]);
 
             const rayRight = new p2.Ray({
                 from: rayStartPositionRight,

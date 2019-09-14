@@ -132,4 +132,33 @@ export default class WidgetLevelEditorGrid extends PIXI.Container {
         }
     }
 
+    public highlightTileAt(x: number, y: number, width: number, height: number) {
+        const blockSize = Tapotan.getGameHeight() / Tapotan.getViewportHeight();
+        width *= blockSize;
+        height *= blockSize;
+
+        this.children.forEach(child => {
+            (child as PIXI.Container).children.forEach(child => {
+                const bounds = child.getBounds();
+                
+                if (
+                    (x >= bounds.x && x <= bounds.x + bounds.width) &&
+                    (y >= bounds.y && y <= bounds.y + bounds.height)
+                ) {
+                    child.alpha = 1;
+                } else {
+                    child.alpha = 0.15;
+                }
+            });
+        });
+    }
+
+    public restoreTilesAlpha() {
+        this.children.forEach(child => {
+            (child as PIXI.Container).children.forEach(child => {
+                child.alpha = 1;
+            });
+        });
+    }
+
 }
