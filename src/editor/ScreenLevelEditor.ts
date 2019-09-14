@@ -345,8 +345,11 @@ export default class ScreenLevelEditor extends Screen {
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
         this.newGameObjectShade.setCustomProperty('__objectName', '');
 
-        this.grid.alpha = 1;
+        this.grid.alpha = 0.25;
         this.grid.visible = true;
+
+        this.objectShadeGridOutline = new WidgetLevelEditorObjectShadeGridOutline(this.newGameObjectShade);
+        this.uiContainer.addChild(this.objectShadeGridOutline);
 
         this.isSettingSpawnPoint = true;
         this.isSettingEndPoint = false;
@@ -366,8 +369,11 @@ export default class ScreenLevelEditor extends Screen {
         this.newGameObjectShade.setCustomProperty('__objectName', '');
         this.newGameObjectShade.transformComponent.setPivot(0, 0);
 
-        this.grid.alpha = 1;
+        this.grid.alpha = 0.25;
         this.grid.visible = true;
+
+        this.objectShadeGridOutline = new WidgetLevelEditorObjectShadeGridOutline(this.newGameObjectShade);
+        this.uiContainer.addChild(this.objectShadeGridOutline);
 
         this.isSettingSpawnPoint = false;
         this.isSettingEndPoint = true;

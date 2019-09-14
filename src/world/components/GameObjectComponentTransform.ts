@@ -225,7 +225,6 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         
         if (this.gameObject) {
             this.gameObject.pivot.set(x, y);
-            //this.gameObject.position.set(this.positionX + this.pivotX, this.positionY + this.pivotY);
             this.gameObject.emit('transform.pivotChanged', x, y);
         }
     }
