@@ -19,6 +19,7 @@ export default function populateBasicMonsterPrefab(
     props: PrefabBasicProps,
     speed: number,
     speedForce: number,
+    animationSpeed: number,
     monsterAnimatorTimer: SpritesheetAnimatorTimer
 ) {
     const tileset = world.getTileset();
@@ -28,9 +29,9 @@ export default function populateBasicMonsterPrefab(
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize(monsterAnimatorTimer);
-    animatorComponent.addAnimation('idle', new Spritesheet(idleSpritesheetTexture, 16, 16), 850);
-    animatorComponent.addAnimation('run', new Spritesheet(runSpritesheetTexture, 16, 16), 140);
-    animatorComponent.addAnimation('run_right', new Spritesheet(runRightSpritesheetTexture, 16, 16), 140);
+    animatorComponent.addAnimation('idle', new Spritesheet(idleSpritesheetTexture, 16, 16), 99999);
+    animatorComponent.addAnimation('run', new Spritesheet(runSpritesheetTexture, 16, 16), animationSpeed);
+    animatorComponent.addAnimation('run_right', new Spritesheet(runRightSpritesheetTexture, 16, 16), animationSpeed);
     animatorComponent.playAnimation('run');
 
     const livingEntityComponent = gameObject.createComponent<GameObjectComponentLivingEntity>(GameObjectComponentLivingEntity);
