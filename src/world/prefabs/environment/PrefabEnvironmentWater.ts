@@ -19,8 +19,12 @@ export default createPrefabSpawnFunction('environment_water', (gameObject: GameO
     animatorComponent.setTransformMultiplier(2);
     animatorComponent.playAnimation('animation');
 
+    gameObject.setCustomProperty('sensor', true);
+
     createPrefabDefaultTransform(gameObject, props, {
         mass: 0,
         fixedRotation: true
+    }, {
+        sensor: true
     });
 });

@@ -17,6 +17,8 @@ export default createPrefabSpawnFunction('environment_waterblock', (gameObject: 
     animatorComponent.addAnimation('animation', new Spritesheet(texture, 16, 16), 200);
     animatorComponent.playAnimation('animation');
 
+    gameObject.setCustomProperty('sensor', true);
+    
     createPrefabDefaultTransform(gameObject, props, {
         mass: 0,
         fixedRotation: true
