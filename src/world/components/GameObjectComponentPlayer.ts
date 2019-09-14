@@ -244,7 +244,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             }
         }
 
-        if (this.touchingSide) {
+        if (this.touchingSide !== null) {
             let touchingBody = this.gameObject.getWorld().getGameObjectByPhysicsBodyId(result.body.id);
             if (touchingBody.getLayer() !== this.gameObject.getLayer() || touchingBody.hasCustomProperty('sensor')) {
                 this.touchingSide = null;
