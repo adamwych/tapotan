@@ -181,6 +181,8 @@ export default class Tapotan {
         this.application.ticker.add(this.inputManager.tick);
         this.application.ticker.add(this.tick);
 
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
         await this.loadTilesets();
         this.assetManager.load().then(() => {
             this.audioManager = new AudioManager();
