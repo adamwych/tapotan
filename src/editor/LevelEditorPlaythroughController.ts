@@ -1,6 +1,7 @@
 import LevelEditorContext from "./LevelEditorContext";
 import { GameState } from "../core/GameManager";
 import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
+import WidgetSignTextBubble from "../screens/widgets/WidgetSignTextBubble";
 
 export default class LevelEditorPlaythroughController {
 
@@ -58,6 +59,10 @@ export default class LevelEditorPlaythroughController {
 
         player.destroy();
         world.removeGameObject(player);
+
+        if (WidgetSignTextBubble.getCurrentlyVisibleBubble()) {
+            WidgetSignTextBubble.getCurrentlyVisibleBubble().hide();
+        }
 
         this.context.getEditorScreen().getSpawnPointShadeObject().visible = true;
         this.context.getEditorScreen().handleCurrentLayerChange(this.context.getCurrentLayer());

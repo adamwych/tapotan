@@ -75,6 +75,8 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         // before it happened, then object's position and angle will be 0 instead of
         // whatever we actually want. `tick` is called here manully to fix that.
         this.synchronizeObjectTransformWithBody();
+
+        this.gameObject.emit('transform.positionChanged', x, y);
     }
 
     public setPivot(x: number, y: number) {
@@ -84,11 +86,15 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
 
         this.pivotX = x;
         this.pivotY = y;
+        
+        this.gameObject.emit('transform.pivotChanged', x, y);
     }
 
     public setAngle(angle: number) {
         this.angle = angle;
         this.physicsBody.angle = angle;
+        
+        this.gameObject.emit('transform.angleChanged', angle);
     }
 
 }

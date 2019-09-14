@@ -10,6 +10,7 @@ import PrefabVictoryFlag from "./PrefabVictoryFlag";
 import PrefabEnvironmentSpring from "./environment/PrefabEnvironmentSpring";
 import PrefabEnvironmentAccelerator from "./environment/PrefabEnvironmentAccelerator";
 import PrefabEnvironmentLadder from "./environment/PrefabEnvironmentLadder";
+import PrefabEnvironmentSign from "./environment/PrefabEnvironmentSign";
 
 export interface PrefabBasicProps {
 
@@ -41,6 +42,18 @@ export default {
     'environment_spring': PrefabEnvironmentSpring,
     'environment_speeder': PrefabEnvironmentAccelerator,
     'environment_ladder': PrefabEnvironmentLadder,
+    'environment_sign_variation0': PrefabEnvironmentSign,
+    'environment_sign_variation1': PrefabEnvironmentSign,
+    'environment_sign_variation2': PrefabEnvironmentSign,
+    'environment_sign_variation3': PrefabEnvironmentSign,
+    'environment_sign_variation4': PrefabEnvironmentSign,
+    'environment_sign_variation5': PrefabEnvironmentSign,
+    'environment_sign_variation6': PrefabEnvironmentSign,
+    'environment_sign_variation7': PrefabEnvironmentSign,
+    'environment_sign_variation8': PrefabEnvironmentSign,
+    'environment_sign_variation9': PrefabEnvironmentSign,
+    'environment_sign_variation10': PrefabEnvironmentSign,
+    'environment_sign_variation11': PrefabEnvironmentSign,
 
     CharacterLawrence: PrefabCharacterLawrence,
 };
