@@ -3,6 +3,8 @@ import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameOb
 
 export default class GameObjectComponentSprite extends GameObjectComponent {
 
+    protected type = 'sprite';
+
     private sprite: PIXI.Sprite;
 
     public initialize(texture: PIXI.Texture): void {

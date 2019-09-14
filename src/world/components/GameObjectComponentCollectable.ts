@@ -6,6 +6,8 @@ import GameObjectComponentCollectableCollector from "./GameObjectComponentCollec
 
 export default class GameObjectComponentCollectable extends GameObjectComponent {
 
+    protected type = 'collectable';
+
     private collectable: Collectable;
 
     public initialize(category: CollectableCategory): void {

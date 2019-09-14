@@ -30,6 +30,8 @@ export enum GameObjectHorizontalAlignment {
  */
 export default class GameObjectComponentTransform extends GameObjectComponent {
 
+    protected type = 'transform';
+
     protected positionX: number = 0;
     protected positionY: number = 0;
 
@@ -49,21 +51,13 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     protected destroy(): void { }
 
     public readCustomSerializationProperties(props: any) {
-        this.positionX = props.positionX;
-        this.positionY = props.positionY;
-        
-        this.pivotX = props.pivotX;
-        this.pivotY = props.pivotY;
-        
-        this.scaleX = props.scaleX;
-        this.scaleY = props.scaleY;
-
-        this.verticalAlignment = props.verticalAlignment === 'top' ? GameObjectVerticalAlignment.Top : GameObjectVerticalAlignment.Bottom;
-        this.horizontalAlignment = props.horizontalAlignment === 'left' ? GameObjectHorizontalAlignment.Left : GameObjectHorizontalAlignment.Right;
-
-        this.faceDirection = props.faceDirection === 'left' ? GameObjectFaceDirection.Left : GameObjectFaceDirection.Right;
-
-        this.angle = props.angle;
+        this.setPosition(props.positionX, props.positionY, true);
+        this.setPivot(props.pivotX, props.pivotY);
+        this.setScale(props.scaleX, props.scaleY);
+        this.setVerticalAlignment(props.verticalAlignment === 'top' ? GameObjectVerticalAlignment.Top : GameObjectVerticalAlignment.Bottom);
+        this.setHorizontalAlignment(props.horizontalAlignment === 'left' ? GameObjectHorizontalAlignment.Left : GameObjectHorizontalAlignment.Right);
+        this.setFaceDirection(props.faceDirection === 'left' ? GameObjectFaceDirection.Left : GameObjectFaceDirection.Right);
+        this.setAngle(props.angle);
     }
 
     public getDebugProperties(): GameObjectComponentDebugProperty[] {

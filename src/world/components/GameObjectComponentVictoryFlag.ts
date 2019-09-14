@@ -5,6 +5,8 @@ import { GameEndReason } from "../../core/GameManager";
 
 export default class GameObjectComponentVictoryFlag extends GameObjectComponent {
 
+    protected type = 'victory_flag';
+
     public initialize() {
         this.gameObject.on('collisionStart', this.handleCollisionStart);
     }

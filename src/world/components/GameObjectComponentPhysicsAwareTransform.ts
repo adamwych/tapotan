@@ -14,6 +14,8 @@ const RADIANS_TO_DEGREES = 180 / Math.PI;
  */
 export default class GameObjectComponentPhysicsAwareTransform extends GameObjectComponentTransform {
 
+    protected type = 'physics_aware_transform';
+
     private physicsBody: p2.Body;
 
     constructor(gameObject: GameObject) {

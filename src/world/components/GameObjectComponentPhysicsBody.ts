@@ -4,6 +4,8 @@ import World from '../World';
 
 export default class GameObjectComponentPhysicsBody extends GameObjectComponent {
 
+    protected type = 'physics_body';
+
     protected body: p2.Body;
     protected shape: p2.Shape;
 

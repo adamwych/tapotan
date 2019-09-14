@@ -4,6 +4,8 @@ import GameObjectComponentLivingEntity from "./GameObjectComponentLivingEntity";
 
 export default class GameObjectComponentKillOnTouch extends GameObjectComponent {
 
+    protected type = 'kill_on_touch';
+
     public initialize(): void {
         this.gameObject.on('collisionStart', this.handleCollisionStart);
     }

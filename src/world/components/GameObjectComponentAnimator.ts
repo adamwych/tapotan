@@ -8,6 +8,8 @@ const emptyFunction = () => {};
 
 export default class GameObjectComponentAnimator extends GameObjectComponent {
 
+    protected type = 'animator';
+
     private animator: SpritesheetAnimator;
 
     public initialize(timer?: SpritesheetAnimatorTimer): void {

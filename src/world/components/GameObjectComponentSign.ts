@@ -5,6 +5,8 @@ import GameObjectComponent from "../GameObjectComponent";
 
 export default class GameObjectComponentSign extends GameObjectComponent {
 
+    protected type = 'sign';
+
     private bubbleWidget: WidgetSignTextBubble;
 
     public initialize(text: string): void {

@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import InputManager from '../core/InputManager';
 import Tapotan from "../core/Tapotan";
+import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import Screen from "../screens/Screen";
 import screenPointToWorld from '../utils/screenPointToWorld';
 import GameObjectComponentEditorShade from '../world/components/GameObjectComponentEditorShade';
@@ -8,6 +9,9 @@ import { GameObjectVerticalAlignment } from '../world/components/GameObjectCompo
 import GameObject from '../world/GameObject';
 import Prefabs from '../world/prefabs/Prefabs';
 import World from '../world/World';
+import ContainerAnimationNewBlockPlaced from './animations/ContainerAnimationNewBlockPlaced';
+import LevelEditorCommandRemoveObject from './commands/LevelEditorCommandRemoveObject';
+import LevelEditorCommandRotateObject from './commands/LevelEditorCommandRotateObject';
 import LevelEditorActiveObjectDragController from './LevelEditorActiveObjectDragController';
 import LevelEditorCameraMovementController from './LevelEditorCameraMovementController';
 import LevelEditorContext from './LevelEditorContext';
@@ -15,17 +19,12 @@ import LevelEditorKeyboardShortcutsController from './LevelEditorKeyboardShortcu
 import LevelEditorLayer from './LevelEditorLayer';
 import LevelEditorNewLevelTemplate from './LevelEditorNewLevelTemplate';
 import LevelEditorPlaythroughController from './LevelEditorPlaythroughController';
+import WidgetLevelEditorObjectActionButtons from './object-action-buttons/WidgetLevelEditorObjectActionButtons';
 import WidgetLevelEditorPrefabDrawer from './prefab-drawer/WidgetLevelEditorPrefabDrawer';
 import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomContainer';
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
-import ContainerAnimator from '../graphics/animation/ContainerAnimator';
-import ContainerAnimationNewBlockPlaced from './animations/ContainerAnimationNewBlockPlaced';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
-import WidgetLevelEditorObjectActionButtons from './object-action-buttons/WidgetLevelEditorObjectActionButtons';
-import LevelEditorCommandRemoveObject from './commands/LevelEditorCommandRemoveObject';
-import LevelEditorCommandRotateObject from './commands/LevelEditorCommandRotateObject';
-import TickHelper from '../core/TickHelper';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -88,8 +87,9 @@ export default class ScreenLevelEditor extends Screen {
         if (this.world.isNewWorld()) {
             LevelEditorNewLevelTemplate.createGameObjects(this.world);
             this.world.setSpawnPointPosition(4, 1, 5);
-            this.handleSpawnPointSet(this.world.getSpawnPointPosition());
         }
+        
+        this.handleSpawnPointSet(this.world.getSpawnPointPosition());
 
         this.initializeGameObjectsInteractivity();
         this.initializeGeneralInteractivity();
@@ -344,6 +344,7 @@ export default class ScreenLevelEditor extends Screen {
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
         this.newGameObjectShade.setCustomProperty('__objectName', '');
+        this.newGameObjectShade.setCustomProperty('__editorOnly', true);
 
         this.grid.alpha = 0.25;
         this.grid.visible = true;
@@ -485,6 +486,7 @@ export default class ScreenLevelEditor extends Screen {
         this.spawnPointShadeObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
         this.spawnPointShadeObject.setLayer(this.context.getCurrentLayerIndex());
         this.spawnPointShadeObject.setCustomProperty('spawnPoint', true);
+        this.spawnPointShadeObject.setCustomProperty('__editorOnly', true);
 
         this.world.setSpawnPointPosition(worldCoords.x, worldCoords.y, this.context.getCurrentLayerIndex());
         this.isSpawnPointSet = true;
@@ -566,6 +568,7 @@ export default class ScreenLevelEditor extends Screen {
         this.newGameObjectShade.visible = false;
         this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
+        this.newGameObjectShade.setCustomProperty('__editorOnly', true);
 
         this.grid.alpha = 1;
         this.grid.visible = true;

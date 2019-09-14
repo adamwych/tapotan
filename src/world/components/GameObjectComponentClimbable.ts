@@ -4,6 +4,8 @@ import GameObjectComponentPlayer from "./GameObjectComponentPlayer";
 
 export default class GameObjectComponentClimbable extends GameObjectComponent {
 
+    protected type = 'climable';
+
     public initialize(): void {
         this.gameObject.on('collisionStart', this.handleCollisionStart);
         this.gameObject.on('collisionEnd', this.handleCollisionEnd);

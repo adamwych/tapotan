@@ -6,6 +6,8 @@ import GameObjectComponentPhysicsBody from './GameObjectComponentPhysicsBody';
 
 export default class GameObjectComponentAccelerator extends GameObjectComponent {
 
+    protected type = 'accelerator';
+
     private timer: number = 0;
     private collidingWith: p2.Body;
 

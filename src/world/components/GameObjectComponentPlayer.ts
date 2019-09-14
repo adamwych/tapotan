@@ -14,6 +14,8 @@ import { GameObjectVerticalAlignment } from './GameObjectComponentTransform';
 
 export default class GameObjectComponentPlayer extends GameObjectComponent {
 
+    protected type = 'player';
+
     private livingEntity: GameObjectComponentLivingEntity;
     private animator: GameObjectComponentAnimator;
     private gameManager: GameManager;

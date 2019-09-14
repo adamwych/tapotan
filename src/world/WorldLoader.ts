@@ -1,8 +1,10 @@
 import { Base64 } from 'js-base64';
 import * as pako from 'pako';
-import World from './World';
 import Tapotan from '../core/Tapotan';
+import GameObject from './GameObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
+import Prefabs from './prefabs/Prefabs';
+import World from './World';
 
 interface WorldLoaderInput {
     type: string;
@@ -44,53 +46,33 @@ export default class WorldLoader {
         world.getBehaviourRules().setCameraBehaviour(levelData.world.behaviourRules.cameraBehaviour);
         world.getBehaviourRules().setCameraSpeed(levelData.world.behaviourRules.cameraSpeed);
         world.getBehaviourRules().setGameOverTimeout(levelData.world.behaviourRules.timeout);
-        /*world.setSpawnPointPosition(
+        world.setSpawnPointPosition(
             levelData.world.spawnPoint.x,
-            Tapotan.getViewportHeight() - levelData.world.spawnPoint.y - 1
-        );*/
+            levelData.world.spawnPoint.y,
+            levelData.world.spawnPoint.layer
+        );
         world.setBackgroundMusicID(levelData.world.backgroundMusic);
 
         levelData.world.objects.forEach(object => {
-            let gameObject = null;
+            if (object.fromPrefab) {
+                const prefabName = object.customProperties.__prefab;
+                const prefabProperties = object.customProperties.__prefabProps;
 
-            if (gameObject) {
-                let y = Tapotan.getViewportHeight() - object.position.y - 1;
+                let gameObject = Prefabs[prefabName](world, 0, 0, prefabProperties) as GameObject;
+
                 gameObject.setId(object.id);
-                gameObject.angle = object.angle;
-                gameObject.skew.set(object.skew.x, object.skew.y);
-                gameObject.position.set(object.position.x, y);
-                gameObject.pivot.set(object.pivot.x, object.pivot.y);
-                gameObject.zIndex = object.zIndex;
-
-                if (object.type === 'victory-flag') {
-                    gameObject.zIndex = 9999;
+                gameObject.transformComponent.readCustomSerializationProperties(object.transform.custom);
+                
+                for (let [k, v] of object.customProperties) {
+                    gameObject.setCustomProperty(k, v);
                 }
 
-                //if (object.type === 'victory-flag') {
-                    /*worldObject.pivot.set(worldObject.width / 2, worldObject.height / 2);
-                    worldObject.position.set(worldObject.position.x + worldObject.pivot.x, worldObject.position.y + worldObject.pivot.y);*/
-                //}
-
-                gameObject.positionUpdated();
-                
-                // world.addObject(worldObject);
+                gameObject.setLayer(object.layer);
             }
-        });
+        }); 
 
         world.emit('worldLoaded');
 
         return world;
-    }
-
-    private static loadEntity(world: World, jsonObject: any) {
-        /*const typeToClassPrototypeMap = {
-            [EntityType.Apple]: 'EntityMonsterApple',
-            [EntityType.Carrot]: 'EntityMonsterCarrot',
-            [EntityType.Snake]: 'EntityMonsterSnake',
-            [EntityType.Ghost]: 'EntityMonsterGhost',
-        };
-
-        const prototype = require('./entities/' + typeToClassPrototypeMap[jsonObject.entityType]).default;
-        return prototype.fromSerialized(world, jsonObject);*/
     }
 }

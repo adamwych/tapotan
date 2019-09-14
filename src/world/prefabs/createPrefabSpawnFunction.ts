@@ -8,6 +8,7 @@ export default function createPrefabSpawnFunction<P>(name: string, populateFunct
         const gameObject = world.createGameObject();
 
         gameObject.setCustomProperty('__prefab', name);
+        gameObject.setCustomProperty('__prefabProps', props);
         
         // Populate object with components.
         populateFunction(gameObject, world, props);

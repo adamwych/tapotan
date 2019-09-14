@@ -1,22 +1,21 @@
+import Axios from 'axios';
 import * as PIXIViewport from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
 import APIRequest from '../api/APIRequest';
+import ScreenLevelEditor from '../editor/ScreenLevelEditor';
 import ScreenIngame from '../screens/ingame/ScreenIngame';
 import ScreenMainMenu from '../screens/main-menu/ScreenMainMenu';
+import ScreenTest from '../screens/ScreenTest';
+import convertWorldToPixels from '../utils/converWorldToPixels';
+import Tileset from '../world/tiles/Tileset';
 import World from '../world/World';
+import WorldLoader from '../world/WorldLoader';
 import AssetManager from './AssetManager';
+import AudioManager from './AudioManager';
+import FrameDebugger from './FrameDebugger';
 import GameManager, { GameState } from './GameManager';
 import InputManager from './InputManager';
 import ScreenManager from './ScreenManager';
-import AudioManager from './AudioManager';
-import WorldSerializer from '../world/WorldSerializer';
-import WorldLoader from '../world/WorldLoader';
-import convertWorldToPixels from '../utils/converWorldToPixels';
-import Axios from 'axios';
-import Tileset from '../world/tiles/Tileset';
-import ScreenTest from '../screens/ScreenTest';
-import ScreenLevelEditor from '../editor/ScreenLevelEditor';
-import FrameDebugger from './FrameDebugger';
 
 export enum TapotanCursor {
     Default = 'Default',

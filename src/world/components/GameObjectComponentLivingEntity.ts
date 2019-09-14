@@ -8,6 +8,8 @@ import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameOb
  */
 export default class GameObjectComponentLivingEntity extends GameObjectComponent {
 
+    protected type = 'living_entity';
+
     /**
      * Whether this entity is dead.
      */

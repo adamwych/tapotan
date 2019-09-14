@@ -8,6 +8,8 @@ import GameObjectComponentPhysicsBody from "./GameObjectComponentPhysicsBody";
 
 export default class GameObjectComponentSpring extends GameObjectComponent {
 
+    protected type = 'spring';
+
     private animator: GameObjectComponentAnimator;
     private bounceScheduled: boolean = false;
 

@@ -3,6 +3,8 @@ import Collectable from "../Collectable";
 
 export default class GameObjectComponentCollectableCollector extends GameObjectComponent {
 
+    protected type = 'collectable_collector';
+
     private collectables: Array<Collectable> = [];
 
     protected destroy(): void {

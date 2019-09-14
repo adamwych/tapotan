@@ -1,21 +1,32 @@
 import World from "./World";
-import Tapotan from "../core/Tapotan";
 import * as pako from 'pako';
 import { Base64 } from 'js-base64';
+import GameObject from "./GameObject";
 
 export default class WorldSerializer {
     public static serialize(world: World, pack: boolean = true) {
         const serializeWorldObjects = (objects) => {
             let result = [];
 
-            objects.forEach(object => {
-                if (object.name === '__sky') {
+            objects.forEach((object: GameObject) => {
+                if (object.hasCustomProperty('__editorOnly')) {
                     return;
                 }
 
-                let obj = object.serialize();
-                obj.position.y = Tapotan.getInitialViewportHeight() - obj.position.y - 1;
-                result.push(obj);
+                if (object.hasCustomProperty('__prefab')) {
+                    result.push({
+                        id: object.getId(),
+                        layer: object.getLayer(),
+                        transform: object.transformComponent.serialize(),
+                        customProperties: object.getCustomProperties(),
+                        fromPrefab: true
+                    });
+                } else {
+                    result.push({
+                        ...object.serialize(),
+                        fromPrefab: false
+                    });
+                }
             });
 
             return result;
@@ -31,11 +42,12 @@ export default class WorldSerializer {
                 tileset: world.getTileset().getName(),
                 spawnPoint: {
                     x: world.getSpawnPointPosition().x,
-                    y: Tapotan.getInitialViewportHeight() - world.getSpawnPointPosition().y - 1
+                    y: world.getSpawnPointPosition().y,
+                    layer: world.getSpawnPointLayer()
                 },
 
                 skyColor: world.getSkyColor(),
-                objects: serializeWorldObjects(world.children),
+                objects: serializeWorldObjects(world.getGameObjects()),
                 behaviourRules: {
                     cameraBehaviour: world.getBehaviourRules().getCameraBehaviour(),
                     cameraSpeed: world.getBehaviourRules().getCameraSpeed(),

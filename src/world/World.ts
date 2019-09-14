@@ -111,6 +111,10 @@ export default class World extends PIXI.Container {
     }
 
     private tick = (dt: number) => {
+        if (this._duringRemove) {
+            return;
+        }
+
         if (!this.paused) {
             this.physicsWorld.step(1 / 60, dt * 1000, 10);
 
@@ -419,6 +423,10 @@ export default class World extends PIXI.Container {
         return this.playerSpawnPoint;
     }
 
+    public getSpawnPointLayer() {
+        return this.playerLayer;
+    }
+
     public setIsNewWorld(isNewWorld: boolean) {
         this._isNewWorld = isNewWorld;
     }
@@ -499,7 +507,7 @@ export default class World extends PIXI.Container {
 
     public setSkyColor(color: string) {
         const colors = {
-            'blue': 0x66faff,
+            'blue': 0x1bf3ff,
             'dark-blue': 0x0a2152,
             
             'red': 0xff6666,

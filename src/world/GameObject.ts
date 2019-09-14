@@ -78,7 +78,8 @@ export default class GameObject extends PIXI.Container {
             enabled: this.enabled,
             components: this.components.map(component => component.serialize()),
             children: this.children.map(child => child instanceof GameObject ? child.serialize() : null).filter(x => x !== null),
-            customProperties: this.customProperties
+            customProperties: this.customProperties,
+            layer: this.layer
         };
     }
 
@@ -246,6 +247,14 @@ export default class GameObject extends PIXI.Container {
      */
     public getComponents(): Array<GameObjectComponent> {
         return this.components;
+    }
+
+    /**
+     * Sets a number that uniquely identifies this object.
+     * @param id 
+     */
+    public setId(id: number) {
+        this.id = id;
     }
 
     /**
