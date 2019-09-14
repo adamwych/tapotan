@@ -9,13 +9,13 @@ import PhysicsBodyCollisionGroup, { PhysicsBodyCollisionMasks } from "../../phys
 import PhysicsMaterials from "../../physics/PhysicsMaterials";
 import World from "../../World";
 import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
+import GameObjectComponentCollectableCollector from "../../components/GameObjectComponentCollectableCollector";
 
 export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameObject, world: World, props: any) => {
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
     body.initializeBox(0.5, 1, {
         mass: 5,
         fixedRotation: true,
-        ccdSpeedThreshold: 10
     });
 
     body.setMaterial(PhysicsMaterials.Player);
@@ -54,4 +54,6 @@ export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameO
 
     const playerComponent = gameObject.createComponent<GameObjectComponentPlayer>(GameObjectComponentPlayer);
     playerComponent.initialize();
+
+    gameObject.createComponent<GameObjectComponentCollectableCollector>(GameObjectComponentCollectableCollector);
 });

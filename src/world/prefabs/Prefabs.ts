@@ -5,6 +5,7 @@ import PrefabVictoryFlag from "./PrefabVictoryFlag";
 import PrefabEnvironmentLava from "./environment/PrefabEnvironmentLava";
 import PrefabEnvironmentWater from "./environment/PrefabEnvironmentWater";
 import PrefabEnvironmentWaterBlock from "./environment/PrefabEnvironmentWaterBlock";
+import PrefabEnvironmentCoin from "./environment/PrefabEnvironmentCoin";
 
 export interface PrefabBasicProps {
 
@@ -24,6 +25,7 @@ export default {
     'environment_lava': PrefabEnvironmentLava,
     'environment_water': PrefabEnvironmentWater,
     'environment_waterblock': PrefabEnvironmentWaterBlock,
+    'environment_coin': PrefabEnvironmentCoin,
 
     CharacterLawrence: PrefabCharacterLawrence,
 };

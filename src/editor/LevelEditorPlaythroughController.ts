@@ -1,5 +1,6 @@
 import LevelEditorContext from "./LevelEditorContext";
 import { GameState } from "../core/GameManager";
+import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
 
 export default class LevelEditorPlaythroughController {
 
@@ -48,6 +49,13 @@ export default class LevelEditorPlaythroughController {
 
         const world = this.context.getWorld();
         const player = world.getPlayer();
+
+        // Bring back collected collectables.
+        const collector = player.getComponentByType<GameObjectComponentCollectableCollector>(GameObjectComponentCollectableCollector);
+        collector.getCollectables().forEach(collectable => {
+            collectable.getGameObject().visible = true;
+        });
+
         player.destroy();
         world.removeGameObject(player);
 
