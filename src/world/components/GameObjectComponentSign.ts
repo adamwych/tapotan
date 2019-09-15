@@ -19,6 +19,16 @@ export default class GameObjectComponentSign extends GameObjectComponent {
         this.setText(text);
     }
 
+    public readCustomSerializationProperties(props: any) {
+        this.setText(props.text);
+    }
+
+    public getCustomSerializationProperties() {
+        return {
+            text: this.text
+        }
+    }
+
     protected destroy(): void {
         this.gameObject.off('collisionStart', this.handleCollisionStart);
         this.gameObject.off('collisionEnd', this.handleCollisionEnd);

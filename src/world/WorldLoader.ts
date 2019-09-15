@@ -58,10 +58,20 @@ export default class WorldLoader {
                 const prefabName = object.customProperties.__prefab;
                 const prefabProperties = object.customProperties.__prefabProps;
 
-                let gameObject = Prefabs[prefabName](world, 0, 0, prefabProperties) as GameObject;
+                const spawner = Prefabs[prefabName];
+                if (typeof spawner !== 'function') {
+                    console.warn('WorldLoader: Prefab ' + prefabName + ' was not found.');
+                    return;
+                }
+
+                let gameObject = spawner(world, 0, 0, prefabProperties) as GameObject;
 
                 gameObject.setId(object.id);
-                gameObject.transformComponent.readCustomSerializationProperties(object.transform.custom);
+                gameObject.getComponents().forEach(component => {
+                    if (component.getType() in object.customComponentProperties) {
+                        component.readCustomSerializationProperties(object.customComponentProperties[component.getType()]);
+                    }
+                });
                 
                 for (let [k, v] of object.customProperties) {
                     gameObject.setCustomProperty(k, v);

@@ -75,7 +75,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         ];
     }
 
-    protected getCustomSerializationProperties() {
+    public getCustomSerializationProperties() {
         return {
             positionX: this.positionX,
             positionY: this.positionY,

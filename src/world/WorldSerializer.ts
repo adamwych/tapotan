@@ -13,17 +13,26 @@ export default class WorldSerializer {
                     return;
                 }
 
+                const customComponentProperties = {};
+
+                // TODO: What if there are multiple components of the same type?
+                object.getComponents().forEach(component => {
+                    customComponentProperties[component.getType()] = component.getCustomSerializationProperties();
+                });
+
                 if (object.hasCustomProperty('__prefab')) {
                     result.push({
                         id: object.getId(),
                         layer: object.getLayer(),
                         transform: object.transformComponent.serialize(),
                         customProperties: object.getCustomProperties(),
+                        customComponentProperties: customComponentProperties,
                         fromPrefab: true
                     });
                 } else {
                     result.push({
                         ...object.serialize(),
+                        customComponentProperties: customComponentProperties,
                         fromPrefab: false
                     });
                 }

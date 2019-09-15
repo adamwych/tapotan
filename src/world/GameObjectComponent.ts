@@ -74,7 +74,7 @@ export default abstract class GameObjectComponent {
      * Returns additional properties that will be included
      * during serialization.
      */
-    protected getCustomSerializationProperties() {
+    public getCustomSerializationProperties() {
         return {}
     }
 
@@ -178,6 +178,13 @@ export default abstract class GameObjectComponent {
      */
     public getGameObject(): GameObject {
         return this.gameObject;
+    }
+
+    /**
+     * Returns a string that uniquely identifies this component's *type*.
+     */
+    public getType(): string {
+        return this.type;
     }
 
 }

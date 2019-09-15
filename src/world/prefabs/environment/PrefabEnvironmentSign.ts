@@ -22,4 +22,6 @@ export default createPrefabSpawnFunction('environment_sign', (gameObject: GameOb
     }, {
         sensor: true
     });
+
+    gameObject.setCustomProperty('__prefab', props.resource);
 });
