@@ -16,6 +16,7 @@ import FrameDebugger from './FrameDebugger';
 import GameManager, { GameState } from './GameManager';
 import InputManager from './InputManager';
 import ScreenManager from './ScreenManager';
+import WorldSerializer from '../world/WorldSerializer';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -394,9 +395,9 @@ export default class Tapotan {
         button.innerHTML = 'Saving...';
 
         const topScreen = this.screenManager.getTopScreen();
-        /*if (topScreen instanceof ScreenEditorMainView) {
+        if (topScreen instanceof ScreenLevelEditor) {
             if (this.gameManager.getGameState() === GameState.Playing) {
-                //topScreen.toggleTestPlaythrough();
+                topScreen.getPlaythroughController().stop();
             }
 
             let snapshot = WorldSerializer.serialize(this.gameManager.getWorld());
@@ -421,7 +422,7 @@ export default class Tapotan {
             });
         } else {
             location.reload();
-        }*/
+        }
     }
 
     public setCursor(cursor: TapotanCursor) {
