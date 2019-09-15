@@ -13,7 +13,7 @@ export default class WidgetLevelEditorSettingsModalBackgroundTab extends WidgetT
 
     private initializeSkyColorParameter(world: World, width: number) {
         const container = new PIXI.Container();
-        const label = new WidgetText('Solid color', WidgetText.Size.Medium, 0xA45F2B);
+        const label = new WidgetText('Solid color', WidgetText.Size.Medium, 0xe5c3a9);
         container.addChild(label);
 
         const spacing = 8;

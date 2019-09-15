@@ -7,6 +7,7 @@ export default class WidgetTabbedViewTab extends PIXI.Container {
     constructor(label: string) {
         super();
 
+        this.sortableChildren = true;
         this.label = label;
     }
 
