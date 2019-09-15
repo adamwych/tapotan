@@ -5,6 +5,7 @@ import GameObject from './GameObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
 import Prefabs from './prefabs/Prefabs';
 import World from './World';
+import GameObjectComponentAI from './components/ai/GameObjectComponentAI';
 
 interface WorldLoaderInput {
     type: string;
@@ -70,6 +71,10 @@ export default class WorldLoader {
                 gameObject.getComponents().forEach(component => {
                     if (component.getType() in object.customComponentProperties) {
                         component.readCustomSerializationProperties(object.customComponentProperties[component.getType()]);
+                    }
+
+                    if (gameObject.hasComponentOfType(GameObjectComponentAI)) {
+                        gameObject.getComponentByType<GameObjectComponentAI>(GameObjectComponentAI).setAIEnabled(true);
                     }
                 });
 

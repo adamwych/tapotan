@@ -109,11 +109,18 @@ export default class SpritesheetAnimator extends PIXI.Container {
     }
 
     public stopAnimating() {
+        if (!this.currentAnimation) {
+            return;
+        }
+
         this.timer.stop();
         this.currentAnimationCellIndex = 0;
         this.currentAnimation = null;
         this.removeChild(this.sprite);
-        this.sprite.removeChild(this.sprite.mask);
+
+        if (this.sprite) {
+            this.sprite.removeChild(this.sprite.mask);
+        }
     }
 
     public addAnimation(name: string, spritesheet: Spritesheet, cellTime: number) {

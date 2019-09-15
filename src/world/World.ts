@@ -485,23 +485,11 @@ export default class World extends PIXI.Container {
     }
 
     public pause() {
-        /*this.worldObjects.forEach(object => {
-            if (object instanceof EntityMonster) {
-                object.setAIEnabled(false);
-            }
-        });*/
-
         this.paused = true;
         this.emit(World.Events.Paused);
     }
 
     public resume() {
-        /*this.worldObjects.forEach(object => {
-            if (object instanceof EntityMonster) {
-                object.setAIEnabled(true);
-            }
-        });*/
-
         this.paused = false;
         this.emit(World.Events.Resumed);
     }
