@@ -5,6 +5,7 @@ import Tapotan from "../core/Tapotan";
 import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import Screen from "../screens/Screen";
 import WidgetModal from '../screens/widgets/modal/WidgetModal';
+import WidgetEndGameOverlay from '../screens/widgets/WidgetEndGameOverlay';
 import WidgetGameOverOverlay from '../screens/widgets/WidgetGameOverOverlay';
 import WidgetVictoryOverlay from '../screens/widgets/WidgetVictoryOverlay';
 import screenPointToWorld from '../utils/screenPointToWorld';
@@ -30,7 +31,8 @@ import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomC
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
-import WidgetEndGameOverlay from '../screens/widgets/WidgetEndGameOverlay';
+import WidgetLevelEditorSetSignTextModal from './modals/set-sign-text-modal/WidgetLevelEditorSetSignTextModal';
+import GameObjectComponentSign from '../world/components/GameObjectComponentSign';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -75,7 +77,7 @@ export default class ScreenLevelEditor extends Screen {
 
     private remainingMouseMoves: Array<{x: number, y: number}> = [];
 
-    private modal: WidgetModal;
+    private modal: WidgetModal = null;
 
     private world: World;
 
@@ -334,6 +336,17 @@ export default class ScreenLevelEditor extends Screen {
             );
         });
 
+        this.activeObjectActionButtons.on('setTextAction', () => {
+            const selectedObject = this.context.getSelectedObjects()[this.context.getSelectedObjects().length - 1];
+            const signComponent = selectedObject.getComponentByType<GameObjectComponentSign>(GameObjectComponentSign);
+            const modal = new WidgetLevelEditorSetSignTextModal(signComponent.getText());
+            modal.on('change', text => {
+                signComponent.setText(text);
+            });
+
+            this.showModal(modal);
+        });
+
         this.activeObjectActionButtons.show();
         this.uiContainer.addChild(this.activeObjectActionButtons);
     }
@@ -401,6 +414,10 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private handleApplicationMouseDown = e => {
+        if (!this.context.canInteractWithEditor()) {
+            return;
+        }
+
         this.isMouseDown = true;
 
         if (e.data.originalEvent.which !== 2 && e.target.name === '__application__stage__') {
@@ -409,6 +426,10 @@ export default class ScreenLevelEditor extends Screen {
     }
     
     private handleApplicationMouseUp = (e) => {
+        if (!this.context.canInteractWithEditor()) {
+            return;
+        }
+
         this.isMouseDown = false;
 
         if (this.objectOutlineActive.length > 0) {
@@ -418,6 +439,10 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private handleApplicationMouseMove = (e) => {
+        if (!this.context.canInteractWithEditor()) {
+            return;
+        }
+
         if (this.isMouseDown) {
             if (this.newGameObjectShade) {
                 this.remainingMouseMoves.push({

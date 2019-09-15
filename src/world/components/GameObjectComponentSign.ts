@@ -7,6 +7,8 @@ export default class GameObjectComponentSign extends GameObjectComponent {
 
     protected type = 'sign';
 
+    private text: string;
+
     private bubbleWidget: WidgetSignTextBubble;
 
     public initialize(text: string): void {
@@ -14,9 +16,7 @@ export default class GameObjectComponentSign extends GameObjectComponent {
         this.gameObject.on('collisionEnd', this.handleCollisionEnd);
         this.gameObject.on('transform.positionChanged', this.handlePositionChanged);
 
-        this.bubbleWidget = new WidgetSignTextBubble(this.gameObject.getWorld(), text);
-        this.bubbleWidget.hide();
-        Tapotan.getInstance().addCameraAwareUIObject(this.bubbleWidget);
+        this.setText(text);
     }
 
     protected destroy(): void {
@@ -42,6 +42,29 @@ export default class GameObjectComponentSign extends GameObjectComponent {
 
         this.bubbleWidget.position.x += (blockSize / 3);
         this.bubbleWidget.position.y -= this.bubbleWidget.height;
+    }
+
+    public setText(text: string) {
+        this.text = text;
+
+        if (this.bubbleWidget) {
+            this.bubbleWidget.destroy();
+        }
+
+        this.bubbleWidget = new WidgetSignTextBubble(this.gameObject.getWorld(), text);
+        this.bubbleWidget.hide();
+        Tapotan.getInstance().addCameraAwareUIObject(this.bubbleWidget);
+
+        if (this.gameObject.transformComponent) {
+            this.handlePositionChanged(
+                this.gameObject.transformComponent.getPositionX(),
+                this.gameObject.transformComponent.getPositionY()
+            );
+        }
+    }
+
+    public getText(): string {
+        return this.text;
     }
 
 }

@@ -48,6 +48,10 @@ export default class LevelEditorActiveObjectDragController {
 
     public handleMouseDrag = ({ x, y, deltaX, deltaY }) => {
 
+        if (!this.context.canInteractWithEditor()) {
+            return;
+        }
+
         const selectedObjects = this.context.getSelectedObjects();
         const gridWidget = this.context.getEditorScreen().getGridWidget();
 

@@ -38,10 +38,18 @@ export default class LevelEditorKeyboardShortcutsController {
     }
 
     private handlePlaythroughToggleShortcutClick = () => {
+        if (this.context.getGame().getGameManager().getGameState() !== GameState.Playing && !this.context.canInteractWithEditor()) {
+            return;
+        }
+        
         this.context.getPlaythroughController().toggle();
     }
 
     private handleSpawnPlayerAtPositionShortcutClick = () => {
+        if (!this.context.canInteractWithEditor()) {
+            return;
+        }
+        
         if (this.context.getGame().getGameManager().getGameState() === GameState.InEditor) {
             this.context.getEditorScreen().beingSpawnPlayerAtPositionAction();
         }

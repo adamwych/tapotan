@@ -4,6 +4,7 @@ import ContainerAnimator from '../../graphics/animation/ContainerAnimator';
 import WidgetLevelEditorObjectActionButton from './WidgetLevelEditorObjectActionButton';
 import ContainerAnimationEditorActionButtonsEnter from '../animations/ContainerAnimationEditorActionButtonsEnter';
 import Tapotan from '../../core/Tapotan';
+import GameObjectComponentSign from '../../world/components/GameObjectComponentSign';
 
 export default class WidgetLevelEditorObjectActionButtons extends PIXI.Container {
 
@@ -18,7 +19,7 @@ export default class WidgetLevelEditorObjectActionButtons extends PIXI.Container
         this.animator = new ContainerAnimator(this);
 
         let addLinkWithDoorButton = false;
-        let addSetTextButton = false;
+        let addSetTextButton = gameObject.hasComponentOfType(GameObjectComponentSign);
 
         let rotateButton = new WidgetLevelEditorObjectActionButton('ObjectActionRotate');
         let linkWithDoorButton = new WidgetLevelEditorObjectActionButton('ObjectActionLinkWithDoor');
