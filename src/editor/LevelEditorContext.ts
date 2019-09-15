@@ -80,7 +80,10 @@ export default class LevelEditorContext extends EventEmitter {
      * any actions related to the level editor.
      */
     public canInteractWithEditor(): boolean {
-        return this.game.getGameManager().getGameState() !== GameState.Playing;
+        return (
+            this.game.getGameManager().getGameState() !== GameState.Playing &&
+            this.editorScreen.getModal() === null
+        );
     }
 
     /**

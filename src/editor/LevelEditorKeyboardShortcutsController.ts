@@ -73,27 +73,39 @@ export default class LevelEditorKeyboardShortcutsController {
     }
 
     private handleKey1Click = () => {
-        this.context.emit('requestOpenPrefabDrawer', 0);
+        if (this.context.canInteractWithEditor()) {
+            this.context.emit('requestOpenPrefabDrawer', 0);
+        }
     }
 
     private handleKey2Click = () => {
-        this.context.emit('requestOpenPrefabDrawer', 1);
+        if (this.context.canInteractWithEditor()) {
+            this.context.emit('requestOpenPrefabDrawer', 1);
+        }
     }
 
     private handleKey3Click = () => {
-        this.context.emit('requestOpenPrefabDrawer', 2);
+        if (this.context.canInteractWithEditor()) {
+            this.context.emit('requestOpenPrefabDrawer', 2);
+        }
     }
 
     private handleKey4Click = () => {
-        this.context.emit('requestOpenPrefabDrawer', 3);
+        if (this.context.canInteractWithEditor()) {
+            this.context.emit('requestOpenPrefabDrawer', 3);
+        }
     }
 
     private handleKey5Click = () => {
-        this.context.emit('requestOpenPrefabDrawer', 4);
+        if (this.context.canInteractWithEditor()) {
+            this.context.emit('requestOpenPrefabDrawer', 4);
+        }
     }
 
     private handleKey6Click = () => {
-        this.context.emit('requestOpenPrefabDrawer', 5);
+        if (this.context.canInteractWithEditor()) {
+            this.context.emit('requestOpenPrefabDrawer', 5);
+        }
     }
 
     private getKeyboardShortcuts() {

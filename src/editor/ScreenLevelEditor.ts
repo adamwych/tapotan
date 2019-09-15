@@ -1,8 +1,12 @@
 import * as PIXI from 'pixi.js';
+import { GameEndReason } from '../core/GameManager';
 import InputManager from '../core/InputManager';
 import Tapotan from "../core/Tapotan";
 import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import Screen from "../screens/Screen";
+import WidgetModal from '../screens/widgets/modal/WidgetModal';
+import WidgetGameOverOverlay from '../screens/widgets/WidgetGameOverOverlay';
+import WidgetVictoryOverlay from '../screens/widgets/WidgetVictoryOverlay';
 import screenPointToWorld from '../utils/screenPointToWorld';
 import GameObjectComponentEditorShade from '../world/components/GameObjectComponentEditorShade';
 import { GameObjectVerticalAlignment } from '../world/components/GameObjectComponentTransform';
@@ -21,13 +25,12 @@ import LevelEditorNewLevelTemplate from './LevelEditorNewLevelTemplate';
 import LevelEditorPlaythroughController from './LevelEditorPlaythroughController';
 import WidgetLevelEditorObjectActionButtons from './object-action-buttons/WidgetLevelEditorObjectActionButtons';
 import WidgetLevelEditorPrefabDrawer from './prefab-drawer/WidgetLevelEditorPrefabDrawer';
+import WidgetLevelEditorTopBar from './top-bar/WidgetLevelEditorTopBar';
 import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomContainer';
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
-import WidgetLevelEditorTopBar from './top-bar/WidgetLevelEditorTopBar';
-import WidgetModal from '../screens/widgets/modal/WidgetModal';
-import WidgetLevelEditorSettingsModal from './modals/settings-modal/WidgetLevelEditorSettingsModal';
+import WidgetEndGameOverlay from '../screens/widgets/WidgetEndGameOverlay';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -560,8 +563,26 @@ export default class ScreenLevelEditor extends Screen {
         this.grid.restoreTilesAlpha();
     }
 
-    public handleGameEnd = () => {
-        this.playthroughController.stop();
+    public handleGameEnd = (reason: GameEndReason) => {
+        let overlay: WidgetEndGameOverlay;
+
+        switch (reason) {
+            case GameEndReason.Victory: {
+                overlay = new WidgetVictoryOverlay(true, 0);
+                break;
+            }
+
+            case GameEndReason.Death: {
+                overlay = new WidgetGameOverOverlay(true);
+                break;
+            }
+        }
+
+        overlay.on('close', () => {
+            this.playthroughController.stop();
+        });
+
+        this.uiContainer.addChild(overlay);
     }
 
     public blurActiveAndHoveredObjectOutline() {
@@ -675,6 +696,10 @@ export default class ScreenLevelEditor extends Screen {
 
     public getSpawnPointShadeObject(): GameObject {
         return this.spawnPointShadeObject;
+    }
+
+    public getModal(): WidgetModal {
+        return this.modal;
     }
 
 }

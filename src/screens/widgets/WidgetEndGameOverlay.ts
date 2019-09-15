@@ -8,6 +8,7 @@ import ScreenTransitionBlocksWave from '../transitions/ScreenTransitionBlocksWav
 import WidgetEndGameModalScoreText from './end-game-overlay/WidgetEndGameModalScoreText';
 import WidgetEndGameModalBackButton from './end-game-overlay/WidgetEndGameModalBackButton';
 import WidgetText from './WidgetText';
+import Spritesheet from '../../graphics/Spritesheet';
 
 export default class WidgetEndGameOverlay extends PIXI.Container {
 
@@ -50,7 +51,7 @@ export default class WidgetEndGameOverlay extends PIXI.Container {
 
         let topAnimatorWrapper = new PIXI.Container();
         this.topAnimator = new SpritesheetAnimator();
-        //this.topAnimator.addAnimation('default', new PIXI.Sprite(topTextureResource.texture), 16, 50);
+        this.topAnimator.addAnimation('default', new Spritesheet(topTextureResource.texture, 160, 42), 50);
         this.topAnimator.playAnimation('default');
         this.topAnimator.setCellWidth(160);
         this.topAnimator.setCellHeight(42);
