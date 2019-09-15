@@ -72,7 +72,7 @@ export default class WorldLoader {
                         component.readCustomSerializationProperties(object.customComponentProperties[component.getType()]);
                     }
                 });
-                
+
                 for (let [k, v] of object.customProperties) {
                     gameObject.setCustomProperty(k, v);
                 }

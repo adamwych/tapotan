@@ -36,16 +36,16 @@ export default class LockDoorKeyConnection {
         const connection = new LockDoorKeyConnection();
         connection.setId(json.id);
 
-        /*world.once('worldLoaded', () => {
+        world.once('worldLoaded', () => {
             let objects = world.getGameObjects();
             objects.forEach(object => {
-                if (json.keys.includes(object.getId()) && object instanceof TileLockKey) {
-                    connection.addKey(object as TileLockKey);
-                } else if (json.doors.includes(object.getId()) && object instanceof TileLockDoor) {
-                    connection.addDoor(object as TileLockDoor);
+                if (json.keys.includes(object.getId())) {
+                    connection.addKey(object);
+                } else if (json.doors.includes(object.getId())) {
+                    connection.addDoor(object);
                 }
-            })
-        });*/
+            });
+        });
 
         LockDoorKeyConnection.cache[json.id] = connection;
         return connection;
