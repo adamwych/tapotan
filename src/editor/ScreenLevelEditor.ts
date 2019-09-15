@@ -112,6 +112,10 @@ export default class ScreenLevelEditor extends Screen {
         this.world.on('backgroundMusicChange', () => {
             game.getAudioManager().playBackgroundMusic(this.world.getBackgroundMusicID(), 500);
         });
+
+        /// #if ENV_PRODUCTION
+        this.initializeBeforeUnloadConfirmation();
+        /// #endif
     }
 
     /**
@@ -177,6 +181,18 @@ export default class ScreenLevelEditor extends Screen {
             this.uiContainer.addChild(this.bottomContainer);
         }
         Tapotan.getInstance().addUIObject(this.uiContainer);
+    }
+
+    private initializeBeforeUnloadConfirmation() {
+        window.onbeforeunload = function (e) {
+            e = e || window.event;
+        
+            if (e) {
+                e.returnValue = 'Are you sure you want to close the editor?';
+            }
+        
+            return 'Are you sure you want to close the editor?';
+        };
     }
 
     /**
