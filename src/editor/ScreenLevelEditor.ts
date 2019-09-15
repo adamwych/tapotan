@@ -98,6 +98,10 @@ export default class ScreenLevelEditor extends Screen {
 
         this.initializeGameObjectsInteractivity();
         this.initializeGeneralInteractivity();
+
+        this.world.on('backgroundMusicChange', () => {
+            game.getAudioManager().playBackgroundMusic(this.world.getBackgroundMusicID(), 500);
+        });
     }
 
     /**

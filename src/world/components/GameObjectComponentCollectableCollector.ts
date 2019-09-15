@@ -1,5 +1,7 @@
 import GameObjectComponent from "../GameObjectComponent";
 import Collectable from "../Collectable";
+import CollectableCategory from "../CollectableCategory";
+import Tapotan from "../../core/Tapotan";
 
 export default class GameObjectComponentCollectableCollector extends GameObjectComponent {
 
@@ -13,6 +15,13 @@ export default class GameObjectComponentCollectableCollector extends GameObjectC
 
     public collect(collectable: Collectable) {
         this.collectables.push(collectable);
+
+        switch (collectable.getCategory()) {
+            case CollectableCategory.Coin: {
+                Tapotan.getInstance().getAudioManager().playSoundEffect('coin');
+                break;
+            }
+        }
     }
 
     public getCollectables(): Array<Collectable> {

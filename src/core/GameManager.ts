@@ -40,6 +40,12 @@ export default class GameManager {
             (topScreen as any).handleGameEnd(reason);
         }
 
+        if (reason === GameEndReason.Death) {
+            this.game.getAudioManager().playSoundEffect('death');
+        } else {
+            this.game.getAudioManager().playSoundEffect('victory');
+        }
+
         this.world.handleGameEnd(reason);
     }
 
