@@ -3,15 +3,14 @@ import * as PIXI from 'pixi.js';
 import { GameEndReason, GameState } from '../core/GameManager';
 import Tapotan from '../core/Tapotan';
 import TickHelper from '../core/TickHelper';
-import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
 import CameraShake from './CameraShake';
-import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
+import { GameObjectVerticalAlignment } from './components/GameObjectComponentTransform';
+import GameObject from './GameObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
 import PhysicsMaterials from './physics/PhysicsMaterials';
-import GameObject from './GameObject';
-import Tileset from './tiles/Tileset';
 import Prefabs from './prefabs/Prefabs';
-import { GameObjectVerticalAlignment } from './components/GameObjectComponentTransform';
+import Tileset from './tiles/Tileset';
+import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 
 export default class World extends PIXI.Container {
 

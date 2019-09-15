@@ -17,6 +17,8 @@ import PrefabMonsterCuddlyApple from "./monsters/PrefabMonsterCuddlyApple";
 import PrefabMonsterHappyCarrot from "./monsters/PrefabMonsterHappyCarrot";
 import PrefabMonsterSnake from "./monsters/PrefabMonsterSnake";
 import PrefabMonsterGhost from "./monsters/PrefabMonsterGhost";
+import PrefabEnvironmentLockKey from "./environment/PrefabEnvironmentLockKey";
+import PrefabEnvironmentLockDoor from "./environment/PrefabEnvironmentLockDoor";
 
 export interface PrefabBasicProps {
 
@@ -62,6 +64,8 @@ export default {
     'environment_sign_variation9': PrefabEnvironmentSign,
     'environment_sign_variation10': PrefabEnvironmentSign,
     'environment_sign_variation11': PrefabEnvironmentSign,
+    'environment_lock_key': PrefabEnvironmentLockKey,
+    'environment_lock_door': PrefabEnvironmentLockDoor,
 
     'monsters_apple': PrefabMonsterCuddlyApple,
     'monsters_carrot': PrefabMonsterHappyCarrot,

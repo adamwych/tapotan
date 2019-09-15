@@ -1,8 +1,9 @@
-import LevelEditorContext from "./LevelEditorContext";
 import { GameState } from "../core/GameManager";
-import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
 import WidgetSignTextBubble from "../screens/widgets/WidgetSignTextBubble";
 import GameObjectComponentAI from "../world/components/ai/GameObjectComponentAI";
+import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
+import GameObjectComponentLockKey from "../world/components/GameObjectComponentLockKey";
+import LevelEditorContext from "./LevelEditorContext";
 
 export default class LevelEditorPlaythroughController {
 
@@ -46,6 +47,7 @@ export default class LevelEditorPlaythroughController {
         this.context.getEditorScreen().getSpawnPointShadeObject().visible = false;
 
         this.context.emit('playthroughStarted');
+        this.context.emit('hideUI');
 
         this.context.getEditorScreen().handleRightMouseButtonClick();
         this.context.getEditorScreen().blurActiveAndHoveredObjectOutline();
@@ -69,6 +71,10 @@ export default class LevelEditorPlaythroughController {
                     gameObject.getCustomProperty('monster.startPositionY')
                 );
             }
+
+            if (gameObject.hasComponentOfType(GameObjectComponentLockKey)) {
+                gameObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).getConnection().reset();
+            }
         });
 
         // Bring back collected collectables.
@@ -88,6 +94,7 @@ export default class LevelEditorPlaythroughController {
         this.context.getEditorScreen().handleCurrentLayerChange(this.context.getCurrentLayer());
 
         this.context.emit('playthroughStopped');
+        this.context.emit('showUI');
     }
 
 }

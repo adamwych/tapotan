@@ -15,6 +15,7 @@ export default class GameObjectComponentCollectableCollector extends GameObjectC
 
     public collect(collectable: Collectable) {
         this.collectables.push(collectable);
+        this.gameObject.emit('collector.collected', collectable);
 
         switch (collectable.getCategory()) {
             case CollectableCategory.Coin: {

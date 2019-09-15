@@ -51,7 +51,7 @@ export default class LevelEditorKeyboardShortcutsController {
         }
         
         if (this.context.getGame().getGameManager().getGameState() === GameState.InEditor) {
-            this.context.getEditorScreen().beingSpawnPlayerAtPositionAction();
+            this.context.getEditorScreen().beginSpawnPlayerAtPositionAction();
         }
     }
 

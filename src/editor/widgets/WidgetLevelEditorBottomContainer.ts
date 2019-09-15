@@ -38,8 +38,8 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         this.zIndex = 9;
         this.sortableChildren = true;
 
-        this.context.on('playthroughStarted', this.handlePlaythroughStarted);
-        this.context.on('playthroughStopped', this.handlePlaythroughStopped);
+        this.context.on('hideUI', this.handleHideUI);
+        this.context.on('showUI', this.handleShowUI);
         this.context.on('requestOpenPrefabDrawer', this.handleRequestOpenPrefabDrawer);
 
         TickHelper.add(this.tick);
@@ -52,8 +52,8 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
 
         this.prefabCategoryTilesContainer.destroy();
 
-        this.context.off('playthroughStarted', this.handlePlaythroughStarted);
-        this.context.off('playthroughStopped', this.handlePlaythroughStopped);
+        this.context.off('hideUI', this.handleHideUI);
+        this.context.off('showUI', this.handleShowUI);
         this.context.off('requestOpenPrefabDrawer', this.handleRequestOpenPrefabDrawer);
     }
 
@@ -155,14 +155,14 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
         });
     }
 
-    private handlePlaythroughStarted = () => {
+    private handleHideUI = () => {
         this.beginSynchronization();
         this.layerSelector.hide();
         this.prefabCategoryTilesContainer.hide();
         this.prefabDrawer.hide();
     }
 
-    public handlePlaythroughStopped = () => {
+    public handleShowUI = () => {
         this.layerSelector.show();
         this.prefabCategoryTilesContainer.show();
     }

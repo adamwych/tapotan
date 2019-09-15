@@ -27,6 +27,8 @@ export default class GameObjectComponentCollectable extends GameObjectComponent 
         let collector = another.getComponentByType<GameObjectComponentCollectableCollector>(GameObjectComponentCollectableCollector);
         if (collector) {
             collector.collect(this.collectable);
+            
+            this.gameObject.emit('collectable.collected', this.collectable);
             this.gameObject.visible = false;
         }
     }

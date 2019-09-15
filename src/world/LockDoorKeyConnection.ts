@@ -1,6 +1,7 @@
 import World from "./World";
 import Tapotan from "../core/Tapotan";
 import GameObject from "./GameObject";
+import GameObjectComponentLockDoor from "./components/GameObjectComponentLockDoor";
 
 export default class LockDoorKeyConnection {
 
@@ -36,7 +37,7 @@ export default class LockDoorKeyConnection {
         connection.setId(json.id);
 
         /*world.once('worldLoaded', () => {
-            let objects = world.getObjects();
+            let objects = world.getGameObjects();
             objects.forEach(object => {
                 if (json.keys.includes(object.getId()) && object instanceof TileLockKey) {
                     connection.addKey(object as TileLockKey);
@@ -56,7 +57,7 @@ export default class LockDoorKeyConnection {
             Tapotan.getInstance().getAudioManager().playSoundEffect('lock_door_open', true);
 
             this.doors.forEach(door => {
-                // door.unlock();
+                door.getComponentByType<GameObjectComponentLockDoor>(GameObjectComponentLockDoor).unlock();
             });
         }
     }
@@ -72,7 +73,7 @@ export default class LockDoorKeyConnection {
             }
         });
 
-        key.on('collected', () => {
+        key.on('collectable.collected', () => {
             this.handleKeyCollected();
         });
     }
@@ -96,7 +97,7 @@ export default class LockDoorKeyConnection {
     public reset() {
         this.collectedKeys = 0;
         this.doors.forEach(door => {
-            // door.lock();
+            door.getComponentByType<GameObjectComponentLockDoor>(GameObjectComponentLockDoor).lock();
         });
     }
 

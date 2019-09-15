@@ -33,6 +33,8 @@ import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOut
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
 import WidgetLevelEditorSetSignTextModal from './modals/set-sign-text-modal/WidgetLevelEditorSetSignTextModal';
 import GameObjectComponentSign from '../world/components/GameObjectComponentSign';
+import GameObjectComponentLockDoor from '../world/components/GameObjectComponentLockDoor';
+import GameObjectComponentLockKey from '../world/components/GameObjectComponentLockKey';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -74,6 +76,8 @@ export default class ScreenLevelEditor extends Screen {
     private endPointObject: GameObject;
 
     private spawnPlayerAtPositionActionActive: boolean = false;
+    private linkWithDoorActionActive: boolean = false;
+    private linkWithDoorKeyObject: GameObject = null;
 
     private remainingMouseMoves: Array<{x: number, y: number}> = [];
 
@@ -306,6 +310,26 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private markObjectAsSelected(gameObject: GameObject) {
+        if (this.linkWithDoorActionActive) {
+            if (gameObject.hasComponentOfType(GameObjectComponentLockDoor)) {
+                const connection = this.linkWithDoorKeyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).getConnection();
+                if (!connection.hasDoor(gameObject)) {
+                    connection.addDoor(gameObject);
+
+                    // Set visibility of all doors to reset animation timer.
+                    connection.getDoors().forEach(door => {
+                        door.getComponentByType<GameObjectComponentLockDoor>(GameObjectComponentLockDoor).setEditorOverlayVisible(true);
+                    });
+                }
+
+                return;
+            } else {
+                this.context.emit('showUI');
+            }
+        }
+
+        this.linkWithDoorActionActive = false;
+
         this.context.markObjectAsSelected(gameObject);
 
         const outline = new WidgetLevelEditorObjectOutline(gameObject, true);
@@ -345,6 +369,11 @@ export default class ScreenLevelEditor extends Screen {
             });
 
             this.showModal(modal);
+        });
+
+        this.activeObjectActionButtons.on('linkWithDoorAction', () => {
+            const selectedObject = this.context.getSelectedObjects()[this.context.getSelectedObjects().length - 1];
+            this.beginLinkWithDoorAction(selectedObject);
         });
 
         this.activeObjectActionButtons.show();
@@ -576,6 +605,16 @@ export default class ScreenLevelEditor extends Screen {
             this.prefabDrawer.hide();
         }
 
+        if (this.linkWithDoorActionActive) {
+            this.linkWithDoorActionActive = false;
+            this.context.emit('showUI');
+
+            const connection = this.linkWithDoorKeyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).getConnection();
+            connection.getDoors().forEach(door => {
+                door.getComponentByType<GameObjectComponentLockDoor>(GameObjectComponentLockDoor).setEditorOverlayVisible(false);
+            });
+        }
+
         this.spawnPlayerAtPositionActionActive = false;
         this.isSettingSpawnPoint = false;
         this.isSettingEndPoint = false;
@@ -627,7 +666,7 @@ export default class ScreenLevelEditor extends Screen {
         this.game.setCursor(Tapotan.Cursor.Default);
     }
 
-    public beingSpawnPlayerAtPositionAction() {
+    public beginSpawnPlayerAtPositionAction() {
         this.handleRightMouseButtonClick();
         this.blurActiveAndHoveredObjectOutline();
 
@@ -643,6 +682,21 @@ export default class ScreenLevelEditor extends Screen {
         this.spawnPlayerAtPositionActionActive = true;
     }
     
+    public beginLinkWithDoorAction(keyObject: GameObject) {
+        this.handleRightMouseButtonClick();
+        this.blurActiveAndHoveredObjectOutline();
+
+        this.context.emit('hideUI');
+
+        const connection = keyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).getConnection();
+        connection.getDoors().forEach(door => {
+            door.getComponentByType<GameObjectComponentLockDoor>(GameObjectComponentLockDoor).setEditorOverlayVisible(true);
+        });
+
+        this.linkWithDoorActionActive = true;
+        this.linkWithDoorKeyObject = keyObject;
+    }
+
     protected tick(dt: number): void {
         this.cameraMovementController.tick(dt);
 

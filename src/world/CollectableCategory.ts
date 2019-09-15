@@ -1,5 +1,6 @@
 enum CollectableCategory {
-    Coin = 'coin'
+    Coin = 'coin',
+    Key = 'key'
 };
 
 export default CollectableCategory;

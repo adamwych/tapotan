@@ -18,7 +18,7 @@ export default class WidgetLevelEditorObjectActionButtons extends PIXI.Container
         this.gameObject = gameObject;
         this.animator = new ContainerAnimator(this);
 
-        let addLinkWithDoorButton = false;
+        let addLinkWithDoorButton = gameObject.hasCustomProperty('lockKey');
         let addSetTextButton = gameObject.hasComponentOfType(GameObjectComponentSign);
 
         let rotateButton = new WidgetLevelEditorObjectActionButton('ObjectActionRotate');

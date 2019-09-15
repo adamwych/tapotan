@@ -72,17 +72,42 @@ export default class WidgetLevelEditorTopBar extends PIXI.Container {
 
         this.context.on('playthroughStarted', this.handlePlaythroughStarted);
         this.context.on('playthroughStopped', this.handlePlaythroughStopped);
+        this.context.on('hideUI', this.handleHideUI);
+        this.context.on('showUI', this.handleShowUI);
+    }
+
+    public destroy() {
+        super.destroy({ children: true });
+
+        this.context.off('playthroughStarted', this.handlePlaythroughStarted);
+        this.context.off('playthroughStopped', this.handlePlaythroughStopped);
+        this.context.off('hideUI', this.handleHideUI);
+        this.context.off('showUI', this.handleShowUI);
+    }
+
+    private handleHideUI = () => {
+        this.publishButton.getAnimator().play(new ContainerAnimationEditorTopBarItemExit());
+        this.settingsButton.getAnimator().play(new ContainerAnimationEditorTopBarItemExit());
+
+        if (!this.playButton.isPlaying()) {
+            this.playButton.getAnimator().play(new ContainerAnimationEditorTopBarItemExit());
+        }
+    }
+
+    private handleShowUI = () => {
+        this.publishButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
+        this.settingsButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
+        
+        if (!this.playButton.isPlaying()) {
+            this.playButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
+        }
     }
 
     private handlePlaythroughStarted = () => {
-        this.publishButton.getAnimator().play(new ContainerAnimationEditorTopBarItemExit());
-        this.settingsButton.getAnimator().play(new ContainerAnimationEditorTopBarItemExit());
         this.playButton.setPlaying(true);
     }
 
     private handlePlaythroughStopped = () => {
-        this.publishButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
-        this.settingsButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
         this.playButton.setPlaying(false);
     }
 
