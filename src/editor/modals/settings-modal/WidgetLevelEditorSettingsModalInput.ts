@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import WidgetText from '../../screens/widgets/WidgetText';
+import WidgetText from '../../../screens/widgets/WidgetText';
 
 export default class WidgetLevelEditorSettingsModalInput extends PIXI.Container {
 

@@ -1,10 +1,13 @@
 import * as PIXI from 'pixi.js';
-import WidgetModal from '../../screens/widgets/modal/WidgetModal';
-import WidgetModalButton from '../../screens/widgets/modal/WidgetModalButton';
-import WidgetDropdown from '../../screens/widgets/WidgetDropdown';
-import World from '../../world/World';
-import { WorldCameraBehaviour, WorldCameraSpeed, WorldGameOverTimeout } from '../../world/WorldBehaviourRules';
+import WidgetModal from '../../../screens/widgets/modal/WidgetModal';
+import WidgetModalButton from '../../../screens/widgets/modal/WidgetModalButton';
+import WidgetDropdown from '../../../screens/widgets/WidgetDropdown';
+import World from '../../../world/World';
+import { WorldCameraBehaviour, WorldCameraSpeed, WorldGameOverTimeout } from '../../../world/WorldBehaviourRules';
 import WidgetLevelEditorSettingsModalInput from './WidgetLevelEditorSettingsModalInput';
+import WidgetTabbedView from '../../../screens/main-menu/widgets/WidgetTabbedView';
+import WidgetTabbedViewTab from '../../../screens/main-menu/widgets/WidgetTabbedViewTab';
+import WidgetLevelEditorSettingsModalBackgroundTab from './WidgetLevelEditorSettingsModalBackgroundTab';
 
 export default class WidgetLevelEditorSettingsModal extends WidgetModal {
 
@@ -12,23 +15,28 @@ export default class WidgetLevelEditorSettingsModal extends WidgetModal {
 
     constructor(world: World) {
         super('Level settings');
-
+        
         let container = new PIXI.Container();
         container.position.y = 106 + 24;
         container.position.x = 32;
         container.sortableChildren = true;
-        
+
         const containerWidth = this.getBodyWidth() - container.position.x - container.position.x;
 
-        this.initializeSkyColorParameter(world, containerWidth, container);
-        this.initializeCameraBehaviourParameter(world, containerWidth, container);
-        this.initializeCameraSpeedParameter(world, containerWidth, container);
-        this.initializeTimeoutParameter(world, containerWidth, container);
-        this.initializeMusicParameter(world, containerWidth, container);
-        this.initializeCharacterParameter(world, containerWidth, container);
+        let tabbedView = new WidgetTabbedView(containerWidth, containerWidth);
+        let testTab = new WidgetLevelEditorSettingsModalBackgroundTab(world, containerWidth);
+        tabbedView.addTab(testTab);
+
+        let testTab2 = new WidgetTabbedViewTab('Gameplay');
+        tabbedView.addTab(testTab2);
+
+        let testTab3 = new WidgetTabbedViewTab('Camera');
+        tabbedView.addTab(testTab3);
+
+        container.addChild(tabbedView);
 
         this.bodyContainer.addChild(container);
-
+        
         let closeButton = new WidgetModalButton('Save');
         closeButton.on('click', () => {
             this.emit('close');

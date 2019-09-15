@@ -27,6 +27,7 @@ import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOut
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
 import WidgetLevelEditorTopBar from './top-bar/WidgetLevelEditorTopBar';
 import WidgetModal from '../screens/widgets/modal/WidgetModal';
+import WidgetLevelEditorSettingsModal from './modals/settings-modal/WidgetLevelEditorSettingsModal';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -101,6 +102,10 @@ export default class ScreenLevelEditor extends Screen {
 
         this.world.on('backgroundMusicChange', () => {
             game.getAudioManager().playBackgroundMusic(this.world.getBackgroundMusicID(), 500);
+        });
+
+        setTimeout(() => {
+            this.showModal(new WidgetLevelEditorSettingsModal(this.world));
         });
     }
 

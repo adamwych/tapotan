@@ -15,6 +15,17 @@ import { GameObjectVerticalAlignment } from './components/GameObjectComponentTra
 
 export default class World extends PIXI.Container {
 
+    public static SkyColors = {
+        'blue': 0x1bf3ff,
+        'light-blue': 0x8bf9ff,
+        'dark-blue': 0x16a4f6,
+        'navy-blue': 0x0a2152,
+        'red': 0xff6666,
+        'dark-red': 0x631a1a,
+        'pink': 0xff66d6,
+        'black': 0x000000
+    }
+
     public static Events = {
         Resumed: 'resumed',
         Paused: 'Paused'
@@ -509,20 +520,8 @@ export default class World extends PIXI.Container {
     }
 
     public setSkyColor(color: string) {
-        const colors = {
-            'blue': 0x1bf3ff,
-            'dark-blue': 0x0a2152,
-            
-            'red': 0xff6666,
-            'dark-red': 0x631a1a,
-            
-            'black': 0x000000,
-
-            'pink': 0xff66d6,
-        }
-
         this.skyColor = color;
-        this.sky.tint = colors[color];
+        this.sky.tint = World.SkyColors[color];
     }
 
     public getSkyColor() {

@@ -5,7 +5,7 @@ import WidgetLevelEditorTopBarItemPublishButton from './WidgetLevelEditorTopbarI
 import ContainerAnimationEditorTopBarItemExit from '../animations/ContainerAnimationEditorTopBarItemExit';
 import ContainerAnimationEditorTopBarItemEnter from '../animations/ContainerAnimationEditorTopBarItemEnter';
 import WidgetLevelEditorTopBarItemSettingsButton from './WidgetLevelEditorTopBarItemSettingsButton';
-import WidgetLevelEditorSettingsModal from '../modals/WidgetLevelEditorSettingsModal';
+import WidgetLevelEditorSettingsModal from '../modals/settings-modal/WidgetLevelEditorSettingsModal';
 import WidgetSpacedContainer from '../../screens/widgets/WidgetSpacedContainer';
 import Tapotan from '../../core/Tapotan';
 import WidgetMusicToggleButton from '../../screens/widgets/WidgetMusicToggleButton';
