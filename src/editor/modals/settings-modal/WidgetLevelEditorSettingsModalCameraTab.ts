@@ -9,7 +9,7 @@ export default class WidgetLevelEditorSettingsModalCameraTab extends WidgetTabbe
     private cameraMoveSpeedDropdown: WidgetDropdown;
 
     constructor(world: World, width: number) {
-        super('Background');
+        super('Camera');
 
         this.initializeCameraBehaviourParameter(world, width);
         this.initializeCameraSpeedParameter(world, width);

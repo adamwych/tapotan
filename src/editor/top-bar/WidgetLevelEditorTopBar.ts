@@ -11,6 +11,8 @@ import Tapotan from '../../core/Tapotan';
 import WidgetMusicToggleButton from '../../screens/widgets/WidgetMusicToggleButton';
 import WidgetLevelEditorTopBarItemExitButton from './WidgetLevelEditorTopBarItemExitButton';
 import ScreenTransitionBlocksWave from '../../screens/transitions/ScreenTransitionBlocksWave';
+import WidgetLevelEditorPublishModal from '../modals/publish-modal/WidgetLevelEditorPublishModal';
+import WidgetLevelEditorPublishSuccessModal from '../modals/publish-modal/WidgetLevelEditorPublishSuccessModal';
 
 export default class WidgetLevelEditorTopBar extends PIXI.Container {
 
@@ -41,6 +43,13 @@ export default class WidgetLevelEditorTopBar extends PIXI.Container {
             leftSideContainer.addItem(this.settingsButton);
 
             this.publishButton = new WidgetLevelEditorTopBarItemPublishButton(context);
+            this.publishButton.on('click', () => {
+                const modal = new WidgetLevelEditorPublishModal();
+                modal.on('published', publicID => {
+                    this.context.getEditorScreen().showModal(new WidgetLevelEditorPublishSuccessModal(publicID));
+                });
+                this.context.getEditorScreen().showModal(modal);
+            });
             leftSideContainer.addItem(this.publishButton);
         }
         this.addChild(leftSideContainer);

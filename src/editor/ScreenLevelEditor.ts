@@ -103,10 +103,6 @@ export default class ScreenLevelEditor extends Screen {
         this.world.on('backgroundMusicChange', () => {
             game.getAudioManager().playBackgroundMusic(this.world.getBackgroundMusicID(), 500);
         });
-
-        setTimeout(() => {
-            this.showModal(new WidgetLevelEditorSettingsModal(this.world));
-        });
     }
 
     /**
