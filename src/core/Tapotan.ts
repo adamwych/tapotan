@@ -348,6 +348,8 @@ export default class Tapotan {
 
         this.gameManager.setGameState(GameState.InEditor);
         this.gameManager.setWorld(editorWorld);
+        
+        this.viewport.left = 0;
 
         let editorScreen = new ScreenLevelEditor(this);
         this.screenManager.transitionToScreen(editorScreen);
