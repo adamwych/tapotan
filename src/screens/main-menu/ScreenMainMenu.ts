@@ -89,18 +89,21 @@ export default class ScreenMainMenu extends Screen {
                 ignoresPhysics: true
             });
 
+            ground.setLayer(6);
+            groundGrass.setLayer(6);
+
             ground.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
             groundGrass.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
 
             if (Math.random() < 0.075) {
                 const randomTreeIndex = Math.floor(1 + (Math.random() * 9));
-                const tree = Prefabs.BasicBlock(world, blockIndex, 0, {
+                const tree = Prefabs.BasicBlock(world, blockIndex, 1, {
                     resource: 'background_decals_trees_tree' + randomTreeIndex,
                     ignoresPhysics: true
                 });
 
-                tree.transformComponent.translate(0, tree.height - (1 / 16));
                 tree.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
+                tree.setLayer(5);
                 
                 if (blockIndex < viewportWidth) {
                     this.worldObjectsGroupOne.push(tree);
