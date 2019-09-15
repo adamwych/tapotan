@@ -3,7 +3,7 @@ import Screen from "../Screen";
 import Tapotan from "../../core/Tapotan";
 import GameManager, { GameEndReason, GameState } from '../../core/GameManager';
 import WidgetVictoryOverlay from '../widgets/WidgetVictoryOverlay';
-import ScreenTransitionBlocky from '../transitions/ScreenTransitionBlocky';
+import ScreenTransitionBlocksWave from '../transitions/ScreenTransitionBlocksWave';
 import WorldLoader from '../../world/WorldLoader';
 import WidgetIngameLevelPopup from './widgets/WidgetIngameLevelPopup';
 import APIRequest from '../../api/APIRequest';
@@ -182,7 +182,7 @@ export default class ScreenIngame extends Screen {
     }
 
     private playBlockyTransition(inbetweenCallback: Function) {
-        const transition = new ScreenTransitionBlocky();
+        const transition = new ScreenTransitionBlocksWave();
         transition.setInBetweenCallback(() => {
             setTimeout(() => {
                 inbetweenCallback();

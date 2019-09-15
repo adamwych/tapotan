@@ -6,7 +6,7 @@ import WidgetMainMenuLevelSelector from './widgets/WidgetMainMenuLevelSelector';
 import WidgetText from '../widgets/WidgetText';
 import APIRequest from '../../api/APIRequest';
 import WidgetMainMenuButton from './widgets/WidgetMainMenuButton';
-import ScreenTransitionBlocky from '../transitions/ScreenTransitionBlocky';
+import ScreenTransitionBlocksWave from '../transitions/ScreenTransitionBlocksWave';
 import WidgetMusicToggleButton from '../widgets/WidgetMusicToggleButton';
 import Prefabs from '../../world/prefabs/Prefabs';
 import { GameObjectVerticalAlignment } from '../../world/components/GameObjectComponentTransform';
@@ -196,7 +196,7 @@ export default class ScreenMainMenu extends Screen {
             let createALevelButton = new WidgetMainMenuButton("Create a level");
             createALevelButton.on('click', () => {
                 createALevelButton.interactive = false;
-                const transition = new ScreenTransitionBlocky();
+                const transition = new ScreenTransitionBlocksWave();
                 transition.setInBetweenCallback(() => {
                     setTimeout(() => {
                         this.game.startEditor();

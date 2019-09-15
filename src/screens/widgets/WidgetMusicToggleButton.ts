@@ -15,7 +15,7 @@ export default class WidgetMusicToggleButton extends PIXI.Container {
 
     private status: boolean = false;
 
-    constructor(tileset: Tileset) {
+    constructor(tileset: Tileset, scale: number = 4) {
         super();
 
         this.animator = new ContainerAnimator(this);
@@ -32,12 +32,13 @@ export default class WidgetMusicToggleButton extends PIXI.Container {
         this.spriteEnabled.visible = false;
         this.spriteDisabled.visible = false;
 
+        this.spriteEnabled.scale.set(scale);
+        this.spriteDisabled.scale.set(scale);
+
         this.pivot.set(this.spriteEnabled.width / 2, this.spriteEnabled.height / 2);
 
         this.addChild(this.spriteEnabled);
         this.addChild(this.spriteDisabled);
-
-        this.scale.set(4, 4);
 
         this.interactive = true;
         this.on('mouseover', () => {
@@ -49,7 +50,7 @@ export default class WidgetMusicToggleButton extends PIXI.Container {
         });
 
         this.on('mousedown', () => {
-            this.animator.play(new ContainerAnimationButtonMouseDown(4));
+            this.animator.play(new ContainerAnimationButtonMouseDown());
         });
 
         this.on('click', () => {
@@ -76,6 +77,10 @@ export default class WidgetMusicToggleButton extends PIXI.Container {
         }
 
         Tapotan.getInstance().getAudioManager().setMuted(!enabled);
+    }
+
+    public getAnimator() {
+        return this.animator;
     }
 
 }

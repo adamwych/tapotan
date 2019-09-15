@@ -104,6 +104,7 @@ export default class World extends PIXI.Container {
         this.lockConnections = [];
 
         this.gameObjects.forEach(object => {
+            object.destroy();
             this.removeGameObject(object);
         });
 

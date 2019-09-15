@@ -3,7 +3,7 @@ import WidgetModal from '../../widgets/modal/WidgetModal';
 import WidgetModalButton from '../../widgets/modal/WidgetModalButton';
 import Tapotan from '../../../core/Tapotan';
 import WorldLoader from '../../../world/WorldLoader';
-import ScreenTransitionBlocky from '../../transitions/ScreenTransitionBlocky';
+import ScreenTransitionBlocksWave from '../../transitions/ScreenTransitionBlocksWave';
 import { GameState } from '../../../core/GameManager';
 import WidgetMusicToggleButton from '../../widgets/WidgetMusicToggleButton';
 
@@ -32,7 +32,7 @@ export default class WidgetIngameMenuModal extends WidgetModal {
             Math.floor(restartButton.height / 2) + 180 + 96
         );
         restartButton.on('click', () => {
-            const transition = new ScreenTransitionBlocky();
+            const transition = new ScreenTransitionBlocksWave();
             transition.setInBetweenCallback(() => {
                 setTimeout(() => {
                     const currentWorld = Tapotan.getInstance().getGameManager().getWorld();
@@ -55,7 +55,7 @@ export default class WidgetIngameMenuModal extends WidgetModal {
             Math.floor(quitButton.height / 2) + 180 + 96 + 96
         );
         quitButton.on('click', () => {
-            const transition = new ScreenTransitionBlocky();
+            const transition = new ScreenTransitionBlocksWave();
             transition.setInBetweenCallback(() => {
                 setTimeout(() => {
                     Tapotan.getInstance().startMainMenu();

@@ -14,7 +14,7 @@ class ScreenTransitionBlockyBlock extends PIXI.Container {
     private _y;
     private _yBlocksNum;
 
-    constructor(parent: ScreenTransitionBlocky, blockBase, x, y, yBlocksNum) {
+    constructor(parent: ScreenTransitionBlocksWave, blockBase, x, y, yBlocksNum) {
         super();
 
         this._x = x;
@@ -41,7 +41,7 @@ class ScreenTransitionBlockyBlock extends PIXI.Container {
     }
 }
 
-export default class ScreenTransitionBlocky extends PIXI.Container {
+export default class ScreenTransitionBlocksWave extends PIXI.Container {
 
     private blocksDone: number = 0;
     private xBlocksNum = 0;
@@ -96,4 +96,18 @@ export default class ScreenTransitionBlocky extends PIXI.Container {
     public setInBetweenCallback(callback: Function) {
         this.inBetweenCallback = callback;
     }
+
+    public static play(inBetweenCallback: Function) {
+        const transition = new ScreenTransitionBlocksWave();
+        transition.zIndex = 10;
+        transition.setInBetweenCallback(() => {
+            setTimeout(() => {
+                inBetweenCallback();
+                transition.playExitAnimation();
+            }, 500);
+        });
+
+        Tapotan.getInstance().addUIObject(transition);
+    }
+
 }

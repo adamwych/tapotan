@@ -105,6 +105,7 @@ export default class ScreenLevelEditor extends Screen {
      * Frees all allocated resources and removes listeners.
      */
     public onRemovedFromScreenManager() {
+        super.onRemovedFromScreenManager();
         this.destroy({ children: true });
 
         this.keyboardShortcutsController.destroy();
@@ -137,7 +138,7 @@ export default class ScreenLevelEditor extends Screen {
     private initializeWidgets() {
         this.uiContainer = new PIXI.Container();
         this.uiContainer.sortableChildren = true;
-        this.uiContainer.zIndex = 9999;
+        this.uiContainer.zIndex = 9;
         {
             this.grid = new WidgetLevelEditorGrid();
             this.grid.visible = false;
@@ -161,7 +162,7 @@ export default class ScreenLevelEditor extends Screen {
             });
             this.uiContainer.addChild(this.bottomContainer);
         }
-        this.game.getPixiApplication().stage.addChild(this.uiContainer);
+        Tapotan.getInstance().addUIObject(this.uiContainer);
     }
 
     /**

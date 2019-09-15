@@ -4,7 +4,7 @@ import ContainerAnimator from '../../graphics/animation/ContainerAnimator';
 import ModalWidgetEnterAnimation from './modal/ModalWidgetEnterAnimation';
 import SpritesheetAnimator from '../../graphics/SpritesheetAnimator';
 import WidgetModalButton from './modal/WidgetModalButton';
-import ScreenTransitionBlocky from '../transitions/ScreenTransitionBlocky';
+import ScreenTransitionBlocksWave from '../transitions/ScreenTransitionBlocksWave';
 import WidgetEndGameModalScoreText from './end-game-overlay/WidgetEndGameModalScoreText';
 import WidgetEndGameModalBackButton from './end-game-overlay/WidgetEndGameModalBackButton';
 import WidgetText from './WidgetText';
@@ -124,7 +124,7 @@ export default class WidgetEndGameOverlay extends PIXI.Container {
             goBackButton.position.x -= 280;
             goBackButton.position.y = 28;
             goBackButton.on('click', () => {
-                const transition = new ScreenTransitionBlocky();
+                const transition = new ScreenTransitionBlocksWave();
                 transition.setInBetweenCallback(() => {
                     setTimeout(() => {
                         Tapotan.getInstance().startMainMenu();

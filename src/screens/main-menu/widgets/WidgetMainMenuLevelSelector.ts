@@ -7,7 +7,7 @@ import WidgetMainMenuLevelSelectorTab from './WidgetMainMenuLevelSelectorTab';
 import WidgetMainMenuLevelSelectorLoader from './WidgetMainMenuLevelSelectorLoader';
 import WidgetMainMenuLevelSelectorSearch from './WidgetMainMenuLevelSelectorSearch';
 import APIRequest from '../../../api/APIRequest';
-import ScreenTransitionBlocky from '../../transitions/ScreenTransitionBlocky';
+import ScreenTransitionBlocksWave from '../../transitions/ScreenTransitionBlocksWave';
 import WorldLoader from '../../../world/WorldLoader';
 import WidgetScrollableContainer from '../../widgets/scrollable-container/WidgetScrollableContainer';
 
@@ -264,7 +264,7 @@ export default class WidgetMainMenuLevelSelector extends PIXI.Container {
             id: publicID
         }).then(response => {
             if (response.data.success) {
-                const transition = new ScreenTransitionBlocky();
+                const transition = new ScreenTransitionBlocksWave();
                 transition.setInBetweenCallback(() => {
                     const world = WorldLoader.load(response.data.data, response.data.authorName);
                     if (!world) {
