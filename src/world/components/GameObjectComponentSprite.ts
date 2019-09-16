@@ -29,4 +29,8 @@ export default class GameObjectComponentSprite extends GameObjectComponent {
         ];
     }
 
+    public getSprite(): PIXI.Sprite {
+        return this.sprite;
+    }
+
 }

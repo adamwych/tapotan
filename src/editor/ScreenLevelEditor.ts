@@ -10,6 +10,9 @@ import WidgetGameOverOverlay from '../screens/widgets/WidgetGameOverOverlay';
 import WidgetVictoryOverlay from '../screens/widgets/WidgetVictoryOverlay';
 import screenPointToWorld from '../utils/screenPointToWorld';
 import GameObjectComponentEditorShade from '../world/components/GameObjectComponentEditorShade';
+import GameObjectComponentLockDoor from '../world/components/GameObjectComponentLockDoor';
+import GameObjectComponentLockKey from '../world/components/GameObjectComponentLockKey';
+import GameObjectComponentSign from '../world/components/GameObjectComponentSign';
 import { GameObjectVerticalAlignment } from '../world/components/GameObjectComponentTransform';
 import GameObject from '../world/GameObject';
 import Prefabs from '../world/prefabs/Prefabs';
@@ -24,6 +27,7 @@ import LevelEditorKeyboardShortcutsController from './LevelEditorKeyboardShortcu
 import LevelEditorLayer from './LevelEditorLayer';
 import LevelEditorNewLevelTemplate from './LevelEditorNewLevelTemplate';
 import LevelEditorPlaythroughController from './LevelEditorPlaythroughController';
+import WidgetLevelEditorSetSignTextModal from './modals/set-sign-text-modal/WidgetLevelEditorSetSignTextModal';
 import WidgetLevelEditorObjectActionButtons from './object-action-buttons/WidgetLevelEditorObjectActionButtons';
 import WidgetLevelEditorPrefabDrawer from './prefab-drawer/WidgetLevelEditorPrefabDrawer';
 import WidgetLevelEditorTopBar from './top-bar/WidgetLevelEditorTopBar';
@@ -31,10 +35,7 @@ import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomC
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
-import WidgetLevelEditorSetSignTextModal from './modals/set-sign-text-modal/WidgetLevelEditorSetSignTextModal';
-import GameObjectComponentSign from '../world/components/GameObjectComponentSign';
-import GameObjectComponentLockDoor from '../world/components/GameObjectComponentLockDoor';
-import GameObjectComponentLockKey from '../world/components/GameObjectComponentLockKey';
+import WidgetLevelEditorSettingsModal from './modals/settings-modal/WidgetLevelEditorSettingsModal';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -116,6 +117,10 @@ export default class ScreenLevelEditor extends Screen {
         /// #if ENV_PRODUCTION
         this.initializeBeforeUnloadConfirmation();
         /// #endif
+
+        setTimeout(() => {
+            this.showModal(new WidgetLevelEditorSettingsModal(this.world));
+        })
     }
 
     /**
@@ -401,7 +406,7 @@ export default class ScreenLevelEditor extends Screen {
         // Disable interactivity with game objects from different layers, and make them less visible.
         this.world.getGameObjects().forEach(gameObject => {
             gameObject.interactive = (gameObject.getLayer() === currentLayer.getIndex());
-            gameObject.alpha = gameObject.interactive || gameObject.getLayer() === 7 ? 1 : 0.75;
+            gameObject.alpha = gameObject.interactive || gameObject.hasCustomProperty('background') || gameObject.getLayer() === 7 ? 1 : 0.75;
         });
 
         this.blurActiveAndHoveredObjectOutline();
@@ -512,6 +517,11 @@ export default class ScreenLevelEditor extends Screen {
             this.getPlaythroughController().play(false);
             this.grid.visible = false;
             this.handleRightMouseButtonClick();
+            return;
+        }
+        
+        if (!this.newGameObjectShade) {
+            console.warn('newGameObjectShade === null');
             return;
         }
 
@@ -696,6 +706,8 @@ export default class ScreenLevelEditor extends Screen {
         this.grid.visible = true;
 
         this.spawnPlayerAtPositionActionActive = true;
+        this.linkWithDoorActionActive = false;
+        this.isMouseDown = false;
     }
     
     public beginLinkWithDoorAction(keyObject: GameObject) {

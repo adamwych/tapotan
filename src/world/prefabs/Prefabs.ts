@@ -19,6 +19,7 @@ import PrefabMonsterSnake from "./monsters/PrefabMonsterSnake";
 import PrefabMonsterGhost from "./monsters/PrefabMonsterGhost";
 import PrefabEnvironmentLockKey from "./environment/PrefabEnvironmentLockKey";
 import PrefabEnvironmentLockDoor from "./environment/PrefabEnvironmentLockDoor";
+import PrefabComplexBackgroundClouds from "./complex-backgrounds/PrefabComplexBackgroundClouds";
 
 export interface PrefabBasicProps {
 
@@ -73,5 +74,7 @@ export default {
     'monsters_ghost': PrefabMonsterGhost,
 
     CharacterLawrence: PrefabCharacterLawrence,
-    CharacterDeathBubbles: PrefabParticlesPlayerDeathBubbles
+    CharacterDeathBubbles: PrefabParticlesPlayerDeathBubbles,
+
+    ComplexBackgroundClouds: PrefabComplexBackgroundClouds
 };

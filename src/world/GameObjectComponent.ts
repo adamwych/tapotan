@@ -89,7 +89,9 @@ export default abstract class GameObjectComponent {
     /**
      * Deinitializes the component and frees all resources.
      */
-    protected abstract destroy(): void;
+    protected destroy(): void {
+        
+    }
 
     /**
      * Destroys the component and removes it from the game object.

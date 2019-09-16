@@ -381,6 +381,8 @@ export default class Tapotan {
 
         this.cameraAwareUIObjectsContainer.position.x = -convertWorldToPixels(this.viewport.left);
         this.cameraAwareUIObjectsContainer.position.y = -convertWorldToPixels(this.viewport.top);
+
+        document.title = 'TAPOTAN | ' + this.application.ticker.FPS.toFixed(2) + ' FPS';
     }
 
     private handleResizeMessageReloadButtonClick = () => {

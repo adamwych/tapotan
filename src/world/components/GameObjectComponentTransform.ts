@@ -109,7 +109,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      * @param x 
      * @param y 
      */
-    public translate(x: number, y: number) {
+    public translate(x: number, y: number = 0) {
         this.setPosition(this.positionX + x, this.positionY + y);
     }
 
@@ -120,16 +120,19 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      * @param y 
      */
     public setPosition(x: number, y: number, force: boolean = false) {
-        if (!force && (x === this.positionX && y === this.positionY)) {
-            return;
-        }
+        this.setPositionX(x, force);
+        this.setPositionY(y, force);
+    }
 
+    /**
+     * Sets the position on X axis.
+     * @param x 
+     */
+    public setPositionX(x: number, force: boolean = false) {
         this.positionX = x;
-        this.positionY = y;
         
         if (this.gameObject) {
             let containerTargetX = this.positionX;
-            let containerTargetY = this.positionY;
 
             if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
                 let viewportWidth = Tapotan.getViewportWidth();
@@ -138,6 +141,21 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
                 containerTargetX = alignedX - this.gameObject.width;
             }
 
+            this.gameObject.position.x = containerTargetX + this.pivotX;
+            this.gameObject.emit('transform.positionChanged', x, this.positionY);
+        }
+    }
+
+    /**
+     * Sets the position on Y axis.
+     * @param y 
+     */
+    public setPositionY(y: number, force: boolean = false) {
+        this.positionY = y;
+        
+        if (this.gameObject) {
+            let containerTargetY = this.positionY;
+
             if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
                 let viewportHeight = Tapotan.getViewportHeight();
                 let alignedY = viewportHeight - containerTargetY;
@@ -145,8 +163,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
                 containerTargetY = alignedY - this.gameObject.height;
             }
 
-            this.gameObject.position.set(containerTargetX + this.pivotX, containerTargetY + this.pivotY);
-            this.gameObject.emit('transform.positionChanged', x, y);
+            this.gameObject.position.y = containerTargetY + this.pivotY;
+            this.gameObject.emit('transform.positionChanged', this.positionX, y);
         }
     }
 
@@ -405,6 +423,20 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         const viewport = Tapotan.getInstance().getViewport();
 
         return Tapotan.getGameHeight() - (this.getPositionY() * blockSize) - (this.gameObject.height * blockSize) - (viewport.top * blockSize);
+    }
+    
+    /**
+     * Returns position of the object on the X axis in world coordinates. 
+     */
+    public getWorldX(): number {
+        return this.getPositionX() - Tapotan.getInstance().getViewport().left;
+    }
+
+    /**
+     * Returns position of the object on the Y axis in world coordinates.
+     */
+    public getWorldY(): number {
+        return this.getPositionY() - Tapotan.getInstance().getViewport().top;
     }
 
 }

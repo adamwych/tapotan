@@ -4,6 +4,8 @@ import GameObjectComponentAI from "../world/components/ai/GameObjectComponentAI"
 import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
 import GameObjectComponentLockKey from "../world/components/GameObjectComponentLockKey";
 import LevelEditorContext from "./LevelEditorContext";
+import GameObjectComponentParallaxBackground from "../world/components/backgrounds/GameObjectComponentParallaxBackground";
+import GameObject from "../world/GameObject";
 
 export default class LevelEditorPlaythroughController {
 
@@ -51,6 +53,8 @@ export default class LevelEditorPlaythroughController {
 
         this.context.getEditorScreen().handleRightMouseButtonClick();
         this.context.getEditorScreen().blurActiveAndHoveredObjectOutline();
+
+        world.handleGameStart();
     }
 
     public stop() {
@@ -70,10 +74,6 @@ export default class LevelEditorPlaythroughController {
                     gameObject.getCustomProperty('monster.startPositionX'),
                     gameObject.getCustomProperty('monster.startPositionY')
                 );
-            }
-
-            if (gameObject.hasComponentOfType(GameObjectComponentLockKey)) {
-                gameObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).getConnection().reset();
             }
         });
 
@@ -95,6 +95,8 @@ export default class LevelEditorPlaythroughController {
 
         this.context.emit('playthroughStopped');
         this.context.emit('showUI');
+
+        world.handleGameEnd(null);
     }
 
 }

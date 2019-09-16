@@ -11,19 +11,20 @@ import PhysicsMaterials from './physics/PhysicsMaterials';
 import Prefabs from './prefabs/Prefabs';
 import Tileset from './tiles/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
+import GameObjectComponentParallaxBackground from './components/backgrounds/GameObjectComponentParallaxBackground';
 
 export default class World extends PIXI.Container {
 
     public static SkyColors = {
-        'blue': 0x1bf3ff,
         'light-blue': 0x8bf9ff,
+        'blue': 0x1bf3ff,
         'dark-blue': 0x16a4f6,
         'navy-blue': 0x0a2152,
         'red': 0xff6666,
         'dark-red': 0x631a1a,
         'pink': 0xff66d6,
         'black': 0x000000
-    }
+    };
 
     public static Events = {
         Resumed: 'resumed',
@@ -60,7 +61,8 @@ export default class World extends PIXI.Container {
 
     private userRating: number = -1;
 
-    private skyColor: string = 'blue';
+    private skyColor: string = 'light-blue';
+    private animatedBackgroundId: string = 'none';
     private behaviourRules: WorldBehaviourRules;
 
     private timeoutTimer: number = 0;
@@ -98,6 +100,8 @@ export default class World extends PIXI.Container {
         this.sky.tint = 0x1bf3ff;
         this.sky.zIndex = 0;
         this.addChild(this.sky);
+
+        this.setSkyColor('light-blue');
 
         this.sortableChildren = true;
 
@@ -262,6 +266,18 @@ export default class World extends PIXI.Container {
             viewport.top = (this.player.transformComponent.getPositionY() - Tapotan.getViewportHeight() / 2) + 1;
             viewport.left = (this.player.transformComponent.getPositionX() - Tapotan.getViewportWidth() / 2) + 2;
         }
+
+        this.gameObjects.forEach(gameObject => {
+            if (gameObject.hasCustomProperty('hasParallaxBackground')) {
+                gameObject.children.forEach(child => {
+                    if (child instanceof GameObject) {
+                        const parallax = child.getComponentByType<GameObjectComponentParallaxBackground>(GameObjectComponentParallaxBackground);
+                        parallax.setTranslateEnabled(true);
+                        parallax.reset();
+                    }
+                });
+            }
+        });
     }
 
     public handleGameEnd(reason: GameEndReason) {
@@ -271,6 +287,18 @@ export default class World extends PIXI.Container {
                 this.shake = null;
             });
         }
+
+        this.gameObjects.forEach(gameObject => {
+            if (gameObject.hasCustomProperty('hasParallaxBackground')) {
+                gameObject.children.forEach(child => {
+                    if (child instanceof GameObject) {
+                        const parallax = child.getComponentByType<GameObjectComponentParallaxBackground>(GameObjectComponentParallaxBackground);
+                        parallax.setTranslateEnabled(false);
+                        parallax.reset();
+                    }
+                });
+            }
+        });
     }
 
     public calculatePlayerScore() {
@@ -513,6 +541,14 @@ export default class World extends PIXI.Container {
 
     public getSkyColor() {
         return this.skyColor;
+    }
+
+    public setAnimatedBackgroundId(animatedBackgroundId: string) {
+        this.animatedBackgroundId = animatedBackgroundId;
+    }
+
+    public getAnimatedBackgroundId() {
+        return this.animatedBackgroundId;
     }
 
     public getBehaviourRules() {
