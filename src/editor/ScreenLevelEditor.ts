@@ -117,10 +117,6 @@ export default class ScreenLevelEditor extends Screen {
         /// #if ENV_PRODUCTION
         this.initializeBeforeUnloadConfirmation();
         /// #endif
-
-        setTimeout(() => {
-            this.showModal(new WidgetLevelEditorSettingsModal(this.world));
-        })
     }
 
     /**

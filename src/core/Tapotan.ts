@@ -376,13 +376,12 @@ export default class Tapotan {
 
     private tick = (dt: number) => {
         /// #if ENV_DEVELOPMENT
+        document.title = 'TAPOTAN | ' + this.application.ticker.FPS.toFixed(2) + ' FPS';
         this.frameDebugger.frame();
         /// #endif
 
         this.cameraAwareUIObjectsContainer.position.x = -convertWorldToPixels(this.viewport.left);
         this.cameraAwareUIObjectsContainer.position.y = -convertWorldToPixels(this.viewport.top);
-
-        document.title = 'TAPOTAN | ' + this.application.ticker.FPS.toFixed(2) + ' FPS';
     }
 
     private handleResizeMessageReloadButtonClick = () => {
