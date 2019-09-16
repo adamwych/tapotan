@@ -4,16 +4,19 @@ export default class ContainerAnimationScale extends ContainerAnimation {
 
     private startScale: number = 1;
     private targetScale: number = 1;
+    private time: number = 0;
     
-    constructor(targetScale: number = 1) {
+    constructor(targetScale: number = 1, time: number = 0.075) {
         super();
+
         this.targetScale = targetScale;
+        this.time = time;
     }
 
     public tick(container: PIXI.Container, dt: number): void {
         this.timer += dt;
 
-        let alpha = Math.min(this.timer / 0.075, 1);
+        let alpha = Math.min(this.timer / this.time, 1);
         if (alpha === 1) {
             this.notifyEnd();
         }

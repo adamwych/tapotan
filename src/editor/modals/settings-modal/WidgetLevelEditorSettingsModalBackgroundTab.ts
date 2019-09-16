@@ -112,6 +112,10 @@ export default class WidgetLevelEditorSettingsModalBackgroundTab extends WidgetT
             tile.position.y += tile.pivot.y;
 
             tile.on('click', () => {
+                if (world.getAnimatedBackgroundId() === background.id) {
+                    return;
+                }
+                
                 let objectsToRemove = [];
 
                 world.getGameObjects().forEach(gameObject => {
