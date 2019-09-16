@@ -4,6 +4,7 @@ import ContainerAnimator from '../../../graphics/animation/ContainerAnimator';
 import ContainerAnimation from '../../../graphics/animation/ContainerAnimation';
 import Interpolation from '../../../utils/Interpolation';
 import WidgetTabbedViewTabButton from './WidgetTabbedViewTabButton';
+import WidgetScrollableContainer from '../../widgets/scrollable-container/WidgetScrollableContainer';
 
 interface WidgetTabbedViewTabInternal {
     tab: WidgetTabbedViewTab;
@@ -21,6 +22,9 @@ export default class WidgetTabbedView extends PIXI.Container {
     private activeTabBorder: PIXI.Graphics;
     private activeTabBorderAnimator: ContainerAnimator;
 
+    private scrollable: WidgetScrollableContainer;
+    private bodyContainer: PIXI.Container;
+
     constructor(width: number, height: number) {
         super();
 
@@ -35,6 +39,13 @@ export default class WidgetTabbedView extends PIXI.Container {
         this.addChild(this.activeTabBorder);
 
         this.activeTabBorderAnimator = new ContainerAnimator(this.activeTabBorder);
+
+        this.bodyContainer = new PIXI.Container();
+
+        this.scrollable = new WidgetScrollableContainer(width, 280);
+        this.scrollable.addItem(this.bodyContainer);
+        this.scrollable.position.y = 36;
+        this.addChild(this.scrollable);
     }
 
     public recreateTabButtons() {
@@ -72,9 +83,8 @@ export default class WidgetTabbedView extends PIXI.Container {
             button: null
         });
 
-        tab.position.y = 48;
         tab.visible = false;
-        this.addChild(tab);
+        this.bodyContainer.addChild(tab);
 
         this.recreateTabButtons();
     }
@@ -83,6 +93,8 @@ export default class WidgetTabbedView extends PIXI.Container {
         this.activeTabIndex = index;
 
         this.tabs.forEach((tab, tabIndex) => {
+            this.scrollable.removeItem(this.bodyContainer);
+
             if (tabIndex === index) {
                 tab.button.setActive(true);
 
@@ -93,6 +105,8 @@ export default class WidgetTabbedView extends PIXI.Container {
                 tab.button.setActive(false);
                 tab.tab.visible = false;
             }
+        
+            this.scrollable.addItem(this.bodyContainer);
         });
     }
 

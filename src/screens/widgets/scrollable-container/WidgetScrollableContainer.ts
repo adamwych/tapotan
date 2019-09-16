@@ -135,6 +135,11 @@ export default class WidgetScrollableContainer extends PIXI.Container {
         this.initializeScrollbar();
     }
 
+    public removeItem(item: PIXI.Container) {
+        this.itemsContainer.removeChild(item);
+        this.containerHeight -= item.height + this.itemSpacing;
+    }
+
     protected layOutNewItem(item: PIXI.Container, itemIndex: number) {
         if (itemIndex > 0) {
             let lastChild = this.itemsContainer.children[this.itemsContainer.children.length - 1] as PIXI.Container;

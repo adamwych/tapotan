@@ -32,6 +32,7 @@ export default class WidgetLevelEditorSettingsModal extends WidgetModal {
         this.bodyContainer.addChild(container);
         
         let closeButton = new WidgetModalButton('Save');
+        closeButton.position.y = 16;
         closeButton.on('click', () => {
             this.emit('close');
             this.destroy({ children: true });

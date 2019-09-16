@@ -5,7 +5,7 @@ import Tapotan from "../core/Tapotan";
 
 export default class LevelEditorNewLevelTemplate {
     public static createGameObjects(world: World) {
-        for (let i = 0; i < Tapotan.getViewportWidth() * 8; i++) {
+        for (let i = 0; i < Tapotan.getViewportWidth(); i++) {
             const ground = Prefabs.BasicBlock(world, i, 0, {
                 resource: 'ground_grass_variation0'
             });
