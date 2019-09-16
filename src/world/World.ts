@@ -163,7 +163,7 @@ export default class World extends PIXI.Container {
                         if (playerScreenY <= (Tapotan.getViewportHeight() / 2) + 1) {
                             viewport.top = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
                         }
-                        
+
                         viewport.left += this.behaviourRules.getCameraSpeed() * dt;
 
                         break;
@@ -260,12 +260,6 @@ export default class World extends PIXI.Container {
 
     public handleGameStart() {
         this.timeoutTimer = 0;
-
-        if (this.behaviourRules.getCameraBehaviour() === WorldCameraBehaviour.EverMoving) {
-            const viewport = this.game.getViewport();
-            viewport.top = (this.player.transformComponent.getPositionY() - Tapotan.getViewportHeight() / 2) + 1;
-            viewport.left = (this.player.transformComponent.getPositionX() - Tapotan.getViewportWidth() / 2) + 2;
-        }
 
         this.gameObjects.forEach(gameObject => {
             if (gameObject.hasCustomProperty('hasParallaxBackground')) {

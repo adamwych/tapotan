@@ -44,7 +44,7 @@ export default class WidgetTabbedView extends PIXI.Container {
 
         this.scrollable = new WidgetScrollableContainer(width, 280);
         this.scrollable.addItem(this.bodyContainer);
-        this.scrollable.position.y = 36;
+        this.scrollable.position.y = 42;
         this.addChild(this.scrollable);
     }
 

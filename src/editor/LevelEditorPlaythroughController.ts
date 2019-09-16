@@ -29,6 +29,9 @@ export default class LevelEditorPlaythroughController {
     public play(spawnPlayer: boolean = true) {
         this.playing = true;
 
+        this.context.getGame().getViewport().top = 0;
+        this.context.getGame().getViewport().left = 0;
+
         const world = this.context.getWorld();
         world.getGameObjects().forEach(gameObject => {
             gameObject.interactive = false;
