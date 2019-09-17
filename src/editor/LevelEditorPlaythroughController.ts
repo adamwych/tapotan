@@ -2,10 +2,7 @@ import { GameState } from "../core/GameManager";
 import WidgetSignTextBubble from "../screens/widgets/WidgetSignTextBubble";
 import GameObjectComponentAI from "../world/components/ai/GameObjectComponentAI";
 import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
-import GameObjectComponentLockKey from "../world/components/GameObjectComponentLockKey";
 import LevelEditorContext from "./LevelEditorContext";
-import GameObjectComponentParallaxBackground from "../world/components/backgrounds/GameObjectComponentParallaxBackground";
-import GameObject from "../world/GameObject";
 
 export default class LevelEditorPlaythroughController {
 
@@ -54,8 +51,7 @@ export default class LevelEditorPlaythroughController {
         this.context.emit('playthroughStarted');
         this.context.emit('hideUI');
 
-        this.context.getEditorScreen().handleRightMouseButtonClick();
-        this.context.getEditorScreen().blurActiveAndHoveredObjectOutline();
+        this.context.getEditorScreen().handleGameStart();
 
         world.handleGameStart();
     }

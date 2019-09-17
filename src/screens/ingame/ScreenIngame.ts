@@ -14,6 +14,7 @@ import InputManager from '../../core/InputManager';
 import WidgetIngameMenuModal from './modals/WidgetIngameMenuModal';
 import WidgetModal from '../widgets/modal/WidgetModal';
 import { WorldGameOverTimeout } from '../../world/WorldBehaviourRules';
+import WidgetPlayStatistics from '../widgets/play-statistics/WidgetPlayStatistics';
 
 export default class ScreenIngame extends Screen {
 
@@ -23,6 +24,7 @@ export default class ScreenIngame extends Screen {
     private modal: WidgetModal;
     private timeoutTimerText: WidgetText;
     private timeText: WidgetText;
+    private statistics: WidgetPlayStatistics;
 
     constructor(game: Tapotan) {
         super(game);
@@ -45,6 +47,10 @@ export default class ScreenIngame extends Screen {
         this.timeText = new WidgetText("00:00", WidgetText.Size.Big, 0xffffff);
         this.timeText.position.set(32, 76);
         this.uiContainer.addChild(this.timeText);
+
+        this.statistics = new WidgetPlayStatistics(this.world);
+        this.statistics.position.y = 104;
+        this.uiContainer.addChild(this.statistics);
 
         this.initializeTimeoutTimerText();
 

@@ -28,5 +28,9 @@ export default class GameObjectComponentCollectableCollector extends GameObjectC
     public getCollectables(): Array<Collectable> {
         return this.collectables;
     }
+
+    public countByCategory(category: CollectableCategory) {
+        return this.collectables.filter(x => x.getCategory() === category).length;
+    }
     
 }

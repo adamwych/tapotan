@@ -8,7 +8,7 @@ export enum GameState {
 }
 
 export enum GameEndReason {
-    Victory, Death
+    Victory, Death, EditorToggle
 }
 
 export default class GameManager {
@@ -42,7 +42,7 @@ export default class GameManager {
 
         if (reason === GameEndReason.Death) {
             this.game.getAudioManager().playSoundEffect('death');
-        } else {
+        } else if (reason === GameEndReason.Victory) {
             this.game.getAudioManager().playSoundEffect('victory');
         }
 

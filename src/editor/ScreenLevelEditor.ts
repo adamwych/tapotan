@@ -36,12 +36,15 @@ import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
 import Interpolation from '../utils/Interpolation';
+import WidgetPlayStatistics from '../screens/widgets/play-statistics/WidgetPlayStatistics';
 
 export default class ScreenLevelEditor extends Screen {
 
     private context: LevelEditorContext;
 
     private uiContainer: PIXI.Container;
+
+    private statistics: WidgetPlayStatistics;
 
     private grid: WidgetLevelEditorGrid;
     private objectOutlineHover: WidgetLevelEditorObjectOutline;
@@ -98,13 +101,13 @@ export default class ScreenLevelEditor extends Screen {
         this.keyboardShortcutsController = new LevelEditorKeyboardShortcutsController(this.context);
         this.playthroughController = new LevelEditorPlaythroughController(this.context);
         
-        this.initializeWidgets();
-        
         if (this.world.isNewWorld()) {
             LevelEditorNewLevelTemplate.createGameObjects(this.world);
             this.world.setSpawnPointPosition(4, 1, 5);
         }
-        
+
+        this.initializeWidgets();
+
         this.handleSpawnPointSet(this.world.getSpawnPointPosition());
 
         this.initializeGameObjectsInteractivity();
@@ -117,6 +120,8 @@ export default class ScreenLevelEditor extends Screen {
         /// #if ENV_PRODUCTION
         this.initializeBeforeUnloadConfirmation();
         /// #endif
+
+        this.context.on('playthroughStopped', this.handlePlaythroughStopped);
     }
 
     /**
@@ -144,8 +149,11 @@ export default class ScreenLevelEditor extends Screen {
         InputManager.instance.removeMouseClickListener(this.handleRightMouseButtonClick);
         InputManager.instance.removeKeyDownListener(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
 
+        this.context.off('playthroughStopped', this.handlePlaythroughStopped);
+
         this.prefabDrawer.destroy({ children: true });
         this.bottomContainer.destroy();
+        this.statistics.destroy();
 
         this.world.destroy();
     }
@@ -179,6 +187,11 @@ export default class ScreenLevelEditor extends Screen {
                 this.blurActiveAndHoveredObjectOutline();
             });
             this.uiContainer.addChild(this.bottomContainer);
+
+            this.statistics = new WidgetPlayStatistics(this.world);
+            this.statistics.position.y = this.topBar.position.y + this.topBar.height;
+            this.statistics.visible = false;
+            this.uiContainer.addChild(this.statistics);
         }
         Tapotan.getInstance().addUIObject(this.uiContainer);
     }
@@ -648,6 +661,13 @@ export default class ScreenLevelEditor extends Screen {
         this.grid.restoreTilesAlpha();
     }
 
+    public handleGameStart = () => {
+        this.handleRightMouseButtonClick();
+        this.blurActiveAndHoveredObjectOutline();
+
+        this.statistics.visible = true;
+    }
+
     public handleGameEnd = (reason: GameEndReason) => {
         let overlay: WidgetEndGameOverlay;
 
@@ -663,11 +683,19 @@ export default class ScreenLevelEditor extends Screen {
             }
         }
 
-        overlay.on('close', () => {
+        if (overlay) {
+            overlay.on('close', () => {
+                this.playthroughController.stop();
+            });
+    
+            this.uiContainer.addChild(overlay);
+        } else {
             this.playthroughController.stop();
-        });
+        }
+    }
 
-        this.uiContainer.addChild(overlay);
+    private handlePlaythroughStopped = () => {
+        this.statistics.visible = false;
     }
 
     public blurActiveAndHoveredObjectOutline() {

@@ -36,6 +36,7 @@ export default function populateBasicMonsterPrefab(
 
     const livingEntityComponent = gameObject.createComponent<GameObjectComponentLivingEntity>(GameObjectComponentLivingEntity);
     livingEntityComponent.setRemoveUponDeath(true);
+    livingEntityComponent.setInvulnerable(true);
 
     gameObject.createComponent<GameObjectComponentKillOnTouch>(GameObjectComponentKillOnTouch).initialize();
 

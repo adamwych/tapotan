@@ -236,6 +236,9 @@ export default class World extends PIXI.Container {
         this.player.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
         this.player.setLayer(layer !== -1 ? layer : this.playerLayer);
         this.player.setCustomProperty('player', true);
+        this.player.on('destroyed', () => {
+            this.player = null;
+        });
     }
 
     public addPhysicsBody(parent: any, body: p2.Body) {
