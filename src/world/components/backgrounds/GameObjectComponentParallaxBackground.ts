@@ -11,6 +11,8 @@ export default class GameObjectComponentParallaxBackground extends GameObjectCom
 
     private translateEnabled: boolean = true;
 
+    private lastXMovementDiff: number = 0;
+
     public initialize(speed: number): void {
         this.speed = speed;
 
@@ -31,8 +33,18 @@ export default class GameObjectComponentParallaxBackground extends GameObjectCom
             transform.translate(-this.speed * dt, 0);
         }
 
-        if (this.gameObject.parent.position.x + transform.getWorldX() + this.gameObject.width < 0) {
-            transform.setPositionX(Tapotan.getInstance().getViewport().left + this.gameObject.width - this.gameObject.parent.position.x);
+        const x = this.gameObject.parent.position.x + transform.getWorldX() + this.gameObject.width;
+
+        if (x < 0) {
+            const movement = Tapotan.getInstance().getViewport().left + this.gameObject.width - this.gameObject.parent.position.x;
+
+            if (this.lastXMovementDiff === 0) {
+                this.lastXMovementDiff = transform.getPositionX() - movement;
+            }
+
+            transform.setPositionX(movement);
+        } else if (this.lastXMovementDiff < 0 && x > -this.lastXMovementDiff) {
+            transform.setPositionX(transform.getPositionX() - -this.lastXMovementDiff);
         }
 
         if (this.gameObject.getWorld().shouldAnimatedBackgroundFollowPlayer()) {
