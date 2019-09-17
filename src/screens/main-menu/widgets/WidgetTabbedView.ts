@@ -94,6 +94,7 @@ export default class WidgetTabbedView extends PIXI.Container {
 
         this.tabs.forEach((tab, tabIndex) => {
             this.scrollable.removeItem(this.bodyContainer);
+            this.scrollable.resetScroll();
 
             if (tabIndex === index) {
                 tab.button.setActive(true);

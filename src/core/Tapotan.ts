@@ -10,13 +10,13 @@ import convertWorldToPixels from '../utils/converWorldToPixels';
 import Tileset from '../world/tiles/Tileset';
 import World from '../world/World';
 import WorldLoader from '../world/WorldLoader';
+import WorldSerializer from '../world/WorldSerializer';
 import AssetManager from './AssetManager';
 import AudioManager from './AudioManager';
 import FrameDebugger from './FrameDebugger';
 import GameManager, { GameState } from './GameManager';
 import InputManager from './InputManager';
 import ScreenManager from './ScreenManager';
-import WorldSerializer from '../world/WorldSerializer';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -290,8 +290,7 @@ export default class Tapotan {
         window.location.hash = '';
 
         if (this.gameManager && this.gameManager.getWorld()) {
-            this.gameManager.getWorld().beforeRemove();
-            this.gameManager.getWorld().destroy({ children: true });
+            this.gameManager.getWorld().destroy();
         }
 
         this.gameManager = new GameManager(this);
@@ -315,8 +314,7 @@ export default class Tapotan {
         window.location.hash = '';
 
         if (this.gameManager && this.gameManager.getWorld()) {
-            this.gameManager.getWorld().beforeRemove();
-            this.gameManager.getWorld().destroy({ children: true });
+            this.gameManager.getWorld().destroy();
         }
 
         this.gameManager = new GameManager(this);
@@ -338,8 +336,7 @@ export default class Tapotan {
         window.location.hash = '';
         
         if (this.gameManager && this.gameManager.getWorld()) {
-            this.gameManager.getWorld().beforeRemove();
-            this.gameManager.getWorld().destroy({ children: true });
+            this.gameManager.getWorld().destroy();
         }
 
         this.gameManager = new GameManager(this);

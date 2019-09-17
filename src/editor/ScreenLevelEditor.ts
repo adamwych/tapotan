@@ -147,8 +147,7 @@ export default class ScreenLevelEditor extends Screen {
         this.prefabDrawer.destroy({ children: true });
         this.bottomContainer.destroy();
 
-        this.world.beforeRemove();
-        this.world.destroy({ children: true });
+        this.world.destroy();
     }
 
     /**

@@ -6,6 +6,7 @@ import LockDoorKeyConnection from './LockDoorKeyConnection';
 import Prefabs from './prefabs/Prefabs';
 import World from './World';
 import GameObjectComponentAI from './components/ai/GameObjectComponentAI';
+import WorldMask from './WorldMask';
 
 interface WorldLoaderInput {
     type: string;
@@ -55,6 +56,20 @@ export default class WorldLoader {
             levelData.world.spawnPoint.layer
         );
         world.setBackgroundMusicID(levelData.world.backgroundMusic);
+        
+        if (levelData.world.worldMaskSize !== 'none') {
+            let size = 0;
+
+            switch (levelData.world.worldMaskSize) {
+                case '64': size = WorldMask.Size.Small;
+                case '48': size = WorldMask.Size.Medium;
+                case '32': size = WorldMask.Size.Big;
+            }
+
+            if (size !== 0) {
+                world.setWorldMask(new WorldMask(world, size));
+            }
+        }
 
         levelData.world.objects.forEach(object => {
             if (object.fromPrefab) {

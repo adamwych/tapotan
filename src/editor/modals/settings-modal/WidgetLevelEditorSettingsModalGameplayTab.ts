@@ -3,6 +3,7 @@ import WidgetDropdown from '../../../screens/widgets/WidgetDropdown';
 import World from '../../../world/World';
 import { WorldGameOverTimeout } from '../../../world/WorldBehaviourRules';
 import WidgetLevelEditorSettingsModalInput from './WidgetLevelEditorSettingsModalInput';
+import WorldMask from "../../../world/WorldMask";
 
 export default class WidgetLevelEditorSettingsModalGameplayTab extends WidgetTabbedViewTab {
     constructor(world: World, width: number) {
@@ -11,6 +12,7 @@ export default class WidgetLevelEditorSettingsModalGameplayTab extends WidgetTab
         this.initializeTimeoutParameter(world, width);
         this.initializeCharacterParameter(world, width);
         this.initializeMusicParameter(world, width);
+        this.initializeMaskParameter(world, width);
     }
 
     private initializeTimeoutParameter(world: World, containerWidth: number) {
@@ -61,5 +63,33 @@ export default class WidgetLevelEditorSettingsModalGameplayTab extends WidgetTab
         musicInput.zIndex = 7;
 
         this.addChild(musicInput);
+    }
+
+    private initializeMaskParameter(world: World, containerWidth: number) {
+        const options = [
+            { id: 'none', label: 'None' }
+        ];
+        
+        for (let [k, v] of Object.entries(World.MaskSizes)) {
+            options.push({
+                id: String(v),
+                label: k
+            });
+        }
+
+        let maskDropdown = new WidgetDropdown(options, world.getWorldMask() ? world.getWorldMask().getSize() : 'none');
+        maskDropdown.on('changed', id => {
+            if (id === 'none') {
+                world.setWorldMask(null);
+            } else {
+                world.setWorldMask(new WorldMask(world, id));
+            }
+        });
+
+        let maskInput = new WidgetLevelEditorSettingsModalInput(containerWidth, 'Mask', maskDropdown);
+        maskInput.position.y = 48 * 3;
+        maskInput.zIndex = 6;
+
+        this.addChild(maskInput);
     }
 }

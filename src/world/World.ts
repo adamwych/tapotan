@@ -12,6 +12,7 @@ import Prefabs from './prefabs/Prefabs';
 import Tileset from './tiles/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import GameObjectComponentParallaxBackground from './components/backgrounds/GameObjectComponentParallaxBackground';
+import WorldMask from './WorldMask';
 
 export default class World extends PIXI.Container {
 
@@ -24,6 +25,12 @@ export default class World extends PIXI.Container {
         'dark-red': 0x631a1a,
         'pink': 0xff66d6,
         'black': 0x000000
+    };
+
+    public static MaskSizes = {
+        'Big': WorldMask.Size.Big,
+        'Medium': WorldMask.Size.Medium,
+        'Small': WorldMask.Size.Small,
     };
 
     public static Events = {
@@ -76,6 +83,8 @@ export default class World extends PIXI.Container {
 
     private paused: boolean = false;
 
+    private worldMask: WorldMask;
+
     // ================
     
     /**
@@ -112,7 +121,8 @@ export default class World extends PIXI.Container {
         this.startTime = new Date().getTime();
     }
 
-    public beforeRemove() {
+    public destroy() {
+        super.destroy({ children: true });
         this._duringRemove = true;
 
         TickHelper.remove(this.tick);
@@ -123,6 +133,10 @@ export default class World extends PIXI.Container {
             object.destroy();
             this.removeGameObject(object);
         });
+
+        if (this.worldMask) {
+            this.worldMask.destroy();
+        }
 
         this._duringRemove = false;
     }
@@ -142,6 +156,10 @@ export default class World extends PIXI.Container {
 
         if (this.sky.transform) {
             this.sky.position.x = this.game.getViewport().left;
+        }
+
+        if (this.worldMask) {
+            this.worldMask.tick(dt);
         }
 
         if (this.shake) {
@@ -600,6 +618,18 @@ export default class World extends PIXI.Container {
 
     public getPlayerLayer() {
         return this.playerLayer;
+    }
+
+    public setWorldMask(mask: WorldMask) {
+        if (this.worldMask) {
+            this.worldMask.destroy();
+        }
+
+        this.worldMask = mask;
+    }
+
+    public getWorldMask(): WorldMask {
+        return this.worldMask;
     }
 
 }

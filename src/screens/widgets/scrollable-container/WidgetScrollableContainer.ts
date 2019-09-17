@@ -253,4 +253,9 @@ export default class WidgetScrollableContainer extends PIXI.Container {
 
         this.isResizing = false;
     }
+
+    public resetScroll() {
+        this.itemsContainer.position.y = 0;
+    }
+
 }

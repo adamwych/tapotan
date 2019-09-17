@@ -58,6 +58,7 @@ export default class WorldSerializer {
                 skyColor: world.getSkyColor(),
                 animatedBackgroundId: world.getAnimatedBackgroundId(),
                 animatedBackgroundFollows: world.shouldAnimatedBackgroundFollowPlayer(),
+                worldMaskSize: world.getWorldMask() ? world.getWorldMask().getSize() : 'none',
                 objects: serializeWorldObjects(world.getGameObjects()),
                 behaviourRules: {
                     cameraBehaviour: world.getBehaviourRules().getCameraBehaviour(),
