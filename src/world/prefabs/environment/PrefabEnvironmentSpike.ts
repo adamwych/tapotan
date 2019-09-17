@@ -19,4 +19,6 @@ export default createPrefabSpawnFunction('environment_spike', (gameObject: GameO
     }, {
         sensor: true
     });
+
+    gameObject.setCustomProperty('__prefab', props.resource);
 });
