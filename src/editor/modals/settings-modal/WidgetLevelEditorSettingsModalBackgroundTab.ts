@@ -1,21 +1,26 @@
 import * as PIXI from 'pixi.js';
 import WidgetTabbedViewTab from "../../../screens/main-menu/widgets/WidgetTabbedViewTab";
-import World from '../../../world/World';
+import WidgetDropdown from '../../../screens/widgets/WidgetDropdown';
 import WidgetText from '../../../screens/widgets/WidgetText';
-import WidgetLevelEditorSettingsModalBackgroundSkyColorTile from './WidgetLevelEditorSettingsModalBackgroundSkyColorTile';
-import WidgetLevelEditorSettingsModalBackgroundComplexTile from './WidgetLevelEditorSettingsModalBackgroundComplexTile';
 import WorldBackgrounds from '../../../world/backgrounds/WorldBackgrounds';
+import World from '../../../world/World';
+import WidgetLevelEditorSettingsModalBackgroundComplexTile from './WidgetLevelEditorSettingsModalBackgroundComplexTile';
+import WidgetLevelEditorSettingsModalBackgroundSkyColorTile from './WidgetLevelEditorSettingsModalBackgroundSkyColorTile';
+import WidgetLevelEditorSettingsModalInput from './WidgetLevelEditorSettingsModalInput';
 
 export default class WidgetLevelEditorSettingsModalBackgroundTab extends WidgetTabbedViewTab {
     constructor(world: World, width: number) {
         super('Background');
 
+        this.initializeFollowPlayerVerticallyParameter(world, width);
         this.initializeSkyColorParameter(world, width);
         this.initializeComplexBackgroundParameter(world, width);
     }
 
     private initializeSkyColorParameter(world: World, width: number) {
         const container = new PIXI.Container();
+        container.position.y = 40;
+
         const label = new WidgetText('Color', WidgetText.Size.Medium, 0xe5c3a9);
         container.addChild(label);
 
@@ -77,7 +82,7 @@ export default class WidgetLevelEditorSettingsModalBackgroundTab extends WidgetT
         const container = new PIXI.Container();
         const label = new WidgetText('Animation', WidgetText.Size.Medium, 0xe5c3a9);
         container.addChild(label);
-        container.position.y = this.children[0].position.y + (this.children[0] as PIXI.Container).height + 16;
+        container.position.y = this.children[1].position.y + (this.children[1] as PIXI.Container).height + 16;
         this.addChild(container);
 
         const spacing = 8;
@@ -145,6 +150,24 @@ export default class WidgetLevelEditorSettingsModalBackgroundTab extends WidgetT
 
             tile.setActive(background.id === world.getAnimatedBackgroundId());
         });
+    }
+
+    private initializeFollowPlayerVerticallyParameter(world: World, width: number) {
+        let options = [
+            { id: 'yes', label: 'Yes' },
+            { id: 'no', label: 'No' },
+        ];
+
+        let followDropdown = new WidgetDropdown(options, world.shouldAnimatedBackgroundFollowPlayer() ? 'yes' : 'no');
+        followDropdown.on('changed', id => {
+            world.setAnimatedBackgroundShouldFollowPlayer(id === 'yes');
+        });
+
+        let followInput = new WidgetLevelEditorSettingsModalInput(width, 'Follow player vertically', followDropdown);
+        followInput.position.y = 0;
+        followInput.zIndex = 7;
+
+        this.addChild(followInput);
     }
 
 }

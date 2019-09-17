@@ -63,6 +63,8 @@ export default class World extends PIXI.Container {
 
     private skyColor: string = 'light-blue';
     private animatedBackgroundId: string = 'none';
+    private animatedBackgroundShouldFollowPlayer: boolean = true;
+    
     private behaviourRules: WorldBehaviourRules;
 
     private timeoutTimer: number = 0;
@@ -543,6 +545,24 @@ export default class World extends PIXI.Container {
 
     public getAnimatedBackgroundId() {
         return this.animatedBackgroundId;
+    }
+
+    public setAnimatedBackgroundShouldFollowPlayer(animatedBackgroundShouldFollowPlayer: boolean) {
+        this.animatedBackgroundShouldFollowPlayer = animatedBackgroundShouldFollowPlayer;
+
+        this.gameObjects.forEach(gameObject => {
+            if (gameObject.hasCustomProperty('hasParallaxBackground')) {
+                gameObject.children.forEach(child => {
+                    if (child instanceof GameObject) {
+                        child.getComponentByType<GameObjectComponentParallaxBackground>(GameObjectComponentParallaxBackground).resetY();
+                    }
+                });
+            }
+        });
+    }
+
+    public shouldAnimatedBackgroundFollowPlayer() {
+        return this.animatedBackgroundShouldFollowPlayer;
     }
 
     public getBehaviourRules() {

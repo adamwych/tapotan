@@ -45,6 +45,7 @@ export default class WorldLoader {
         world.setWorldName(levelData.world.name);
         world.setSkyColor(levelData.world.skyColor);
         world.setAnimatedBackgroundId(levelData.world.animatedBackgroundId);
+        world.setAnimatedBackgroundShouldFollowPlayer(levelData.world.animatedBackgroundFollows);
         world.getBehaviourRules().setCameraBehaviour(levelData.world.behaviourRules.cameraBehaviour);
         world.getBehaviourRules().setCameraSpeed(levelData.world.behaviourRules.cameraSpeed);
         world.getBehaviourRules().setGameOverTimeout(levelData.world.behaviourRules.timeout);
