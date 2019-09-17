@@ -80,6 +80,26 @@ export default class LevelEditorKeyboardShortcutsController {
         });
     }
 
+    private handleFocusSelectedObjectShortcutClick = () => {
+        if (!this.context.canInteractWithEditor()) {
+            return;
+        }
+
+        let objectPosition;
+
+        if (this.context.getSelectedObjects().length > 0) {
+            objectPosition = this.context.getSelectedObjects()[0].transformComponent.getPosition();
+        } else {
+            const spawnPosition = this.context.getWorld().getSpawnPointPosition();
+            objectPosition = [spawnPosition.x, spawnPosition.y];
+        }
+
+        this.context.getEditorScreen().beginMoveCameraToPositionAction(
+            objectPosition[0] - (Tapotan.getViewportWidth() / 2) + 1,
+            -objectPosition[1] + (Tapotan.getViewportHeight() / 2)
+        );
+    }
+
     private handleKey1Click = () => {
         if (this.context.canInteractWithEditor()) {
             this.context.emit('requestOpenPrefabDrawer', 0);
@@ -121,6 +141,7 @@ export default class LevelEditorKeyboardShortcutsController {
             [InputManager.KeyCodes.KeyG]: this.handleGridToggleShortcutClick,
             [InputManager.KeyCodes.KeyQ]: this.handlePlaythroughToggleShortcutClick,
             [InputManager.KeyCodes.KeyR]: this.handleRotateObjectShortcutClick,
+            [InputManager.KeyCodes.KeyF]: this.handleFocusSelectedObjectShortcutClick,
             [InputManager.KeyCodes.KeyDelete]: this.handleDeleteObjectsShortcutClick,
             [InputManager.KeyCodes.KeyE]: this.handleSpawnPlayerAtPositionShortcutClick,
             [InputManager.KeyCodes.Key1]: this.handleKey1Click,
