@@ -141,7 +141,7 @@ export default class ScreenIngame extends Screen {
 
         if (reason === GameEndReason.Victory) {
             endGameOverlay = new WidgetVictoryOverlay(false, this.world.getUserRating());
-        } else {
+        } else if (reason === GameEndReason.Death) {
             endGameOverlay = new WidgetGameOverOverlay(false);
         }
 
