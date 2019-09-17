@@ -94,7 +94,7 @@ export default class LevelEditorKeyboardShortcutsController {
             objectPosition = [spawnPosition.x, spawnPosition.y];
         }
 
-        this.context.getEditorScreen().beginMoveCameraToPositionAction(
+        this.context.getEditorScreen().getCameraMovementContorller().animateCameraToPosition(
             objectPosition[0] - (Tapotan.getViewportWidth() / 2) + 1,
             -objectPosition[1] + (Tapotan.getViewportHeight() / 2)
         );

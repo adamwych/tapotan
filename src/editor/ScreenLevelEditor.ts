@@ -82,13 +82,6 @@ export default class ScreenLevelEditor extends Screen {
 
     private remainingMouseMoves: Array<{x: number, y: number}> = [];
 
-    private startCameraX: number = 0;
-    private startCameraY: number = 0;
-    private targetCameraX: number = 0;
-    private targetCameraY: number = 0;
-    private doAnimateCameraToTargetPosition: boolean = false;
-    private cameraMoveAnimationTimer: number = 0;
-
     private modal: WidgetModal = null;
 
     private world: World;
@@ -768,30 +761,6 @@ export default class ScreenLevelEditor extends Screen {
             this.handlePlaceObjectOnMouseCoordinates(move);
         })
         this.remainingMouseMoves = [];
-
-        if (this.doAnimateCameraToTargetPosition) {
-            this.cameraMoveAnimationTimer += dt;
-
-            const viewport = this.game.getViewport();
-            const alpha = Math.min(1, this.cameraMoveAnimationTimer / 0.5);
-            if (alpha === 1) {
-                this.doAnimateCameraToTargetPosition = false;
-            }
-
-            viewport.left = Interpolation.smooth(this.startCameraX, this.targetCameraX, alpha);
-            viewport.top = Interpolation.smooth(this.startCameraY, this.targetCameraY, alpha);
-        }
-    }
-
-    public beginMoveCameraToPositionAction(x: number, y: number) {
-        this.cameraMoveAnimationTimer = 0;
-
-        const viewport = this.game.getViewport();
-        this.startCameraX = viewport.left;
-        this.startCameraY = viewport.top;
-        this.targetCameraX = x;
-        this.targetCameraY = y;
-        this.doAnimateCameraToTargetPosition = true;
     }
 
     public showModal(modal: WidgetModal) {
@@ -826,6 +795,10 @@ export default class ScreenLevelEditor extends Screen {
 
     public getPlaythroughController(): LevelEditorPlaythroughController {
         return this.playthroughController;
+    }
+
+    public getCameraMovementContorller(): LevelEditorCameraMovementController {
+        return this.cameraMovementController;
     }
 
     public getSpawnPointShadeObject(): GameObject {
