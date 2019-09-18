@@ -7,6 +7,7 @@ import GameObject from "../world/GameObject";
 import LevelEditorLayer from "./LevelEditorLayer";
 import LevelEditorPlaythroughController from "./LevelEditorPlaythroughController";
 import { EventEmitter } from "events";
+import LevelEditorSettings from "./LevelEditorSettings";
 
 export default class LevelEditorContext extends EventEmitter {
 
@@ -19,16 +20,20 @@ export default class LevelEditorContext extends EventEmitter {
 
     private currentLayerIndex: number = 5;
     private layers: Array<LevelEditorLayer> = [];
+    
+    private settings: LevelEditorSettings;
 
     private world: World;
 
     constructor(world: World, game: Tapotan, editorScreen: ScreenLevelEditor) {
         super();
+        
         LevelEditorContext.current = this;
 
         this.world = world;
         this.game = game;
         this.editorScreen = editorScreen;
+        this.settings = new LevelEditorSettings();
         this.commandQueue = new LevelEditorCommandQueue(this);
         
         for (let i = 0; i < 6; i++) {
@@ -106,6 +111,10 @@ export default class LevelEditorContext extends EventEmitter {
 
     public getPlaythroughController(): LevelEditorPlaythroughController {
         return this.editorScreen.getPlaythroughController();
+    }
+
+    public getSettings(): LevelEditorSettings {
+        return this.settings;
     }
 
     /**

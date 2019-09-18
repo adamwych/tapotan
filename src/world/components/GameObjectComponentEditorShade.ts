@@ -1,13 +1,15 @@
 import GameObjectComponent from "../GameObjectComponent";
-import GameObject from "../GameObject";
 import InputManager from "../../core/InputManager";
 import screenPointToWorld from "../../utils/screenPointToWorld";
 import Tapotan from "../../core/Tapotan";
+import LevelEditorContext from "../../editor/LevelEditorContext";
 
 export default class GameObjectComponentEditorShade extends GameObjectComponent {
 
-    constructor(gameObject: GameObject) {
-        super(gameObject);
+    private context: LevelEditorContext;
+
+    public initialize(context: LevelEditorContext): void {
+        this.context = context;
     }
 
     protected destroy(): void {
@@ -17,13 +19,11 @@ export default class GameObjectComponentEditorShade extends GameObjectComponent 
     public tick = (dt: number) => {
         super.tick(dt);
 
-        const snapToGrid = false;
-        
         const inputManager = InputManager.instance;
         const mouseX = inputManager.getMouseX();
         const mouseY = inputManager.getMouseY();
 
-        if (snapToGrid) {
+        if (this.context.getSettings().shouldSnapToGrid()) {
             const worldCoords = screenPointToWorld(mouseX, mouseY);
 
             let y = worldCoords.y;

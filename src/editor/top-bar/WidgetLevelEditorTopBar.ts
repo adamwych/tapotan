@@ -13,6 +13,8 @@ import WidgetLevelEditorTopBarItemExitButton from './WidgetLevelEditorTopBarItem
 import ScreenTransitionBlocksWave from '../../screens/transitions/ScreenTransitionBlocksWave';
 import WidgetLevelEditorPublishModal from '../modals/publish-modal/WidgetLevelEditorPublishModal';
 import WidgetLevelEditorPublishSuccessModal from '../modals/publish-modal/WidgetLevelEditorPublishSuccessModal';
+import WidgetLevelEditorTopBarItemEditorSettingsButton from './WidgetLevelEditorTopBarItemEditorSettingsButton';
+import WidgetLevelEditorEditorSettingsModal from '../modals/editor-settings-modal/WidgetLevelEditorEditorSettingsModal';
 
 export default class WidgetLevelEditorTopBar extends PIXI.Container {
 
@@ -21,6 +23,7 @@ export default class WidgetLevelEditorTopBar extends PIXI.Container {
     private publishButton: WidgetLevelEditorTopBarItemPublishButton;
     private settingsButton: WidgetLevelEditorTopBarItemSettingsButton;
     private musicToggleButton: WidgetMusicToggleButton;
+    private editorSettingsButton: WidgetLevelEditorTopBarItemEditorSettingsButton;
     private exitButton: WidgetLevelEditorTopBarItemExitButton;
 
     constructor(context: LevelEditorContext) {
@@ -56,6 +59,13 @@ export default class WidgetLevelEditorTopBar extends PIXI.Container {
 
         const rightSideContainer = new WidgetSpacedContainer(16);
         {
+            this.editorSettingsButton = new WidgetLevelEditorTopBarItemEditorSettingsButton(context);
+            this.editorSettingsButton.on('click', () => {
+                const modal = new WidgetLevelEditorEditorSettingsModal(context, context.getWorld());
+                this.context.getEditorScreen().showModal(modal);
+            });
+            rightSideContainer.addItem(this.editorSettingsButton);
+
             this.musicToggleButton = new WidgetMusicToggleButton(context.getWorld().getTileset(), 5);
             rightSideContainer.addItem(this.musicToggleButton);
 
@@ -97,8 +107,9 @@ export default class WidgetLevelEditorTopBar extends PIXI.Container {
     private handleShowUI = () => {
         this.publishButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
         this.settingsButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
+        this.settingsButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
         
-        if (!this.playButton.isPlaying()) {
+        if (this.playButton.isPlaying()) {
             this.playButton.getAnimator().play(new ContainerAnimationEditorTopBarItemEnter());
         }
     }

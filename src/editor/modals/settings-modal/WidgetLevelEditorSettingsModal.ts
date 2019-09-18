@@ -10,8 +10,6 @@ import WidgetLevelEditorSettingsModalGameplayTab from './WidgetLevelEditorSettin
 
 export default class WidgetLevelEditorSettingsModal extends WidgetModal {
 
-    private cameraMoveSpeedDropdown: WidgetDropdown;
-
     constructor(world: World) {
         super('Level settings');
         

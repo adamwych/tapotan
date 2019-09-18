@@ -314,7 +314,7 @@ export default class ScreenLevelEditor extends Screen {
             ignoresPhysics: true
         });
         this.newGameObjectShade.visible = false;
-        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
+        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade).initialize(this.context);
         this.newGameObjectShade.setCustomProperty('__objectName', resourceName);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
 
@@ -432,7 +432,7 @@ export default class ScreenLevelEditor extends Screen {
 
         this.newGameObjectShade = Prefabs.SpawnPointShade(this.world, 0, 0);
         this.newGameObjectShade.visible = false;
-        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
+        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade).initialize(this.context);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
         this.newGameObjectShade.setCustomProperty('__objectName', '');
         this.newGameObjectShade.setCustomProperty('__editorOnly', true);
@@ -456,7 +456,7 @@ export default class ScreenLevelEditor extends Screen {
 
         this.newGameObjectShade = Prefabs.VictoryFlag(this.world, 0, 0, { ignoresPhysics: true });
         this.newGameObjectShade.visible = false;
-        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
+        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade).initialize(this.context);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
         this.newGameObjectShade.setCustomProperty('__objectName', '');
         this.newGameObjectShade.transformComponent.setPivot(0, 0);
@@ -721,7 +721,7 @@ export default class ScreenLevelEditor extends Screen {
 
         this.newGameObjectShade = Prefabs.SpawnPointShade(this.world, 0, 0);
         this.newGameObjectShade.visible = false;
-        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade);
+        this.newGameObjectShade.createComponent<GameObjectComponentEditorShade>(GameObjectComponentEditorShade).initialize(this.context);
         this.newGameObjectShade.setLayer(this.context.getCurrentLayerIndex());
         this.newGameObjectShade.setCustomProperty('__editorOnly', true);
 

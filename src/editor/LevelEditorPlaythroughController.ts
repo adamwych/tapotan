@@ -3,6 +3,7 @@ import WidgetSignTextBubble from "../screens/widgets/WidgetSignTextBubble";
 import GameObjectComponentAI from "../world/components/ai/GameObjectComponentAI";
 import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
 import LevelEditorContext from "./LevelEditorContext";
+import Tapotan from "../core/Tapotan";
 
 export default class LevelEditorPlaythroughController {
 
@@ -94,6 +95,14 @@ export default class LevelEditorPlaythroughController {
 
         this.context.emit('playthroughStopped');
         this.context.emit('showUI');
+
+        if (this.context.getSettings().shouldRestoreCameraPositionOnEnd()) {
+            const viewport = this.context.getGame().getViewport();
+            const spawnPoint = world.getSpawnPointPosition();
+
+            viewport.left = spawnPoint.x - (Tapotan.getViewportWidth() / 2) + 1;
+            viewport.top = -spawnPoint.y + (Tapotan.getViewportHeight() / 2);
+        }
 
         world.handleGameEnd(null);
     }
