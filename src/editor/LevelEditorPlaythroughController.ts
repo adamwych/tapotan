@@ -10,6 +10,9 @@ export default class LevelEditorPlaythroughController {
     private context: LevelEditorContext;
     private playing: boolean = false;
 
+    private playthroughStartCameraX: number = 0;
+    private playthroughStartCameraY: number = 0;
+
     constructor(context: LevelEditorContext) {
         this.context = context;
     }
@@ -27,8 +30,13 @@ export default class LevelEditorPlaythroughController {
     public play(spawnPlayer: boolean = true) {
         this.playing = true;
 
-        this.context.getGame().getViewport().top = 0;
-        this.context.getGame().getViewport().left = 0;
+        const viewport = this.context.getGame().getViewport();
+        
+        this.playthroughStartCameraX = viewport.left;
+        this.playthroughStartCameraY = viewport.top;
+
+        viewport.top = 0;
+        viewport.left = 0;
 
         const world = this.context.getWorld();
         world.getGameObjects().forEach(gameObject => {
@@ -98,10 +106,8 @@ export default class LevelEditorPlaythroughController {
 
         if (this.context.getSettings().shouldRestoreCameraPositionOnEnd()) {
             const viewport = this.context.getGame().getViewport();
-            const spawnPoint = world.getSpawnPointPosition();
-
-            viewport.left = spawnPoint.x - (Tapotan.getViewportWidth() / 2) + 1;
-            viewport.top = -spawnPoint.y + (Tapotan.getViewportHeight() / 2);
+            viewport.left = this.playthroughStartCameraX;
+            viewport.top = this.playthroughStartCameraY;
         }
 
         world.handleGameEnd(null);
