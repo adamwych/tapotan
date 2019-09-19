@@ -385,7 +385,7 @@ export default class GameObject extends PIXI.Container {
      */
     public getWidth(): number {
         if (this.transformComponent) {
-            return this.transformComponent.isFlipped() ? -this.width : this.width;
+            return this.transformComponent.isFlippedX() ? -this.width : this.width;
         }
 
         return this.width;
@@ -396,7 +396,7 @@ export default class GameObject extends PIXI.Container {
      */
     public getHeight(): number {
         if (this.transformComponent) {
-            return this.transformComponent.isFlipped() ? -this.height : this.height;
+            return this.transformComponent.isFlippedY() ? -this.height : this.height;
         }
 
         return this.height;

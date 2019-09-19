@@ -12,12 +12,12 @@ export default class LevelEditorCommandFlipObject implements LevelEditorCommand 
     }
 
     public execute(context: LevelEditorContext): void {
-        this.wasFlipped = this.gameObject.transformComponent.isFlipped();
-        this.gameObject.transformComponent.setFlipped(!this.wasFlipped);
+        this.wasFlipped = this.gameObject.transformComponent.isFlippedX();
+        this.gameObject.transformComponent.setFlippedX(!this.wasFlipped);
     }
     
     public undo(context: LevelEditorContext): void {
-        this.gameObject.transformComponent.setFlipped(this.wasFlipped);
+        this.gameObject.transformComponent.setFlippedX(this.wasFlipped);
     }
     
 }

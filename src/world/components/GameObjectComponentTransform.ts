@@ -44,7 +44,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
 
     protected angle: number = 0;
 
-    protected flipped: boolean = false;
+    protected flippedX: boolean = false;
+    protected flippedY: boolean = false;
 
     protected verticalAlignment: GameObjectVerticalAlignment = GameObjectVerticalAlignment.Top;
     protected horizontalAlignment: GameObjectHorizontalAlignment = GameObjectHorizontalAlignment.Left;
@@ -60,7 +61,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         this.setVerticalAlignment(props.verticalAlignment === 'top' ? GameObjectVerticalAlignment.Top : GameObjectVerticalAlignment.Bottom);
         this.setHorizontalAlignment(props.horizontalAlignment === 'left' ? GameObjectHorizontalAlignment.Left : GameObjectHorizontalAlignment.Right);
         this.setFaceDirection(props.faceDirection === 'left' ? GameObjectFaceDirection.Left : GameObjectFaceDirection.Right);
-        this.setFlipped(props.flipped);
+        this.setFlippedX(props.flippedX);
+        this.setFlippedY(props.flippedY);
         this.setAngle(props.angle);
     }
 
@@ -75,7 +77,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
             ['Vertical Alignment', this.verticalAlignment],
             ['Horizontal Alignment', this.horizontalAlignment],
             ['Face Direction', this.faceDirection],
-            ['Flipped', this.flipped],
+            ['Flipped X', this.flippedX],
+            ['Flipped Y', this.flippedY],
             ['Angle', this.angle.toFixed(2)],
         ];
     }
@@ -96,7 +99,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
             
             faceDirection: this.faceDirection,
 
-            flipped: this.flipped,
+            flippedX: this.flippedX,
+            flippedY: this.flippedY,
 
             angle: this.angle
         }
@@ -293,8 +297,12 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         this.scaleX = x;
         this.scaleY = y;
 
-        if (this.flipped) {
+        if (this.flippedX) {
             x = -x;
+        }
+
+        if (this.flippedY) {
+            y = -y;
         }
         
         if (this.gameObject) {
@@ -421,8 +429,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      * Sets whether the game object is flipped.
      * @param flipped 
      */
-    public setFlipped(flipped: boolean) {
-        this.flipped = flipped;
+    public setFlippedX(flipped: boolean) {
+        this.flippedX = flipped;
         this.setScale(this.scaleX, this.scaleY, true);
 
         // This assumes that all blocks and entities are facing left by default.
@@ -433,15 +441,35 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         }
 
         if (this.gameObject) {
-            this.gameObject.emit('transform.flipped', flipped);
+            this.gameObject.emit('transform.flippedX', flipped);
         }
     }
 
     /**
-     * Returns whether the game object is flipped.
+     * Returns whether the game object is flipped on the X axis.
      */
-    public isFlipped() {
-        return this.flipped;
+    public isFlippedX() {
+        return this.flippedX;
+    }
+
+    /**
+     * Sets whether the game object is flipped.
+     * @param flipped 
+     */
+    public setFlippedY(flipped: boolean) {
+        this.flippedY = flipped;
+        this.setScale(this.scaleX, this.scaleY, true);
+
+        if (this.gameObject) {
+            this.gameObject.emit('transform.flippedY', flipped);
+        }
+    }
+
+    /**
+     * Returns whether the game object is flipped on the Y axis.
+     */
+    public isFlippedY() {
+        return this.flippedY;
     }
     
     /**
