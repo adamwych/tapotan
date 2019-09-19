@@ -3,6 +3,7 @@ import GameObjectComponentPhysicsAwareTransform from "./components/GameObjectCom
 import GameObjectComponentTransform from "./components/GameObjectComponentTransform";
 import GameObjectComponent from "./GameObjectComponent";
 import World from './World';
+import Tapotan from '../core/Tapotan';
 
 type Constructor<T> = { new (...args: any[]): T };
 
@@ -377,6 +378,42 @@ export default class GameObject extends PIXI.Container {
 
     public setDebuggerCallback(debuggerCallback: Function) {
         this.debuggerCallback = debuggerCallback;
+    }
+
+    /**
+     * Returns world width of the game object.
+     */
+    public getWidth(): number {
+        if (this.transformComponent) {
+            return this.transformComponent.isFlipped() ? -this.width : this.width;
+        }
+
+        return this.width;
+    }
+
+    /**
+     * Returns world height of the game object.
+     */
+    public getHeight(): number {
+        if (this.transformComponent) {
+            return this.transformComponent.isFlipped() ? -this.width : this.width;
+        }
+
+        return this.width;
+    }
+
+    /**
+     * Returns on-screen width of this game object.
+     */
+    public getScreenWidth(): number {
+        return this.getWidth() * Tapotan.getBlockSize();
+    }
+
+    /**
+     * Returns on-screen height of this game object.
+     */
+    public getScreenHeight(): number {
+        return this.getHeight() * Tapotan.getBlockSize();
     }
 
 }

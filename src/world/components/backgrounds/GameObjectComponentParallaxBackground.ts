@@ -33,10 +33,10 @@ export default class GameObjectComponentParallaxBackground extends GameObjectCom
             transform.translate(-this.speed * dt, 0);
         }
 
-        const x = this.gameObject.parent.position.x + transform.getWorldX() + this.gameObject.width;
+        const x = this.gameObject.parent.position.x + transform.getWorldX() + this.gameObject.getWidth();
 
         if (x < 0) {
-            const movement = Tapotan.getInstance().getViewport().left + this.gameObject.width - this.gameObject.parent.position.x;
+            const movement = Tapotan.getInstance().getViewport().left + this.gameObject.getWidth() - this.gameObject.parent.position.x;
 
             if (this.lastXMovementDiff === 0) {
                 this.lastXMovementDiff = transform.getPositionX() - movement;

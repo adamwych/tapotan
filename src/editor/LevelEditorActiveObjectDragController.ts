@@ -31,13 +31,13 @@ export default class LevelEditorActiveObjectDragController {
                 
                 const selectedObject = this.context.getSelectedObjects()[0];
                 
-                if (selectedObject.width > 1) {
+                if (selectedObject.getWidth() > 1) {
                     this.offsetX = (mouseDownCoords.x - selectedObject.transformComponent.getPositionX());
                 } else {
                     this.offsetX = 0;
                 }
 
-                if (selectedObject.height > 1) {
+                if (selectedObject.getHeight() > 1) {
                     this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY());
                 } else {
                     this.offsetY = 0;

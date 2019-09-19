@@ -1,6 +1,7 @@
 import GameObjectComponent from "../../GameObjectComponent";
 import GameObjectComponentPhysicsBody from "../GameObjectComponentPhysicsBody";
 import MonsterAINode from "../../ai/MonsterAINode";
+import GameObject from "../../GameObject";
 
 export default class GameObjectComponentAI extends GameObjectComponent {
 
@@ -10,16 +11,36 @@ export default class GameObjectComponentAI extends GameObjectComponent {
 
     public initialize(): void {
         this.setAIEnabled(false);
+        
+        this.gameObject.on('collisionStart', this.handleCollisionStart);
+        this.gameObject.on('collisionEnd', this.handleCollisionEnd);
     }
 
     protected destroy(): void {
-
+        this.gameObject.off('collisionStart', this.handleCollisionStart);
+        this.gameObject.off('collisionEnd', this.handleCollisionEnd);
     }
 
     public tick = (dt: number) => {
         if (this.aiEnabled) {
             this.aiNodes.forEach(node => {
                 node.tick(dt);
+            });
+        }
+    }
+
+    private handleCollisionStart = (another: GameObject, event) => {
+        if (this.aiEnabled) {
+            this.aiNodes.forEach(node => {
+                node.handleCollisionStart(another, event);
+            });
+        }
+    }
+
+    private handleCollisionEnd = (another: GameObject, event) => {
+        if (this.aiEnabled) {
+            this.aiNodes.forEach(node => {
+                node.handleCollisionEnd(another, event);
             });
         }
     }

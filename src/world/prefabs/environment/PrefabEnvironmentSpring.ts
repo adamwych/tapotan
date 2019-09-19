@@ -38,6 +38,6 @@ export default createPrefabSpawnFunction('environment_spring', (gameObject: Game
         body.setCollisionMask(PhysicsBodyCollisionGroup.Entity | PhysicsBodyCollisionGroup.Player);
 
         gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
-        gameObject.transformComponent.setPivot(gameObject.width / 2, gameObject.height / 2);
+        gameObject.transformComponent.setPivot(gameObject.getWidth() / 2, gameObject.getHeight() / 2);
     }
 });

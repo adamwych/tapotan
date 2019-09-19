@@ -66,11 +66,11 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         let containerTargetY = this.positionY;
 
         if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
-            containerTargetX = Tapotan.getViewportWidth() - containerTargetX - this.gameObject.width;
+            containerTargetX = Tapotan.getViewportWidth() - containerTargetX - this.gameObject.getWidth();
         }
 
         if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
-            containerTargetY = Tapotan.getViewportHeight() - containerTargetY - this.gameObject.height;
+            containerTargetY = Tapotan.getViewportHeight() - containerTargetY - this.gameObject.getHeight();
         }
 
         this.physicsBody.position[0] = containerTargetX * World.PHYSICS_SCALE;

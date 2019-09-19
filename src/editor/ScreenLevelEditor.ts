@@ -37,6 +37,7 @@ import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOut
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
 import Interpolation from '../utils/Interpolation';
 import WidgetPlayStatistics from '../screens/widgets/play-statistics/WidgetPlayStatistics';
+import LevelEditorCommandFlipObject from './commands/LevelEditorCommandFlipObject';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -379,6 +380,12 @@ export default class ScreenLevelEditor extends Screen {
 
             this.context.getCommandQueue().enqueueCommand(
                 new LevelEditorCommandRotateObject(gameObject, angle)
+            );
+        });
+
+        this.activeObjectActionButtons.on('flipAction', () => {
+            this.context.getCommandQueue().enqueueCommand(
+                new LevelEditorCommandFlipObject(gameObject)
             );
         });
 

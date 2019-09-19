@@ -1,8 +1,8 @@
-import GameObjectComponent from "../GameObjectComponent";
 import InputManager from "../../core/InputManager";
-import screenPointToWorld from "../../utils/screenPointToWorld";
 import Tapotan from "../../core/Tapotan";
 import LevelEditorContext from "../../editor/LevelEditorContext";
+import screenPointToWorld from "../../utils/screenPointToWorld";
+import GameObjectComponent from "../GameObjectComponent";
 
 export default class GameObjectComponentEditorShade extends GameObjectComponent {
 
@@ -26,11 +26,14 @@ export default class GameObjectComponentEditorShade extends GameObjectComponent 
         if (this.context.getSettings().shouldSnapToGrid()) {
             const worldCoords = screenPointToWorld(mouseX, mouseY);
 
+            let x = worldCoords.x;
             let y = worldCoords.y;
-            if (this.gameObject.height > 1) {
-                y = worldCoords.y - this.gameObject.height + 1;
+
+            if (this.gameObject.getHeight() > 1) {
+                y = worldCoords.y - this.gameObject.getHeight() + 1;
             }
-            this.gameObject.transformComponent.setPosition(worldCoords.x, y);
+
+            this.gameObject.transformComponent.setPosition(x, y);
         } else {
             let x = mouseX / (Tapotan.getGameHeight() / Tapotan.getViewportHeight());
             let y = mouseY / (Tapotan.getGameHeight() / Tapotan.getViewportHeight());
@@ -38,14 +41,14 @@ export default class GameObjectComponentEditorShade extends GameObjectComponent 
             x += Tapotan.getInstance().getViewport().left;
             y += Tapotan.getInstance().getViewport().top;
 
-            if (this.gameObject.height > 1) {
-                y = y - (this.gameObject.height);
+            if (this.gameObject.getHeight() > 1) {
+                y = y - (this.gameObject.getHeight());
             } else {
-                y = y - (this.gameObject.height / 2);
+                y = y - (this.gameObject.getHeight() / 2);
             }
 
             this.gameObject.transformComponent.setPosition(
-                x - (this.gameObject.width / 2),
+                x - (this.gameObject.getWidth() / 2),
                 y
             );
         }

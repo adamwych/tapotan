@@ -20,7 +20,7 @@ export default class GameObjectComponentLockDoor extends GameObjectComponent {
 
         this.editorOverlay = new PIXI.Graphics();
         this.editorOverlay.beginFill(0x37ba27);
-        this.editorOverlay.drawRect(0, 0, this.gameObject.width, this.gameObject.height);
+        this.editorOverlay.drawRect(0, 0, this.gameObject.getWidth(), this.gameObject.getHeight());
         this.editorOverlay.endFill();
         this.editorOverlay.visible = false;
         this.gameObject.addChild(this.editorOverlay);

@@ -22,11 +22,13 @@ export default class WidgetLevelEditorObjectActionButtons extends PIXI.Container
         let addSetTextButton = gameObject.hasComponentOfType(GameObjectComponentSign);
 
         let rotateButton = new WidgetLevelEditorObjectActionButton('ObjectActionRotate');
+        let flipButton = new WidgetLevelEditorObjectActionButton('ObjectActionFlip');
         let linkWithDoorButton = new WidgetLevelEditorObjectActionButton('ObjectActionLinkWithDoor');
         let setTextButton = new WidgetLevelEditorObjectActionButton('ObjectActionSetText');
         let removeButton = new WidgetLevelEditorObjectActionButton('ObjectActionRemove');
 
         this.addButton(rotateButton, 'rotate');
+        this.addButton(flipButton, 'flip');
 
         if (addLinkWithDoorButton) {
             this.addButton(linkWithDoorButton, 'linkWithDoor');
@@ -60,8 +62,7 @@ export default class WidgetLevelEditorObjectActionButtons extends PIXI.Container
     }
 
     private synchronizePositionWithGameObject() {
-        let objectScreenWidth = this.gameObject.width * Tapotan.getBlockSize();
-        this.position.x = this.gameObject.transformComponent.getScreenX() - ((this.width - objectScreenWidth) / 2);
+        this.position.x = this.gameObject.transformComponent.getScreenX() - ((this.width - this.gameObject.getScreenWidth()) / 2);
         this.position.y = this.gameObject.transformComponent.getScreenY() - 46;
     }
 

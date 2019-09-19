@@ -16,7 +16,7 @@ export default class WidgetLevelEditorObjectOutline extends PIXI.Container {
 
         const gfx = new PIXI.Graphics();
         gfx.lineStyle(2, 0xffffff);
-        gfx.drawRect(0, 0, object.width * blockSize, object.height * blockSize);
+        gfx.drawRect(0, 0, object.getWidth() * blockSize, object.getHeight() * blockSize);
 
         this.sprite = new PIXI.Sprite(Tapotan.getInstance().getPixiApplication().renderer.generateTexture(gfx, PIXI.SCALE_MODES.NEAREST, 1));
         this.addChild(this.sprite);

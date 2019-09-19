@@ -434,8 +434,8 @@ export default class World extends PIXI.Container {
             if (gameObject.transformComponent) {
                 let gameObjectX = roundTo4th(gameObject.transformComponent.getUnalignedPositionX());
                 let gameObjectY = roundTo4th(gameObject.transformComponent.getUnalignedPositionY());
-                let gameObjectWidth = roundTo4th(gameObject.width);
-                let gameObjectHeight = roundTo4th(gameObject.height);
+                let gameObjectWidth = roundTo4th(gameObject.getWidth());
+                let gameObjectHeight = roundTo4th(gameObject.getHeight());
                 
                 if (
                     x >= gameObjectX &&

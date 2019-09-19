@@ -27,6 +27,7 @@ export enum GameObjectHorizontalAlignment {
  * @emits transform.verticalAlignmentChanged
  * @emits transform.horizontalAlignmentChanged
  * @emits transform.faceDirectionChanged
+ * @emits transform.flipped
  */
 export default class GameObjectComponentTransform extends GameObjectComponent {
 
@@ -43,6 +44,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
 
     protected angle: number = 0;
 
+    protected flipped: boolean = false;
+
     protected verticalAlignment: GameObjectVerticalAlignment = GameObjectVerticalAlignment.Top;
     protected horizontalAlignment: GameObjectHorizontalAlignment = GameObjectHorizontalAlignment.Left;
 
@@ -57,6 +60,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         this.setVerticalAlignment(props.verticalAlignment === 'top' ? GameObjectVerticalAlignment.Top : GameObjectVerticalAlignment.Bottom);
         this.setHorizontalAlignment(props.horizontalAlignment === 'left' ? GameObjectHorizontalAlignment.Left : GameObjectHorizontalAlignment.Right);
         this.setFaceDirection(props.faceDirection === 'left' ? GameObjectFaceDirection.Left : GameObjectFaceDirection.Right);
+        this.setFlipped(props.flipped);
         this.setAngle(props.angle);
     }
 
@@ -71,6 +75,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
             ['Vertical Alignment', this.verticalAlignment],
             ['Horizontal Alignment', this.horizontalAlignment],
             ['Face Direction', this.faceDirection],
+            ['Flipped', this.flipped],
             ['Angle', this.angle.toFixed(2)],
         ];
     }
@@ -90,6 +95,8 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
             horizontalAlignment: this.horizontalAlignment,
             
             faceDirection: this.faceDirection,
+
+            flipped: this.flipped,
 
             angle: this.angle
         }
@@ -138,7 +145,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
                 let viewportWidth = Tapotan.getViewportWidth();
                 let alignedX = viewportWidth - containerTargetX;
 
-                containerTargetX = alignedX - this.gameObject.width;
+                containerTargetX = alignedX - this.gameObject.getWidth();
             }
 
             this.gameObject.position.x = containerTargetX + this.pivotX;
@@ -160,7 +167,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
                 let viewportHeight = Tapotan.getViewportHeight();
                 let alignedY = viewportHeight - containerTargetY;
 
-                containerTargetY = alignedY - this.gameObject.height;
+                containerTargetY = alignedY - this.gameObject.getHeight();
             }
 
             this.gameObject.position.y = containerTargetY + this.pivotY;
@@ -278,13 +285,17 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      * @param x 
      * @param y 
      */
-    public setScale(x: number, y: number) {
-        if (x === this.scaleX && y === this.scaleY) {
+    public setScale(x: number, y: number, force: boolean = false) {
+        if (x === this.scaleX && y === this.scaleY && !force) {
             return;
         }
 
         this.scaleX = x;
         this.scaleY = y;
+
+        if (this.flipped) {
+            x = -x;
+        }
         
         if (this.gameObject) {
             this.gameObject.scale.set(x, y);
@@ -405,6 +416,33 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     public getFaceDirection(): GameObjectFaceDirection {
         return this.faceDirection;
     }
+
+    /**
+     * Sets whether the game object is flipped.
+     * @param flipped 
+     */
+    public setFlipped(flipped: boolean) {
+        this.flipped = flipped;
+        this.setScale(this.scaleX, this.scaleY, true);
+
+        // This assumes that all blocks and entities are facing left by default.
+        if (flipped) {
+            this.setFaceDirection(GameObjectFaceDirection.Right);
+        } else {
+            this.setFaceDirection(GameObjectFaceDirection.Left);
+        }
+
+        if (this.gameObject) {
+            this.gameObject.emit('transform.flipped', flipped);
+        }
+    }
+
+    /**
+     * Returns whether the game object is flipped.
+     */
+    public isFlipped() {
+        return this.flipped;
+    }
     
     /**
      * Returns position of the object on the X axis in screen coordinates. 
@@ -422,7 +460,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         const blockSize = Tapotan.getBlockSize();
         const viewport = Tapotan.getInstance().getViewport();
 
-        return Tapotan.getGameHeight() - (this.getPositionY() * blockSize) - (this.gameObject.height * blockSize) - (viewport.top * blockSize);
+        return Tapotan.getGameHeight() - (this.getPositionY() * blockSize) - (this.gameObject.getHeight() * blockSize) - (viewport.top * blockSize);
     }
     
     /**

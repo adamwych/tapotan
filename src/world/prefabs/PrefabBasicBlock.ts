@@ -22,7 +22,7 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(gameObject.width, gameObject.height, {
+        body.initializeBox(gameObject.getWidth(), gameObject.getHeight(), {
             mass: 0,
             fixedRotation: true
         });
@@ -34,5 +34,5 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
         gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
     }
 
-    gameObject.transformComponent.setPivot(gameObject.width / 2, gameObject.height / 2);
+    gameObject.transformComponent.setPivot(gameObject.getWidth() / 2, gameObject.getHeight() / 2);
 });
