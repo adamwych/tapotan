@@ -396,10 +396,10 @@ export default class GameObject extends PIXI.Container {
      */
     public getHeight(): number {
         if (this.transformComponent) {
-            return this.transformComponent.isFlipped() ? -this.width : this.width;
+            return this.transformComponent.isFlipped() ? -this.height : this.height;
         }
 
-        return this.width;
+        return this.height;
     }
 
     /**
