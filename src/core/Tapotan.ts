@@ -49,7 +49,7 @@ export default class Tapotan {
 
     private isSavingEditorSnapshot: boolean = false;
     
-    public static GameVersion: number = 2;
+    public static GameVersion: number = 5;
     public static Cursor = TapotanCursor;
 
     constructor() {
@@ -64,7 +64,7 @@ export default class Tapotan {
         if (helloResponse.data.success) {
             this.sessionId = helloResponse.data.sessionId;
             
-            if (helloResponse.data.clientVersion !== Tapotan.GameVersion) {
+            /*if (helloResponse.data.clientVersion !== Tapotan.GameVersion) {
                 APIRequest.get('/report', {
                     type: 'outdated',
                     sessionId: this.sessionId
@@ -74,7 +74,7 @@ export default class Tapotan {
                     location.reload(true);
                     return;
                 }
-            }
+            }*/
         }
 
         // Keep the session alive.
