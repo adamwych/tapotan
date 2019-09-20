@@ -20,8 +20,10 @@ export default class LevelEditorSettings {
         if (window.localStorage) {
             try {
                 let data = JSON.parse(window.localStorage.getItem('editor.settings'));
-                this.snapToGrid = data.snapToGrid;
-                this.restoreCameraPositionOnEnd = data.restoreCameraPositionOnEnd;
+                if (data) {
+                    this.snapToGrid = data.snapToGrid;
+                    this.restoreCameraPositionOnEnd = data.restoreCameraPositionOnEnd;
+                }
             } catch (error) {
                 console.warn('Unable to load editor settings:');
                 console.warn(error);
