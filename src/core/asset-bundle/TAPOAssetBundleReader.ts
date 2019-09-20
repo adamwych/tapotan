@@ -1,4 +1,4 @@
-import * as zlib from 'zlib';
+import * as pako from 'pako';
 import TAPOAssetBundle from "./TAPOAssetBundle";
 
 export default class TAPOAssetBundleReader {
@@ -25,37 +25,12 @@ export default class TAPOAssetBundleReader {
 
         let idx = 4 + 'dadadadadadadadabatguy'.length + 1;
         while (idx < data.length - 1) {
-            let nextFileLength = data.readInt32LE(idx);
-
-            // File's length is 4 bytes.
+            const compressedFileDataLength = data.readInt32LE(idx);
             idx += 4;
-            
-            // Read file data in chunks.
-            const chunkSize = 128;
+            const compressedFileData = data.slice(idx, idx + compressedFileDataLength);
+            idx += compressedFileDataLength;
 
-            let startIdx = idx;
-            let fileBufferIdx = 0;
-            let fileBufferEndIdx = startIdx + nextFileLength;
-
-            let nextFileDataBuffers = [];
-            while (idx < startIdx + nextFileLength) {
-                let currentChunkStartIdx = startIdx + fileBufferIdx;
-                let currentChunkEndIdx = startIdx + fileBufferIdx + chunkSize;
-                if (currentChunkEndIdx > fileBufferEndIdx) {
-                    currentChunkEndIdx = fileBufferEndIdx;
-                }
-
-                let currentChunkLength = currentChunkEndIdx - currentChunkStartIdx;
-                
-                nextFileDataBuffers.push(data.slice(currentChunkStartIdx, currentChunkEndIdx));
-
-                idx += currentChunkLength;
-                fileBufferIdx += currentChunkLength;
-            }
-
-            let nextFileData = Buffer.concat(nextFileDataBuffers);
-
-            let fileData = zlib.inflateRawSync(nextFileData);
+            let fileData = Buffer.from(pako.inflateRaw(compressedFileData));
             let filePath = '';
 
             for (let j = 0; j < fileData.length; j++) {
