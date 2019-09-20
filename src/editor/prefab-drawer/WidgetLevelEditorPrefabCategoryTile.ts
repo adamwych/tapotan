@@ -40,7 +40,8 @@ export default class WidgetLevelEditorPrefabCategoryTile extends PIXI.Container 
             this.animator.play(new ContainerAnimationButtonMouseOut());
         });
 
-        this.on('mousedown', () => {
+        this.on('mousedown', (e) => {
+            e.stopPropagation();
             this.animator.play(new ContainerAnimationButtonMouseDown());
         });
     }

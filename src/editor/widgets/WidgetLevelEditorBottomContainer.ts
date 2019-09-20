@@ -63,7 +63,8 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
 
         this.context.getWorld().getTileset().getEditorCategories().forEach(editorCategory => {
             const categoryTile = new WidgetLevelEditorPrefabCategoryTile(this.context.getWorld(), editorCategory.name, editorCategory.label);
-            categoryTile.on('click', () => {
+            categoryTile.on('click', (e) => {
+                e.stopPropagation();
                 this.openPrefabCategoryDrawer(editorCategory);
             });
             this.prefabCategoryTilesContainer.addCategoryTile(categoryTile);
@@ -72,7 +73,8 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
 
         {
             const spawnPointCategoryTile = new WidgetLevelEditorPrefabCategoryTile(this.context.getWorld(), 'spawnpoint', 'Set spawn point');
-            spawnPointCategoryTile.on('click', () => {
+            spawnPointCategoryTile.on('click', (e) => {
+                e.stopPropagation();
                 this.beginSynchronization();
                 this.prefabDrawer.hide();
                 this.context.getEditorScreen().handleSetSpawnPointTileClick();
@@ -82,7 +84,8 @@ export default class WidgetLevelEditorBottomContainer extends PIXI.Container {
 
         {
             const endPointCategoryTile = new WidgetLevelEditorPrefabCategoryTile(this.context.getWorld(), 'endpoint', 'Set finish point');
-            endPointCategoryTile.on('click', () => {
+            endPointCategoryTile.on('click', (e) => {
+                e.stopPropagation();
                 this.beginSynchronization();
                 this.prefabDrawer.hide();
                 this.context.getEditorScreen().handleSetEndPointTileClick();
