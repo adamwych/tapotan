@@ -198,7 +198,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
                 this.physicsBody.applyImpulse([0, -this.jumpForce]);
             }
 
-            if (this.duringJump && !this.touchingGround) {
+            if (this.duringJump && !this.touchingGround && !this.touchingSide) {
                 this.physicsBody.applyForce([0, -(this.touchingSide === null ? this.jumpContinueForce : this.jumpContinueForce * 0.75)]);
             }
         }

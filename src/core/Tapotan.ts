@@ -477,11 +477,11 @@ export default class Tapotan {
     }
 
     public static getViewportWidth(): number {
-        return 24;
+        return 22;
     }
 
     public static getViewportHeight(): number {
-        return 24 * (Tapotan.getGameHeight() / Tapotan.getGameWidth());
+        return 22 * (Tapotan.getGameHeight() / Tapotan.getGameWidth());
     }
 
     public static getInstance(): Tapotan {

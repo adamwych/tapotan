@@ -25,7 +25,7 @@ export default class WidgetModal extends PIXI.Container {
         this.centerModal();
 
         this.stageOverlay = new PIXI.Graphics();
-        this.stageOverlay.alpha = 0.1;
+        this.stageOverlay.alpha = 0.15;
         this.stageOverlay.beginFill(0x000000);
         this.stageOverlay.drawRect(0, 0, Tapotan.getGameWidth(), Tapotan.getGameHeight());
         this.stageOverlay.scale.set(1.5, 1.5);

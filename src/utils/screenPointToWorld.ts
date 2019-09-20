@@ -6,12 +6,11 @@ export default function screenPointToWorld(x: number, y: number): PIXI.Point {
     let singleBlockHeight = Tapotan.getGameHeight() / Tapotan.getViewportHeight();
     let movedScreenY = -Tapotan.getInstance().getViewport().top * singleBlockHeight;
     y -= movedScreenY;
-    //y += Tapotan.getViewportHeightDifferenceDueToResize();
     worldY = Math.floor((Tapotan.getGameHeight() - y) / singleBlockHeight);
     worldY = Tapotan.getViewportHeight() - worldY - 1;
 
     return new PIXI.Point(
-        Math.floor(Tapotan.getInstance().getViewport().left + ((x / Tapotan.getGameWidth()) * 24)),
+        Math.floor(Tapotan.getInstance().getViewport().left + ((x / Tapotan.getGameWidth()) * 22)),
         worldY
     );
 }
