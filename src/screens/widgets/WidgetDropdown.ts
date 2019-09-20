@@ -25,7 +25,7 @@ export default class WidgetDropdown extends PIXI.Container {
 
         this.sortableChildren = true;
 
-        let caretTexture = Tapotan.getInstance().getGameManager().getWorld().getTileset().getResourceByPath('UI/DropdownCaret').texture;
+        let caretTexture = Tapotan.getInstance().getGameManager().getWorld().getTileset().getResourceByPath('UI/DropdownCaret');
         caretTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         this.caret = new PIXI.Sprite(caretTexture);
         this.addChild(this.caret);

@@ -9,7 +9,7 @@ import CollectableCategory from "../../CollectableCategory";
 import GameObjectComponentLockKey from "../../components/GameObjectComponentLockKey";
 
 export default createPrefabSpawnFunction('environment_lock_key', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    const texture = world.getTileset().getResourceById(props.resource).texture;
+    const texture = world.getTileset().getResourceById(props.resource);
     const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
     spriteComponent.initialize(texture);
 

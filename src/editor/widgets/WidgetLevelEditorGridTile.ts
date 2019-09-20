@@ -8,8 +8,8 @@ export default class WidgetLevelEditorGridTile extends PIXI.Container {
     constructor(spriteSize: number) {
         super();
 
-        const texture = Tapotan.getInstance().getPixiApplication().loader.resources['ui_editor_grid_tile_' + spriteSize].texture;
-        texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        const texture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/GridTile' + spriteSize + '.png').resource;
+        texture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         this.sprite = new PIXI.Sprite(texture);
         this.addChild(this.sprite);
     }

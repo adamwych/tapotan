@@ -46,12 +46,12 @@ export default class WidgetEndGameOverlay extends PIXI.Container {
         this.animator = new ContainerAnimator(this.modalWrapper);
         this.animator.play(new ModalWidgetEnterAnimation());
 
-        let topTextureResource = Tapotan.getInstance().getPixiApplication().loader.resources[topResource];
-        topTextureResource.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        let topTextureResource = Tapotan.getInstance().getAssetManager().getResourceByPath(topResource + '.png').resource;
+        topTextureResource.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
         let topAnimatorWrapper = new PIXI.Container();
         this.topAnimator = new SpritesheetAnimator();
-        this.topAnimator.addAnimation('default', new Spritesheet(topTextureResource.texture, 160, 42), 50);
+        this.topAnimator.addAnimation('default', new Spritesheet(topTextureResource, 160, 42), 50);
         this.topAnimator.playAnimation('default');
         this.topAnimator.setCellWidth(160);
         this.topAnimator.setCellHeight(42);
@@ -63,9 +63,9 @@ export default class WidgetEndGameOverlay extends PIXI.Container {
         topAnimatorWrapper.addChild(this.topAnimator);
         this.modalWrapper.addChild(topAnimatorWrapper);
 
-        let textureResource = Tapotan.getInstance().getPixiApplication().loader.resources[backgroundResource];
-        textureResource.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-        this.sprite = new PIXI.Sprite(textureResource.texture);
+        let textureResource = Tapotan.getInstance().getAssetManager().getResourceByPath(backgroundResource + '.png').resource;
+        textureResource.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        this.sprite = new PIXI.Sprite(textureResource);
         this.sprite.scale.set(5, 5);
         this.sprite.pivot.set(80, 60);
 

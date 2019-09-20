@@ -62,7 +62,7 @@ export default class WidgetMainMenuLevelSelector extends PIXI.Container {
     }
 
     private initializeBackground() {
-        const backgroundTexture = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/LevelSelector'].texture;
+        const backgroundTexture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/LevelSelector.png').resource;
         backgroundTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         const background = new PIXI.Sprite(backgroundTexture);
         background.scale.set(5);

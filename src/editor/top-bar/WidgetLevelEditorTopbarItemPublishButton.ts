@@ -18,7 +18,7 @@ export default class WidgetLevelEditorTopBarItemPublishButton extends WidgetLeve
 
         const world = context.getWorld();
 
-        const texture = world.getTileset().getResourceById('ui_publish_button').texture;
+        const texture = world.getTileset().getResourceById('ui_publish_button');
         
         const scale = 3.5;
         const width = 72 * scale;

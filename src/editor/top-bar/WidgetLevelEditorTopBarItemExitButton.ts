@@ -14,7 +14,7 @@ export default class WidgetLevelEditorTopBarItemExitButton extends WidgetLevelEd
 
         const world = context.getWorld();
 
-        const texture = world.getTileset().getResourceById('ui_editor_topbar_exit').texture;
+        const texture = world.getTileset().getResourceById('ui_editor_topbar_exit');
         this.background = new PIXI.Sprite(texture);
         this.background.scale.set(5);
         this.addChild(this.background);

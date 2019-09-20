@@ -129,7 +129,7 @@ export default class WidgetSignTextBubble extends PIXI.Container {
         bottomShadow2.position.y = height;
         this.background.addChild(bottomShadow2);
 
-        const caretTexture = this.world.getTileset().getResourceByPath('Environment/Sign/TextBubble/Caret').texture;
+        const caretTexture = this.world.getTileset().getResourceByPath('Environment/Sign/TextBubble/Caret');
         this.caret = new PIXI.Sprite(caretTexture);
         this.caret.scale.set(size);
         this.caret.position.x = size;

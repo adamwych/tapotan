@@ -48,7 +48,7 @@ export default class WidgetMainMenuLevelSelectorItem extends PIXI.Container {
         levelPlayCount.y = 32;
         this.addChild(levelPlayCount);
 
-        let starIconTexture = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/LevelSelectorStar'].texture;
+        let starIconTexture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/LevelSelectorStar.png').resource;
         starIconTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
         for (let i = 0; i < model.rating; i++) {

@@ -20,8 +20,8 @@ export default class WidgetMainMenuLevelSelectorLoader extends PIXI.Container {
         this.overlay.interactive = true;
         this.addChild(this.overlay);
 
-        const loaderSpritesheet = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/Loader'];
-        loaderSpritesheet.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        const loaderSpritesheet = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/Loader.png').resource;
+        loaderSpritesheet.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         this.animator = new SpritesheetAnimator();
         this.animator.setCellWidth(16);
         this.animator.setCellHeight(16);

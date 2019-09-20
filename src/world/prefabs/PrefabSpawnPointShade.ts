@@ -6,7 +6,7 @@ import createPrefabSpawnFunction from "./createPrefabSpawnFunction";
 
 export default createPrefabSpawnFunction('SpawnPointShade', (gameObject: GameObject, world: World, props: any) => {
     gameObject.createComponent(GameObjectComponentTransform);
-    const texture = world.getTileset().getResourceById('characters_lawrence_spawnpoint').texture;
+    const texture = world.getTileset().getResourceById('characters_lawrence_spawnpoint');
     const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
     spriteComponent.initialize(texture);
 });

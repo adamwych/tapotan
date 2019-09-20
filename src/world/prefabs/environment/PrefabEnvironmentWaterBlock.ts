@@ -10,7 +10,7 @@ import createPrefabSpawnFunction from "./../createPrefabSpawnFunction";
 const waterBlockAnimationTimer = new SpritesheetAnimatorTimer();
 
 export default createPrefabSpawnFunction('environment_waterblock', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    const texture = world.getTileset().getResourceById('environment_waterblock_animation').texture;
+    const texture = world.getTileset().getResourceById('environment_waterblock_animation');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize(waterBlockAnimationTimer);

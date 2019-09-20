@@ -17,6 +17,7 @@ import FrameDebugger from './FrameDebugger';
 import GameManager, { GameState } from './GameManager';
 import InputManager from './InputManager';
 import ScreenManager from './ScreenManager';
+import LoadProgress from './LoadProgress';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -173,7 +174,8 @@ export default class Tapotan {
         this.application.stage.addChild(this.uiObjectsContainer);
         this.application.stage.addChild(this.cameraAwareUIObjectsContainer);
 
-        this.assetManager = new AssetManager(this);
+        this.audioManager = new AudioManager();
+        this.assetManager = new AssetManager();
         this.gameManager = new GameManager(this);
         this.inputManager = new InputManager();
         this.screenManager = new ScreenManager(this);
@@ -183,19 +185,56 @@ export default class Tapotan {
 
         document.addEventListener('contextmenu', e => e.preventDefault());
 
-        await this.loadTilesets();
-        this.assetManager.load().then(() => {
-            this.audioManager = new AudioManager();
-            this.audioManager.setLoadCompleteCallback(() => {
-                window.onbeforeunload = () => {
-                    this.application.destroy(true, {
-                        children: true,
-                        baseTexture: true,
-                        texture: true
-                    });
+        window.onbeforeunload = () => {
+            this.application.destroy(true, {
+                children: true,
+                baseTexture: true,
+                texture: true
+            });
 
-                    delete this.application;
-                };
+            this.assetManager.destroy();
+            delete this.application;
+        };
+
+        // Load base assets bundle.
+        const baseBundleLoadProgressCallback = (downloadProgress: number, loadedResources: number, allResources: number) => {
+            if (allResources === 0) {
+                allResources = 1;
+            }
+
+            const downloadPercentage = (downloadProgress * 100);
+            const loadPercentage = (loadedResources / allResources) * 100;
+            
+            LoadProgress.setBaseBundleLoadProgress((downloadPercentage + loadPercentage) / 2);
+        };
+
+        this.assetManager.loadBaseBundle(baseBundleLoadProgressCallback).then(bundle => {
+            try {
+                this.audioManager.loadBackgroundMusicFromBundle(bundle);
+                this.audioManager.loadSoundEffectsFromBundle(bundle);
+
+                const fonts = [
+                    [ 18, 1 ],
+                    [ 24, 2 ],
+                    [ 36, 4 ],
+                    [ 80, 9 ]
+                ];
+
+                fonts.forEach(font => {
+                    const size = font[0];
+                    const texturesNum = font[1];
+                    let textures = [];
+
+                    for (let i = 0; i < texturesNum; i++) {
+                        textures.push(bundle.getFile('Fonts/Joystix_' + size + '_' + i + '.png').resource);
+                    }
+
+                    PIXI.BitmapText.registerFont(
+                        bundle.getFile('Fonts/Joystix_' + size + '.xml').resource, textures
+                    );
+                });
+
+                this.assetManager.addTileset(Tileset.loadFromXMLDocument(bundle.getFile('Tilesets/Pixelart/data.xml').resource));
 
                 this.initialViewportHeight = Tapotan.getViewportHeight();
 
@@ -203,22 +242,22 @@ export default class Tapotan {
                     let hash = window.location.hash.substr(1, window.location.hash.length);
                     if (hash.startsWith('play')) {
                         document.getElementById('loading').style.display = 'none';
-
+    
                         let levelID = hash.substr(4, hash.length);
                         this.loadAndStartLevel(parseInt(levelID));
                         return;
                     }
                 }
-
+    
                 let isLoadingSnapshot = false;
-
+    
                 if (window.localStorage) {
                     if (window.localStorage.getItem('shouldRestoreAfterResizeReload') === 'true') {
                         let sessionId = window.localStorage.getItem('restoreSessionID');
-
+    
                         // Remove them even if we fail to not fall into an infinite loop.
                         window.localStorage.removeItem('shouldRestoreAfterResizeReload');
-
+    
                         isLoadingSnapshot = true;
                         APIRequest.get('/get_editor_snapshot', { sessionId: sessionId }).then(response => {
                             document.getElementById('loading').style.display = 'none';
@@ -229,61 +268,25 @@ export default class Tapotan {
                         });
                     }
                 }
-
+    
                 if (!isLoadingSnapshot) {
                     document.getElementById('loading').style.opacity = '0';
                     document.getElementById('loading').style.pointerEvents = 'none';
-
+    
                     this.startEditor();
                     //this.startMainMenu();
                     //this.startTestScreen();
                 }
-            });
+            } catch (error) {
+                console.error(error);
+            }
+        }).catch(({ error, entry }) => {
+            if (entry) {
+                console.error('Asset bundle load failed: (' + entry.path + ') ' + error);
+            } else {
+                console.error('Asset bundle load failed: ' + error);
+            }
         });
-    }
-
-    private async loadTilesets() {
-        const tilesetNames = ['pixelart'];
-        const tilesets = [];
-        const promises = [];
-
-        tilesetNames.forEach(tilesetName => {
-            promises.push(Axios.get('/assets/tilesets/' + tilesetName + '/data.xml').then(response => {
-                const tileset = Tileset.loadFromXMLDocument(new DOMParser().parseFromString(response.data, 'text/xml'));
-                this.assetManager.addTileset(tileset);
-                tilesets.push(tileset);
-            }));
-        });
-
-        await Promise.all(promises);
-
-        this.application.loader.add('Joystix 18', 'assets/Fonts/Joystix_16.fnt');
-        this.application.loader.add('Joystix 24', 'assets/Fonts/Joystix.fnt');
-        this.application.loader.add('Joystix 36', 'assets/Fonts/Joystix_38.fnt'); // 36 actually
-        this.application.loader.add('Joystix 80', 'assets/Fonts/Joystix_80.fnt');
-
-        this.application.loader.add('Logo', 'assets/Logo.png');
-        this.application.loader.add('LogoInline', 'assets/LogoInline.png');
-        this.application.loader.add('Graphics/UI/LevelSelector', 'assets/Graphics/UI/LevelSelector.png');
-        this.application.loader.add('Graphics/UI/LevelSelectorStar', 'assets/Graphics/UI/LevelSelectorStar.png');
-        this.application.loader.add('Graphics/UI/Modal', 'assets/Graphics/UI/Modal.png');
-        this.application.loader.add('Graphics/UI/ModalButton', 'assets/Graphics/UI/ModalButton.png');
-        this.application.loader.add('Graphics/UI/ModalCloseButton', 'assets/Graphics/UI/ModalCloseButton.png');
-        this.application.loader.add('Graphics/UI/VictoryModal', 'assets/Graphics/UI/VictoryModal.png');
-        this.application.loader.add('Graphics/UI/VictoryModalTop', 'assets/Graphics/UI/VictoryModalTop.png');
-        this.application.loader.add('Graphics/UI/VictoryModalGoBackButton', 'assets/Graphics/UI/VictoryModalGoBackButton.png');
-        this.application.loader.add('Graphics/UI/VictoryModalStar', 'assets/Graphics/UI/VictoryModalStar.png');
-        this.application.loader.add('Graphics/UI/GameOverModalTop', 'assets/Graphics/UI/GameOverModalTop.png');
-        this.application.loader.add('Graphics/UI/Loader', 'assets/Graphics/UI/Loader.png');
-        this.application.loader.add('Graphics/UI/LevelThumbnails/LevelThumbnail1', 'assets/Graphics/UI/LevelThumbnails/LevelThumbnail1.png');
-        this.application.loader.add('Graphics/UI/MainMenuOpenEditorButton', 'assets/Graphics/UI/MainMenuOpenEditorButton.png');
-        this.application.loader.add('Graphics/UI/LevelTopPopup', 'assets/Graphics/UI/LevelTopPopup.png');
-        this.application.loader.add('ui_editor_grid_tile_16', 'assets/Graphics/UI/GridTile16.png');
-        this.application.loader.add('ui_editor_grid_tile_32', 'assets/Graphics/UI/GridTile32.png');
-        this.application.loader.add('ui_editor_grid_tile_64', 'assets/Graphics/UI/GridTile64.png');
-        this.application.loader.add('ui_editor_grid_tile_16_double', 'assets/Graphics/UI/GridTile16_Double.png');
-        this.application.loader.add('ui_editor_grid_tile_32_double', 'assets/Graphics/UI/GridTile32_Double.png');
-        this.application.loader.add('ui_editor_grid_tile_64_double', 'assets/Graphics/UI/GridTile64_Double.png');
     }
 
     public startMainMenu() {

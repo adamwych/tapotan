@@ -1,5 +1,5 @@
-import { Howl, Howler } from 'howler';
-import LoadProgress from './LoadProgress';
+import { Howler } from 'howler';
+import TAPOAssetBundle from './asset-bundle/TAPOAssetBundle';
 
 const BACKGROUND_MUSIC_NAMES = [
     'pixelart__main_theme',
@@ -25,20 +25,12 @@ export default class AudioManager {
     
     private playingSoundEffects: Howl[] = [];
 
-    private loadCompleteCallback: Function;
-
-    private loadedMusicFiles: number = 0;
-    private loadedSoundEffectFiles: number = 0;
-
     private currentVolume: number = 0.33;
     private muted: boolean = false;
 
     private backgroundMusicFadeScheduled: boolean = false;
 
     constructor() {
-        this.preloadBackgroundMusic();
-        this.preloadSoundEffects();
-
         if (window.localStorage) {
             let enabled = window.localStorage.getItem('music_enabled');
             if (['true', 'false'].includes(enabled)) {
@@ -51,27 +43,15 @@ export default class AudioManager {
         }
     }
 
-    private preloadBackgroundMusic() {
+    public loadBackgroundMusicFromBundle(bundle: TAPOAssetBundle) {
         BACKGROUND_MUSIC_NAMES.forEach(name => {
-            this.backgroundMusic[name] = new Howl({
-                src: ['assets/Music/' + name + '.mp3'],
-                onload: () => {
-                    this.loadedMusicFiles++;
-                    this.checkIfAllAssetsLoaded();
-                }
-            });
+            this.backgroundMusic[name] = bundle.getFile('Music/' + name + '.mp3').resource;
         });
     }
 
-    private preloadSoundEffects() {
+    public loadSoundEffectsFromBundle(bundle: TAPOAssetBundle) {
         SFX_NAMES.forEach(name => {
-            this.soundEffects[name] = new Howl({
-                src: ['assets/SFX/' + name + '.mp3'],
-                onload: () => {
-                    this.loadedSoundEffectFiles++;
-                    this.checkIfAllAssetsLoaded();
-                }
-            });
+            this.soundEffects[name] = bundle.getFile('SFX/' + name + '.mp3').resource;
         });
     }
 
@@ -124,20 +104,6 @@ export default class AudioManager {
             this.playingBackgroundMusic.stop();
             this.playingBackgroundMusic = null;
         }
-    }
-
-    private checkIfAllAssetsLoaded() {
-        LoadProgress.setMusicLoadProgress(((this.loadedMusicFiles + this.loadedSoundEffectFiles) / (BACKGROUND_MUSIC_NAMES.length + SFX_NAMES.length)) * 100);
-
-        if (this.loadedMusicFiles >= BACKGROUND_MUSIC_NAMES.length &&
-            this.loadedSoundEffectFiles >= SFX_NAMES.length)
-        {
-            this.loadCompleteCallback();
-        }
-    }
-
-    public setLoadCompleteCallback(callback: Function) {
-        this.loadCompleteCallback = callback;
     }
 
     public setMuted(muted: boolean) {

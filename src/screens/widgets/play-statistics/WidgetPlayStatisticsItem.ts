@@ -11,7 +11,7 @@ export default class WidgetPlayStatisticsItem extends PIXI.Container {
     constructor(world: World, iconResourceId: string) {
         super();
 
-        const texture = world.getTileset().getResourceById(iconResourceId).texture;
+        const texture = world.getTileset().getResourceById(iconResourceId);
         const animator = new SpritesheetAnimator();
         animator.addAnimation('animation', new Spritesheet(texture, 32, 32), 150);
         animator.setCellWidth(32);

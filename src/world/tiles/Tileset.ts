@@ -2,6 +2,7 @@ import Tapotan from "../../core/Tapotan";
 import { LoaderResource, SCALE_MODES } from "pixi.js";
 import TilesetEditorCategory from "../../tilesets/TilesetEditorCategory";
 import TilesetEditorCategoryTilesGroup from "../../tilesets/TilesetEditorCategoryTilesGroup";
+import { ResourceType, TAPOAssetBundleEntry } from "../../core/asset-bundle/TAPOAssetBundle";
 
 interface TilesetResource {
     resource: LoaderResource;
@@ -23,19 +24,18 @@ export default class Tileset {
     }
 
     public addResource(id: string, resourcePath: string) {
-        let fullResourcePath = 'assets/tilesets/' + this.id + '/' + resourcePath;
-        Tapotan.getInstance().getAssetManager().schedule(fullResourcePath, resource => {
-            if (this.textureFiltering === 'nearest') {
-                if (resourcePath.endsWith('.png')) {
-                    resource.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
-                }
+        let bundleAssetPath = 'Tilesets/' + this.id + '/' + resourcePath;
+        let asset = Tapotan.getInstance().getAssetManager().getResourceByPath(bundleAssetPath);
+        if (asset) {
+            if (asset.type === ResourceType.Texture && this.textureFiltering === 'nearest') {
+                asset.resource.baseTexture.scaleMode = SCALE_MODES.NEAREST;
             }
-
+    
             this.resources[id] = {
-                resource: resource,
+                resource: asset.resource,
                 path: resourcePath.substr(0, resourcePath.lastIndexOf('.')).toLowerCase()
             };
-        });
+        }
     }
 
     public setTextureFiltering(filtering: 'linear' | 'nearest') {
@@ -62,7 +62,7 @@ export default class Tileset {
         return this.editorCategories;
     }
 
-    public getResourceById(id: string): LoaderResource {
+    public getResourceById(id: string): any {
         let res = this.resources[id];
         if (res) {
             return res.resource;
@@ -72,7 +72,7 @@ export default class Tileset {
         return null;
     }
 
-    public getResourceByPath(path: string): LoaderResource {
+    public getResourceByPath(path: string): any {
         path = path.toLowerCase();
         let res = Object.values(this.resources).find(x => x.path === path);
         if (res) {

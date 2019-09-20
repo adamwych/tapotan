@@ -30,7 +30,7 @@ export default createPrefabSpawnFunction('ComplexBackgroundClouds', (gameObject:
         layerGameObject.transformComponent.setScale(props.initialScale || 1, props.initialScale || 1);
         
         const spriteComponent = layerGameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
-        spriteComponent.initialize(world.getTileset().getResourceById(layer.resource).texture);
+        spriteComponent.initialize(world.getTileset().getResourceById(layer.resource));
         
         const parallaxBackgroundComponent = layerGameObject.createComponent<GameObjectComponentParallaxBackground>(GameObjectComponentParallaxBackground);
         parallaxBackgroundComponent.initialize(layer.speed);

@@ -1,22 +1,94 @@
-import Tapotan from "./Tapotan";
-import { LoaderResource } from "pixi.js";
+import Axios from "axios";
+import * as PIXI from 'pixi.js';
 import Tileset from "../world/tiles/Tileset";
-import LoadProgress from "./LoadProgress";
-
-type AssetManagerResourceLoadCallback = (resource: LoaderResource) => void;
-type AssetManagerQueueEntry = {
-    path: string;
-    callback: AssetManagerResourceLoadCallback;
-}
+import TAPOAssetBundle, { ResourceType, TAPOAssetBundleEntry } from "./asset-bundle/TAPOAssetBundle";
+import TAPOAssetBundleLoader from "./asset-bundle/TAPOAssetBundleLoader";
+import Tapotan from "./Tapotan";
 
 export default class AssetManager {
 
-    private game: Tapotan;
-    private queue: AssetManagerQueueEntry[] = [];
-    private tilesets: Tileset[] = [];
+    private assetBundleLoader: TAPOAssetBundleLoader;
 
-    constructor(game: Tapotan) {
-        this.game = game;
+    private loadedBundles: Array<TAPOAssetBundle> = [];
+
+    private tilesets: Array<Tileset> = [];
+
+    constructor() {
+        this.assetBundleLoader = new TAPOAssetBundleLoader();
+        this.assetBundleLoader.addResourceLoader(ResourceType.Texture, this.handleTextureAssetLoad);
+        this.assetBundleLoader.addResourceLoader(ResourceType.Sound, this.handleSoundAssetLoad);
+    }
+
+    public destroy() {
+        this.loadedBundles.forEach(bundle => {
+            bundle.getFiles().forEach(file => {
+                if (file.resource && typeof file.resource.destroy === 'function') {
+                    file.resource.destroy();
+                }
+            });
+        });
+    }
+    
+    public loadBaseBundle(progressCallback: Function = () => {}): Promise<TAPOAssetBundle> {
+        return new Promise((resolve, reject) => {
+            Axios.get('/assets/bundle.tapo?v=' + Tapotan.GameVersion, {
+                responseType: 'arraybuffer',
+
+                onDownloadProgress: (event) => {
+                    progressCallback(event.loaded / event.total, 0, 0);
+                }
+            }).then(response => {
+                this.assetBundleLoader.load(Buffer.from(response.data), 
+                    (bundle) => {
+                        this.loadedBundles.push(bundle);
+                        resolve(bundle);
+                    },
+    
+                    (loadedResources: number, allResources: number) => {
+                        progressCallback(1, loadedResources, allResources);
+                    },
+    
+                    (entry: any, error: any) => {
+
+                        // Allow loading resources of unknown type, because that should not
+                        // do any harm.
+                        if (error === 'UNKNOWN_RESOURCE_TYPE') {
+                            return;
+                        }
+
+                        reject({ error, entry });
+
+                    }
+                );
+            }).catch(error => {
+                reject({ error });
+            });
+        });
+    }
+
+    private handleTextureAssetLoad = (file: TAPOAssetBundleEntry, width: number, height: number, data: any, kind: string) => {
+        return (PIXI.Texture as any).fromBuffer(data, width, height);
+    }
+
+    private handleSoundAssetLoad = (file: TAPOAssetBundleEntry) => {
+        return new Howl({
+            src: ['data:audio/mpeg;base64,' + file.data.toString('base64')],
+        }).load();
+    }
+
+    /**
+     * Looks through all loaded bundles and tries to find specified resource.
+     * @param path 
+     */
+    public getResourceByPath(path: string): TAPOAssetBundleEntry {
+        for (let bundle of this.loadedBundles) {
+            let file = bundle.getFile(path);
+            if (file) {
+                return file;
+            }
+        }
+
+        return null;
     }
 
     public addTileset(tileset: Tileset) {
@@ -27,29 +99,8 @@ export default class AssetManager {
         return this.tilesets.find(x => x.getName().toLowerCase() === name.toLowerCase());
     }
 
-    public schedule(path: string, loadCallback: AssetManagerResourceLoadCallback) {
-        this.game.getPixiApplication().loader.add(path);
-        this.queue.push({
-            path: path,
-            callback: loadCallback
-        });
+    public getLoadedBundles(): Array<TAPOAssetBundle> {
+        return this.loadedBundles;
     }
 
-    public load() {
-        return new Promise((resolve, reject) => {
-            this.game.getPixiApplication().loader.on('load', loader => {
-                LoadProgress.setAssetsLoadProgress(loader.progress);
-            });
-
-            this.game.getPixiApplication().loader.load(() => {
-                this.queue.forEach(({ path, callback }) => {
-                    callback(this.game.getPixiApplication().loader.resources[path]);
-                });
-    
-                this.queue = [];
-                this.game.getPixiApplication().loader.off('load');
-                resolve();
-            });
-        });
-    }
 }

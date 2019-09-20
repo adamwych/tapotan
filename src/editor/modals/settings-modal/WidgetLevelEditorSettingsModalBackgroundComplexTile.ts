@@ -17,7 +17,7 @@ export default class WidgetLevelEditorSettingsModalBackgroundComplexTile extends
     }
 
     protected initializeGraphics(): PIXI.Container {
-        const sprite = new PIXI.Sprite(this.world.getTileset().getResourceById(this.resourceId).texture);
+        const sprite = new PIXI.Sprite(this.world.getTileset().getResourceById(this.resourceId));
         sprite.height = sprite.height * (this.tileWidth / sprite.width);
         sprite.width = this.tileWidth;
         return sprite;

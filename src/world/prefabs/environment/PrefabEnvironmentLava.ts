@@ -11,7 +11,7 @@ import createPrefabSpawnFunction from "./../createPrefabSpawnFunction";
 const lavaAnimationTimer = new SpritesheetAnimatorTimer();
 
 export default createPrefabSpawnFunction('environment_lava', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    const texture = world.getTileset().getResourceById('environment_lava_animation').texture;
+    const texture = world.getTileset().getResourceById('environment_lava_animation');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize(lavaAnimationTimer);

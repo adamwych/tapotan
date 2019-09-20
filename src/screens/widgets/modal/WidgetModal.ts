@@ -39,9 +39,9 @@ export default class WidgetModal extends PIXI.Container {
         this.animator = new ContainerAnimator(this.modalWrapper);
         this.animator.play(new ModalWidgetEnterAnimation());
 
-        let textureResource = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/Modal'];
-        textureResource.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-        this.sprite = new PIXI.Sprite(textureResource.texture);
+        let textureResource = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/Modal.png').resource;
+        textureResource.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        this.sprite = new PIXI.Sprite(textureResource);
         this.sprite.scale.set(5, 5);
         this.sprite.pivot.set(80, 60);
 
@@ -58,9 +58,9 @@ export default class WidgetModal extends PIXI.Container {
         titleText.position.y = 48;
         this.bodyContainer.addChild(titleText);
 
-        let closeButtonTexture = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/ModalCloseButton'];
-        closeButtonTexture.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-        this.closeButton = new PIXI.Sprite(closeButtonTexture.texture);
+        let closeButtonTexture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/ModalCloseButton.png').resource;
+        closeButtonTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        this.closeButton = new PIXI.Sprite(closeButtonTexture);
         this.closeButton.scale.set(1.5, 1.5);
         this.closeButton.position.x = this.sprite.width - this.closeButton.width - 56;
         this.closeButton.position.y = 56;

@@ -13,7 +13,7 @@ export default class WidgetMainMenuButton extends PIXI.Container {
     constructor(text: string) {
         super();
 
-        let buttonTexture = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/MainMenuOpenEditorButton'].texture;
+        let buttonTexture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/MainMenuOpenEditorButton.png').resource;
         buttonTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         
         let buttonBackground = new PIXI.Sprite(buttonTexture);

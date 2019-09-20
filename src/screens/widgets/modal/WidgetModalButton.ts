@@ -23,9 +23,9 @@ export default class WidgetModalButton extends PIXI.Container {
 
         this.animator = new ContainerAnimator(this);
 
-        let buttonTextureRes = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/ModalButton'];
-        buttonTextureRes.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-        this.buttonSprite = new PIXI.Sprite(buttonTextureRes.texture);
+        let buttonTextureRes = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/ModalButton.png').resource;
+        buttonTextureRes.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        this.buttonSprite = new PIXI.Sprite(buttonTextureRes);
         this.buttonSprite.scale.set(5, 5);
         this.buttonSprite.pivot.set(Math.floor(62 / 2), Math.floor(19 / 2));
 
@@ -45,7 +45,7 @@ export default class WidgetModalButton extends PIXI.Container {
 
         // TODO: Load loader only if it's gonna be used.
         const loaderSpritesheet = Tapotan.getInstance().getGameManager().getWorld().getTileset().getResourceByPath('UI/Loader');
-        loaderSpritesheet.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        loaderSpritesheet.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         this.loaderAnimator = new SpritesheetAnimator();
         this.loaderAnimator.setCellWidth(16);
         this.loaderAnimator.setCellHeight(16);

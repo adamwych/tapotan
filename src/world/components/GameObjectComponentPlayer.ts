@@ -212,6 +212,8 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private tickGroundCollisionCheck(): void {
         const result = new p2.RaycastResult();
 
+        // Each foot checked individually.
+
         let rayStartPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1]);
         let rayEndPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1] + (World.PHYSICS_SCALE / 2));
 

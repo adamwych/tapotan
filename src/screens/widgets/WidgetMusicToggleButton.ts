@@ -20,8 +20,8 @@ export default class WidgetMusicToggleButton extends PIXI.Container {
 
         this.animator = new ContainerAnimator(this);
 
-        const onTexture = tileset.getResourceByPath('UI/MusicOn').texture;
-        const offTexture = tileset.getResourceByPath('UI/MusicOff').texture;
+        const onTexture = tileset.getResourceByPath('UI/MusicOn');
+        const offTexture = tileset.getResourceByPath('UI/MusicOff');
 
         onTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         offTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;

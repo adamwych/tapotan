@@ -31,7 +31,7 @@ export default class WorldMask {
             this.viewport.mask.destroy({ children: true });
         }
 
-        this.mask = new PIXI.Sprite(world.getTileset().getResourceById('world_mask').texture);
+        this.mask = new PIXI.Sprite(world.getTileset().getResourceById('world_mask'));
         this.mask.scale.set(1 / size, 1 / size);
         this.viewport.mask = this.mask;
         this.viewport.addChild(this.mask);

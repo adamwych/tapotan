@@ -23,9 +23,9 @@ export default function populateBasicMonsterPrefab(
     monsterAnimatorTimer: SpritesheetAnimatorTimer
 ) {
     const tileset = world.getTileset();
-    const idleSpritesheetTexture = tileset.getResourceById(props.resource).texture;
-    const runSpritesheetTexture = tileset.getResourceById(props.resource + '_run').texture;
-    const runRightSpritesheetTexture = tileset.getResourceById(props.resource + '_run_right').texture;
+    const idleSpritesheetTexture = tileset.getResourceById(props.resource);
+    const runSpritesheetTexture = tileset.getResourceById(props.resource + '_run');
+    const runRightSpritesheetTexture = tileset.getResourceById(props.resource + '_run_right');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize(monsterAnimatorTimer);

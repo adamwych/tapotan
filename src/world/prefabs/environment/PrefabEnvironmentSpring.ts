@@ -12,8 +12,8 @@ import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
 import { PrefabBasicProps } from "../Prefabs";
 
 export default createPrefabSpawnFunction('environment_spring', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    const idleTexture = world.getTileset().getResourceById('environment_spring').texture;
-    const animationTexture = world.getTileset().getResourceById('environment_spring_animation').texture;
+    const idleTexture = world.getTileset().getResourceById('environment_spring');
+    const animationTexture = world.getTileset().getResourceById('environment_spring_animation');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize();

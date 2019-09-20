@@ -22,7 +22,7 @@ export default class WidgetLevelEditorLayerSelectorItem extends PIXI.Container {
         this.animator = new ContainerAnimator(this);
         this.sortableChildren = true;
 
-        const texture = world.getTileset().getResourceById('ui_layer_rect_background').texture;
+        const texture = world.getTileset().getResourceById('ui_layer_rect_background');
         this.background = new PIXI.Sprite(texture);
         this.background.scale.set(3.5);
         this.addChild(this.background);

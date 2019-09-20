@@ -35,7 +35,7 @@ export default createPrefabSpawnFunction('VictoryFlag', (gameObject: GameObject,
     victoryFlagComponent.initialize();
     
     const tileset = world.getTileset();
-    const texture = tileset.getResourceById('victory_flag').texture;
+    const texture = tileset.getResourceById('victory_flag');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize();

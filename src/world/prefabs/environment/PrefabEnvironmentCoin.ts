@@ -18,7 +18,7 @@ export default createPrefabSpawnFunction('environment_coin', (gameObject: GameOb
     const gameObject2 = new GameObject();
     gameObject2.setWorld(world);
 
-    const texture = world.getTileset().getResourceById('environment_coin_animation').texture;
+    const texture = world.getTileset().getResourceById('environment_coin_animation');
 
     const animatorComponent = gameObject2.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize(coinAnimationTimer);

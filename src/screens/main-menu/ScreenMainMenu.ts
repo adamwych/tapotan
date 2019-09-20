@@ -172,7 +172,7 @@ export default class ScreenMainMenu extends Screen {
 
         let logo;
         {
-            let logoTexture = this.game.getPixiApplication().loader.resources['LogoInline'].texture;
+            let logoTexture = this.game.getAssetManager().getResourceByPath('Graphics/LogoInline.png').resource;
             logoTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
             logo = new PIXI.Sprite(logoTexture);
             logo.scale.set(4);

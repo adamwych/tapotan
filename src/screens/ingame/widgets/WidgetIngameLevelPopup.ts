@@ -12,8 +12,8 @@ export default class WidgetIngameLevelPopup extends PIXI.Container {
 
         let animator = new ContainerAnimator(this);
 
-        let texture = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/LevelTopPopup'].texture;
-        texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+        let texture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/LevelTopPopup.png').resource;
+        texture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
         let background = new PIXI.Sprite(texture);
         background.scale.set(4);

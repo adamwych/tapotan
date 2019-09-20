@@ -9,8 +9,8 @@ import GameObjectComponentAnimator from "../../components/GameObjectComponentAni
 import Spritesheet from "../../../graphics/Spritesheet";
 
 export default createPrefabSpawnFunction('environment_lock_door', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    const lockedTexture = world.getTileset().getResourceById('environment_lock_door').texture;
-    const unlockedTexture = world.getTileset().getResourceById('environment_lock_door_unlocked').texture;
+    const lockedTexture = world.getTileset().getResourceById('environment_lock_door');
+    const unlockedTexture = world.getTileset().getResourceById('environment_lock_door_unlocked');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize();

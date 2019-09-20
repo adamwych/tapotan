@@ -26,15 +26,15 @@ export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameO
     transformComponent.setPivot(0.5, 0.5);
 
     const tileset = world.getTileset();
-    const idleSpritesheetTexture = tileset.getResourceById('characters_lawrence_idle').texture;
-    const idleLeftSpritesheetTexture = tileset.getResourceById('characters_lawrence_idleleft').texture;
-    const runSpritesheetTexture = tileset.getResourceById('characters_lawrence_run').texture;
-    const runLeftSpritesheetTexture = tileset.getResourceById('characters_lawrence_runleft').texture;
-    const midairSpritesheetTexture = tileset.getResourceById('characters_lawrence_midair').texture;
-    const midairLeftSpritesheetTexture = tileset.getResourceById('characters_lawrence_midairleft').texture;
-    const wallSlideSpritesheetTexture = tileset.getResourceById('characters_lawrence_wallslide').texture;
-    const wallSlideLeftSpritesheetTexture = tileset.getResourceById('characters_lawrence_wallslideleft').texture;
-    const climbSpritesheetTexture = tileset.getResourceById('characters_lawrence_climb').texture;
+    const idleSpritesheetTexture = tileset.getResourceById('characters_lawrence_idle');
+    const idleLeftSpritesheetTexture = tileset.getResourceById('characters_lawrence_idleleft');
+    const runSpritesheetTexture = tileset.getResourceById('characters_lawrence_run');
+    const runLeftSpritesheetTexture = tileset.getResourceById('characters_lawrence_runleft');
+    const midairSpritesheetTexture = tileset.getResourceById('characters_lawrence_midair');
+    const midairLeftSpritesheetTexture = tileset.getResourceById('characters_lawrence_midairleft');
+    const wallSlideSpritesheetTexture = tileset.getResourceById('characters_lawrence_wallslide');
+    const wallSlideLeftSpritesheetTexture = tileset.getResourceById('characters_lawrence_wallslideleft');
+    const climbSpritesheetTexture = tileset.getResourceById('characters_lawrence_climb');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize();

@@ -7,7 +7,7 @@ import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
 import { PrefabBasicProps } from "../Prefabs";
 
 export default createPrefabSpawnFunction('environment_spike', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    const texture = world.getTileset().getResourceById(props.resource).texture;
+    const texture = world.getTileset().getResourceById(props.resource);
     const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
     spriteComponent.initialize(texture);
 

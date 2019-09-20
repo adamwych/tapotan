@@ -11,7 +11,7 @@ import { PrefabBasicProps } from "../Prefabs";
 const speederAnimationTimer = new SpritesheetAnimatorTimer();
 
 export default createPrefabSpawnFunction('environment_speeder', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    const texture = world.getTileset().getResourceById('environment_speeder_animation').texture;
+    const texture = world.getTileset().getResourceById('environment_speeder_animation');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize(speederAnimationTimer);

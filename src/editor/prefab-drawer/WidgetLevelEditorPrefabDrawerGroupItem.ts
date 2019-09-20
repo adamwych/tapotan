@@ -10,11 +10,10 @@ export default class WidgetLevelEditorPrefabDrawerGroupItem extends PIXI.Contain
 
     private spriteContainer: PIXI.Container;
 
-    constructor(resource: PIXI.LoaderResource) {
+    constructor(texture: PIXI.Texture) {
         super();
 
         this.animator = new ContainerAnimator(this);
-        const texture = resource.texture;
 
         this.spriteContainer = new PIXI.Container();
 

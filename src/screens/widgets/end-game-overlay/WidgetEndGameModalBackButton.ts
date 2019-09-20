@@ -11,7 +11,7 @@ export default class WidgetEndGameModalBackButton extends PIXI.Container {
 
         let animator = new ContainerAnimator(this);
 
-        let buttonTexture = Tapotan.getInstance().getPixiApplication().loader.resources['Graphics/UI/VictoryModalGoBackButton'].texture;
+        let buttonTexture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/VictoryModalGoBackButton.png').resource;
         buttonTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         let button = new PIXI.Sprite(buttonTexture);
         button.scale.set(4);

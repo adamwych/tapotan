@@ -14,7 +14,7 @@ export default class WidgetLevelEditorTopBarItemEditorSettingsButton extends Wid
 
         const world = context.getWorld();
 
-        const texture = world.getTileset().getResourceById('ui_editor_topbar_editor_settings').texture;
+        const texture = world.getTileset().getResourceById('ui_editor_topbar_editor_settings');
         this.background = new PIXI.Sprite(texture);
         this.background.scale.set(5);
         this.addChild(this.background);

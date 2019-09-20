@@ -10,7 +10,7 @@ import createPrefabSpawnFunction from "./../createPrefabSpawnFunction";
 const starAnimationTimer = new SpritesheetAnimatorTimer();
 
 export default createPrefabSpawnFunction('sky_stars_variation0', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    const texture = world.getTileset().getResourceById(props.resource + '_animation').texture;
+    const texture = world.getTileset().getResourceById(props.resource + '_animation');
 
     const animatorComponent = gameObject.createComponent<GameObjectComponentAnimator>(GameObjectComponentAnimator);
     animatorComponent.initialize(starAnimationTimer);

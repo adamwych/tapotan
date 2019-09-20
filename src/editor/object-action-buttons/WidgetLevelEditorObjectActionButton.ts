@@ -14,7 +14,7 @@ export default class WidgetLevelEditorObjectActionButton extends PIXI.Container 
 
         this.animator = new ContainerAnimator(this);
 
-        let texture = Tapotan.getInstance().getGameManager().getWorld().getTileset().getResourceByPath('UI/Editor/' + resourceName).texture;
+        let texture = Tapotan.getInstance().getGameManager().getWorld().getTileset().getResourceByPath('UI/Editor/' + resourceName);
         let sprite = new PIXI.Sprite(texture);
         sprite.scale.set(1.75);
         this.addChild(sprite);

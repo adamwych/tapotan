@@ -14,7 +14,7 @@ export interface PrefabBasicBlockProps extends PrefabBasicProps {
 };
 
 export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (gameObject: GameObject, world: World, props: PrefabBasicBlockProps) => {
-    const texture = world.getTileset().getResourceById(props.resource).texture;
+    const texture = world.getTileset().getResourceById(props.resource);
     const spriteComponent = gameObject.createComponent<GameObjectComponentSprite>(GameObjectComponentSprite);
     spriteComponent.initialize(texture);
 
