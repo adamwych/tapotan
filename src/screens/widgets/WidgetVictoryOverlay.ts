@@ -12,7 +12,7 @@ export default class WidgetVictoryOverlay extends WidgetEndGameOverlay {
         super(fromEditor, 'Graphics/UI/VictoryModal', 'Graphics/UI/VictoryModalTop');
 
         if (!fromEditor) {
-            let starTexture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/VictoryModalStar').resource;
+            let starTexture = Tapotan.getInstance().getAssetManager().getResourceByPath('Graphics/UI/VictoryModalStar.png').resource;
             starTexture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
 
             this.starsContainer = new PIXI.Container();
