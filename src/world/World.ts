@@ -4,6 +4,7 @@ import { GameEndReason, GameState } from '../core/GameManager';
 import Tapotan from '../core/Tapotan';
 import TickHelper from '../core/TickHelper';
 import CameraShake from './CameraShake';
+import GameObjectComponentParallaxBackground from './components/backgrounds/GameObjectComponentParallaxBackground';
 import { GameObjectVerticalAlignment } from './components/GameObjectComponentTransform';
 import GameObject from './GameObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
@@ -11,8 +12,8 @@ import PhysicsMaterials from './physics/PhysicsMaterials';
 import Prefabs from './prefabs/Prefabs';
 import Tileset from './tiles/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
-import GameObjectComponentParallaxBackground from './components/backgrounds/GameObjectComponentParallaxBackground';
 import WorldMask from './WorldMask';
+import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
 
 export default class World extends PIXI.Container {
 
@@ -168,8 +169,12 @@ export default class World extends PIXI.Container {
             if (this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
                 let viewport = this.game.getViewport();
 
+                //console.log(this.behaviourRules.getCameraBehaviour());
+
                 switch (this.behaviourRules.getCameraBehaviour()) {
                     case WorldCameraBehaviour.FollowingPlayer: {
+                        //console.log(viewport.top, this.player.transformComponent.getUnalignedPositionY());
+
                         if (this.player) {
                             viewport.top = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
                             viewport.left = (this.player.transformComponent.getUnalignedPositionX() - Tapotan.getViewportWidth() / 2) + 2;

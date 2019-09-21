@@ -3,6 +3,7 @@ import screenPointToWorld from "../utils/screenPointToWorld";
 import InputManager from "../core/InputManager";
 import Tapotan from "../core/Tapotan";
 import LevelEditorCommandMoveObject from "./commands/LevelEditorCommandMoveObject";
+import GameObjectComponentPhysicsAwareTransform from "../world/components/GameObjectComponentPhysicsAwareTransform";
 
 export default class LevelEditorActiveObjectDragController {
 
@@ -38,7 +39,11 @@ export default class LevelEditorActiveObjectDragController {
                 }
 
                 if (selectedObject.getHeight() > 1) {
-                    this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY());
+                    if (selectedObject.transformComponent instanceof GameObjectComponentPhysicsAwareTransform) {
+                        this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY()) + 1;
+                    } else {
+                        this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY());
+                    }
                 } else {
                     this.offsetY = 0;
                 }
@@ -60,10 +65,13 @@ export default class LevelEditorActiveObjectDragController {
         // so this `targetY` calculation should work fine, but it *might* break for objects
         // that will have other vertical alignment.
         const worldCoords = screenPointToWorld(x, y);
-        const targetX = worldCoords.x;
-        const targetY = Tapotan.getViewportHeight() - worldCoords.y - 1;
+        let targetX = worldCoords.x;
+        let targetY = Tapotan.getViewportHeight() - worldCoords.y - 1;
 
         if (selectedObjects.length === 1) {
+
+            targetX = targetX - Math.floor(this.offsetX);
+            targetY = targetY - Math.floor(this.offsetY);
 
             // Don't allow moving the block out of world bounds.
             if (targetX < 0 || targetY < 0) {
@@ -72,7 +80,7 @@ export default class LevelEditorActiveObjectDragController {
 
             if (!selectedObjects[0].transformComponent.isAtPosition(targetX, targetY)) {
                 this.context.getCommandQueue().enqueueCommand(
-                    new LevelEditorCommandMoveObject(selectedObjects[0], [targetX - Math.floor(this.offsetX), targetY - Math.floor(this.offsetY)])
+                    new LevelEditorCommandMoveObject(selectedObjects[0], [targetX, targetY])
                 );
 
                 gridWidget.alpha = 0.33;

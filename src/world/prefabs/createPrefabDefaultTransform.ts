@@ -28,6 +28,7 @@ export default function createPrefabDefaultTransform(
         body.setCollisionMask(collisionMask);
 
         gameObject.createComponent(GameObjectComponentPhysicsAwareTransform);
-        gameObject.transformComponent.setPivot(gameObject.getWidth() / 2, gameObject.getHeight() / 2);
     }
+    
+    gameObject.transformComponent.setPivot(gameObject.getWidth() / 2, gameObject.getHeight() / 2);
 }

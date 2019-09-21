@@ -38,7 +38,7 @@ export default class LevelEditorKeyboardShortcutsController {
     }
 
     private handlePlaythroughToggleShortcutClick = () => {
-        if (this.context.getGame().getGameManager().getGameState() !== GameState.Playing && !this.context.canInteractWithEditor()) {
+        if (this.context.getEditorScreen().getModal() !== null) {
             return;
         }
         

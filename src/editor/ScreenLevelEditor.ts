@@ -691,7 +691,10 @@ export default class ScreenLevelEditor extends Screen {
         }
 
         if (overlay) {
+            this.modal = overlay as any;
+
             overlay.on('close', () => {
+                this.modal = null;
                 this.playthroughController.stop();
             });
     

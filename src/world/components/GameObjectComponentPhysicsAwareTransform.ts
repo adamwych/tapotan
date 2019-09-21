@@ -16,6 +16,9 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
 
     protected type = 'physics_aware_transform';
 
+    private _positionX: number = 0;
+    private _positionY: number = 0;
+
     private physicsBody: p2.Body;
 
     constructor(gameObject: GameObject) {
@@ -37,33 +40,19 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
     }
 
     private synchronizeObjectTransformWithBody() {
-        // TODO: What will happen if this get called multiple times during one frame?
-        // TODO: Do this only if anything has changed.
-
-        this.positionX = this.physicsBody.position[0] / World.PHYSICS_SCALE;
-        this.positionY = this.physicsBody.position[1] / World.PHYSICS_SCALE;
         this.angle = this.physicsBody.angle * RADIANS_TO_DEGREES;
 
         this.gameObject.pivot.set(this.pivotX, this.pivotY);
-        this.gameObject.position.set(this.positionX + this.pivotX, this.positionY + this.pivotY);
+        this.gameObject.position.set(this.physicsBody.position[0] / World.PHYSICS_SCALE, this.physicsBody.position[1] / World.PHYSICS_SCALE);
         this.gameObject.angle = this.angle;
-
-        if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
-            this.positionX = Tapotan.getViewportWidth() - this.positionX - 1;
-        }
-
-        if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
-            this.positionY = Tapotan.getViewportHeight() - this.positionY - 1;
-        }
-
     }
 
     public setPosition(x: number, y: number, force: boolean = false) {
-        this.positionX = x;
-        this.positionY = y;
+        this._positionX = x;
+        this._positionY = y;
         
-        let containerTargetX = this.positionX;
-        let containerTargetY = this.positionY;
+        let containerTargetX = this._positionX + this.pivotX;
+        let containerTargetY = this._positionY - this.pivotY;
 
         if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
             containerTargetX = Tapotan.getViewportWidth() - containerTargetX - this.gameObject.getWidth();
@@ -75,6 +64,9 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
 
         this.physicsBody.position[0] = containerTargetX * World.PHYSICS_SCALE;
         this.physicsBody.position[1] = containerTargetY * World.PHYSICS_SCALE;
+
+        this.positionX = x;
+        this.positionY = y;
 
         // Any visual components attached to the game object may be rendered
         // before this component ticks. `tick` changes the position of the object
@@ -102,6 +94,26 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         this.physicsBody.angle = angle * DEGREES_TO_RADIANS;
         
         this.gameObject.emit('transform.angleChanged', angle);
+    }
+
+    public getPositionX(): number {
+        let x = this.physicsBody.position[0] / World.PHYSICS_SCALE;
+        
+        if (this.horizontalAlignment === GameObjectHorizontalAlignment.Right) {
+            return Tapotan.getViewportWidth() - x - 1;
+        }
+
+        return x - this.getPivotX();
+    }
+
+    public getPositionY(): number {
+        let y = this.physicsBody.position[1] / World.PHYSICS_SCALE;
+        
+        if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
+            return Tapotan.getViewportHeight() - y - this.getPivotY();
+        }
+
+        return y + this.getPivotY();
     }
 
 }

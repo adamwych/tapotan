@@ -198,10 +198,10 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public getUnalignedPositionX(): number {
         if (this.horizontalAlignment !== GameObjectHorizontalAlignment.Left) {
-            return (Tapotan.getViewportWidth() - this.positionX - 1) - this.pivotX;
+            return (Tapotan.getViewportWidth() - this.getPositionX() - 1) - this.pivotX;
         }
 
-        return this.positionX - this.pivotX;
+        return this.getPositionX() - this.pivotX;
     }
 
     /**
@@ -216,10 +216,10 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public getUnalignedPositionY(): number {
         if (this.verticalAlignment !== GameObjectVerticalAlignment.Top) {
-            return (Tapotan.getViewportHeight() - this.positionY - 1) - this.pivotY;
+            return (Tapotan.getViewportHeight() - this.getPositionY() - 1) - this.pivotY;
         }
 
-        return this.positionY - this.pivotY;
+        return this.getPositionY() - this.pivotY;
     }
 
     /**
@@ -229,7 +229,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      * @param y 
      */
     public isAtPosition(x: number, y: number): boolean {
-        return this.positionX === x && this.positionY === y;
+        return this.getPositionX() === x && this.getPositionY() === y;
     }
 
     /**
@@ -478,7 +478,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     public getScreenX(): number {
         const blockSize = Tapotan.getBlockSize();
         const viewport = Tapotan.getInstance().getViewport();
-        return (this.getPositionX() * blockSize) - (viewport.left * blockSize);
+        return ((this.getPositionX()) * blockSize) - (viewport.left * blockSize);
     }
 
     /**
@@ -487,7 +487,6 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     public getScreenY(): number {
         const blockSize = Tapotan.getBlockSize();
         const viewport = Tapotan.getInstance().getViewport();
-
         return Tapotan.getGameHeight() - (this.getPositionY() * blockSize) - (this.gameObject.getHeight() * blockSize) - (viewport.top * blockSize);
     }
     
