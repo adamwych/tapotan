@@ -270,12 +270,17 @@ export default class Tapotan {
                 }
     
                 if (!isLoadingSnapshot) {
-                    document.getElementById('loading').style.opacity = '0';
-                    document.getElementById('loading').style.pointerEvents = 'none';
-    
-                    this.startEditor();
-                    //this.startMainMenu();
-                    //this.startTestScreen();
+
+                    // Wait 200ms to let CPU cool down and ensure smooth transition.
+                    setTimeout(() => {
+                        document.getElementById('loading').style.opacity = '0';
+                        document.getElementById('loading').style.pointerEvents = 'none';
+        
+                        this.startEditor();
+                        //this.startMainMenu();
+                        //this.startTestScreen();
+                    }, 200);
+
                 }
             } catch (error) {
                 console.error(error);

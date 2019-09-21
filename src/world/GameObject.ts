@@ -384,22 +384,26 @@ export default class GameObject extends PIXI.Container {
      * Returns world width of the game object.
      */
     public getWidth(): number {
-        if (this.transformComponent) {
-            return this.transformComponent.isFlippedX() ? -this.width : this.width;
+        let localWidth = this.width;
+
+        if (this.scale.x !== 1 && this.scale.x !== -1) {
+            localWidth = localWidth - (this.scale.x - 1);
         }
 
-        return this.width;
+        return Math.abs(localWidth);
     }
 
     /**
      * Returns world height of the game object.
      */
     public getHeight(): number {
-        if (this.transformComponent) {
-            return this.transformComponent.isFlippedY() ? -this.height : this.height;
+        let localHeight = this.height;
+
+        if (this.scale.y !== 1 && this.scale.y !== -1) {
+            localHeight = localHeight - (this.scale.y - 1);
         }
 
-        return this.height;
+        return Math.abs(localHeight);
     }
 
     /**

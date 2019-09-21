@@ -169,12 +169,8 @@ export default class World extends PIXI.Container {
             if (this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
                 let viewport = this.game.getViewport();
 
-                //console.log(this.behaviourRules.getCameraBehaviour());
-
                 switch (this.behaviourRules.getCameraBehaviour()) {
                     case WorldCameraBehaviour.FollowingPlayer: {
-                        //console.log(viewport.top, this.player.transformComponent.getUnalignedPositionY());
-
                         if (this.player) {
                             viewport.top = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
                             viewport.left = (this.player.transformComponent.getUnalignedPositionX() - Tapotan.getViewportWidth() / 2) + 2;
@@ -422,32 +418,41 @@ export default class World extends PIXI.Container {
 
         // All positions must be rounded to 4 decimal places for this to work!
 
-        if (!topLeftAligned) {
+        if (topLeftAligned) {
             y = Tapotan.getViewportHeight() - y - 1;
         }
 
         x = roundTo4th(x);
-        y = roundTo4th(y);
+        y = Math.round(roundTo4th(y));
         width = roundTo4th(width);
         height = roundTo4th(height);
+
+        const bounds = new PIXI.Rectangle(x, y, width, height);
 
         this.gameObjects.forEach(gameObject => {
             if (layer !== -1 && gameObject.getLayer() !== layer) {
                 return;
             }
 
-            if (gameObject.transformComponent) {
-                let gameObjectX = roundTo4th(gameObject.transformComponent.getUnalignedPositionX());
-                let gameObjectY = roundTo4th(gameObject.transformComponent.getUnalignedPositionY());
-                let gameObjectWidth = roundTo4th(gameObject.getWidth());
-                let gameObjectHeight = roundTo4th(gameObject.getHeight());
-                
-                if (
-                    x >= gameObjectX &&
-                    x < (gameObjectX + gameObjectWidth) &&
+            const objectX = gameObject.transformComponent.getPositionX();
+            const objectY = Math.round(gameObject.transformComponent.getPositionY());
+            const objectWidth = gameObject.getWidth();
+            const objectHeight = gameObject.getHeight();
 
-                    y >= gameObjectY &&
-                    y < (gameObjectY + gameObjectHeight)
+            const testBounds = new PIXI.Rectangle(objectX, objectY, objectWidth, objectHeight);
+
+            if ((bounds.x === testBounds.x &&
+                bounds.y === testBounds.y &&
+                bounds.x + bounds.width === testBounds.x + testBounds.width &&
+                bounds.y + bounds.height === testBounds.y + testBounds.height)
+            ) {
+                results.push(gameObject);
+            } else {
+                if (
+                    testBounds.contains(bounds.x, bounds.y) ||
+                    testBounds.contains(bounds.x + bounds.width - 0.0001, bounds.y) ||
+                    testBounds.contains(bounds.x, bounds.y + bounds.height - 0.0001) ||
+                    testBounds.contains(bounds.x + bounds.width - 0.0001, bounds.y + bounds.height - 0.0001)
                 ) {
                     results.push(gameObject);
                 }

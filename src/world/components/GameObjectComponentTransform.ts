@@ -201,7 +201,7 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
             return (Tapotan.getViewportWidth() - this.getPositionX() - 1) - this.pivotX;
         }
 
-        return this.getPositionX() - this.pivotX;
+        return this.getPositionX();
     }
 
     /**
@@ -216,10 +216,10 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
      */
     public getUnalignedPositionY(): number {
         if (this.verticalAlignment !== GameObjectVerticalAlignment.Top) {
-            return (Tapotan.getViewportHeight() - this.getPositionY() - 1) - this.pivotY;
+            return (Tapotan.getViewportHeight() - this.getPositionY() - 1);
         }
 
-        return this.getPositionY() - this.pivotY;
+        return this.getPositionY();
     }
 
     /**

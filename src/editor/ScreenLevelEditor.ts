@@ -5,6 +5,7 @@ import Tapotan from "../core/Tapotan";
 import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import Screen from "../screens/Screen";
 import WidgetModal from '../screens/widgets/modal/WidgetModal';
+import WidgetPlayStatistics from '../screens/widgets/play-statistics/WidgetPlayStatistics';
 import WidgetEndGameOverlay from '../screens/widgets/WidgetEndGameOverlay';
 import WidgetGameOverOverlay from '../screens/widgets/WidgetGameOverOverlay';
 import WidgetVictoryOverlay from '../screens/widgets/WidgetVictoryOverlay';
@@ -18,6 +19,7 @@ import GameObject from '../world/GameObject';
 import Prefabs from '../world/prefabs/Prefabs';
 import World from '../world/World';
 import ContainerAnimationNewBlockPlaced from './animations/ContainerAnimationNewBlockPlaced';
+import LevelEditorCommandFlipObject from './commands/LevelEditorCommandFlipObject';
 import LevelEditorCommandRemoveObject from './commands/LevelEditorCommandRemoveObject';
 import LevelEditorCommandRotateObject from './commands/LevelEditorCommandRotateObject';
 import LevelEditorActiveObjectDragController from './LevelEditorActiveObjectDragController';
@@ -35,9 +37,6 @@ import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomC
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
-import Interpolation from '../utils/Interpolation';
-import WidgetPlayStatistics from '../screens/widgets/play-statistics/WidgetPlayStatistics';
-import LevelEditorCommandFlipObject from './commands/LevelEditorCommandFlipObject';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -85,7 +84,7 @@ export default class ScreenLevelEditor extends Screen {
     private linkWithDoorKeyObject: GameObject = null;
 
     private remainingMouseMoves: Array<{x: number, y: number}> = [];
-
+    
     private modal: WidgetModal = null;
 
     private world: World;
@@ -540,8 +539,14 @@ export default class ScreenLevelEditor extends Screen {
             return;
         }
 
+        let coordsX = worldCoords.x;
+
+        if (this.newGameObjectShade.getWidth() > 1) {
+            coordsX -= 1;
+        }
+
         const collidingGameObjects = this.world.getGameObjectsIntersectingRectangle(
-            worldCoords.x,
+            coordsX,
             worldCoords.y,
             this.newGameObjectShade.width,
             this.newGameObjectShade.height,
@@ -587,7 +592,6 @@ export default class ScreenLevelEditor extends Screen {
                 this.context.getCurrentLayer().addGameObject(gameObject);
                 this.initializeGameObjectInteractivity(gameObject);
             }
-
         }
     }
 
