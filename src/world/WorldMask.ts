@@ -51,8 +51,8 @@ export default class WorldMask {
             this.mask.visible = true;
             this.viewport.mask = this.mask;
             this.viewport.mask.position.set(
-                player.transformComponent.getUnalignedPositionX() - (this.mask.width / 2) + 1,
-                player.transformComponent.getUnalignedPositionY() - (this.mask.height / 2) + 1
+                player.transformComponent.getUnalignedPositionX() - (this.mask.width / 2) + 0.5,
+                player.transformComponent.getUnalignedPositionY() - (this.mask.height / 2) + 0.5
             );
             
         } else {
