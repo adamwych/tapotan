@@ -52,9 +52,6 @@ export default function UIEditorRootComponent() {
 
         return () => {
             window.removeEventListener('mousedown', handleWindowMouseDown);
-            LevelEditorUIAgent.offPlaythroughStarted(handlePlaythroughStarted);
-            LevelEditorUIAgent.offPlaythroughStopped(handlePlaythroughStopped);
-            LevelEditorUIAgent.offObjectSelected(handleGameObjectSelected);
         };
     }, []);
 

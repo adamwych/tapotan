@@ -22,10 +22,7 @@ export default function UIEditorTopbarItemPlayButton() {
         LevelEditorUIAgent.onPlaythroughStarted(handlePlaythroughStarted);
         LevelEditorUIAgent.onPlaythroughStopped(handlePlaythroughStopped);
 
-        return () => {
-            LevelEditorUIAgent.offPlaythroughStarted(handlePlaythroughStarted);
-            LevelEditorUIAgent.offPlaythroughStopped(handlePlaythroughStopped);
-        };
+        return () => { };
     }, []);
 
     return (

@@ -86,6 +86,10 @@ export default class ScreenLevelEditor extends Screen {
         this.world = game.getGameManager().getWorld();
         this.addChild(this.world);
 
+        this.world.addWorldTickCallback((dt: number) => {
+            this.cameraMovementController.tick(dt);
+        });
+
         this.context = new LevelEditorContext(this.world, game, this);
         this.activeObjectDragController = new LevelEditorActiveObjectDragController(this.context);
         this.cameraMovementController = new LevelEditorCameraMovementController(this.context);
@@ -786,8 +790,6 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     protected tick(dt: number): void {
-        this.cameraMovementController.tick(dt);
-
         this.objectOutlineActive.forEach(outline => {
             outline.tick(dt);
         });

@@ -38,9 +38,7 @@ export default function UIEditorPrefabExplorer() {
     useEffect(() => {
         LevelEditorUIAgent.onPlaythroughStarted(handlePlaythroughStarted);
 
-        return () => {
-            LevelEditorUIAgent.offPlaythroughStarted(handlePlaythroughStarted);
-        };
+        return () => { };
     }, []);
 
     return (

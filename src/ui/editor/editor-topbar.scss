@@ -1,6 +1,8 @@
 @import './mixins.scss';
 
 .editor-topbar {
+    width: 100%;
+
     position: absolute;
     padding: 16px;
 
@@ -54,6 +56,7 @@
         top: 0;
 
         display: flex;
+        flex: 1;
     }
 
     .editor-topbar-item-publish {
@@ -74,5 +77,11 @@
             letter-spacing: 3px;
             text-transform: uppercase;
         }
+    }
+
+    .editor-topbar-item-exit-editor {
+        position: absolute;
+        top: 0;
+        right: 0;
     }
 }

@@ -29,9 +29,7 @@ export default class GameObjectComponentParallaxBackground extends GameObjectCom
     public tick = (dt: number) => {
         const transform = this.gameObject.transformComponent;
 
-        if (this.translateEnabled) {
-            transform.translate(-this.speed * dt, 0);
-        }
+        transform.translate(-this.speed * dt, 0);
 
         const x = this.gameObject.parent.position.x + transform.getWorldX() + this.gameObject.getWidth();
 
@@ -54,15 +52,15 @@ export default class GameObjectComponentParallaxBackground extends GameObjectCom
     }
     
     public reset() {
-        TickHelper.nextTick(() => {
+        /*TickHelper.nextTick(() => {
             this.gameObject.transformComponent.setPosition(this.startX, this.startY);
-        });
+        });*/
     }
 
     public resetY() {
-        TickHelper.nextTick(() => {
+        /*TickHelper.nextTick(() => {
             this.gameObject.transformComponent.setPositionY(this.startY);
-        });
+        });*/
     }
 
     public setTranslateEnabled(translateEnabled: boolean) {

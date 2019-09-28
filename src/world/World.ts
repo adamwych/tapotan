@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import { GameEndReason, GameState } from '../core/GameManager';
 import Tapotan from '../core/Tapotan';
 import TickHelper from '../core/TickHelper';
+import WorldBackgrounds from './backgrounds/WorldBackgrounds';
 import CameraShake from './CameraShake';
 import GameObjectComponentParallaxBackground from './components/backgrounds/GameObjectComponentParallaxBackground';
 import { GameObjectVerticalAlignment } from './components/GameObjectComponentTransform';
@@ -13,8 +14,6 @@ import Prefabs from './prefabs/Prefabs';
 import Tileset from './tiles/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
-import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
-import WorldBackgrounds from './backgrounds/WorldBackgrounds';
 
 export default class World extends PIXI.Container {
 
@@ -85,8 +84,6 @@ export default class World extends PIXI.Container {
 
     private paused: boolean = false;
 
-    private worldMask: WorldMask;
-
     // ================
     
     /**
@@ -94,6 +91,23 @@ export default class World extends PIXI.Container {
      */
     private gameObjects: Array<GameObject> = [];
 
+    /**
+     * List of functions that will be called before
+     * updating game objects.
+     */
+    private worldTickCallbacks: Function[] = [];
+
+    /**
+     * The mask that hides everyting around it and follows the player.
+     */
+    private worldMask: WorldMask;
+
+    /**
+     * Whether the world is being removed.
+     * 
+     * This is to make sure that we don't accidentally try to update
+     * the world whilst it is destroying.
+     */
     private _duringRemove: boolean = false;
 
     constructor(game: Tapotan, width: number, height: number, tileset: Tileset) {
@@ -151,22 +165,6 @@ export default class World extends PIXI.Container {
             return;
         }
 
-        if (!this.paused) {
-            this.physicsWorld.step(1 / 60, dt * 1000, 10);
-
-            this.gameObjects.forEach(gameObject => {
-                gameObject.tick(dt);
-            });
-        }
-
-        if (this.sky.transform) {
-            this.sky.position.x = this.game.getViewport().left;
-        }
-
-        if (this.worldMask) {
-            this.worldMask.tick(dt);
-        }
-
         if (this.shake) {
             this.shake.tick(dt);
         } else {
@@ -214,6 +212,26 @@ export default class World extends PIXI.Container {
 
         if (this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
             this.playTimer += dt;
+        }
+
+        this.worldTickCallbacks.forEach(tick => {
+            tick(dt);
+        });
+
+        if (!this.paused) {
+            this.physicsWorld.step(1 / 60, dt * 1000, 10);
+
+            this.gameObjects.forEach(gameObject => {
+                gameObject.tick(dt);
+            });
+        }
+
+        if (this.sky.transform) {
+            this.sky.position.x = this.game.getViewport().left;
+        }
+
+        if (this.worldMask) {
+            this.worldMask.tick(dt);
         }
     }
 
@@ -647,6 +665,14 @@ export default class World extends PIXI.Container {
 
     public getWorldMask(): WorldMask {
         return this.worldMask;
+    }
+
+    public addWorldTickCallback(callback: Function) {
+        this.worldTickCallbacks.push(callback);
+    }
+
+    public removeWorldTickCallback(callback: Function) {
+        this.worldTickCallbacks.splice(this.worldTickCallbacks.indexOf(callback, 1));
     }
 
 }
