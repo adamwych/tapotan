@@ -1,0 +1,387 @@
+.victory-overlay-modal {
+    position: relative;
+
+    padding: 1rem;
+    width: 796px;
+    height: 594px;
+
+    z-index: 2;
+
+    animation-name: victory-overlay-modal--enter;
+    animation-duration: 300ms;
+    animation-fill-mode: forwards;
+    animation-delay: 400ms;
+
+    transform: scale(0);
+    transform-origin: center center;
+
+    @keyframes victory-overlay-modal--enter {
+        0% {
+            opacity: 0;
+            transform: scale(1.33);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .victory-overlay-modal-text {
+        position: absolute;
+        top: 27px;
+        left: 120px;
+
+        width: 540px;
+        height: 138px;
+
+        z-index: 3;
+
+        animation-name: victory-overlay-modal-text--enter;
+        animation-duration: 200ms;
+        animation-fill-mode: forwards;
+        animation-delay: 800ms;
+
+        transform: scale(0);
+        transform-origin: center center;
+
+        @keyframes victory-overlay-modal-text--enter {
+            0% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        &.attr--stage2 {
+            opacity: 1;
+            transform: scale(1);
+
+            animation-name: victory-overlay-modal-text--infinite;
+            animation-duration: 1000ms;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-delay: 0ms;
+
+            @keyframes victory-overlay-modal-text--infinite {
+                0% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.05);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+        }
+    }
+
+    .victory-overlay-modal-flag {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 225px;
+
+        z-index: 2;
+
+        animation-name: victory-overlay-modal-flag--enter;
+        animation-duration: 400ms;
+        animation-fill-mode: forwards;
+        animation-delay: 400ms;
+
+        transform: scaleY(0);
+        transform-origin: center center;
+
+        @keyframes victory-overlay-modal-flag--enter {
+            0% {
+                transform: scaleY(0);
+            }
+
+            60% {
+                transform: scaleY(1.15);
+            }
+
+            100% {
+                transform: scaleY(1);
+            }
+        }
+    }
+
+    .victory-overlay-modal-flag-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 225px;
+
+        z-index: 1;
+
+        animation-name: victory-overlay-modal-flag-bg--enter;
+        animation-duration: 300ms;
+        animation-fill-mode: forwards;
+        animation-delay: 800ms;
+
+        transform: scaleX(0);
+        transform-origin: center center;
+
+        @keyframes victory-overlay-modal-flag-bg--enter {
+            from {
+                transform: scaleX(0.85);
+            }
+
+            to {
+                transform: scaleX(1);
+            }
+        }
+    }
+
+    .victory-overlay-modal-content-background {
+        position: absolute;
+        top: 129px;
+        left: 120px;
+
+        width: 550px;
+        height: 430px;
+
+        z-index: 1;
+
+        padding-top: 85px;
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-bottom: 30px;
+
+        animation-name: victory-overlay-modal-content-background--enter;
+        animation-duration: 300ms;
+        animation-fill-mode: forwards;
+        animation-delay: 1300ms;
+
+        transform: scaleY(0);
+        transform-origin: center 0;
+
+        @keyframes victory-overlay-modal-content-background--enter {
+            0% {
+                transform: scaleY(0);
+            }
+
+            70% {
+                transform: scaleY(1.05);
+            }
+
+            100% {
+                transform: scaleY(1);
+            }
+        }
+    }
+
+    .victory-overlay-modal-stars {
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        > div {
+            width: 64px;
+            height: 64px;
+        }
+    }
+
+    .victory-overlay-modal-scoreboard {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        position: relative;
+        top: -56px;
+
+        .victory-overlay-modal-scoreboard-title {
+            color: #74bc4d;
+            text-align: center;
+            font-size: 46px;
+            margin-bottom: 0.75rem;
+        }
+
+        .victory-overlay-modal-scoreboard-table {
+            width: 75%;
+
+            .victory-overlay-modal-scoreboard-row {
+                width: 100%;
+
+                display: flex;
+                align-items: center;
+
+                padding: 4px 0;
+
+                animation-name: victory-overlay-modal-scoreboard-row--enter;
+                animation-duration: 200ms;
+                animation-fill-mode: forwads;
+
+                @keyframes victory-overlay-modal-scoreboard-row--enter {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-8px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                &:not(:last-child) {
+                    border-bottom: 2px solid #e0e0e0;
+                }
+
+                &.attr--player {
+                    > div {
+                        color: #ffcc00;
+                    }
+                }
+
+                > div {
+                    color: #74bc4d;
+                    font-size: 30px;
+                }
+
+                > div:nth-child(1) {
+                    flex-basis: 20%;
+                    text-align: center;
+                }
+
+                > div:nth-child(2) {
+                    flex-basis: 55%;
+                }
+
+                > div:nth-child(3) {
+                    flex-basis: 25%;
+                    text-align: right;
+                }
+            }
+        }
+    }
+}
+
+.victory-overlay-main-menu-button {
+    position: absolute;
+    top: 276px;
+    left: 52px;
+    width: 86px;
+    z-index: 1;
+
+    transition: all 100ms;
+
+    animation-name: victory-overlay-main-menu-button--enter;
+    animation-duration: 150ms;
+    animation-fill-mode: forwards;
+    animation-delay: 1700ms;
+
+    opacity: 0;
+    transform-origin: center 0;
+
+    @keyframes victory-overlay-main-menu-button--enter {
+        from {
+            opacity: 1;
+            transform: translateX(60px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0px);
+        }
+    }
+
+    &:hover {
+        left: 40px;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.victory-overlay-play-again-button {
+    position: absolute;
+    top: 276px;
+    left: 652px;
+    width: 86px;
+    z-index: 1;
+
+    transition: all 100ms;
+
+    animation-name: victory-overlay-play-again-button--enter;
+    animation-duration: 150ms;
+    animation-fill-mode: forwards;
+    animation-delay: 1700ms;
+
+    opacity: 0;
+    transform-origin: center 0;
+
+    @keyframes victory-overlay-play-again-button--enter {
+        from {
+            opacity: 1;
+            transform: translateX(-60px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0px);
+        }
+    }
+
+    &:hover {
+        left: 666px;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.victory-overlay-continue-button {
+    position: absolute;
+    left: 154px;
+    bottom: 10px;
+
+    width: 250px;
+
+    transition: all 100ms;
+
+    &:hover {
+        bottom: 17px;
+    }
+
+    > span {
+        position: absolute;
+        bottom: 45px;
+        left: -14px;
+
+        width: 100%;
+        text-align: center;
+        color: #ffffff;
+        font-size: 46px;
+        
+        display: block;
+        line-height: 0;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+}

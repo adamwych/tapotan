@@ -227,8 +227,10 @@ export default class InputManager {
 
     public removeMouseUpListener(callback: Function) {
         for (let [k, v] of Object.entries(this.mouseUpListeners)) {
-            if (v === callback) {
-                delete this.mouseUpListeners[k];
+            let value = v as Array<any>;
+            if (value.includes(callback)) {
+                value.splice(value.indexOf(callback), 1);
+                this.mouseUpListeners[k] = value;
             }
         }
     }
@@ -243,8 +245,10 @@ export default class InputManager {
 
     public removeMouseClickListener(callback: Function) {
         for (let [k, v] of Object.entries(this.mouseClickListeners)) {
-            if (v === callback) {
-                delete this.mouseClickListeners[k];
+            let value = v as Array<any>;
+            if (value.includes(callback)) {
+                value.splice(value.indexOf(callback), 1);
+                this.mouseClickListeners[k] = value;
             }
         }
     }

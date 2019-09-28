@@ -2,9 +2,14 @@ import * as React from 'react';
 import Tapotan from '../core/Tapotan';
 import Screen from '../screens/Screen';
 import UICircularMaskTransition from './UICircularMaskTransition';
+import UIVictoryOverlay from './game-end-overlay/UIVictoryOverlay';
+import UIGameOverOverlay from './game-end-overlay/UIGameOverOverlay';
 
 interface TapotanUIApplicationState {
     screens: Array<Screen>;
+
+    showGameOverOverlay: boolean;
+    showVictoryOverlay: boolean;
 }
 
 export default class TapotanUIApplication extends React.Component<any, TapotanUIApplicationState> {
@@ -13,25 +18,51 @@ export default class TapotanUIApplication extends React.Component<any, TapotanUI
         super(props);
 
         this.state = {
-            screens: []
+            screens: [],
+            showGameOverOverlay: false,
+            showVictoryOverlay: false
         }
     }
 
     public componentDidMount() {
-        const screenManager = Tapotan.getInstance().getScreenManager();
+        const game = Tapotan.getInstance();
+        const screenManager = game.getScreenManager();
+
         screenManager.on('screenPushed', this.handleScreenManagerChange);
         screenManager.on('screenPopped', this.handleScreenManagerChange);
+        game.on('gameOver', this.handleGameOver);
+        game.on('victory', this.handleVictory);
     }
 
     public componentWillUnmount() {
-        const screenManager = Tapotan.getInstance().getScreenManager();
-        screenManager.on('screenPushed', this.handleScreenManagerChange);
-        screenManager.on('screenPopped', this.handleScreenManagerChange);
+        const game = Tapotan.getInstance();
+        const screenManager = game.getScreenManager();
+
+        screenManager.off('screenPushed', this.handleScreenManagerChange);
+        screenManager.off('screenPopped', this.handleScreenManagerChange);
+        game.off('gameOver', this.handleGameOver);
+        game.off('victory', this.handleVictory);
     }
 
     private handleScreenManagerChange = (screens) => {
         this.setState({
-            screens: screens
+            screens: screens,
+            showVictoryOverlay: false,
+            showGameOverOverlay: false
+        });
+    }
+
+    private handleGameOver = () => {
+        this.setState({
+            showGameOverOverlay: true,
+            showVictoryOverlay: false
+        });
+    }
+
+    private handleVictory = () => {
+        this.setState({
+            showGameOverOverlay: false,
+            showVictoryOverlay: true
         });
     }
 
@@ -43,6 +74,20 @@ export default class TapotanUIApplication extends React.Component<any, TapotanUI
                 {screenRootComponents.map((Component, index) => (
                     <Component key={index} />
                 ))}
+
+                {this.state.showVictoryOverlay && (
+                    <UIVictoryOverlay
+                        inEditor={Tapotan.getInstance().isInEditor()}
+                        onCloseRequest={() => this.setState({ showVictoryOverlay: false })}
+                    />
+                )}
+
+                {this.state.showGameOverOverlay && (
+                    <UIGameOverOverlay
+                        inEditor={Tapotan.getInstance().isInEditor()}
+                        onCloseRequest={() => this.setState({ showGameOverOverlay: false })}
+                    />
+                )}
 
                 <UICircularMaskTransition />
             </div>

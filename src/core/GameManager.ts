@@ -2,6 +2,7 @@ import World from "../world/World";
 import Tapotan from "./Tapotan";
 import ScreenIngame from "../screens/ingame/ScreenIngame";
 import ScreenLevelEditor from "../editor/ScreenLevelEditor";
+import { EventEmitter } from "events";
 
 export enum GameState {
     InMenu, Playing, InEditor, Unknown
@@ -36,13 +37,15 @@ export default class GameManager {
         this.endReason = reason;
 
         let topScreen = this.game.getScreenManager().getTopScreen();
-        if (topScreen instanceof ScreenLevelEditor || topScreen instanceof ScreenIngame) {
+        if (topScreen instanceof ScreenIngame) {
             (topScreen as any).handleGameEnd(reason);
         }
 
         if (reason === GameEndReason.Death) {
+            this.game.emit('gameOver');
             this.game.getAudioManager().playSoundEffect('death');
         } else if (reason === GameEndReason.Victory) {
+            this.game.emit('victory');
             this.game.getAudioManager().playSoundEffect('victory');
         }
 

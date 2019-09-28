@@ -4,6 +4,7 @@ import LevelEditorContext from "./LevelEditorContext";
 import LevelEditorCommandRemoveObject from "./commands/LevelEditorCommandRemoveObject";
 import { GameState } from "../core/GameManager";
 import LevelEditorCommandRotateObject from "./commands/LevelEditorCommandRotateObject";
+import LevelEditorUIAgent from "./LevelEditorUIAgent";
 
 export default class LevelEditorKeyboardShortcutsController {
 
@@ -38,7 +39,7 @@ export default class LevelEditorKeyboardShortcutsController {
     }
 
     private handlePlaythroughToggleShortcutClick = () => {
-        if (this.context.getEditorScreen().getModal() !== null) {
+        if (!LevelEditorUIAgent.isInteractionEnabled()) {
             return;
         }
         

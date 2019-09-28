@@ -1,0 +1,154 @@
+.game-over-overlay-modal {
+    position: relative;
+
+    padding: 1rem;
+    width: 796px;
+    height: 594px;
+
+    z-index: 2;
+
+    animation-name: game-over-overlay-modal--enter;
+    animation-duration: 300ms;
+    animation-fill-mode: forwards;
+    animation-delay: 100ms;
+
+    transform: scale(0);
+    transform-origin: center center;
+
+    @keyframes game-over-overlay-modal--enter {
+        0% {
+            opacity: 0;
+            transform: scale(1.33);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .game-over-overlay-modal-text {
+        position: relative;
+
+        > div {
+            position: absolute;
+            width: 100%;
+
+            animation-fill-mode: forwards;
+
+            opacity: 0;
+
+            img {
+                width: 100%;
+            }
+        }
+
+        > div:nth-child(1) {
+            animation-name: game-over-overlay-modal-text--enter1;
+            animation-delay: 450ms;
+            animation-duration: 300ms;
+        }
+
+        > div:nth-child(2) {
+            animation-name: game-over-overlay-modal-text--enter2;
+            animation-delay: 300ms;
+            animation-duration: 650ms;
+            transform: scale(0.95) translateY(18px);
+        }
+
+        > div:nth-child(3) {
+            animation-name: game-over-overlay-modal-text--enter3;
+            animation-delay: 150ms;
+            animation-duration: 500ms;
+            transform: scale(0.9) translateY(36px);
+        }
+
+        @keyframes game-over-overlay-modal-text--enter1 {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes game-over-overlay-modal-text--enter2 {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes game-over-overlay-modal-text--enter3 {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.25;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+    }
+
+    .game-over-overlay-modal-buttons {
+        position: relative;
+        top: 206px;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    .game-over-overlay-modal-button {
+        width: fit-content;
+        display: inline-block;
+        background: #ef2929;
+        color: #ffffff;
+        margin-top: 1rem;
+        font-size: 42px;
+        padding: 1rem 1.5rem;
+
+        opacity: 0;
+        transform: translateX(-12px);
+        transition: all 150ms;
+        
+        animation-name: game-over-overlay-modal-button--enter;
+        animation-duration: 250ms;
+        animation-fill-mode: forwards;
+
+        &:nth-child(1) {
+            animation-delay: 1100ms;
+        }
+
+        &:nth-child(2) {
+            animation-delay: 1225ms;
+        }
+
+        @keyframes game-over-overlay-modal-button--enter {
+            from {
+                opacity: 0;
+                transform: translateX(-12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        &:hover {
+            padding: 1rem 2.5rem;
+        }
+    }
+}

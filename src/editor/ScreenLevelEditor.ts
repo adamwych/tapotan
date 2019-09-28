@@ -5,9 +5,6 @@ import Tapotan from "../core/Tapotan";
 import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import Screen from "../screens/Screen";
 import WidgetModal from '../screens/widgets/modal/WidgetModal';
-import WidgetEndGameOverlay from '../screens/widgets/WidgetEndGameOverlay';
-import WidgetGameOverOverlay from '../screens/widgets/WidgetGameOverOverlay';
-import WidgetVictoryOverlay from '../screens/widgets/WidgetVictoryOverlay';
 import UIEditorRootComponent from '../ui/editor/UIEditorRootComponent';
 import screenPointToWorld from '../utils/screenPointToWorld';
 import GameObjectComponentEditorShade from '../world/components/GameObjectComponentEditorShade';
@@ -75,8 +72,6 @@ export default class ScreenLevelEditor extends Screen {
     private lastHitObject: GameObject = null;
 
     private remainingMouseMoves: Array<{x: number, y: number}> = [];
-    
-    private modal: WidgetModal = null;
 
     private world: World;
 
@@ -199,12 +194,12 @@ export default class ScreenLevelEditor extends Screen {
             if (selectedObjects.length > 0) {
                 const selectedObject = selectedObjects[selectedObjects.length - 1];
                 const signComponent = selectedObject.getComponentByType<GameObjectComponentSign>(GameObjectComponentSign);
-                const modal = new WidgetLevelEditorSetSignTextModal(signComponent.getText());
+                /*const modal = new WidgetLevelEditorSetSignTextModal(signComponent.getText());
                 modal.on('change', text => {
                     signComponent.setText(text);
                 });
 
-                this.showModal(modal);
+                this.showModal(modal);*/
             }
         });
 
@@ -217,11 +212,15 @@ export default class ScreenLevelEditor extends Screen {
         });
 
         LevelEditorUIAgent.onTogglePlaythroughEmitted(() => {
-            if (this.context.getEditorScreen().getModal() !== null) {
-                return;
-            }
-            
             this.context.getPlaythroughController().toggle();
+        });
+    
+        LevelEditorUIAgent.onSetSpawnTileClicked(() => {
+            this.handleSetSpawnPointTileClick();
+        });
+
+        LevelEditorUIAgent.onSetEndTileClicked(() => {
+            this.handleSetEndPointTileClick();
         });
     }
 
@@ -694,11 +693,6 @@ export default class ScreenLevelEditor extends Screen {
         this.isSettingSpawnPoint = false;
         this.isSettingEndPoint = false;
 
-        if (this.modal) {
-            this.modal.destroy({ children: true });
-            this.modal = null;
-        }
-
         this.grid.restoreTilesAlpha();
     }
 
@@ -707,35 +701,6 @@ export default class ScreenLevelEditor extends Screen {
 
         this.handleRightMouseButtonClick();
         this.blurActiveAndHoveredObjectOutline();
-    }
-
-    public handleGameEnd = (reason: GameEndReason) => {
-        let overlay: WidgetEndGameOverlay;
-
-        switch (reason) {
-            case GameEndReason.Victory: {
-                overlay = new WidgetVictoryOverlay(true, 0);
-                break;
-            }
-
-            case GameEndReason.Death: {
-                overlay = new WidgetGameOverOverlay(true);
-                break;
-            }
-        }
-
-        if (overlay) {
-            this.modal = overlay as any;
-
-            overlay.on('close', () => {
-                this.modal = null;
-                this.playthroughController.stop();
-            });
-    
-            this.uiContainer.addChild(overlay);
-        } else {
-            this.playthroughController.stop();
-        }
     }
 
     private handlePlaythroughStopped = () => {
@@ -825,20 +790,6 @@ export default class ScreenLevelEditor extends Screen {
         this.remainingMouseMoves = [];
     }
 
-    public showModal(modal: WidgetModal) {
-        if (this.modal) {
-            this.modal.destroy({ children: true });
-            this.modal = null;
-        }
-
-        this.modal = modal;
-        this.modal.on('close', () => {
-            this.modal = null;
-        });
-
-        this.uiContainer.addChild(this.modal);
-    }
-
     /**
      * Checks whether user should be able to interact with specified game object.
      * @param gameObject 
@@ -847,7 +798,8 @@ export default class ScreenLevelEditor extends Screen {
         return (
             this.context.canInteractWithEditor() &&
             this.newGameObjectShade === null &&
-            gameObject.getLayer() === this.context.getCurrentLayerIndex()
+            gameObject.getLayer() === this.context.getCurrentLayerIndex() &&
+            LevelEditorUIAgent.isInteractionEnabled()
         );
     }
 
@@ -865,10 +817,6 @@ export default class ScreenLevelEditor extends Screen {
 
     public getSpawnPointShadeObject(): GameObject {
         return this.spawnPointShadeObject;
-    }
-
-    public getModal(): WidgetModal {
-        return this.modal;
     }
 
     public getUIRootComponent() {

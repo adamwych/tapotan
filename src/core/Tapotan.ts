@@ -19,6 +19,7 @@ import InputManager from './InputManager';
 import ScreenManager from './ScreenManager';
 import LoadProgress from './LoadProgress';
 import TapotanUIApplicationBootstrap from '../ui/TapotanUIApplicationBootstrap';
+import { EventEmitter } from 'events';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -27,7 +28,7 @@ export enum TapotanCursor {
     Move = 'Move'
 }
 
-export default class Tapotan {
+export default class Tapotan extends EventEmitter {
 
     public static instance: Tapotan;
 
@@ -49,11 +50,15 @@ export default class Tapotan {
     private resizeCallbacks: Function[] = [];
 
     private isSavingEditorSnapshot: boolean = false;
+
+    private _isInEditor: boolean = false;
     
     public static GameVersion: number = 5;
     public static Cursor = TapotanCursor;
 
     constructor() {
+        super();
+        
         Tapotan.instance = this;
         this.init();
     }
@@ -279,8 +284,8 @@ export default class Tapotan {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
         
-                        this.startMainMenu();
-                        //this.startEditor();
+                        //this.startMainMenu();
+                        this.startEditor();
                     }, 200);
 
                 }
@@ -297,6 +302,8 @@ export default class Tapotan {
     }
 
     public startMainMenu() {
+        this._isInEditor = false;
+        
         window.location.hash = '';
 
         if (this.gameManager && this.gameManager.getWorld()) {
@@ -321,6 +328,8 @@ export default class Tapotan {
     }
 
     public startLevel(world: World) {
+        this._isInEditor = false;
+
         window.location.hash = '';
 
         if (this.gameManager && this.gameManager.getWorld()) {
@@ -343,6 +352,8 @@ export default class Tapotan {
     }
 
     public startEditor(world: World = null) {
+        this._isInEditor = true;
+
         window.location.hash = '';
         
         if (this.gameManager && this.gameManager.getWorld()) {
@@ -369,6 +380,8 @@ export default class Tapotan {
     }
 
     private startTestScreen() {
+        this._isInEditor = false;
+        
         this.gameManager = new GameManager(this);
                 
         const world = new World(this, 100, 100, this.assetManager.getTilesetByName('pixelart'));
@@ -526,6 +539,10 @@ export default class Tapotan {
         }
     }
 
+    public isInEditor() {
+        return this._isInEditor;
+    }
+
     public static getViewportHeightDifferenceDueToResize() {
         return Tapotan.getViewportHeight() - Tapotan.getInstance().initialViewportHeight;
     }
@@ -533,4 +550,5 @@ export default class Tapotan {
     public static getInitialViewportHeight() {
         return Tapotan.getInstance().initialViewportHeight;
     }
+
 }

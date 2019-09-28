@@ -10,6 +10,7 @@ export default class LevelEditorUIAgent extends EventEmitter {
     public static instance: LevelEditorUIAgent = null;
 
     private worldInteractionEnabled: boolean = true;
+    private interactionEnabled: boolean = true;
 
     private editorContext: LevelEditorContext;
 
@@ -31,6 +32,14 @@ export default class LevelEditorUIAgent extends EventEmitter {
         return LevelEditorUIAgent.instance.worldInteractionEnabled;
     }
 
+    public static setInteractionEnabled(enabled: boolean) {
+        LevelEditorUIAgent.instance.interactionEnabled = enabled;
+    }
+
+    public static isInteractionEnabled(): boolean {
+        return LevelEditorUIAgent.instance.interactionEnabled;
+    }
+
     // ============================================================
 
     public static emitPrefabExplorerItemSelected(resource: string) {
@@ -43,6 +52,34 @@ export default class LevelEditorUIAgent extends EventEmitter {
 
     public static offPrefabExplorerItemSelected(callback: PrefabExplorerItemSelectedCallbackFn) {
         LevelEditorUIAgent.instance.off('prefabExplorerItemSelected', callback);
+    }
+
+    // ============================================================
+
+    public static emitSetSpawnTileClicked() {
+        LevelEditorUIAgent.instance.emit('setSpawnTileClicked');
+    }
+
+    public static onSetSpawnTileClicked(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.on('setSpawnTileClicked', callback);
+    }
+
+    public static offSetSpawnTileClicked(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.off('setSpawnTileClicked', callback);
+    }
+
+    // ============================================================
+
+    public static emitSetEndTileClicked() {
+        LevelEditorUIAgent.instance.emit('setEndTileClicked');
+    }
+
+    public static onSetEndTileClicked(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.on('setEndTileClicked', callback);
+    }
+
+    public static offSetEndTileClicked(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.off('setEndTileClicked', callback);
     }
 
     // ============================================================

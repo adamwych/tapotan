@@ -1,0 +1,33 @@
+.game-over-overlay,
+.victory-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 2;
+
+    pointer-events: all;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    animation-name: game-end-overlay--enter;
+    animation-duration: 200ms;
+    animation-fill-mode: forwards;
+
+    @keyframes game-end-overlay--enter {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+}

@@ -8,6 +8,7 @@ import LevelEditorLayer from "./LevelEditorLayer";
 import LevelEditorPlaythroughController from "./LevelEditorPlaythroughController";
 import { EventEmitter } from "events";
 import LevelEditorSettings from "./LevelEditorSettings";
+import LevelEditorUIAgent from "./LevelEditorUIAgent";
 
 export default class LevelEditorContext extends EventEmitter {
 
@@ -87,7 +88,7 @@ export default class LevelEditorContext extends EventEmitter {
     public canInteractWithEditor(): boolean {
         return (
             this.game.getGameManager().getGameState() !== GameState.Playing &&
-            this.editorScreen.getModal() === null
+            LevelEditorUIAgent.isInteractionEnabled()
         );
     }
 

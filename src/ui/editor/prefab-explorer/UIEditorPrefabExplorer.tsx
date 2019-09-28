@@ -30,6 +30,18 @@ export default function UIEditorPrefabExplorer() {
         setPrefabExplorerActiveCategoryID(null);
     }, []);
 
+    const handleSetSpawnPointTileClick = useCallback(() => {
+        LevelEditorUIAgent.setWorldInteractionEnabled(true);
+        LevelEditorUIAgent.emitSetSpawnTileClicked();
+        setPrefabExplorerActiveCategoryID(null);
+    }, []);
+
+    const handleSetEndPointTileClick = useCallback(() => {
+        LevelEditorUIAgent.setWorldInteractionEnabled(true);
+        LevelEditorUIAgent.emitSetEndTileClicked();
+        setPrefabExplorerActiveCategoryID(null);
+    }, []);
+
     const handlePlaythroughStarted = useCallback(() => {
         LevelEditorUIAgent.setWorldInteractionEnabled(true);
         setPrefabExplorerActiveCategoryID(null);
@@ -52,6 +64,20 @@ export default function UIEditorPrefabExplorer() {
                         active={activeCategoryID === editorCategory.name}
                     />
                 ))}
+
+                <UIEditorPrefabExplorerTile
+                    label="Spawn Point"
+                    icon="spawn_point"
+                    onClick={handleSetSpawnPointTileClick}
+                    active={false}
+                />
+
+                <UIEditorPrefabExplorerTile
+                    label="End Point"
+                    icon="end_point"
+                    onClick={handleSetEndPointTileClick}
+                    active={false}
+                />
             </div>
 
             <UIEditorPrefabExplorerPopupWrapper
