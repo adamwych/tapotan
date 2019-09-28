@@ -1,0 +1,35 @@
+@import './mixins.scss';
+
+.editor-layer-selector {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 16px;
+
+    display: flex;
+    align-items: center;
+
+    .editor-layer-selector-tile {
+        width: 96px;
+        height: 96px;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        pointer-events: all;
+
+        font-size: 40px;
+        color: #bcbcbc;
+
+        @include scale-hover-animation;
+
+        &:not(:first-child) {
+            margin-left: 12px;
+        }
+
+        &.attr--active {
+            color: #0053cc;
+        }
+    }
+}

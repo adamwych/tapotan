@@ -9,6 +9,7 @@ import UIEditorObjectActionButtons from './UIEditorObjectActionButtons';
 import UIEditorSharedValues from './UIEditorSharedValues';
 import UIEditorTopbar from './UIEditorTopbar';
 import UIEditorPublishPopup from './publish-popup/UIEditorPublishPopup';
+import UIEditorLayerSelector from './UIEditorLayerSelector';
 
 require('./editor.scss');
 
@@ -59,6 +60,7 @@ export default function UIEditorRootComponent() {
         <div className={`screen-editor ${playthroughInProgress ? 'attr--playthrough-started' : ''}`}>
             <UIEditorTopbar commonActionsVisible={!playthroughInProgress} />
             <UIEditorPrefabExplorer />
+            <UIEditorLayerSelector />
     
             {levelSettingsPopupVisible && (
                 <UIEditorLevelSettingsPopup />

@@ -6,6 +6,7 @@
 @import './editor-level-settings-dropdown.scss';
 @import './editor-level-settings-toggle-selector.scss';
 @import './editor-publish-popup.scss';
+@import './editor-layer-selector.scss';
 
 .screen-editor {
     position: relative;
@@ -16,7 +17,8 @@
     pointer-events: none;
 
     &.attr--playthrough-started {
-        .editor-prefab-explorer {
+        .editor-prefab-explorer,
+        .editor-layer-selector {
             bottom: -112px;
         }
 
