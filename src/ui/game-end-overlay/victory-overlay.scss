@@ -10,7 +10,7 @@
     animation-name: victory-overlay-modal--enter;
     animation-duration: 300ms;
     animation-fill-mode: forwards;
-    animation-delay: 400ms;
+    animation-delay: 200ms;
 
     transform: scale(0);
     transform-origin: center center;
@@ -40,7 +40,7 @@
         animation-name: victory-overlay-modal-text--enter;
         animation-duration: 200ms;
         animation-fill-mode: forwards;
-        animation-delay: 800ms;
+        animation-delay: 600ms;
 
         transform: scale(0);
         transform-origin: center center;
@@ -96,7 +96,7 @@
         animation-name: victory-overlay-modal-flag--enter;
         animation-duration: 400ms;
         animation-fill-mode: forwards;
-        animation-delay: 400ms;
+        animation-delay: 200ms;
 
         transform: scaleY(0);
         transform-origin: center center;
@@ -129,7 +129,7 @@
         animation-name: victory-overlay-modal-flag-bg--enter;
         animation-duration: 300ms;
         animation-fill-mode: forwards;
-        animation-delay: 800ms;
+        animation-delay: 600ms;
 
         transform: scaleX(0);
         transform-origin: center center;
@@ -163,7 +163,7 @@
         animation-name: victory-overlay-modal-content-background--enter;
         animation-duration: 300ms;
         animation-fill-mode: forwards;
-        animation-delay: 1300ms;
+        animation-delay: 1100ms;
 
         transform: scaleY(0);
         transform-origin: center 0;
@@ -284,7 +284,7 @@
     animation-name: victory-overlay-main-menu-button--enter;
     animation-duration: 150ms;
     animation-fill-mode: forwards;
-    animation-delay: 1700ms;
+    animation-delay: 1500ms;
 
     opacity: 0;
     transform-origin: center 0;
@@ -324,7 +324,7 @@
     animation-name: victory-overlay-play-again-button--enter;
     animation-duration: 150ms;
     animation-fill-mode: forwards;
-    animation-delay: 1700ms;
+    animation-delay: 1500ms;
 
     opacity: 0;
     transform-origin: center 0;

@@ -314,6 +314,10 @@ export default class ScreenLevelEditor extends Screen {
                 return;
             }
 
+            if (this.isSettingSpawnPoint || this.isSettingEndPoint) {
+                return;
+            }
+
             if (
                 this.context.getSelectedObjects().length > 0 &&
                 this.context.getSelectedObjects().includes(gameObject)
@@ -796,10 +800,10 @@ export default class ScreenLevelEditor extends Screen {
      */
     public canInteractWithGameObject(gameObject: GameObject): boolean {
         return (
+            LevelEditorUIAgent.isInteractionEnabled() &&
             this.context.canInteractWithEditor() &&
             this.newGameObjectShade === null &&
-            gameObject.getLayer() === this.context.getCurrentLayerIndex() &&
-            LevelEditorUIAgent.isInteractionEnabled()
+            gameObject.getLayer() === this.context.getCurrentLayerIndex()
         );
     }
 
