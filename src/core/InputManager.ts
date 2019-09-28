@@ -147,8 +147,6 @@ export default class InputManager {
     }
     
     private handleMouseDown = (e): void => {
-        e.preventDefault();
-
         this.mouseDownCurrentButton = e.which;
 
         if (!this.mouseDown.includes(e.which)) {
@@ -224,6 +222,14 @@ export default class InputManager {
             this.mouseUpListeners[button].push(callback);
         } else {
             this.mouseUpListeners[button] = [callback];
+        }
+    }
+
+    public removeMouseUpListener(callback: Function) {
+        for (let [k, v] of Object.entries(this.mouseUpListeners)) {
+            if (v === callback) {
+                delete this.mouseUpListeners[k];
+            }
         }
     }
 

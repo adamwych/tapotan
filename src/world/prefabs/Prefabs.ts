@@ -1,25 +1,26 @@
 import PrefabCharacterLawrence from "./characters/PrefabCharacterLawrence";
+import PrefabCharacterMainMenuLawrence from "./characters/PrefabCharacterMainMenuLawrence";
+import PrefabComplexBackgroundClouds from "./complex-backgrounds/PrefabComplexBackgroundClouds";
+import PrefabEnvironmentAccelerator from "./environment/PrefabEnvironmentAccelerator";
 import PrefabEnvironmentCoin from "./environment/PrefabEnvironmentCoin";
+import PrefabEnvironmentLadder from "./environment/PrefabEnvironmentLadder";
 import PrefabEnvironmentLava from "./environment/PrefabEnvironmentLava";
+import PrefabEnvironmentLockDoor from "./environment/PrefabEnvironmentLockDoor";
+import PrefabEnvironmentLockKey from "./environment/PrefabEnvironmentLockKey";
+import PrefabEnvironmentSign from "./environment/PrefabEnvironmentSign";
 import PrefabEnvironmentSpike from "./environment/PrefabEnvironmentSpike";
+import PrefabEnvironmentSpring from "./environment/PrefabEnvironmentSpring";
 import PrefabEnvironmentWater from "./environment/PrefabEnvironmentWater";
 import PrefabEnvironmentWaterBlock from "./environment/PrefabEnvironmentWaterBlock";
+import PrefabMonsterCuddlyApple from "./monsters/PrefabMonsterCuddlyApple";
+import PrefabMonsterGhost from "./monsters/PrefabMonsterGhost";
+import PrefabMonsterHappyCarrot from "./monsters/PrefabMonsterHappyCarrot";
+import PrefabMonsterSnake from "./monsters/PrefabMonsterSnake";
+import PrefabParticlesPlayerDeathBubbles from "./particles/PrefabParticlesPlayerDeathBubbles";
 import PrefabBasicBlock from "./PrefabBasicBlock";
 import PrefabSpawnPointShade from "./PrefabSpawnPointShade";
 import PrefabVictoryFlag from "./PrefabVictoryFlag";
-import PrefabEnvironmentSpring from "./environment/PrefabEnvironmentSpring";
-import PrefabEnvironmentAccelerator from "./environment/PrefabEnvironmentAccelerator";
-import PrefabEnvironmentLadder from "./environment/PrefabEnvironmentLadder";
-import PrefabEnvironmentSign from "./environment/PrefabEnvironmentSign";
 import PrefabSkyStar from "./sky/PrefabSkyStar";
-import PrefabParticlesPlayerDeathBubbles from "./particles/PrefabParticlesPlayerDeathBubbles";
-import PrefabMonsterCuddlyApple from "./monsters/PrefabMonsterCuddlyApple";
-import PrefabMonsterHappyCarrot from "./monsters/PrefabMonsterHappyCarrot";
-import PrefabMonsterSnake from "./monsters/PrefabMonsterSnake";
-import PrefabMonsterGhost from "./monsters/PrefabMonsterGhost";
-import PrefabEnvironmentLockKey from "./environment/PrefabEnvironmentLockKey";
-import PrefabEnvironmentLockDoor from "./environment/PrefabEnvironmentLockDoor";
-import PrefabComplexBackgroundClouds from "./complex-backgrounds/PrefabComplexBackgroundClouds";
 
 export interface PrefabBasicProps {
 
@@ -74,6 +75,7 @@ export default {
     'monsters_ghost': PrefabMonsterGhost,
 
     CharacterLawrence: PrefabCharacterLawrence,
+    CharacterMainMenuLawrence: PrefabCharacterMainMenuLawrence,
     CharacterDeathBubbles: PrefabParticlesPlayerDeathBubbles,
 
     ComplexBackgroundClouds: PrefabComplexBackgroundClouds

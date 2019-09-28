@@ -35,7 +35,12 @@
             overflow: hidden;
             background: #000000;
             cursor: url('/assets/tilesets/pixelart/UI/Cursor.ico'), auto;
-            font-family: 'Joystix';
+            font-family: 'bradybunch';
+            user-select: none;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body.CursorDefault {
@@ -59,6 +64,11 @@
             src: url('/assets/Fonts/Joystix.ttf');
         }
 
+        @font-face {
+            font-family: 'bradybunch';
+            src: url('/assets/Fonts/brady_bunch/brady_bunch.woff');
+        }
+
         #webglerror,
         #loading,
         #resizerefresh {
@@ -79,6 +89,8 @@
             font-smooth: never;
             -webkit-font-smoothing: none;
             user-select: none;
+
+            z-index: 2;
         }
 
         #webglerror > div:first-child,
@@ -98,7 +110,7 @@
         }
 
         #loading > div:first-child {
-            font-size: 16px;
+            font-size: 60px;
             animation-name: fade-and-scale;
         }
 
@@ -188,6 +200,16 @@
                 opacity: 1;
             }
         }
+
+        #tapotan-ui-root {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -215,5 +237,6 @@
     </div>
 
     <div id="tetempoan"></div>
+    <div id="tapotan-ui-root"></div>
 </body>
 </html>

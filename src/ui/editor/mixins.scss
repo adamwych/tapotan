@@ -1,0 +1,7 @@
+@mixin scale-hover-animation() {
+    transition: all 100ms;
+    pointer-events: all;
+
+    &:hover { transform: scale(1.1); }
+    &:active, &:focus { transform: scale(0.95); }
+}

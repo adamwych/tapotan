@@ -1,0 +1,78 @@
+@import './mixins.scss';
+
+.editor-object-action-buttons {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: -42px;
+
+    animation-name: editor-object-action-buttons--enter;
+    animation-duration: 150ms;
+    animation-fill-mode: forwards;
+
+    @keyframes editor-object-action-buttons--enter {
+        from {
+            transform: translateY(8px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .editor-object-action-button {
+        position: relative;
+
+        @include scale-hover-animation;
+
+        &:not(:first-child) {
+            margin-left: 4px;
+        }
+            
+        &:hover {
+            .editor-object-action-button-tooltip {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .editor-object-action-button-tooltip {
+            width: 84px;
+
+            position: absolute;
+            top: -100%;
+            left: -26px;
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+
+            text-align: center;
+
+            background: #0053cc;
+            color: #ffffff;
+
+            opacity: 0;
+
+            transition: all 150ms;
+            transform: translateY(4px);
+        }
+
+        .editor-object-action-button-icon {
+            width: 36px;
+            height: 36px;
+
+            img {
+                display: block;
+    
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}

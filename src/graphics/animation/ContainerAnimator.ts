@@ -59,8 +59,11 @@ export default class ContainerAnimator {
             this.currentAnimationEndCallback();
         }
 
-        this.currentAnimation.beforeEnd(this.container);
-        this.currentAnimation = null;
+        if (this.currentAnimation) {
+            this.currentAnimation.beforeEnd(this.container);
+            this.currentAnimation = null;
+        }
+        
         this.currentAnimationEndCallback = null;
     }
 }

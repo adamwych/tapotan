@@ -3,10 +3,13 @@ import Tapotan from "../core/Tapotan";
 
 export default class Screen extends PIXI.Container {
 
+    protected _id: number;
     protected game: Tapotan;
 
     constructor(game: Tapotan) {
         super();
+
+        this._id = Math.random();
         this.game = game;
     }
     
@@ -26,4 +29,9 @@ export default class Screen extends PIXI.Container {
     private _tick = () => {
         this.tick(this.game.getPixiApplication().ticker.elapsedMS / 1000);
     }
+
+    public getUIRootComponent() {
+        return null;
+    }
+
 }

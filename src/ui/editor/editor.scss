@@ -1,0 +1,27 @@
+@import './editor-prefab-explorer.scss';
+@import './editor-prefab-explorer-popup.scss';
+@import './editor-object-action-buttons.scss';
+@import './editor-topbar.scss';
+@import './editor-level-settings-popup.scss';
+@import './editor-level-settings-dropdown.scss';
+@import './editor-level-settings-toggle-selector.scss';
+@import './editor-publish-popup.scss';
+
+.screen-editor {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    pointer-events: none;
+
+    &.attr--playthrough-started {
+        .editor-prefab-explorer {
+            bottom: -112px;
+        }
+
+        .editor-topbar-common {
+            top: -112px;
+        }
+    }
+}

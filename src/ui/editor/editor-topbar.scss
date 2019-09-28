@@ -1,0 +1,78 @@
+@import './mixins.scss';
+
+.editor-topbar {
+    position: absolute;
+    padding: 16px;
+
+    display: flex;
+    align-items: center;
+
+    .editor-topbar-item {
+        pointer-events: all;
+
+        width: 96px;
+        height: 96px;
+
+        @include scale-hover-animation;
+
+        &:not(:first-child) {
+            margin-left: 12px;
+        }
+
+        &.attr--active {
+            animation-name: editor-topbar-item--active;
+            animation-duration: 1000ms;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+
+            @keyframes editor-topbar-item--active {
+                0% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+        }
+
+        img {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .editor-topbar-common {
+        position: relative;
+        margin-left: 12px;
+        transition: all 100ms;
+        top: 0;
+
+        display: flex;
+    }
+
+    .editor-topbar-item-publish {
+        transform: scale(1);
+        width: 288px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        > span {
+            position: absolute;
+            width: 100%;
+            display: block;
+            text-align: center;
+            color: #ffffff;
+            font-size: 54px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+    }
+}

@@ -14,18 +14,19 @@ import Tileset from './tiles/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
 import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
+import WorldBackgrounds from './backgrounds/WorldBackgrounds';
 
 export default class World extends PIXI.Container {
 
     public static SkyColors = {
-        'light-blue': 0x8bf9ff,
-        'blue': 0x1bf3ff,
-        'dark-blue': 0x16a4f6,
-        'navy-blue': 0x0a2152,
-        'red': 0xff6666,
-        'dark-red': 0x631a1a,
-        'pink': 0xff66d6,
-        'black': 0x000000
+        'light-blue': ['8bf9ff', 0x8bf9ff],
+        'blue': ['1bf3ff', 0x1bf3ff],
+        'dark-blue': ['16a4f6', 0x16a4f6],
+        'navy-blue': ['0a2152', 0x0a2152],
+        'red': ['ff6666', 0xff6666],
+        'dark-red': ['631a1a', 0x631a1a],
+        'pink': ['ff66d6', 0xff66d6],
+        'black': ['000000', 0x000000]
     };
 
     public static MaskSizes = {
@@ -113,13 +114,16 @@ export default class World extends PIXI.Container {
         this.sky.zIndex = 0;
         this.addChild(this.sky);
 
-        this.setSkyColor('light-blue');
+        this.setSkyColor('blue');
 
         this.sortableChildren = true;
 
         TickHelper.add(this.tick);
 
         this.startTime = new Date().getTime();
+
+        this.setAnimatedBackgroundId('clouds');
+        new WorldBackgrounds.Clouds.spawner(this);
     }
 
     public destroy() {
@@ -563,7 +567,7 @@ export default class World extends PIXI.Container {
 
     public setSkyColor(color: string) {
         this.skyColor = color;
-        this.sky.tint = World.SkyColors[color];
+        this.sky.tint = World.SkyColors[color][1];
     }
 
     public getSkyColor() {

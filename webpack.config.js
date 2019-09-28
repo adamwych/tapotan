@@ -33,12 +33,21 @@ module.exports = {
                     }
                 ],
                 exclude: /node_modules/
-            }
+            },
+            
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader',
+                ],
+            },
         ]
     },
 
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css']
     },
 
     output: {

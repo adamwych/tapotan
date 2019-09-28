@@ -3,10 +3,9 @@ import WidgetModal from '../../../screens/widgets/modal/WidgetModal';
 import WidgetModalButton from '../../../screens/widgets/modal/WidgetModalButton';
 import WidgetDropdown from '../../../screens/widgets/WidgetDropdown';
 import World from '../../../world/World';
-import WidgetLevelEditorSettingsModalInput from '../settings-modal/WidgetLevelEditorSettingsModalInput';
 import LevelEditorContext from '../../LevelEditorContext';
 
-export default class WidgetLevelEditorEditorSettingsModal extends WidgetModal {
+/*export default class WidgetLevelEditorEditorSettingsModal extends WidgetModal {
 
     private context: LevelEditorContext;
 
@@ -67,4 +66,4 @@ export default class WidgetLevelEditorEditorSettingsModal extends WidgetModal {
         return new WidgetLevelEditorSettingsModalInput(width, label, dropdown);
     }
 
-}
+}*/

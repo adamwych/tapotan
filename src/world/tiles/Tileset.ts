@@ -6,6 +6,7 @@ import { ResourceType, TAPOAssetBundleEntry } from "../../core/asset-bundle/TAPO
 
 interface TilesetResource {
     resource: LoaderResource;
+    data: Buffer;
     path: string;
 };
 
@@ -33,6 +34,7 @@ export default class Tileset {
     
             this.resources[id] = {
                 resource: asset.resource,
+                data: asset.data,
                 path: resourcePath.substr(0, resourcePath.lastIndexOf('.')).toLowerCase()
             };
         }
@@ -62,13 +64,22 @@ export default class Tileset {
         return this.editorCategories;
     }
 
-    public getResourceById(id: string): any {
+    public getAssetById(id: string): TilesetResource {
         let res = this.resources[id];
         if (res) {
-            return res.resource;
+            return res;
         }
 
-        console.warn('Resource not found: ' + id);
+        console.warn('Asset not found: ' + id);
+        return null;
+    }
+
+    public getResourceById(id: string): any {
+        let asset = this.getAssetById(id);
+        if (asset) {
+            return asset.resource;
+        }
+
         return null;
     }
 

@@ -1,0 +1,62 @@
+@import './mixins.scss';
+
+.editor-level-settings-popup-background-tab {
+    .editor-level-settings-section {
+        margin-top: 1rem;
+
+        .editor-level-settings-section-title {
+            color: #ffffff;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        .editor-level-settings-section-body {
+            margin-top: 0.33rem;
+        }
+    }
+
+    .editor-level-settings-background-tiles {
+        width: auto;
+
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        margin: -5px;
+        margin-right: 0;
+
+        .editor-level-settings-background-tile {
+            height: 72px;
+
+            flex: calc(25% - 10px);
+            flex-grow: 0;
+            flex-shrink: 0;
+
+            margin: 5px;
+
+            background-size: contain;
+            background-position: center;
+
+            @include scale-hover-animation;
+
+            &::after {
+                content: ' ';
+                position: absolute;
+                top: 4px;
+                left: 4px;
+                width: calc(100% - 12px);
+                height: calc(100% - 12px);
+                border: 2px dashed transparent;
+                pointer-events: none;
+            }
+
+            &.attr--active {
+                transform: scale(1.1);
+
+                &::after {
+                    border: 2px dashed white;
+                }
+            }
+        }
+    }
+}

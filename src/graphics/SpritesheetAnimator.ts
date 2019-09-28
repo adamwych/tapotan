@@ -71,7 +71,6 @@ export default class SpritesheetAnimator extends PIXI.Container {
 
         let animation = this.animations[name];
         if (animation) {
-
             this.timer.restartAnimation(animation.speed, animation.cells, startFrame);
             this.currentAnimationCellIndex = this.timer.getCellIndex();
             this.lastCurrentAnimationCellIndex = -1;

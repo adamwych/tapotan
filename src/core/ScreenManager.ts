@@ -2,13 +2,16 @@ import Tapotan from "./Tapotan";
 import Screen from "../screens/Screen";
 import ScreenTransition from "../screens/ScreenTransition";
 import ScreenTransitionImmediate from "../screens/transitions/ScreenTransitionImmediate";
+import { EventEmitter } from "events";
 
-export default class ScreenManager {
+export default class ScreenManager extends EventEmitter {
 
     private game: Tapotan;
     private screens: Screen[];
 
     constructor(game: Tapotan) {
+        super();
+
         this.game = game;
         this.screens = [];
     }
@@ -25,6 +28,7 @@ export default class ScreenManager {
         screen.onAddedToScreenManager();
         this.game.getViewport().addChild(screen);
         this.screens.splice(0, 0, screen);
+        this.emit('screenPushed', this.getScreens());
     }
 
     public popScreen() {
@@ -36,9 +40,15 @@ export default class ScreenManager {
         topScreen.onRemovedFromScreenManager();
         this.game.getViewport().removeChild(topScreen);
         this.screens.splice(0, 1);
+        this.emit('screenPopped', this.getScreens());
     }
 
     public getTopScreen() {
         return this.screens[0];
     }
+
+    public getScreens() {
+        return this.screens;
+    }
+
 }

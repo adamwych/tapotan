@@ -1,0 +1,116 @@
+.screen-main-menu {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+
+    .main-manu-island-wrapper {
+        position: absolute;
+        width: 792px;
+        height: 792px;
+
+        .main-menu-island-button {
+            line-height: 0;
+    
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+    
+            font-size: 44px;
+    
+            background-repeat: no-repeat;
+            background-size: contain;
+
+            text-transform: uppercase;
+    
+            color: #ffffff;
+
+            transition: all 150ms;
+
+            &:hover {
+                transform: scale(1.1);
+
+                .main-menu-island-button-description {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            &:active, &:focus {
+                transform: scale(0.9);
+            }
+
+            .main-menu-island-button-description {
+                opacity: 0;
+                position: absolute;
+                top: calc(100% + 6px);
+                color: #ffffff;
+                font-size: 18px;
+                line-height: 1rem;
+                white-space: nowrap;
+                padding: 0.75rem;
+                border-radius: 40px;
+                transition: all 150ms;
+                transform: translateY(-8px);
+            }
+        }
+
+        .main-menu-island-button-scoreboards {
+            position: absolute;
+            top: 284px;
+            left: -85px;
+
+            > .main-menu-island-button {
+                width: 270px;
+                height: 90px;
+
+                > .main-menu-island-button-description {
+                    background: #5ab188;
+                }
+            }
+        }
+
+        .main-menu-island-button-play {
+            position: absolute;
+            top: 120px;
+            right: 230px;
+
+            > .main-menu-island-button {
+                width: 160px;
+                height: 70px;
+
+                > .main-menu-island-button-description {
+                    background: #a41c45;
+                }
+            }
+        }
+
+        .main-menu-island-button-level-maker {
+            position: absolute;
+            top: 356px;
+            right: 22px;
+
+            > .main-menu-island-button {
+                width: 236px;
+                height: 70px;
+
+                > .main-menu-island-button-description {
+                    background: #d43232;
+                }
+            }
+        }
+    }
+
+    .main-menu-logo {
+        margin-top: 4rem;
+        margin-right: 3.5rem;
+
+        img {
+            width: 480px;
+            image-rendering: pixelated;
+        }
+    }
+}

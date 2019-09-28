@@ -18,6 +18,7 @@ import GameManager, { GameState } from './GameManager';
 import InputManager from './InputManager';
 import ScreenManager from './ScreenManager';
 import LoadProgress from './LoadProgress';
+import TapotanUIApplicationBootstrap from '../ui/TapotanUIApplicationBootstrap';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -213,6 +214,8 @@ export default class Tapotan {
                 this.audioManager.loadBackgroundMusicFromBundle(bundle);
                 this.audioManager.loadSoundEffectsFromBundle(bundle);
 
+                TapotanUIApplicationBootstrap.start();
+
                 const fonts = [
                     [ 18, 1 ],
                     [ 24, 2 ],
@@ -276,9 +279,8 @@ export default class Tapotan {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
         
-                        this.startEditor();
-                        //this.startMainMenu();
-                        //this.startTestScreen();
+                        this.startMainMenu();
+                        //this.startEditor();
                     }, 200);
 
                 }
@@ -482,11 +484,11 @@ export default class Tapotan {
     }
 
     public static getViewportWidth(): number {
-        return 22;
+        return 24;
     }
 
     public static getViewportHeight(): number {
-        return 22 * (Tapotan.getGameHeight() / Tapotan.getGameWidth());
+        return 24 * (Tapotan.getGameHeight() / Tapotan.getGameWidth());
     }
 
     public static getInstance(): Tapotan {

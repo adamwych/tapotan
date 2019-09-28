@@ -4,13 +4,14 @@ import InputManager from "../core/InputManager";
 import Tapotan from "../core/Tapotan";
 import LevelEditorCommandMoveObject from "./commands/LevelEditorCommandMoveObject";
 import GameObjectComponentPhysicsAwareTransform from "../world/components/GameObjectComponentPhysicsAwareTransform";
+import LevelEditorUIAgent from "./LevelEditorUIAgent";
 
 export default class LevelEditorActiveObjectDragController {
 
     private context: LevelEditorContext;
 
-    private offsetX: number;
-    private offsetY: number;
+    private offsetX: number = 0;
+    private offsetY: number = 0;
 
     constructor(context: LevelEditorContext) {
         this.context = context;
@@ -26,34 +27,36 @@ export default class LevelEditorActiveObjectDragController {
 
     public handleMouseDown = (x, y) => {
         setTimeout(() => {
-            if (this.context.getSelectedObjects().length > 0) {
-                const mouseDownCoords = screenPointToWorld(x, y);
-                mouseDownCoords.y = Tapotan.getViewportHeight() - mouseDownCoords.y - 1;
-                
-                const selectedObject = this.context.getSelectedObjects()[0];
-                
-                if (selectedObject.getWidth() > 1) {
-                    this.offsetX = (mouseDownCoords.x - selectedObject.transformComponent.getPositionX());
-                } else {
-                    this.offsetX = 0;
-                }
-
-                if (selectedObject.getHeight() > 1) {
-                    if (selectedObject.transformComponent instanceof GameObjectComponentPhysicsAwareTransform) {
-                        this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY()) + 1;
+            setTimeout(() => {
+                if (this.context.getSelectedObjects().length > 0) {
+                    const mouseDownCoords = screenPointToWorld(x, y);
+                    mouseDownCoords.y = Tapotan.getViewportHeight() - mouseDownCoords.y - 1;
+                    
+                    const selectedObject = this.context.getSelectedObjects()[0];
+    
+                    if (selectedObject.getWidth() > 1) {
+                        this.offsetX = (mouseDownCoords.x - selectedObject.transformComponent.getPositionX());
                     } else {
-                        this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY());
+                        this.offsetX = 0;
                     }
-                } else {
-                    this.offsetY = 0;
+    
+                    if (selectedObject.getHeight() > 1) {
+                        if (selectedObject.transformComponent instanceof GameObjectComponentPhysicsAwareTransform) {
+                            this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY()) + 1;
+                        } else {
+                            this.offsetY = (mouseDownCoords.y - selectedObject.transformComponent.getPositionY());
+                        }
+                    } else {
+                        this.offsetY = 0;
+                    }
                 }
-            }
+            });
         });
     }
 
     public handleMouseDrag = ({ x, y, deltaX, deltaY }) => {
 
-        if (!this.context.canInteractWithEditor()) {
+        if (!this.context.canInteractWithEditor() || !LevelEditorUIAgent.isWorldInteractionEnabled()) {
             return;
         }
 

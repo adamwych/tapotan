@@ -71,6 +71,7 @@ export default class GameObject extends PIXI.Container {
         this.customProperties = {};
         this.destroyed = false;
         this.enabled = true;
+        this.sortableChildren = true;
     }
 
     public serialize(): any {

@@ -1,0 +1,188 @@
+@import './mixins.scss';
+
+.editor-publish-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: all;
+    z-index: 2;
+
+    animation-name: editor-publish-popup-overlay--enter;
+    animation-duration: 100ms;
+    animation-fill-mode: forwards;
+
+    @keyframes editor-publish-popup-overlay--enter {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+.editor-publish-popup {
+    position: absolute;
+    z-index: 3;
+    left: calc((100vw - 640px) / 2);
+    top: 0px;
+    width: 640px;
+    height: 555px;
+
+    transform-origin: 0 0;
+    pointer-events: all;
+    
+    animation-name: editor-publish-popup--enter;
+    animation-duration: 150ms;
+    animation-fill-mode: forwards;
+
+    @keyframes editor-publish-popup--enter {
+        0% {
+            opacity: 0;
+            transform: translateY(-16px);
+        }
+
+        70% {
+            opacity: 0.7;
+            transform: translateY(12px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+    }
+
+    .editor-publish-popup-title {
+        width: calc(100% - 65px - 48px);
+        position: absolute;
+        left: 65px;
+        top: 92px;
+        font-size: 40px;
+        color: #ffffff;
+        letter-spacing: 2px;
+        text-align: center;
+    }
+    
+    .editor-publish-popup-body {
+        width: calc(100% - 65px - 35px);
+        height: 350px;
+        position: absolute;
+        top: 160px;
+        left: 65px;
+
+        padding-top: 2rem;
+        
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .editor-publish-popup-fields {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .editor-publish-popup-field {
+        &:not(:last-child) {
+            margin-bottom: 2rem;
+        }
+
+        .editor-publish-popup-field-label {
+            color: #ffffff;
+            font-size: 26px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            line-height: 10px;
+        }
+
+        .editor-publish-popup-field-input {
+            input {
+                outline: none;
+                background: transparent;
+
+                border: none;
+                border-bottom: 3px dashed white;
+
+                font-family: 'bradybunch';
+                font-size: 30px;
+
+                color: white;
+                letter-spacing: 1px;
+            }
+        }
+    }
+
+    .editor-publish-popup-submit-button {
+        display: inline-block;
+        color: #ffffff;
+        padding: 1rem 2rem;
+        font-size: 56px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-top: 0.5rem;
+
+        @include scale-hover-animation;
+    }
+
+    .editor-publish-popup-success-wrapper {
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-between;
+
+        animation-name: editor-publish-popup-success-wrapper--enter;
+        animation-duration: 500ms;
+        animation-fill-mode: forwards;
+
+        @keyframes editor-publish-popup-success-wrapper--enter {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .editor-publish-popup-message {
+            font-size: 30px;
+            color: #ffffff;
+            text-align: center;
+
+            a {
+                text-decoration: none;
+                color: #ffffff;
+                border-bottom: 2px solid white;
+                user-select: all;
+            }
+        }
+    }
+
+    .editor-publish-close-button {
+        position: absolute;
+        top: 54px;
+        right: 6px;
+        width: 64px;
+        height: 64px;
+
+        @include scale-hover-animation;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+}

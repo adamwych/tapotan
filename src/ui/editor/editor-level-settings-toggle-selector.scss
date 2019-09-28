@@ -1,0 +1,26 @@
+@import './mixins.scss';
+
+.editor-level-settings-toggle-selector {
+    width: 100%;
+    position: relative;
+
+    .editor-level-settings-toggle-selector-item {
+        display: inline-block;
+        padding: 4px 8px;
+        text-align: center;
+        color: #ffffff;
+        font-size: 18px;
+        border: 2px dashed transparent;
+
+        @include scale-hover-animation;
+
+        &:not(:first-child) {
+            margin-left: 8px;
+        }
+
+        &.attr--active {
+            border-color: #ffffff;
+            transform: scale(1.1);
+        }
+    }
+}

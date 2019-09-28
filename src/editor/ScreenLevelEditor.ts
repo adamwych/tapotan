@@ -5,10 +5,10 @@ import Tapotan from "../core/Tapotan";
 import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import Screen from "../screens/Screen";
 import WidgetModal from '../screens/widgets/modal/WidgetModal';
-import WidgetPlayStatistics from '../screens/widgets/play-statistics/WidgetPlayStatistics';
 import WidgetEndGameOverlay from '../screens/widgets/WidgetEndGameOverlay';
 import WidgetGameOverOverlay from '../screens/widgets/WidgetGameOverOverlay';
 import WidgetVictoryOverlay from '../screens/widgets/WidgetVictoryOverlay';
+import UIEditorRootComponent from '../ui/editor/UIEditorRootComponent';
 import screenPointToWorld from '../utils/screenPointToWorld';
 import GameObjectComponentEditorShade from '../world/components/GameObjectComponentEditorShade';
 import GameObjectComponentLockDoor from '../world/components/GameObjectComponentLockDoor';
@@ -29,11 +29,8 @@ import LevelEditorKeyboardShortcutsController from './LevelEditorKeyboardShortcu
 import LevelEditorLayer from './LevelEditorLayer';
 import LevelEditorNewLevelTemplate from './LevelEditorNewLevelTemplate';
 import LevelEditorPlaythroughController from './LevelEditorPlaythroughController';
+import LevelEditorUIAgent from './LevelEditorUIAgent';
 import WidgetLevelEditorSetSignTextModal from './modals/set-sign-text-modal/WidgetLevelEditorSetSignTextModal';
-import WidgetLevelEditorObjectActionButtons from './object-action-buttons/WidgetLevelEditorObjectActionButtons';
-import WidgetLevelEditorPrefabDrawer from './prefab-drawer/WidgetLevelEditorPrefabDrawer';
-import WidgetLevelEditorTopBar from './top-bar/WidgetLevelEditorTopBar';
-import WidgetLevelEditorBottomContainer from './widgets/WidgetLevelEditorBottomContainer';
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
@@ -44,19 +41,11 @@ export default class ScreenLevelEditor extends Screen {
 
     private uiContainer: PIXI.Container;
 
-    private statistics: WidgetPlayStatistics;
-
     private grid: WidgetLevelEditorGrid;
     private objectOutlineHover: WidgetLevelEditorObjectOutline;
     private objectOutlineActive: Array<WidgetLevelEditorObjectOutline> = [];
     private activeObjectDragController: LevelEditorActiveObjectDragController;
-    private activeObjectActionButtons: WidgetLevelEditorObjectActionButtons;
     private objectShadeGridOutline: WidgetLevelEditorObjectShadeGridOutline;
-
-    private prefabDrawer: WidgetLevelEditorPrefabDrawer;
-
-    private topBar: WidgetLevelEditorTopBar;
-    private bottomContainer: WidgetLevelEditorBottomContainer;
 
     private newGameObjectShade: GameObject = null;
 
@@ -83,6 +72,8 @@ export default class ScreenLevelEditor extends Screen {
     private linkWithDoorActionActive: boolean = false;
     private linkWithDoorKeyObject: GameObject = null;
 
+    private lastHitObject: GameObject = null;
+
     private remainingMouseMoves: Array<{x: number, y: number}> = [];
     
     private modal: WidgetModal = null;
@@ -100,6 +91,8 @@ export default class ScreenLevelEditor extends Screen {
         this.cameraMovementController = new LevelEditorCameraMovementController(this.context);
         this.keyboardShortcutsController = new LevelEditorKeyboardShortcutsController(this.context);
         this.playthroughController = new LevelEditorPlaythroughController(this.context);
+        
+        this.initializeUIAgent();
         
         if (this.world.isNewWorld()) {
             LevelEditorNewLevelTemplate.createGameObjects(this.world);
@@ -134,28 +127,98 @@ export default class ScreenLevelEditor extends Screen {
 
         this.keyboardShortcutsController.destroy();
         this.activeObjectDragController.destroy();
-        
-        if (this.activeObjectActionButtons) {
-            this.activeObjectActionButtons.destroy({ children: true });
-        }
+
+        LevelEditorUIAgent.emitObjectSelected(null);
 
         this.uiContainer.destroy({ children: true });
 
-        const applicationStage = this.game.getPixiApplication().stage;
-        applicationStage.off('mousedown', this.handleApplicationMouseDown);
-        applicationStage.off('mouseup', this.handleApplicationMouseUp);
-        applicationStage.off('mousemove', this.handleApplicationMouseMove);
+        InputManager.instance.removeMouseClickListener(this.handleApplicationMouseDown);
+        InputManager.instance.removeMouseUpListener(this.handleApplicationMouseUp);
+        InputManager.instance.removeMouseMoveListener(this.handleApplicationMouseMove);
         
         InputManager.instance.removeMouseClickListener(this.handleRightMouseButtonClick);
         InputManager.instance.removeKeyDownListener(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
 
         this.context.off('playthroughStopped', this.handlePlaythroughStopped);
 
-        this.prefabDrawer.destroy({ children: true });
-        this.bottomContainer.destroy();
-        this.statistics.destroy();
-
         this.world.destroy();
+
+        LevelEditorUIAgent.instance = null;
+    }
+
+    private initializeUIAgent() {
+        LevelEditorUIAgent.instance = new LevelEditorUIAgent(this.context);
+        LevelEditorUIAgent.onPrefabExplorerItemSelected((resource: string) => {
+            this.handleRightMouseButtonClick();
+            this.blurActiveAndHoveredObjectOutline();
+            this.spawnPrefabAsShade(resource);
+        });
+
+        LevelEditorUIAgent.onObjectActionButtonClicked('Rotate', () => {
+            let selectedObjects = this.context.getSelectedObjects();
+            if (selectedObjects.length > 0) {
+                let gameObject = selectedObjects[0];
+                let angle = gameObject.transformComponent.getAngle() + 90;
+                if (angle === 360) {
+                    angle = 0;
+                }
+
+                this.context.getCommandQueue().enqueueCommand(
+                    new LevelEditorCommandRotateObject(gameObject, angle)
+                );
+            }
+        });
+
+        LevelEditorUIAgent.onObjectActionButtonClicked('Flip', () => {
+            let selectedObjects = this.context.getSelectedObjects();
+            if (selectedObjects.length > 0) {
+                let gameObject = selectedObjects[0];
+                this.context.getCommandQueue().enqueueCommand(
+                    new LevelEditorCommandFlipObject(gameObject)
+                );
+            }
+        });
+
+        LevelEditorUIAgent.onObjectActionButtonClicked('Remove', () => {
+            let selectedObjects = this.context.getSelectedObjects();
+            if (selectedObjects.length > 0) {
+                let gameObject = selectedObjects[0];
+                this.blurActiveAndHoveredObjectOutline();
+                this.context.getCommandQueue().enqueueCommand(
+                    new LevelEditorCommandRemoveObject(gameObject)
+                );
+            }
+        });
+
+        LevelEditorUIAgent.onObjectActionButtonClicked('SetText', () => {
+            let selectedObjects = this.context.getSelectedObjects();
+            if (selectedObjects.length > 0) {
+                const selectedObject = selectedObjects[selectedObjects.length - 1];
+                const signComponent = selectedObject.getComponentByType<GameObjectComponentSign>(GameObjectComponentSign);
+                const modal = new WidgetLevelEditorSetSignTextModal(signComponent.getText());
+                modal.on('change', text => {
+                    signComponent.setText(text);
+                });
+
+                this.showModal(modal);
+            }
+        });
+
+        LevelEditorUIAgent.onObjectActionButtonClicked('LinkWithDoor', () => {
+            let selectedObjects = this.context.getSelectedObjects();
+            if (selectedObjects.length > 0) {
+                const selectedObject = selectedObjects[selectedObjects.length - 1];
+                this.beginLinkWithDoorAction(selectedObject);
+            }
+        });
+
+        LevelEditorUIAgent.onTogglePlaythroughEmitted(() => {
+            if (this.context.getEditorScreen().getModal() !== null) {
+                return;
+            }
+            
+            this.context.getPlaythroughController().toggle();
+        });
     }
 
     /**
@@ -165,34 +228,11 @@ export default class ScreenLevelEditor extends Screen {
         this.uiContainer = new PIXI.Container();
         this.uiContainer.sortableChildren = true;
         this.uiContainer.zIndex = 9;
-        {
-            this.grid = new WidgetLevelEditorGrid();
-            this.grid.visible = false;
-            this.uiContainer.addChild(this.grid);
 
-            this.prefabDrawer = new WidgetLevelEditorPrefabDrawer();
-            this.prefabDrawer.visible = false;
-            this.uiContainer.addChild(this.prefabDrawer);
+        this.grid = new WidgetLevelEditorGrid();
+        this.grid.visible = false;
+        this.uiContainer.addChild(this.grid);
 
-            this.topBar = new WidgetLevelEditorTopBar(this.context);
-            this.topBar.position.set(
-                16, 16
-            );
-            this.uiContainer.addChild(this.topBar);
-
-            this.bottomContainer = new WidgetLevelEditorBottomContainer(this.context, this.prefabDrawer);
-            this.bottomContainer.zIndex = 2;
-            this.bottomContainer.interactive = true;
-            this.bottomContainer.on('mousedown', (e) => {
-                this.blurActiveAndHoveredObjectOutline();
-            });
-            this.uiContainer.addChild(this.bottomContainer);
-
-            this.statistics = new WidgetPlayStatistics(this.world);
-            this.statistics.position.y = this.topBar.position.y + this.topBar.height;
-            this.statistics.visible = false;
-            this.uiContainer.addChild(this.statistics);
-        }
         Tapotan.getInstance().addUIObject(this.uiContainer);
     }
 
@@ -280,7 +320,7 @@ export default class ScreenLevelEditor extends Screen {
 
             // If we're not doing multi-select the first empty
             // the selected objects array.
-            if (!e.data.originalEvent.shiftKey) {
+            if (!e.shiftKey) {
                 this.clearSelectedObjects();
             }
 
@@ -289,12 +329,9 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private initializeGeneralInteractivity() {
-        const applicationStage = this.game.getPixiApplication().stage;
-        applicationStage.interactive = true;
-        applicationStage.on('mousedown', this.handleApplicationMouseDown);
-        applicationStage.on('mouseup', this.handleApplicationMouseUp);
-        applicationStage.on('mousemove', this.handleApplicationMouseMove);
-
+        InputManager.instance.listenMouseClick(InputManager.MouseButton.Left, this.handleApplicationMouseDown);
+        InputManager.instance.listenMouseUp(InputManager.MouseButton.Left, this.handleApplicationMouseUp);
+        InputManager.instance.listenMouseMove(this.handleApplicationMouseMove);
         InputManager.instance.listenMouseClick(InputManager.MouseButton.Right, this.handleRightMouseButtonClick);
         InputManager.instance.listenKeyDown(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
     }
@@ -365,54 +402,7 @@ export default class ScreenLevelEditor extends Screen {
         this.objectOutlineActive.push(outline);
         this.uiContainer.addChild(outline);
 
-        if (this.activeObjectActionButtons) {
-            this.activeObjectActionButtons.destroy({ children: true });
-            this.activeObjectActionButtons = null;
-        }
-
-        this.activeObjectActionButtons = new WidgetLevelEditorObjectActionButtons(gameObject);
-        this.activeObjectActionButtons.on('rotateAction', () => {
-            let angle = gameObject.transformComponent.getAngle() + 90;
-            if (angle === 360) {
-                angle = 0;
-            }
-
-            this.context.getCommandQueue().enqueueCommand(
-                new LevelEditorCommandRotateObject(gameObject, angle)
-            );
-        });
-
-        this.activeObjectActionButtons.on('flipAction', () => {
-            this.context.getCommandQueue().enqueueCommand(
-                new LevelEditorCommandFlipObject(gameObject)
-            );
-        });
-
-        this.activeObjectActionButtons.on('removeAction', () => {
-            this.blurActiveAndHoveredObjectOutline();
-            this.context.getCommandQueue().enqueueCommand(
-                new LevelEditorCommandRemoveObject(gameObject)
-            );
-        });
-
-        this.activeObjectActionButtons.on('setTextAction', () => {
-            const selectedObject = this.context.getSelectedObjects()[this.context.getSelectedObjects().length - 1];
-            const signComponent = selectedObject.getComponentByType<GameObjectComponentSign>(GameObjectComponentSign);
-            const modal = new WidgetLevelEditorSetSignTextModal(signComponent.getText());
-            modal.on('change', text => {
-                signComponent.setText(text);
-            });
-
-            this.showModal(modal);
-        });
-
-        this.activeObjectActionButtons.on('linkWithDoorAction', () => {
-            const selectedObject = this.context.getSelectedObjects()[this.context.getSelectedObjects().length - 1];
-            this.beginLinkWithDoorAction(selectedObject);
-        });
-
-        this.activeObjectActionButtons.show();
-        this.uiContainer.addChild(this.activeObjectActionButtons);
+        LevelEditorUIAgent.emitObjectSelected(gameObject);
     }
 
     public handleCurrentLayerChange(currentLayer: LevelEditorLayer) {
@@ -477,16 +467,34 @@ export default class ScreenLevelEditor extends Screen {
         this.isSettingEndPoint = true;
     }
 
-    private handleApplicationMouseDown = e => {
-        if (!this.context.canInteractWithEditor()) {
-            return;
-        }
+    private handleApplicationMouseDown = (x, y, e) => {
 
-        this.isMouseDown = true;
+        // Wait a tick to let UI component cancel the event.
+        setTimeout(() => {
+            if (e.defaultPrevented || (e.target.classList instanceof DOMTokenList && !e.target.classList.contains('tapotan-ui-application'))) {
+                return;
+            }
 
-        if (e.data.originalEvent.which !== 2 && e.target.name === '__application__stage__') {
-            this.blurActiveAndHoveredObjectOutline();
-        }
+            if (!this.context.canInteractWithEditor()) {
+                return;
+            }
+
+            if (e.which === 1) {
+                this.isMouseDown = true;
+
+                if (this.lastHitObject) {
+                    this.lastHitObject.emit('mousedown', e);
+                }
+
+                if (this.newGameObjectShade) {
+                    this.remainingMouseMoves.push({
+                        x: x,
+                        y: y
+                    });
+                }
+            }
+        });
+
     }
     
     private handleApplicationMouseUp = (e) => {
@@ -502,7 +510,7 @@ export default class ScreenLevelEditor extends Screen {
         }
     }
 
-    private handleApplicationMouseMove = (e) => {
+    private handleApplicationMouseMove = (x: number, y: number) => {
         if (!this.context.canInteractWithEditor()) {
             return;
         }
@@ -510,14 +518,37 @@ export default class ScreenLevelEditor extends Screen {
         if (this.isMouseDown) {
             if (this.newGameObjectShade) {
                 this.remainingMouseMoves.push({
-                    x: e.data.global.x,
-                    y: e.data.global.y
+                    x: x,
+                    y: y
                 });
             }
+        } else {
+            this.handleGameObjectHitTest(x, y);
         }
 
         this.lastMouseX = InputManager.instance.getMouseX();
         this.lastMouseY = InputManager.instance.getMouseY();
+    }
+
+    private handleGameObjectHitTest(x: number, y: number) {
+        let interactionManager = this.game.getPixiApplication().renderer.plugins.interaction;
+        let hit = interactionManager.hitTest(new PIXI.Point(x, y));
+        if (hit instanceof GameObject) {
+            if (hit !== this.lastHitObject) {
+                if (this.lastHitObject) {
+                    this.lastHitObject.emit('mouseout');
+                }
+
+                this.lastHitObject = hit;
+                this.lastHitObject.emit('mouseover');
+            }
+        } else {
+            if (this.lastHitObject) {
+                this.lastHitObject.emit('mouseout');
+            }
+
+            this.lastHitObject = null;
+        }
     }
 
     private handlePlaceObjectOnMouseCoordinates = (mouseCoords) => {
@@ -645,11 +676,6 @@ export default class ScreenLevelEditor extends Screen {
             }
         }
 
-        if (this.prefabDrawer.visible) {
-            this.bottomContainer.beginSynchronization();
-            this.prefabDrawer.hide();
-        }
-
         if (this.linkWithDoorActionActive) {
             this.linkWithDoorActionActive = false;
             this.context.emit('showUI');
@@ -673,10 +699,10 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     public handleGameStart = () => {
+        LevelEditorUIAgent.emitPlaythroughStarted();
+
         this.handleRightMouseButtonClick();
         this.blurActiveAndHoveredObjectOutline();
-
-        this.statistics.visible = true;
     }
 
     public handleGameEnd = (reason: GameEndReason) => {
@@ -709,7 +735,7 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private handlePlaythroughStopped = () => {
-        this.statistics.visible = false;
+        LevelEditorUIAgent.emitPlaythroughStopped();
     }
 
     public blurActiveAndHoveredObjectOutline() {
@@ -720,10 +746,7 @@ export default class ScreenLevelEditor extends Screen {
             this.objectOutlineHover = null;
         }
 
-        if (this.activeObjectActionButtons) {
-            this.activeObjectActionButtons.destroy({ children: true });
-            this.activeObjectActionButtons = null;
-        }
+        LevelEditorUIAgent.emitObjectSelected(null);
 
         this.clearSelectedObjects();
         this.game.setCursor(Tapotan.Cursor.Default);
@@ -775,10 +798,6 @@ export default class ScreenLevelEditor extends Screen {
 
         if (this.objectShadeGridOutline) {
             this.objectShadeGridOutline.tick(dt);
-        }
-
-        if (this.activeObjectActionButtons) {
-            this.activeObjectActionButtons.tick(dt);
         }
 
         if (this.newGameObjectShade !== null) {
@@ -848,6 +867,10 @@ export default class ScreenLevelEditor extends Screen {
 
     public getModal(): WidgetModal {
         return this.modal;
+    }
+
+    public getUIRootComponent() {
+        return UIEditorRootComponent;
     }
 
 }

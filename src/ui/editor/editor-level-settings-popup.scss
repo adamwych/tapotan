@@ -1,0 +1,97 @@
+@import './mixins.scss';
+@import './editor-level-settings-popup-background-tab.scss';
+
+.editor-level-settings-popup {
+    position: absolute;
+    left: 85px;
+    top: 110px;
+    z-index: 1;
+    width: 640px;
+    height: 512px;
+
+    transform-origin: 50px 0;
+    
+    animation-name: editor-level-settings-popup--enter;
+    animation-duration: 150ms;
+    animation-fill-mode: forwards;
+
+    @keyframes editor-level-settings-popup--enter {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+    }
+
+    .editor-level-settings-popup-title {
+        position: absolute;
+        left: 65px;
+        top: 86px;
+        font-size: 40px;
+        color: #ffffff;
+        letter-spacing: 2px;
+    }
+    
+    .editor-level-settings-popup-body {
+        width: calc(100% - 65px - 35px);
+        position: absolute;
+        top: 160px;
+        left: 65px;
+    }
+
+    .editor-level-settings-popup-tabs {
+        display: flex;
+        align-items: center;
+
+        .editor-level-settings-popup-tab {
+            flex: 1;
+            color: #ffffff;
+            font-size: 30px;
+            pointer-events: all;
+            text-align: center;
+            background-size: cover;
+            padding: 8px;
+            letter-spacing: 1px;
+
+            @include scale-hover-animation;
+
+            &.attr--active {
+                transform: scale(1.1);
+            }
+
+            &:not(.attr--active) {
+                opacity: 0.6;
+            }
+        }
+    }
+
+    .editor-level-settings-popup-background-tab,
+    .editor-level-settings-popup-gameplay-tab,
+    .editor-level-settings-popup-camera-tab {
+        width: auto;
+        height: 250px;
+        pointer-events: all;
+    }
+
+    .editor-level-settings-input {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+
+        > div:nth-child(1) {
+            color: #ffffff;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        > div:nth-child(2) {
+            width: 60%;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+    }
+}

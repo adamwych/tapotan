@@ -13,7 +13,11 @@ export default class TickHelper {
     }
 
     public static remove(fn: (dt: number) => void) {
-        PIXI.Ticker.shared.remove(TickHelper.tickers.find(x => x.original === fn).ticker);
+        let localTickerIndex = TickHelper.tickers.findIndex(x => x.original === fn);
+        if (localTickerIndex > -1) {
+            PIXI.Ticker.shared.remove(TickHelper.tickers[localTickerIndex].ticker);
+            TickHelper.tickers.splice(localTickerIndex, 1);
+        }
     }
 
     private static createTickWrapper(fn: (dt: number) => void) {

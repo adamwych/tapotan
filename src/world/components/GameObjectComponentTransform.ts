@@ -487,7 +487,12 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
     public getScreenY(): number {
         const blockSize = Tapotan.getBlockSize();
         const viewport = Tapotan.getInstance().getViewport();
-        return Tapotan.getGameHeight() - (this.getPositionY() * blockSize) - (this.gameObject.getHeight() * blockSize) - (viewport.top * blockSize);
+
+        if (this.verticalAlignment === GameObjectVerticalAlignment.Bottom) {
+            return Tapotan.getGameHeight() - (this.getPositionY() * blockSize) - (this.gameObject.getHeight() * blockSize) - (viewport.top * blockSize);
+        }
+
+        return (this.getPositionY() * blockSize) - (this.gameObject.getHeight() * blockSize) - (viewport.top * blockSize);
     }
     
     /**
