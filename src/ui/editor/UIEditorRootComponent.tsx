@@ -36,6 +36,9 @@ export default function UIEditorRootComponent() {
     }, []);
 
     const handleGameObjectSelected = useCallback((object: GameObject) => {
+        setLevelSettingsPopupVisible(false);
+        setEditorSettingsPopupVisible(false);
+        setPublishPopupVisible(false);
         setSelectedGameObject(object);
     }, []);
 
