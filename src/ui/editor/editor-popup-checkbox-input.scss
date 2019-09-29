@@ -1,0 +1,66 @@
+@import './mixins.scss';
+
+.editor-popup-checkbox-input {
+    width: 100%;
+    position: relative;
+
+    display: flex;
+    justify-content: flex-end;
+
+    .editor-popup-checkbox-input-item {
+        position: relative;
+
+        display: flex;
+        align-items: center;
+
+        padding: 4px 8px;
+        text-align: center;
+        color: #ffffff;
+        font-size: 18px;
+        border: 2px dashed #ffffff;
+        transition: all 100ms;
+        pointer-events: all;
+
+        transform-origin: 100% 50%;
+
+        @include scale-hover-animation;
+
+        &.attr--active {
+            &::before {
+                content: ' ';
+    
+                position: relative;
+                top: -1px;
+    
+                width: 5px;
+                height: 12px;
+    
+                margin-left: 4px;
+                margin-right: 12px;
+    
+                border: 3px solid #ffffff;
+                border-top: 0;
+                border-left: 0;
+    
+                transform: rotate(45deg);
+            }
+        }
+
+        &:not(.attr-active) {
+            &::before {
+                content: ' ';
+    
+                position: relative;
+                top: -1px;
+    
+                width: 5px;
+                height: 12px;
+    
+                margin-left: 4px;
+                margin-right: 12px;
+    
+                transform: rotate(45deg);
+            }
+        }
+    }
+}

@@ -9,7 +9,6 @@ interface UIEditorLevelSettingsDropdownProps {
 export default function UIEditorLevelSettingsDropdown(props: UIEditorLevelSettingsDropdownProps) {
     const [visible, setVisible] = useState(false);
     const [currentItemID, setCurrentItemID] = useState(props.initialValue);
-    console.log(props.items,currentItemID);
     const currentItem = props.items.find(x => x.id === currentItemID);
 
     const handleButtonClick = useCallback(() => {

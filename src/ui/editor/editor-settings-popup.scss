@@ -1,0 +1,67 @@
+@import './mixins.scss';
+
+.editor-settings-popup {
+    position: absolute;
+    top: 127px;
+    right: 80px;
+    z-index: 1;
+    width: 404px;
+    height: 512px;
+
+    transform-origin: 50px 0;
+    
+    animation-name: editor-settings-popup--enter;
+    animation-duration: 150ms;
+    animation-fill-mode: forwards;
+
+    pointer-events: all;
+
+    @keyframes editor-settings-popup--enter {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+    }
+
+    .editor-settings-popup-title {
+        position: absolute;
+        top: 80px;
+        left: 65px;
+        font-size: 40px;
+        color: #ffffff;
+        letter-spacing: 2px;
+    }
+
+    .editor-settings-popup-body {
+        width: calc(100% - 96px);
+        height: 250px;
+
+        position: relative;
+        top: 140px;
+        left: 28px;
+    }
+
+    .editor-settings-popup-input {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1rem;
+
+        > div:nth-child(1) {
+            color: #ffffff;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        > div:nth-child(2) {
+            width: 60%;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+    }
+}

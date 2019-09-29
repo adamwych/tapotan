@@ -84,36 +84,45 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
     useEffect(() => {
         if (props.inEditor) {
             LevelEditorUIAgent.setInteractionEnabled(false);
-        }
-
-        setTimeout(() => {
             setScoreboard([
                 {
                     place: 1,
-                    name: 'Unknown Player',
-                    score: 999
-                },
-
-                {
-                    divider: true
-                },
-
-                {
-                    place: 153,
                     name: 'You',
-                    score: 123,
-                    divider: false,
+                    score: Tapotan.getInstance().getGameManager().getWorld().calculatePlayerScore(),
                     player: true
-                },
-
-                {
-                    place: 154,
-                    name: 'human',
-                    score: 23
-                },
+                }
             ]);
             setIsLoadingScoreboard(false);
-        }, 2500);
+        } else {
+            setTimeout(() => {
+                setScoreboard([
+                    {
+                        place: 1,
+                        name: 'Unknown Player',
+                        score: 999
+                    },
+    
+                    {
+                        divider: true
+                    },
+    
+                    {
+                        place: 153,
+                        name: 'You',
+                        score: Tapotan.getInstance().getGameManager().getWorld().calculatePlayerScore(),
+                        divider: false,
+                        player: true
+                    },
+    
+                    {
+                        place: 154,
+                        name: 'human',
+                        score: 23
+                    },
+                ]);
+                setIsLoadingScoreboard(false);
+            }, 2500);
+        }
 
         setTimeout(() => {
             textElement.current.addEventListener('animationend', () => {

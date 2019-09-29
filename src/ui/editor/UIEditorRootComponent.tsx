@@ -11,20 +11,23 @@ import UIEditorTopbar from './UIEditorTopbar';
 import UIEditorPublishPopup from './publish-popup/UIEditorPublishPopup';
 import UIEditorLayerSelector from './UIEditorLayerSelector';
 import UIEditorWelcomePopup from './UIEditorWelcomePopup';
+import UIEditorSettingsPopup from './UIEditorSettingsPopup';
 
 require('./editor.scss');
 
 export default function UIEditorRootComponent() {
     const [playthroughInProgress, setPlaythroughInProgress] = useState(false);
     const [selectedGameObject, setSelectedGameObject] = useState(null);
-    const [welcomePopupVisible, setWelcomePopupVisible] = useState(true);
+    const [welcomePopupVisible, setWelcomePopupVisible] = useState(false);
     const [levelSettingsPopupVisible, setLevelSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.LevelSettingsPopupVisible, false);
+    const [editorSettingsPopupVisible, setEditorSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.EditorSettingsPopupVisible, false);
     const [publishPopupVisible, setPublishPopupVisible] = useSharedValue(UIEditorSharedValues.PublishPopupVisible, false);
     const [prefabExplorerActiveCategoryID, setPrefabExplorerActiveCategoryID] = useSharedValue(UIEditorSharedValues.PrefabExplorerActiveCategoryID, null);
 
     const handlePlaythroughStarted = useCallback(() => {
         setPlaythroughInProgress(true);
         setLevelSettingsPopupVisible(false);
+        setEditorSettingsPopupVisible(false);
         setPublishPopupVisible(false);
     }, []);
 
@@ -47,6 +50,7 @@ export default function UIEditorRootComponent() {
 
             // Hide popups.
             setLevelSettingsPopupVisible(false);
+            setEditorSettingsPopupVisible(false);
             setPublishPopupVisible(false);
             setPrefabExplorerActiveCategoryID(null);
         }
@@ -75,6 +79,10 @@ export default function UIEditorRootComponent() {
     
             {levelSettingsPopupVisible && (
                 <UIEditorLevelSettingsPopup />
+            )}
+    
+            {editorSettingsPopupVisible && (
+                <UIEditorSettingsPopup />
             )}
 
             {publishPopupVisible && (

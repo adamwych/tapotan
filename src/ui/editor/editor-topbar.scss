@@ -56,7 +56,13 @@
         top: 0;
 
         display: flex;
+        justify-content: space-between;
+
         flex: 1;
+
+        > div {
+            display: flex;
+        }
     }
 
     .editor-topbar-item-publish {
@@ -77,11 +83,5 @@
             letter-spacing: 3px;
             text-transform: uppercase;
         }
-    }
-
-    .editor-topbar-item-exit-editor {
-        position: absolute;
-        top: 0;
-        right: 0;
     }
 }

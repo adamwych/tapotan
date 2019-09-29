@@ -396,7 +396,7 @@ export default class Tapotan extends EventEmitter {
 
     private tick = (dt: number) => {
         /// #if ENV_DEVELOPMENT
-        document.title = 'TAPOTAN | ' + this.application.ticker.FPS.toFixed(2) + ' FPS';
+        //document.title = 'TAPOTAN | ' + this.application.ticker.FPS.toFixed(2) + ' FPS';
         this.frameDebugger.frame();
         /// #endif
 

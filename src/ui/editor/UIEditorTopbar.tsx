@@ -13,24 +13,38 @@ interface UIEditorTopbarProps {
 
 export default function UIEditorTopbar(props: UIEditorTopbarProps) {
     const [levelSettingsPopupVisible, setLevelSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.LevelSettingsPopupVisible, false);
+    const [editorSettingsPopupVisible, setEditorSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.EditorSettingsPopupVisible, false);
     const [prefabExplorerActiveCategoryID, setPrefabExplorerActiveCategoryID] = useSharedValue(UIEditorSharedValues.PrefabExplorerActiveCategoryID, null);
     const [publishPopupVisible, setPublishPopupVisible] = useSharedValue(UIEditorSharedValues.PublishPopupVisible, false);
 
     const handleLevelSettingsActionClick = useCallback(() => {
-        setPrefabExplorerActiveCategoryID(false);
+        setPrefabExplorerActiveCategoryID(null);
         setPublishPopupVisible(false);
+        setEditorSettingsPopupVisible(false);
         setLevelSettingsPopupVisible(!levelSettingsPopupVisible);
     }, [levelSettingsPopupVisible]);
+
+    const handleEditorSettingsActionClick = useCallback(() => {
+        setPrefabExplorerActiveCategoryID(null);
+        setPublishPopupVisible(false);
+        setEditorSettingsPopupVisible(!editorSettingsPopupVisible);
+        setLevelSettingsPopupVisible(false);
+    }, [editorSettingsPopupVisible]);
 
     return (
         <div className="editor-topbar">
             <UIEditorTopbarItemPlayButton />
         
             <div className="editor-topbar-common">
-                <UIEditorTopbarItem icon="LevelSettings" actionName="LevelSettings" active={levelSettingsPopupVisible} onClick={handleLevelSettingsActionClick} />
-                <UIEditorTopbarItemPublishButton />
+                <div>
+                    <UIEditorTopbarItem icon="LevelSettings" actionName="LevelSettings" active={levelSettingsPopupVisible} onClick={handleLevelSettingsActionClick} />
+                    <UIEditorTopbarItemPublishButton />
+                </div>
 
-                <UIEditorTopbarItemExitEditorButton />
+                <div>
+                    <UIEditorTopbarItem icon="EditorSettings" actionName="EditorSettings" active={editorSettingsPopupVisible} onClick={handleEditorSettingsActionClick} />
+                    <UIEditorTopbarItemExitEditorButton />
+                </div>
             </div>
         </div>
     );

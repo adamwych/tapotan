@@ -10,10 +10,12 @@ import useSharedValue from '../../lib/useSharedValue';
 export default function UIEditorPrefabExplorer() {
     const tileset = useRef(Tapotan.getInstance().getGameManager().getWorld().getTileset());
     const [levelSettingsPopupVisible, setLevelSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.LevelSettingsPopupVisible, false);
+    const [editorSettingsPopupVisible, setEditorSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.EditorSettingsPopupVisible, false);
     const [activeCategoryID, setPrefabExplorerActiveCategoryID] = useSharedValue(UIEditorSharedValues.PrefabExplorerActiveCategoryID, null);
 
     const handleTileClick = useCallback(categoryID => {
         setLevelSettingsPopupVisible(false);
+        setEditorSettingsPopupVisible(false);
 
         if (categoryID === activeCategoryID) {
             LevelEditorUIAgent.setWorldInteractionEnabled(true);
