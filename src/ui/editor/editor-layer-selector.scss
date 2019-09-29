@@ -8,6 +8,8 @@
 
     display: flex;
     align-items: center;
+    
+    transition: all 100ms;
 
     .editor-layer-selector-tile {
         width: 96px;
