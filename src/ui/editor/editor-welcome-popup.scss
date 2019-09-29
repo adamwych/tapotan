@@ -1,0 +1,74 @@
+@import './mixins.scss';
+
+.editor-welcome-popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.66);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2;
+
+    pointer-events: all;
+
+    animation-name: editor-welcome-popup--enter;
+    animation-duration: 300ms;
+    animation-fill-mode: forwards;
+    animation-delay: 1000ms;
+
+    transform: scale(0);
+    transform-origin: center center;
+
+    @keyframes editor-welcome-popup--enter {
+        0% {
+            opacity: 0;
+            transform: scale(1.33);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .editor-welcome-popup-modal {
+        position: relative;
+
+        width: 70vw;
+        height: auto;
+
+        img {
+            display: block;
+            width: 100%;
+        }
+    }
+
+    .editor-welcome-close-button {
+        position: absolute;
+        top: 64px;
+        right: 72px;
+        
+        width: 320px;
+        height: 100px;
+        
+        background-repeat: no-repeat;
+        
+        color: #0053cc;
+        font-size: 54px;
+        text-transform: uppercase;
+        line-height: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @include scale-hover-animation;
+    }
+}

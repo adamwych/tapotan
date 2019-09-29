@@ -10,12 +10,14 @@ import UIEditorSharedValues from './UIEditorSharedValues';
 import UIEditorTopbar from './UIEditorTopbar';
 import UIEditorPublishPopup from './publish-popup/UIEditorPublishPopup';
 import UIEditorLayerSelector from './UIEditorLayerSelector';
+import UIEditorWelcomePopup from './UIEditorWelcomePopup';
 
 require('./editor.scss');
 
 export default function UIEditorRootComponent() {
     const [playthroughInProgress, setPlaythroughInProgress] = useState(false);
     const [selectedGameObject, setSelectedGameObject] = useState(null);
+    const [welcomePopupVisible, setWelcomePopupVisible] = useState(true);
     const [levelSettingsPopupVisible, setLevelSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.LevelSettingsPopupVisible, false);
     const [publishPopupVisible, setPublishPopupVisible] = useSharedValue(UIEditorSharedValues.PublishPopupVisible, false);
     const [prefabExplorerActiveCategoryID, setPrefabExplorerActiveCategoryID] = useSharedValue(UIEditorSharedValues.PrefabExplorerActiveCategoryID, null);
@@ -32,6 +34,11 @@ export default function UIEditorRootComponent() {
 
     const handleGameObjectSelected = useCallback((object: GameObject) => {
         setSelectedGameObject(object);
+    }, []);
+
+    const handleWelcomePopupClose = useCallback(() => {
+        setWelcomePopupVisible(false);
+        LevelEditorUIAgent.setInteractionEnabled(true);
     }, []);
 
     const handleWindowMouseDown = useCallback(event => {
@@ -61,6 +68,10 @@ export default function UIEditorRootComponent() {
             <UIEditorTopbar commonActionsVisible={!playthroughInProgress} />
             <UIEditorPrefabExplorer />
             <UIEditorLayerSelector />
+
+            {welcomePopupVisible && (
+                <UIEditorWelcomePopup onClose={handleWelcomePopupClose} />
+            )}
     
             {levelSettingsPopupVisible && (
                 <UIEditorLevelSettingsPopup />
