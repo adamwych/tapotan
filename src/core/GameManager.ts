@@ -50,7 +50,7 @@ export default class GameManager {
         }
 
         if (this.game.getInputManager().isActivelyUsingGamepad()) {
-            this.game.getInputManager().getGamepadController().vibrate(0.33, 400);
+            this.game.getInputManager().getGamepadController().vibrate(0.5, 200);
         }
 
         this.world.handleGameEnd(reason);
