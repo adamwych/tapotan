@@ -49,6 +49,10 @@ export default class GameManager {
             this.game.getAudioManager().playSoundEffect('victory');
         }
 
+        if (this.game.getInputManager().isActivelyUsingGamepad()) {
+            this.game.getInputManager().getGamepadController().vibrate(0.33, 400);
+        }
+
         this.world.handleGameEnd(reason);
     }
 

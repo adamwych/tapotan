@@ -72,6 +72,12 @@ export default class InputControllerGamepad {
                         let currentLeftAxisHorizontal = gamepad.axes[0];
                         let currentLeftAxisVertical = gamepad.axes[1];
 
+                        if (currentLeftAxisHorizontal < -1) currentLeftAxisHorizontal = -1;
+                        if (currentLeftAxisHorizontal > 1) currentLeftAxisHorizontal = 1;
+
+                        if (currentLeftAxisVertical < -1) currentLeftAxisVertical = -1;
+                        if (currentLeftAxisVertical > 1) currentLeftAxisVertical = 1;
+
                         let deltaHorizontal = currentLeftAxisHorizontal - previousLeftAxisHorizontal;
                         let deltaVertical = currentLeftAxisVertical - previousLeftAxisVertical;
 
@@ -162,12 +168,34 @@ export default class InputControllerGamepad {
     public listenButtonDown = (buttonIndex: number, listener: ListenerFunction) => this.internalEventEmitter.on('buttonDown' + buttonIndex, listener);
     public listenButtonUp = (buttonIndex: number, listener: ListenerFunction) => this.internalEventEmitter.on('buttonUp' + buttonIndex, listener);
 
+    public vibrate(strength: number, duration: number) {
+        for (let gamepad of this.getConnectedGamepads()) {
+            if (gamepad) {
+
+                // Looks like vibrations are only supported in Chrome for now
+                // and they are implemented differently from what it says in the docs?...
+
+                let pad = (gamepad as any);
+                if (pad.vibrationActuator) {
+                    let actuator = pad.vibrationActuator;
+                    if (actuator.type === 'dual-rumble') {
+                        actuator.playEffect('dual-rumble', {
+                            duration: duration,
+                            strongMagnitude: strength,
+                            weakMagnitude: strength
+                        });
+                    }
+                }
+            }
+        }
+    }
+
     public getConnectedGamepads(): Array<Gamepad> {
-        return navigator.getGamepads();
+        return navigator.getGamepads() || [];
     }
 
     public getConnectedGamepadsState(): Array<GamepadState> {
-        return navigator.getGamepads().map(gamepad => this.connectedGamepadsState.find(x => x.getGamepadIndex() === gamepad.index));
+        return this.getConnectedGamepads().map(gamepad => this.connectedGamepadsState.find(x => x.getGamepadIndex() === gamepad.index));
     }
 
 }
