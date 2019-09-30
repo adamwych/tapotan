@@ -1,4 +1,4 @@
-import InputManager from "../../core/InputManager";
+import InputManager from "../../core/input/InputManager";
 import Tapotan from "../../core/Tapotan";
 import LevelEditorContext from "../../editor/LevelEditorContext";
 import screenPointToWorld from "../../utils/screenPointToWorld";

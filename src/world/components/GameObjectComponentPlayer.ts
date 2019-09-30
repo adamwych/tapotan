@@ -1,6 +1,6 @@
 import * as p2 from 'p2';
 import GameManager, { GameEndReason } from '../../core/GameManager';
-import InputManager from '../../core/InputManager';
+import InputManager from '../../core/input/InputManager';
 import Tapotan from '../../core/Tapotan';
 import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 import GameObjectFaceDirection from '../GameObjectFaceDirection';
@@ -43,12 +43,28 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     
     private firstTick: boolean = true;
 
+    private wantsToMoveUp: boolean = false;
+    private wantsToMoveLeft: boolean = false;
+    private wantsToMoveRight: boolean = false;
+    private wantsToJump: boolean = false;
+
     public initialize(): void {
         this.physicsBody = this.gameObject.getComponentByType<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody).getBody();
         this.animator = this.gameObject.getComponentByType<GameObjectComponentAnimator>(GameObjectComponentAnimator);
         this.livingEntity = this.gameObject.getComponentByType<GameObjectComponentLivingEntity>(GameObjectComponentLivingEntity);
         this.gameManager = Tapotan.getInstance().getGameManager();
         this.gameObject.on('livingEntity.died', this.handleLivingEntityDied);
+
+        const inputManager = Tapotan.getInstance().getInputManager();
+
+        inputManager.bindAction('MoveUp', this.handleInputMoveUpAction);
+        inputManager.bindAction('MoveUpStop', this.handleInputMoveUpStopAction);
+        inputManager.bindAction('MoveLeft', this.handleInputMoveLeftAction);
+        inputManager.bindAction('MoveLeftStop', this.handleInputMoveLeftStopAction);
+        inputManager.bindAction('MoveRight', this.handleInputMoveRightAction);
+        inputManager.bindAction('MoveRightStop', this.handleInputMoveRightStopAction);
+        inputManager.bindAction('JumpButtonDown', this.handleInputJumpButtonDown);
+        inputManager.bindAction('JumpButtonUp', this.handleInputJumpButtonUp);
     }
     
     protected destroy(): void {
@@ -66,6 +82,38 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             ['Air Speed', this.airSpeedForce],
             ['Jump Force', this.jumpForce]
         ];
+    }
+
+    private handleInputMoveUpAction = () => {
+        this.wantsToMoveUp = true;
+    }
+
+    private handleInputMoveUpStopAction = () => {
+        this.wantsToMoveUp = false;
+    }
+
+    private handleInputMoveLeftAction = (deviation: number) => {
+        this.wantsToMoveLeft = true;
+    }
+
+    private handleInputMoveLeftStopAction = () => {
+        this.wantsToMoveLeft = false;
+    }
+
+    private handleInputMoveRightAction = (deviation: number) => {
+        this.wantsToMoveRight = true;
+    }
+
+    private handleInputMoveRightStopAction = () => {
+        this.wantsToMoveRight = false;
+    }
+
+    private handleInputJumpButtonDown = () => {
+        this.wantsToJump = true;
+    }
+
+    private handleInputJumpButtonUp = () => {
+        this.wantsToJump = false;
     }
 
     public tick(dt: number) {
@@ -103,24 +151,10 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     }
 
     private tickMovement(dt: number): void {
-        const inputManager = Tapotan.getInstance().getInputManager();
-        const wantsToRunLeft = (
-            inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowLeft) ||
-            inputManager.isKeyDown(InputManager.KeyCodes.KeyA)
-        );
-
-        const wantsToRunRight = (
-            inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowRight) ||
-            inputManager.isKeyDown(InputManager.KeyCodes.KeyD)
-        );
-
         let ignoreAnimationSet = false;
 
         if (this.isOnLadder()) {
-            if (
-                inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowUp) ||
-                inputManager.isKeyDown(InputManager.KeyCodes.KeyW)
-            ) {
+            if (this.wantsToMoveUp) {
                 ignoreAnimationSet = true;
                 this.animator.playAnimation('climb', 0);
                 this.physicsBody.velocity[1] = -12;
@@ -132,6 +166,8 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             this.isClimbingLadder = false;
         }
 
+        this.isClimbingLadder = false;
+
         if (Math.abs(this.physicsBody.velocity[0]) < this.speed) {
             let speed = (this.touchingGround ? this.speedForce : this.airSpeedForce);
             
@@ -139,12 +175,12 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
                 speed /= 2;
             }
 
-            if (wantsToRunLeft) {
+            if (this.wantsToMoveLeft) {
                 this.faceDirection = GameObjectFaceDirection.Left;
                 this.physicsBody.applyForce([-speed, 0]);
             }
     
-            if (wantsToRunRight) {
+            if (this.wantsToMoveRight) {
                 this.faceDirection = GameObjectFaceDirection.Right;
                 this.physicsBody.applyForce([speed, 0]);
             }
@@ -159,7 +195,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         } else if (this.touchingSide === GameObjectFaceDirection.Right) {
             this.animator.playAnimation('wallslide');
         } else {
-            if (wantsToRunLeft || wantsToRunRight) {
+            if (this.wantsToMoveLeft || this.wantsToMoveRight) {
                 if (this.faceDirection === GameObjectFaceDirection.Left) {
                     if (this.touchingGround) {
                         this.animator.playAnimation('run_left', this.wasInAirInPreviousFrame ? 0 : 1);
@@ -188,10 +224,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             return;
         }
 
-        const inputManager = Tapotan.getInstance().getInputManager();
-        const spaceDown = inputManager.isKeyDown(InputManager.KeyCodes.KeySpacebar);
-
-        if (spaceDown) {
+        if (this.wantsToJump) {
             if (this.canJump && this.touchingGround) {
                 this.duringJump = true;
                 this.canJump = false;
@@ -201,9 +234,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             if (this.duringJump && !this.touchingGround && !this.touchingSide) {
                 this.physicsBody.applyForce([0, -(this.touchingSide === null ? this.jumpContinueForce : this.jumpContinueForce * 0.75)]);
             }
-        }
-
-        if (!spaceDown) {
+        } else {
             this.canJump = true;
             this.duringJump = false;
         }

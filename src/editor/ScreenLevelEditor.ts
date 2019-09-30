@@ -1,10 +1,8 @@
 import * as PIXI from 'pixi.js';
-import { GameEndReason } from '../core/GameManager';
-import InputManager from '../core/InputManager';
+import InputManager from '../core/input/InputManager';
 import Tapotan from "../core/Tapotan";
 import ContainerAnimator from '../graphics/animation/ContainerAnimator';
 import Screen from "../screens/Screen";
-import WidgetModal from '../screens/widgets/modal/WidgetModal';
 import UIEditorRootComponent from '../ui/editor/UIEditorRootComponent';
 import screenPointToWorld from '../utils/screenPointToWorld';
 import GameObjectComponentEditorShade from '../world/components/GameObjectComponentEditorShade';
@@ -27,7 +25,6 @@ import LevelEditorLayer from './LevelEditorLayer';
 import LevelEditorNewLevelTemplate from './LevelEditorNewLevelTemplate';
 import LevelEditorPlaythroughController from './LevelEditorPlaythroughController';
 import LevelEditorUIAgent from './LevelEditorUIAgent';
-import WidgetLevelEditorSetSignTextModal from './modals/set-sign-text-modal/WidgetLevelEditorSetSignTextModal';
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
@@ -131,12 +128,12 @@ export default class ScreenLevelEditor extends Screen {
 
         this.uiContainer.destroy({ children: true });
 
-        InputManager.instance.removeMouseClickListener(this.handleApplicationMouseDown);
-        InputManager.instance.removeMouseUpListener(this.handleApplicationMouseUp);
-        InputManager.instance.removeMouseMoveListener(this.handleApplicationMouseMove);
+        InputManager.instance.getMouseController().removeDownListener(InputManager.MouseButton.Left, this.handleApplicationMouseDown);
+        InputManager.instance.getMouseController().removeUpListener(InputManager.MouseButton.Left, this.handleApplicationMouseUp);
+        InputManager.instance.getMouseController().removeMoveListener(this.handleApplicationMouseMove);
         
-        InputManager.instance.removeMouseClickListener(this.handleRightMouseButtonClick);
-        InputManager.instance.removeKeyDownListener(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
+        InputManager.instance.getMouseController().removeDownListener(InputManager.MouseButton.Right, this.handleRightMouseButtonClick);
+        InputManager.instance.getKeyboardController().removeKeyDownListener(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
 
         this.context.off('playthroughStopped', this.handlePlaythroughStopped);
 
@@ -336,11 +333,11 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     private initializeGeneralInteractivity() {
-        InputManager.instance.listenMouseClick(InputManager.MouseButton.Left, this.handleApplicationMouseDown);
-        InputManager.instance.listenMouseUp(InputManager.MouseButton.Left, this.handleApplicationMouseUp);
-        InputManager.instance.listenMouseMove(this.handleApplicationMouseMove);
-        InputManager.instance.listenMouseClick(InputManager.MouseButton.Right, this.handleRightMouseButtonClick);
-        InputManager.instance.listenKeyDown(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
+        InputManager.instance.getMouseController().listenDown(InputManager.MouseButton.Left, this.handleApplicationMouseDown);
+        InputManager.instance.getMouseController().listenUp(InputManager.MouseButton.Left, this.handleApplicationMouseUp);
+        InputManager.instance.getMouseController().listenMove(this.handleApplicationMouseMove);
+        InputManager.instance.getMouseController().listenDown(InputManager.MouseButton.Right, this.handleRightMouseButtonClick);
+        InputManager.instance.getKeyboardController().listenKeyDown(InputManager.KeyCodes.KeyEscape, this.handleRightMouseButtonClick);
     }
 
     public spawnPrefabAsShade = (resourceName: string) => {
@@ -482,12 +479,12 @@ export default class ScreenLevelEditor extends Screen {
                 return;
             }
 
-            if (!this.context.canInteractWithEditor()) {
-                return;
-            }
-
             if (e.which === 1) {
                 this.isMouseDown = true;
+
+                if (!this.context.canInteractWithEditor()) {
+                    return;
+                }
 
                 if (this.lastHitObject) {
                     this.lastHitObject.emit('mousedown', e);
@@ -505,11 +502,11 @@ export default class ScreenLevelEditor extends Screen {
     }
     
     private handleApplicationMouseUp = (e) => {
+        this.isMouseDown = false;
+
         if (!this.context.canInteractWithEditor()) {
             return;
         }
-
-        this.isMouseDown = false;
 
         if (this.objectOutlineActive.length > 0) {
             this.grid.alpha = 1;

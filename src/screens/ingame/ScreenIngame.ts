@@ -10,7 +10,7 @@ import APIRequest from '../../api/APIRequest';
 import WidgetGameOverOverlay from '../widgets/WidgetGameOverOverlay';
 import WidgetText from '../widgets/WidgetText';
 import World from '../../world/World';
-import InputManager from '../../core/InputManager';
+import InputManager from '../../core/input/InputManager';
 import WidgetIngameMenuModal from './modals/WidgetIngameMenuModal';
 import WidgetModal from '../widgets/modal/WidgetModal';
 import { WorldGameOverTimeout } from '../../world/WorldBehaviourRules';
@@ -54,7 +54,7 @@ export default class ScreenIngame extends Screen {
 
         this.initializeTimeoutTimerText();
 
-        game.getInputManager().listenKeyUp(InputManager.KeyCodes.KeyEscape, this.showMenuModal);
+        // game.getInputManager().listenKeyUp(InputManager.KeyCodes.KeyEscape, this.showMenuModal);
     }
 
     private initializeTimeoutTimerText() {
@@ -91,7 +91,7 @@ export default class ScreenIngame extends Screen {
     public onRemovedFromScreenManager() {
         super.onRemovedFromScreenManager();
 
-        this.game.getInputManager().removeKeyUpListener(InputManager.KeyCodes.KeyEscape, this.showMenuModal);
+        // this.game.getInputManager().removeKeyUpListener(InputManager.KeyCodes.KeyEscape, this.showMenuModal);
 
         if (this.modal) {
             this.modal.destroy();

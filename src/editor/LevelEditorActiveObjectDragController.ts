@@ -1,6 +1,6 @@
 import LevelEditorContext from "./LevelEditorContext";
 import screenPointToWorld from "../utils/screenPointToWorld";
-import InputManager from "../core/InputManager";
+import InputManager from "../core/input/InputManager";
 import Tapotan from "../core/Tapotan";
 import LevelEditorCommandMoveObject from "./commands/LevelEditorCommandMoveObject";
 import GameObjectComponentPhysicsAwareTransform from "../world/components/GameObjectComponentPhysicsAwareTransform";
@@ -16,13 +16,13 @@ export default class LevelEditorActiveObjectDragController {
     constructor(context: LevelEditorContext) {
         this.context = context;
 
-        this.context.getGame().getInputManager().listenMouseClick(InputManager.MouseButton.Left, this.handleMouseDown);
-        this.context.getGame().getInputManager().listenMouseDrag(InputManager.MouseButton.Left, this.handleMouseDrag);
+        this.context.getGame().getInputManager().getMouseController().listenDown(InputManager.MouseButton.Left, this.handleMouseDown);
+        this.context.getGame().getInputManager().getMouseController().listenDrag(InputManager.MouseButton.Left, this.handleMouseDrag);
     }
 
     public destroy() {
-        this.context.getGame().getInputManager().removeMouseClickListener(this.handleMouseDown);
-        this.context.getGame().getInputManager().removeMouseDragListener(InputManager.MouseButton.Left, this.handleMouseDrag);
+        this.context.getGame().getInputManager().getMouseController().removeDownListener(InputManager.MouseButton.Left, this.handleMouseDown);
+        this.context.getGame().getInputManager().getMouseController().removeDragListener(InputManager.MouseButton.Left, this.handleMouseDrag);
     }
 
     public handleMouseDown = (x, y) => {
@@ -55,7 +55,6 @@ export default class LevelEditorActiveObjectDragController {
     }
 
     public handleMouseDrag = ({ x, y, deltaX, deltaY }) => {
-
         if (!this.context.canInteractWithEditor() || !LevelEditorUIAgent.isWorldInteractionEnabled()) {
             return;
         }
@@ -72,7 +71,6 @@ export default class LevelEditorActiveObjectDragController {
         let targetY = Tapotan.getViewportHeight() - worldCoords.y - 1;
 
         if (selectedObjects.length === 1) {
-
             targetX = targetX - Math.floor(this.offsetX);
             targetY = targetY - Math.floor(this.offsetY);
 

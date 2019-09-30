@@ -15,11 +15,12 @@ import AssetManager from './AssetManager';
 import AudioManager from './AudioManager';
 import FrameDebugger from './FrameDebugger';
 import GameManager, { GameState } from './GameManager';
-import InputManager from './InputManager';
+import InputManager from './input/InputManager';
 import ScreenManager from './ScreenManager';
 import LoadProgress from './LoadProgress';
 import TapotanUIApplicationBootstrap from '../ui/TapotanUIApplicationBootstrap';
 import { EventEmitter } from 'events';
+import TickHelper from './TickHelper';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -186,7 +187,7 @@ export default class Tapotan extends EventEmitter {
         this.inputManager = new InputManager();
         this.screenManager = new ScreenManager(this);
 
-        this.application.ticker.add(this.inputManager.tick);
+        TickHelper.add(this.inputManager.tick);
         this.application.ticker.add(this.tick);
 
         document.addEventListener('contextmenu', e => e.preventDefault());
@@ -284,6 +285,7 @@ export default class Tapotan extends EventEmitter {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
         
+                        //this.startTestScreen();
                         //this.startMainMenu();
                         this.startEditor();
                     }, 200);

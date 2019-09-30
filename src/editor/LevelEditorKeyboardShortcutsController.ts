@@ -1,5 +1,5 @@
 import Tapotan from "../core/Tapotan";
-import InputManager from "../core/InputManager";
+import InputManager from "../core/input/InputManager";
 import LevelEditorContext from "./LevelEditorContext";
 import LevelEditorCommandRemoveObject from "./commands/LevelEditorCommandRemoveObject";
 import { GameState } from "../core/GameManager";
@@ -18,14 +18,14 @@ export default class LevelEditorKeyboardShortcutsController {
     private startListening() {
         const inputManager = Tapotan.getInstance().getInputManager();
         for (const [key, callback] of Object.entries(this.getKeyboardShortcuts())) {
-            inputManager.listenKeyDown(parseInt(key), callback);
+            inputManager.getKeyboardController().listenKeyDown(parseInt(key), callback);
         }
     }
 
     public destroy() {
         const inputManager = Tapotan.getInstance().getInputManager();
         for (const [key, callback] of Object.entries(this.getKeyboardShortcuts())) {
-            inputManager.removeKeyDownListener(parseInt(key), callback);
+            inputManager.getKeyboardController().removeKeyDownListener(parseInt(key), callback);
         }
     }
 

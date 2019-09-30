@@ -1,5 +1,5 @@
 import Tapotan from "../core/Tapotan";
-import InputManager from "../core/InputManager";
+import InputManager from "../core/input/InputManager";
 import LevelEditorContext from "./LevelEditorContext";
 import Interpolation from "../utils/Interpolation";
 
@@ -42,20 +42,21 @@ export default class LevelEditorCameraMovementController {
 
         const inputManager = this.context.getGame().getInputManager();
         const viewport = this.context.getGame().getViewport();
+        const keyboardController = inputManager.getKeyboardController();
 
-        if (inputManager.isKeyDown(InputManager.KeyCodes.KeyW) || inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowUp)) {
+        if (keyboardController.isKeyDown(InputManager.KeyCodes.KeyW) || keyboardController.isKeyDown(InputManager.KeyCodes.KeyArrowUp)) {
             viewport.top -= 15 * dt;
         }
         
-        if (inputManager.isKeyDown(InputManager.KeyCodes.KeyS) || inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowDown)) {
+        if (keyboardController.isKeyDown(InputManager.KeyCodes.KeyS) || keyboardController.isKeyDown(InputManager.KeyCodes.KeyArrowDown)) {
             viewport.top += 15 * dt;
         }
 
-        if (inputManager.isKeyDown(InputManager.KeyCodes.KeyA) || inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowLeft)) {
+        if (keyboardController.isKeyDown(InputManager.KeyCodes.KeyA) || keyboardController.isKeyDown(InputManager.KeyCodes.KeyArrowLeft)) {
             viewport.left -= 15 * dt;
         }
 
-        if (inputManager.isKeyDown(InputManager.KeyCodes.KeyD) || inputManager.isKeyDown(InputManager.KeyCodes.KeyArrowRight)) {
+        if (keyboardController.isKeyDown(InputManager.KeyCodes.KeyD) || keyboardController.isKeyDown(InputManager.KeyCodes.KeyArrowRight)) {
             viewport.left += 15 * dt;
         }
 

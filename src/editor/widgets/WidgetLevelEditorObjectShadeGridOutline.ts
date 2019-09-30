@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import Tapotan from "../../core/Tapotan";
 import GameObject from "../../world/GameObject";
 import screenPointToWorld from '../../utils/screenPointToWorld';
-import InputManager from '../../core/InputManager';
+import InputManager from '../../core/input/InputManager';
 
 export default class WidgetLevelEditorObjectShadeGridOutline extends PIXI.Container {
     private sprite: PIXI.Sprite;

@@ -16,7 +16,7 @@ export default class LevelEditorCameraZoomController {
 
     constructor(context: LevelEditorContext) {
         this.context = context;
-        this.context.getGame().getInputManager().listenMouseWheel(this.handleMouseWheel);
+        // this.context.getGame().getInputManager().listenMouseWheel(this.handleMouseWheel);
 
         this.maxZoom = Tapotan.getGameHeight() / Tapotan.getViewportHeight();
         this.currentZoom = Tapotan.getGameHeight() / Tapotan.getViewportHeight();
@@ -25,7 +25,7 @@ export default class LevelEditorCameraZoomController {
     }
 
     public destroy() {
-        this.context.getGame().getInputManager().removeMouseWheelListener(this.handleMouseWheel);
+        // this.context.getGame().getInputManager().removeMouseWheelListener(this.handleMouseWheel);
     }
 
     public tick = (dt: number) => {
