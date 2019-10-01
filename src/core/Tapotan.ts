@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 import APIRequest from '../api/APIRequest';
 import ScreenLevelEditor from '../editor/ScreenLevelEditor';
 import ScreenIngame from '../screens/ScreenIngame';
-import convertWorldToPixels from '../utils/converWorldToPixels';
+import convertWorldToPixels from '../utils/convertWorldToPixels';
 import Tileset from '../world/tileset/Tileset';
 import World from '../world/World';
 import WorldLoader from '../world/WorldLoader';

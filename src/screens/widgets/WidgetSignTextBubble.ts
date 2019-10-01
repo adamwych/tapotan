@@ -4,7 +4,7 @@ import WidgetText from './WidgetText';
 import Interpolation from '../../utils/Interpolation';
 import ContainerAnimation from '../../graphics/animation/ContainerAnimation';
 import Tapotan from '../../core/Tapotan';
-import convertWorldToPixels from '../../utils/converWorldToPixels';
+import convertWorldToPixels from '../../utils/convertWorldToPixels';
 import convertPixelsToWorld from '../../utils/convertPixelsToWorld';
 import World from '../../world/World';
 
