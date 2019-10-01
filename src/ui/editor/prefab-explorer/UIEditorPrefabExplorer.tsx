@@ -6,6 +6,7 @@ import UIEditorPrefabExplorerPopupWrapper from './UIEditorPrefabExplorerPopupWra
 import UIEditorPrefabExplorerTile from './UIEditorPrefabExplorerTile';
 import UIEditorSharedValues from '../UIEditorSharedValues';
 import useSharedValue from '../../lib/useSharedValue';
+import InputManager from '../../../core/input/InputManager';
 
 export default function UIEditorPrefabExplorer() {
     const tileset = useRef(Tapotan.getInstance().getGameManager().getWorld().getTileset());
@@ -13,7 +14,7 @@ export default function UIEditorPrefabExplorer() {
     const [editorSettingsPopupVisible, setEditorSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.EditorSettingsPopupVisible, false);
     const [activeCategoryID, setPrefabExplorerActiveCategoryID] = useSharedValue(UIEditorSharedValues.PrefabExplorerActiveCategoryID, null);
 
-    const handleTileClick = useCallback(categoryID => {
+    const handleTileClick = useCallback((categoryID: string) => {
         setLevelSettingsPopupVisible(false);
         setEditorSettingsPopupVisible(false);
 
@@ -50,8 +51,31 @@ export default function UIEditorPrefabExplorer() {
     }, []);
 
     useEffect(() => {
-        LevelEditorUIAgent.onPlaythroughStarted(handlePlaythroughStarted);
+        const keyboardController = InputManager.instance.getKeyboardController();
 
+        let editorCategories = tileset.current.getEditorCategories();
+        let editorCategoriesLength = Math.min(9, editorCategories.length);
+        let quickAccessKeyHandlers = [];
+
+        for (let i = 0; i < editorCategoriesLength; i++) {
+            quickAccessKeyHandlers.push(() => {
+                if (LevelEditorUIAgent.isInteractionEnabled()) {
+                    handleTileClick(tileset.current.getEditorCategories()[i].name);
+                }
+            });
+
+            keyboardController.listenKeyDown(InputManager.KeyCodes['Key' + (i + 1)], quickAccessKeyHandlers[i]);
+        }
+
+        return () => {
+            quickAccessKeyHandlers.forEach((handler, index) => {
+                keyboardController.removeKeyDownListener(InputManager.KeyCodes['Key' + (index + 1)], handler);
+            });
+        };
+    }, [activeCategoryID]);
+
+    useEffect(() => {
+        LevelEditorUIAgent.onPlaythroughStarted(handlePlaythroughStarted);
         return () => { };
     }, []);
 

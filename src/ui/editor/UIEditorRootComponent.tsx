@@ -12,6 +12,7 @@ import UIEditorPublishPopup from './publish-popup/UIEditorPublishPopup';
 import UIEditorLayerSelector from './UIEditorLayerSelector';
 import UIEditorWelcomePopup from './UIEditorWelcomePopup';
 import UIEditorSettingsPopup from './UIEditorSettingsPopup';
+import InputManager from '../../core/input/InputManager';
 
 require('./editor.scss');
 
@@ -61,6 +62,7 @@ export default function UIEditorRootComponent() {
 
     useEffect(() => {
         window.addEventListener('mousedown', handleWindowMouseDown);
+
         LevelEditorUIAgent.onPlaythroughStarted(handlePlaythroughStarted);
         LevelEditorUIAgent.onPlaythroughStopped(handlePlaythroughStopped);
         LevelEditorUIAgent.onObjectSelected(handleGameObjectSelected);
