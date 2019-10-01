@@ -188,7 +188,7 @@ export default class Tapotan extends EventEmitter {
         this.screenManager = new ScreenManager(this);
 
         TickHelper.add(this.inputManager.tick);
-        this.application.ticker.add(this.tick);
+        TickHelper.add(this.tick);
 
         document.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -308,15 +308,17 @@ export default class Tapotan extends EventEmitter {
         
         window.location.hash = '';
 
-        if (this.gameManager && this.gameManager.getWorld()) {
-            this.gameManager.getWorld().destroy();
-        }
-
-        this.gameManager = new GameManager(this);
-
         let mainMenuScreen = new ScreenMainMenu(this);
         this.screenManager.transitionToScreen(mainMenuScreen);
         this.audioManager.playBackgroundMusic('pixelart__main_theme', 1500);
+        
+        if (this.gameManager) {
+            if (this.gameManager.getWorld()) {
+                this.gameManager.getWorld().destroy();
+            }
+
+            this.gameManager = null;
+        }
     }
 
     public loadAndStartLevel(publicID: number) {
@@ -331,7 +333,6 @@ export default class Tapotan extends EventEmitter {
 
     public startLevel(world: World) {
         this._isInEditor = false;
-
         window.location.hash = '';
 
         if (this.gameManager && this.gameManager.getWorld()) {
@@ -355,7 +356,6 @@ export default class Tapotan extends EventEmitter {
 
     public startEditor(world: World = null) {
         this._isInEditor = true;
-
         window.location.hash = '';
         
         if (this.gameManager && this.gameManager.getWorld()) {
@@ -401,6 +401,10 @@ export default class Tapotan extends EventEmitter {
         //document.title = 'TAPOTAN | ' + this.application.ticker.FPS.toFixed(2) + ' FPS';
         this.frameDebugger.frame();
         /// #endif
+
+        if (this.gameManager && this.gameManager.getWorld()) {
+            this.gameManager.getWorld().tick(dt);
+        }
 
         this.cameraAwareUIObjectsContainer.position.x = -convertWorldToPixels(this.viewport.left);
         this.cameraAwareUIObjectsContainer.position.y = -convertWorldToPixels(this.viewport.top);

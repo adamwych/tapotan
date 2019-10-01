@@ -2,7 +2,6 @@ import * as p2 from 'p2';
 import * as PIXI from 'pixi.js';
 import { GameEndReason, GameState } from '../core/GameManager';
 import Tapotan from '../core/Tapotan';
-import TickHelper from '../core/TickHelper';
 import WorldBackgrounds from './backgrounds/WorldBackgrounds';
 import CameraShake from './CameraShake';
 import GameObjectComponentParallaxBackground from './components/backgrounds/GameObjectComponentParallaxBackground';
@@ -132,8 +131,6 @@ export default class World extends PIXI.Container {
 
         this.sortableChildren = true;
 
-        TickHelper.add(this.tick);
-
         this.startTime = new Date().getTime();
 
         this.setAnimatedBackgroundId('clouds');
@@ -143,8 +140,6 @@ export default class World extends PIXI.Container {
     public destroy() {
         super.destroy({ children: true });
         this._duringRemove = true;
-
-        TickHelper.remove(this.tick);
 
         this.lockConnections = [];
 
@@ -160,7 +155,7 @@ export default class World extends PIXI.Container {
         this._duringRemove = false;
     }
 
-    private tick = (dt: number) => {
+    public tick(dt: number) {
         if (this._duringRemove) {
             return;
         }

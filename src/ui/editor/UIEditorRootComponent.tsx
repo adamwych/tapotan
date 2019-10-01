@@ -12,7 +12,6 @@ import UIEditorPublishPopup from './publish-popup/UIEditorPublishPopup';
 import UIEditorLayerSelector from './UIEditorLayerSelector';
 import UIEditorWelcomePopup from './UIEditorWelcomePopup';
 import UIEditorSettingsPopup from './UIEditorSettingsPopup';
-import InputManager from '../../core/input/InputManager';
 
 require('./editor.scss');
 

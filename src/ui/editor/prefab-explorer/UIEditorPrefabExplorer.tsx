@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import InputManager from '../../../core/input/InputManager';
 import Tapotan from '../../../core/Tapotan';
 import LevelEditorUIAgent from '../../../editor/LevelEditorUIAgent';
+import useSharedValue from '../../lib/useSharedValue';
+import UIEditorSharedValues from '../UIEditorSharedValues';
 import UIEditorPrefabExplorerPopupWrapper from './UIEditorPrefabExplorerPopupWrapper';
 import UIEditorPrefabExplorerTile from './UIEditorPrefabExplorerTile';
-import UIEditorSharedValues from '../UIEditorSharedValues';
-import useSharedValue from '../../lib/useSharedValue';
-import InputManager from '../../../core/input/InputManager';
 
 export default function UIEditorPrefabExplorer() {
     const tileset = useRef(Tapotan.getInstance().getGameManager().getWorld().getTileset());
