@@ -2,8 +2,6 @@ import { EventEmitter } from "events";
 import ScreenLevelEditor from "../editor/ScreenLevelEditor";
 import ScreenMainMenu from "../screens/main-menu/ScreenMainMenu";
 import Screen from "../screens/Screen";
-import ScreenTransition from "../screens/ScreenTransition";
-import ScreenTransitionImmediate from "../screens/transitions/ScreenTransitionImmediate";
 import World from "../world/World";
 import GameManager, { GameState } from "./GameManager";
 import Tapotan from "./Tapotan";
@@ -24,8 +22,9 @@ export default class ScreenManager extends EventEmitter {
         this.game.setIsInEditor(false);
         window.location.hash = '';
 
-        const mainMenuScreen = new ScreenMainMenu(this.game);
-        this.transitionToScreen(mainMenuScreen);
+        this.popScreen();
+        this.pushScreen(new ScreenMainMenu(this.game));
+
         this.game.getAudioManager().playBackgroundMusic('pixelart__main_theme', 1500);
         
         if (this.game.getGameManager()) {
@@ -46,27 +45,19 @@ export default class ScreenManager extends EventEmitter {
         }
 
         const gameManager = new GameManager(this.game);
-        this.game.setGameManager(gameManager);
-        
         const editorWorld = world || new World(this.game, 1000, 1000, this.game.getAssetManager().getTilesetByName('Pixelart'));
+
+        this.game.setGameManager(gameManager);
 
         gameManager.setGameState(GameState.InEditor);
         gameManager.setWorld(editorWorld);
         
         this.game.getViewport().left = 0;
 
-        const editorScreen = new ScreenLevelEditor(this.game);
-        this.transitionToScreen(editorScreen);
+        this.popScreen();
+        this.pushScreen(new ScreenLevelEditor(this.game));
         
         this.game.getAudioManager().playBackgroundMusic(editorWorld.getBackgroundMusicID());
-    }
-
-    public transition(transition: ScreenTransition): void {
-        transition.start(this);
-    }
-
-    public transitionToScreen(screen: Screen): void {
-        this.transition(new ScreenTransitionImmediate(this.screens[0], screen));
     }
 
     public pushScreen(screen: Screen) {

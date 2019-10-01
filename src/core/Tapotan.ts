@@ -327,8 +327,9 @@ export default class Tapotan extends EventEmitter {
         
         this.viewport.left = 0;
 
-        let ingameScreen = new ScreenIngame(this);
-        this.screenManager.transitionToScreen(ingameScreen);
+        this.screenManager.popScreen();
+        this.screenManager.pushScreen(new ScreenIngame(this));
+
         this.audioManager.playBackgroundMusic(world.getBackgroundMusicID(), 1500);
     }
 
