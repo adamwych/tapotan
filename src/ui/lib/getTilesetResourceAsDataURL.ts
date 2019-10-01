@@ -1,5 +1,5 @@
 import getBundledResourceMimeTypeFromExtension from "./getBundledResourceMimeTypeFromExtension";
-import Tileset from "../../world/tiles/Tileset";
+import Tileset from "../../world/tileset/Tileset";
 
 /**
  * Returns specified resource in form of a Data URL.

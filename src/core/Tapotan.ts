@@ -4,7 +4,7 @@ import APIRequest from '../api/APIRequest';
 import ScreenLevelEditor from '../editor/ScreenLevelEditor';
 import ScreenIngame from '../screens/ingame/ScreenIngame';
 import convertWorldToPixels from '../utils/converWorldToPixels';
-import Tileset from '../world/tiles/Tileset';
+import Tileset from '../world/tileset/Tileset';
 import World from '../world/World';
 import WorldLoader from '../world/WorldLoader';
 import WorldSerializer from '../world/WorldSerializer';

@@ -1,6 +1,6 @@
 import Axios from "axios";
 import * as PIXI from 'pixi.js';
-import Tileset from "../world/tiles/Tileset";
+import Tileset from "../world/tileset/Tileset";
 import TAPOAssetBundle, { ResourceType, TAPOAssetBundleEntry } from "./asset-bundle/TAPOAssetBundle";
 import TAPOAssetBundleLoader from "./asset-bundle/TAPOAssetBundleLoader";
 import Tapotan from "./Tapotan";

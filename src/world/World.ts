@@ -10,7 +10,7 @@ import GameObject from './GameObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
 import PhysicsMaterials from './physics/PhysicsMaterials';
 import Prefabs from './prefabs/Prefabs';
-import Tileset from './tiles/Tileset';
+import Tileset from './tileset/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
 

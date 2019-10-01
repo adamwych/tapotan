@@ -1,7 +1,7 @@
 import Tapotan from "../../core/Tapotan";
 import { LoaderResource, SCALE_MODES } from "pixi.js";
-import TilesetEditorCategory from "../../tilesets/TilesetEditorCategory";
-import TilesetEditorCategoryTilesGroup from "../../tilesets/TilesetEditorCategoryTilesGroup";
+import TilesetEditorCategory from "./TilesetEditorCategory";
+import TilesetEditorCategoryTilesGroup from "./TilesetEditorCategoryTilesGroup";
 import { ResourceType, TAPOAssetBundleEntry } from "../../core/asset-bundle/TAPOAssetBundle";
 
 interface TilesetResource {

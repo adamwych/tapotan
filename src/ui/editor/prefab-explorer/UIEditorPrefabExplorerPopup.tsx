@@ -1,6 +1,6 @@
 import * as React from 'react';
 import getBundledResourceAsDataURL from '../../lib/getBundledResourceAsDataURL';
-import TilesetEditorCategory from '../../../tilesets/TilesetEditorCategory';
+import TilesetEditorCategory from '../../../world/tileset/TilesetEditorCategory';
 import Tapotan from '../../../core/Tapotan';
 import getTilesetResourceAsDataURL from '../../lib/getTilesetResourceAsDataURL';
 import CustomScrollbars from 'react-custom-scrollbars';
