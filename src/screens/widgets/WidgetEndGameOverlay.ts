@@ -128,7 +128,7 @@ export default class WidgetEndGameOverlay extends PIXI.Container {
                 const transition = new ScreenTransitionBlocksWave();
                 transition.setInBetweenCallback(() => {
                     setTimeout(() => {
-                        Tapotan.getInstance().startMainMenu();
+                        Tapotan.getInstance().getScreenManager().startMainMenu();
                         transition.playExitAnimation();
                     }, 500);
                 });

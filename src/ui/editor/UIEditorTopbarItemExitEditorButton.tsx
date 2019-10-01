@@ -9,7 +9,7 @@ export default function UIEditorTopbarItemExitEditorButton() {
         const element = event.target;
         const rect = element.getBoundingClientRect();
         UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, ((rect.top / window.innerHeight) * 100) + 5, () => {
-            Tapotan.getInstance().startMainMenu();
+            Tapotan.getInstance().getScreenManager().startMainMenu();
         });
     }, []);
 

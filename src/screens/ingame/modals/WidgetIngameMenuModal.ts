@@ -58,7 +58,7 @@ export default class WidgetIngameMenuModal extends WidgetModal {
             const transition = new ScreenTransitionBlocksWave();
             transition.setInBetweenCallback(() => {
                 setTimeout(() => {
-                    Tapotan.getInstance().startMainMenu();
+                    Tapotan.getInstance().getScreenManager().startMainMenu();
                     transition.playExitAnimation();
                 }, 500);
             });

@@ -23,7 +23,7 @@ export default function UIMainMenuIslandWrapper() {
 
     const handleLevelMakerButtonClick = useCallback(event => {
         playUICircularMaskTransition(event.target, () => {
-            Tapotan.getInstance().startEditor();
+            Tapotan.getInstance().getScreenManager().startEditor();
         });
     }, []);
 

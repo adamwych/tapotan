@@ -157,13 +157,13 @@ export default class ScreenIngame extends Screen {
 
                     // No more levels to play. :(
                     if (!response.data.success) {
-                        Tapotan.getInstance().startMainMenu();
+                        Tapotan.getInstance().getScreenManager().startMainMenu();
                         return;
                     }
 
                     const world = WorldLoader.load(response.data.data, response.data.authorName);
                     if (!world) {
-                        Tapotan.getInstance().startMainMenu();
+                        Tapotan.getInstance().getScreenManager().startMainMenu();
                         return;
                     }
 

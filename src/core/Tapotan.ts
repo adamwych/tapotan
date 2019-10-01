@@ -1,11 +1,8 @@
-import Axios from 'axios';
 import * as PIXIViewport from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
 import APIRequest from '../api/APIRequest';
 import ScreenLevelEditor from '../editor/ScreenLevelEditor';
 import ScreenIngame from '../screens/ingame/ScreenIngame';
-import ScreenMainMenu from '../screens/main-menu/ScreenMainMenu';
-import ScreenTest from '../screens/ScreenTest';
 import convertWorldToPixels from '../utils/converWorldToPixels';
 import Tileset from '../world/tiles/Tileset';
 import World from '../world/World';
@@ -273,7 +270,7 @@ export default class Tapotan extends EventEmitter {
                             window.localStorage.removeItem('restoreSessionID');
                             let world = WorldLoader.load(response.data.data, 'Unknown');
                             world.setIsNewWorld(false);
-                            this.startEditor(world);
+                            this.screenManager.startEditor(world);
                         });
                     }
                 }
@@ -285,9 +282,8 @@ export default class Tapotan extends EventEmitter {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
         
-                        //this.startTestScreen();
                         //this.startMainMenu();
-                        this.startEditor();
+                        this.screenManager.startEditor();
                     }, 200);
 
                 }
@@ -301,24 +297,6 @@ export default class Tapotan extends EventEmitter {
                 console.error('Asset bundle load failed: ' + error);
             }
         });
-    }
-
-    public startMainMenu() {
-        this._isInEditor = false;
-        
-        window.location.hash = '';
-
-        let mainMenuScreen = new ScreenMainMenu(this);
-        this.screenManager.transitionToScreen(mainMenuScreen);
-        this.audioManager.playBackgroundMusic('pixelart__main_theme', 1500);
-        
-        if (this.gameManager) {
-            if (this.gameManager.getWorld()) {
-                this.gameManager.getWorld().destroy();
-            }
-
-            this.gameManager = null;
-        }
     }
 
     public loadAndStartLevel(publicID: number) {
@@ -352,48 +330,6 @@ export default class Tapotan extends EventEmitter {
         let ingameScreen = new ScreenIngame(this);
         this.screenManager.transitionToScreen(ingameScreen);
         this.audioManager.playBackgroundMusic(world.getBackgroundMusicID(), 1500);
-    }
-
-    public startEditor(world: World = null) {
-        this._isInEditor = true;
-        window.location.hash = '';
-        
-        if (this.gameManager && this.gameManager.getWorld()) {
-            this.gameManager.getWorld().destroy();
-        }
-
-        this.gameManager = new GameManager(this);
-        
-        const editorWorld = world || new World(this, 1000, 1000, this.assetManager.getTilesetByName('Pixelart'));
-
-        this.gameManager.setGameState(GameState.InEditor);
-        this.gameManager.setWorld(editorWorld);
-        
-        this.viewport.left = 0;
-
-        let editorScreen = new ScreenLevelEditor(this);
-        this.screenManager.transitionToScreen(editorScreen);
-        
-        if (!world) {
-            editorWorld.setBackgroundMusicID('pixelart__main_theme');
-        } else {
-            this.audioManager.playBackgroundMusic(editorWorld.getBackgroundMusicID());
-        }
-    }
-
-    private startTestScreen() {
-        this._isInEditor = false;
-        
-        this.gameManager = new GameManager(this);
-                
-        const world = new World(this, 100, 100, this.assetManager.getTilesetByName('pixelart'));
-        world.handleGameStart();
-        
-        this.gameManager.setGameState(GameState.Playing);
-        this.gameManager.setWorld(world);
-
-        let screen = new ScreenTest(this);
-        this.screenManager.transitionToScreen(screen);
     }
 
     private tick = (dt: number) => {
@@ -482,6 +418,10 @@ export default class Tapotan extends EventEmitter {
         return this.screenManager;
     }
 
+    public setGameManager(manager: GameManager) {
+        this.gameManager = manager;
+    }
+
     public getGameManager(): GameManager {
         return this.gameManager;
     }
@@ -543,6 +483,10 @@ export default class Tapotan extends EventEmitter {
         if (idx > -1) {
             this.resizeCallbacks.splice(idx, 1);
         }
+    }
+
+    public setIsInEditor(inEditor: boolean) {
+        this._isInEditor = inEditor;
     }
 
     public isInEditor() {

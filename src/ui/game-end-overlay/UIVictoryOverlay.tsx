@@ -24,7 +24,7 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
     const handleMainMenuButtonClick = useCallback(event => {
         playUICircularMaskTransition(event.target, () => {
             props.onCloseRequest();
-            Tapotan.getInstance().startMainMenu();
+            Tapotan.getInstance().getScreenManager().startMainMenu();
         });
     }, []);
 
@@ -55,13 +55,13 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
                 }).then(response => {
                     // No more levels to play. :(
                     if (!response.data.success) {
-                        Tapotan.getInstance().startMainMenu();
+                        Tapotan.getInstance().getScreenManager().startMainMenu();
                         return;
                     }
 
                     const world = WorldLoader.load(response.data.data, response.data.authorName);
                     if (!world) {
-                        Tapotan.getInstance().startMainMenu();
+                        Tapotan.getInstance().getScreenManager().startMainMenu();
                         return;
                     }
 

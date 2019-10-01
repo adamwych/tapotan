@@ -115,6 +115,7 @@ export default class World extends PIXI.Container {
         this.game = game;
         this.tileset = tileset;
         this.behaviourRules = new WorldBehaviourRules();
+        this.backgroundMusicId = 'pixelart__main_theme';
         
         this.initializePhysics();
 
