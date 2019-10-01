@@ -22,7 +22,7 @@ export default class InputControllerKeyboard {
     }
 
     private handleKeyDown = (event: KeyboardEvent) => {
-        this.internalEventEmitter.emit('keyDown' + event.keyCode, 0);
+        this.internalEventEmitter.emit('keyDown' + event.keyCode, null);
         this.keysDown.push(event.keyCode);
         
         this.manager.setActivelyUsingGamepad(false);
@@ -37,7 +37,7 @@ export default class InputControllerKeyboard {
     }
 
     private handleKeyUp = (event: KeyboardEvent) => {
-        this.internalEventEmitter.emit('keyUp' + event.keyCode, 0);
+        this.internalEventEmitter.emit('keyUp' + event.keyCode, null);
         this.keysDown.splice(this.keysDown.indexOf(event.keyCode), 1);
 
         this.manager.setActivelyUsingGamepad(false);

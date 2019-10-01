@@ -1,6 +1,6 @@
-import Tapotan from "../../core/Tapotan";
-import World from '../../world/World';
-import Screen from "../Screen";
+import Tapotan from "../core/Tapotan";
+import World from '../world/World';
+import Screen from "./Screen";
 
 export default class ScreenIngame extends Screen {
 

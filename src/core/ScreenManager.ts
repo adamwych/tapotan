@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import ScreenLevelEditor from "../editor/ScreenLevelEditor";
-import ScreenMainMenu from "../screens/main-menu/ScreenMainMenu";
+import ScreenMainMenu from "../screens/ScreenMainMenu";
 import Screen from "../screens/Screen";
 import World from "../world/World";
 import GameManager, { GameState } from "./GameManager";

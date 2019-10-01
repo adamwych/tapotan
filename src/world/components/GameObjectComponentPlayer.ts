@@ -1,6 +1,5 @@
 import * as p2 from 'p2';
 import GameManager, { GameEndReason } from '../../core/GameManager';
-import InputManager from '../../core/input/InputManager';
 import Tapotan from '../../core/Tapotan';
 import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 import GameObjectFaceDirection from '../GameObjectFaceDirection';
@@ -92,16 +91,34 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         this.wantsToMoveUp = false;
     }
 
-    private handleInputMoveLeftAction = (deviation: number) => {
-        this.wantsToMoveLeft = true;
+    private handleInputMoveLeftAction = (gamepadAxisData: number[]) => {
+        if (gamepadAxisData[0] !== null) {
+            const deviation = gamepadAxisData[0];
+            if (deviation < 0) {
+                this.wantsToMoveLeft = true;
+                this.wantsToMoveRight = false;
+            } else if (deviation > 0) {
+                this.wantsToMoveRight = true;
+                this.wantsToMoveLeft = false;
+            } else {
+                this.wantsToMoveRight = false;
+                this.wantsToMoveLeft = false;
+            }
+        } else {
+            this.wantsToMoveLeft = true;
+        }
     }
 
     private handleInputMoveLeftStopAction = () => {
         this.wantsToMoveLeft = false;
     }
 
-    private handleInputMoveRightAction = (deviation: number) => {
-        this.wantsToMoveRight = true;
+    private handleInputMoveRightAction = (gamepadAxisData: number[]) => {
+        if (gamepadAxisData[0] === null) {
+            this.wantsToMoveRight = true;
+        }
+
+        // Ignore gamepad here, it will be handled by `handleInputMoveLeftAction`.
     }
 
     private handleInputMoveRightStopAction = () => {

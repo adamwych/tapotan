@@ -1,13 +1,13 @@
-import InputManager from '../../core/input/InputManager';
-import Tapotan from "../../core/Tapotan";
-import UIMainMenuRootComponent from '../../ui/main-menu/UIMainMenuRootComponent';
-import GameObjectComponentAnimator from '../../world/components/GameObjectComponentAnimator';
-import GameObjectComponentSprite from '../../world/components/GameObjectComponentSprite';
-import GameObjectComponentTransform, { GameObjectVerticalAlignment } from '../../world/components/GameObjectComponentTransform';
-import GameObject from '../../world/GameObject';
-import Prefabs from '../../world/prefabs/Prefabs';
-import World from '../../world/World';
-import Screen from "../Screen";
+import InputManager from '../core/input/InputManager';
+import Tapotan from "../core/Tapotan";
+import UIMainMenuRootComponent from '../ui/main-menu/UIMainMenuRootComponent';
+import GameObjectComponentAnimator from '../world/components/GameObjectComponentAnimator';
+import GameObjectComponentSprite from '../world/components/GameObjectComponentSprite';
+import GameObjectComponentTransform, { GameObjectVerticalAlignment } from '../world/components/GameObjectComponentTransform';
+import GameObject from '../world/GameObject';
+import Prefabs from '../world/prefabs/Prefabs';
+import World from '../world/World';
+import Screen from "./Screen";
 
 export default class ScreenMainMenu extends Screen {
 

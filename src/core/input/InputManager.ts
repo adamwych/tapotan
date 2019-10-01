@@ -138,7 +138,7 @@ export default class InputManager {
         const moveLeftAction = new InputAction('MoveLeft', this);
         moveLeftAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyA);
         moveLeftAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowLeft);
-        moveLeftAction.attachGamepadLeftJoystickMaxLeft();
+        moveLeftAction.attachGamepadLeftJoystickChange();
 
         const moveLeftStopAction = new InputAction('MoveLeftStop', this);
         moveLeftStopAction.attachKeyboardKeyUpEvent(InputManager.KeyCodes.KeyA);
@@ -148,7 +148,7 @@ export default class InputManager {
         const moveRightAction = new InputAction('MoveRight', this);
         moveRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyD);
         moveRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowRight);
-        moveRightAction.attachGamepadLeftJoystickMaxRight();
+        moveRightAction.attachGamepadLeftJoystickChange();
 
         const moveRightStopAction = new InputAction('MoveRightStop', this);
         moveRightStopAction.attachKeyboardKeyUpEvent(InputManager.KeyCodes.KeyD);

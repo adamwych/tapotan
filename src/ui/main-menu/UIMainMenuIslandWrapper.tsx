@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useEffect, useRef } from 'react';
 import Tapotan from '../../core/Tapotan';
 import TickHelper from '../../core/TickHelper';
-import ScreenMainMenu from '../../screens/main-menu/ScreenMainMenu';
+import ScreenMainMenu from '../../screens/ScreenMainMenu';
 import UICircularMaskTransition from '../UICircularMaskTransition';
 import UIMainMenuIslandButton from './UIMainMenuIslandButton';
 

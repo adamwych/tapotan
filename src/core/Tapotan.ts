@@ -2,7 +2,7 @@ import * as PIXIViewport from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
 import APIRequest from '../api/APIRequest';
 import ScreenLevelEditor from '../editor/ScreenLevelEditor';
-import ScreenIngame from '../screens/ingame/ScreenIngame';
+import ScreenIngame from '../screens/ScreenIngame';
 import convertWorldToPixels from '../utils/converWorldToPixels';
 import Tileset from '../world/tileset/Tileset';
 import World from '../world/World';

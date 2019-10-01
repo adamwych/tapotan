@@ -1,6 +1,6 @@
 import World from "../world/World";
 import Tapotan from "./Tapotan";
-import ScreenIngame from "../screens/ingame/ScreenIngame";
+import ScreenIngame from "../screens/ScreenIngame";
 import ScreenLevelEditor from "../editor/ScreenLevelEditor";
 import { EventEmitter } from "events";
 

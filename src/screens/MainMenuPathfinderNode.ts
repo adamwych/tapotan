@@ -1,4 +1,4 @@
-import GameObject from "../../world/GameObject";
+import GameObject from "../world/GameObject";
 
 export interface MainMenuPathfinderNode {
     x: number;
