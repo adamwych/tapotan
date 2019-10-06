@@ -1,10 +1,13 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import APIRequest from '../../api/APIRequest';
 import Tapotan from '../../core/Tapotan';
 import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
 import UITheatreLevelsItem from './UITheatreLevelsItem';
 import UICircularMaskTransition from '../UICircularMaskTransition';
+import UIEditorSharedValues from '../editor/UIEditorSharedValues';
+import useSharedValue from '../lib/useSharedValue';
 
 export default function UITheatreLevels() {
     const [past, setPast] = useState(false);
@@ -13,6 +16,7 @@ export default function UITheatreLevels() {
     const [items, setItems] = useState([]);
     const [isFetchingMoreLevels, setIsFetchingMoreLevels] = useState(false);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
+    const [theaterFilter, setTheaterFilter] = useSharedValue(UIEditorSharedValues.TheaterFilter, 'MostPopular');
 
     const fetchMoreLevels = (index: number) => {
         if (index === items.length - 4) {
@@ -23,7 +27,8 @@ export default function UITheatreLevels() {
             setIsFetchingMoreLevels(true);
 
             APIRequest.get('/levels', {
-                pageIndex: currentPageIndex + 1
+                pageIndex: currentPageIndex + 1,
+                filter: theaterFilter
             }).then(response => {
                 if (response.data.success) {
                     setCurrentPageIndex(currentPageIndex + 1);
@@ -61,17 +66,25 @@ export default function UITheatreLevels() {
     }, [currentLevelIndex]);
 
     useEffect(() => {
-        APIRequest.get('/levels', {
-
-        }).then(response => {
-            setItems(response.data.levels);
-            setCurrentLevelIndex(0);
-        });
-
         setTimeout(() => {
             setPast(true);
         }, 3000);
     }, []);
+
+    useEffect(() => {
+        APIRequest.get('/levels', {
+            pageIndex: 0,
+            filter: theaterFilter
+        }).then(response => {
+            if (response.data.success) {
+                ReactDOM.unstable_batchedUpdates(() => {
+                    setCurrentLevelIndex(0);
+                    setCurrentPageIndex(0);
+                    setItems(response.data.levels);
+                });
+            }
+        });
+    }, [theaterFilter]);
 
     const idx = currentLevelIndex - 3;
     const singleItemWidth = 230;
@@ -79,7 +92,7 @@ export default function UITheatreLevels() {
 
     return (
         <div className="screen-theatre-layer-levels">
-            {currentLevelIndex !== -1 && (
+            {items.length > 0 && currentLevelIndex <= items.length - 1 && (
                 <div className={`screen-theatre-current-level-title ${past ? 'attr--past' : ''}`} ref={element => currentLevelTitleElement.current = element} key={currentLevelIndex}>
                     <div>{items[currentLevelIndex].name}</div>
                     <div>by {items[currentLevelIndex].author}</div>

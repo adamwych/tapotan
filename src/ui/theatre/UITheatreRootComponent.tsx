@@ -7,16 +7,24 @@ import UITheatreAudience from './UITheatreAudience';
 import UITheatreFilters from './UITheatreFilters';
 import UITheatreSpotlight from './UITheatreSpotlight';
 import UITheatreLevels from './UITheatreLevels';
+import useSharedValue from '../lib/useSharedValue';
+import UIEditorSharedValues from '../editor/UIEditorSharedValues';
 
 require('./theatre.scss');
 
 export default function UITheatreRootComponent() {
+    const [theaterFilter, setTheaterFilter] = useSharedValue(UIEditorSharedValues.TheaterFilter, 'MostPopular');
+
     const handleBackButtonClick = useCallback(event => {
         const element = event.target;
         const rect = element.getBoundingClientRect();
         UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, ((rect.top / window.innerHeight) * 100) + 4.5, () => {
             Tapotan.getInstance().getScreenManager().startMainMenu();
         });
+    }, []);
+
+    const handleFilterChange = useCallback(filter => {
+        setTheaterFilter(filter);
     }, []);
 
     return (
@@ -37,7 +45,9 @@ export default function UITheatreRootComponent() {
                     </div>
                 </div>
 
-                <UITheatreFilters />
+                <UITheatreFilters
+                    onChange={handleFilterChange}
+                />
 
                 {/*<div className="screen-theatre-back-button" style={{ backgroundImage: getBundledResourceAsDataURL('Graphics/Theatre/BackButtonBackground.svg') }} onClick={handleBackButtonClick}>
                     Back

@@ -2,7 +2,11 @@ import * as React from 'react';
 import { useCallback, useState } from 'react';
 import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
 
-export default function UITheatreFilters() {
+interface UITheatreFiltersProps {
+    onChange(filter: 'MostPopular' | 'Newest');
+}
+
+export default function UITheatreFilters(props: UITheatreFiltersProps) {
     const [activeFilterID, setActiveFilterID] = useState('MostPopular');
     const buttons = [
         ['MostPopular', 'Most popular'],
@@ -11,6 +15,10 @@ export default function UITheatreFilters() {
     ];
 
     const handleButtonClick = useCallback(button => {
+        if (['MostPopular', 'Newest'].includes(button[0])) {
+            props.onChange(button[0]);
+        }
+
         setActiveFilterID(button[0]);
     }, [activeFilterID]);
 
