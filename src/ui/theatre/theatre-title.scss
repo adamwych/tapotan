@@ -17,6 +17,8 @@
 
     will-change: transform;
 
+    z-index: 1;
+
     @keyframes screen-theatre-title--enter {
         80% {
             transform: translateY(8px);
@@ -63,5 +65,33 @@
         font-size: 88px;
 
         transform: rotate(4deg);
+    }
+
+    .screen-theatre-title-back-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        transition: all 150ms;
+
+        width: 60px;
+        height: 60px;
+
+        position: absolute;
+        bottom: -135px;
+
+        pointer-events: all;
+
+        img {
+            width: 100%;
+        }
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        &:active, &:focus {
+            transform: scale(0.9);
+        }
     }
 }

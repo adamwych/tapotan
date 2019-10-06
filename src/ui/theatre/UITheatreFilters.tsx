@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
+import InputManager from '../../core/input/InputManager';
 
 interface UITheatreFiltersProps {
     onChange(filter: 'MostPopular' | 'Newest');
@@ -21,6 +22,36 @@ export default function UITheatreFilters(props: UITheatreFiltersProps) {
 
         setActiveFilterID(button[0]);
     }, [activeFilterID]);
+
+    const handleUISwitchLeftInputAction = useCallback(() => {
+        if (activeFilterID === 'Newest') {
+            setActiveFilterID('MostPopular');
+            props.onChange('MostPopular');
+        } else if (activeFilterID === 'Search') {
+            setActiveFilterID('Newest');
+            props.onChange('Newest');
+        }
+    }, [activeFilterID]);
+
+    const handleUISwitchRightInputAction = useCallback(() => {
+        if (activeFilterID === 'MostPopular') {
+            setActiveFilterID('Newest');
+            props.onChange('Newest');
+        } else if (activeFilterID === 'Newest') {
+            setActiveFilterID('Search');
+        }
+    }, [activeFilterID]);
+
+    useEffect(() => {
+        const inputManager = InputManager.instance;
+        inputManager.bindAction('UISwitchLeft', handleUISwitchLeftInputAction);
+        inputManager.bindAction('UISwitchRight', handleUISwitchRightInputAction);
+
+        return () => {
+            inputManager.unbindAction('UISwitchLeft', handleUISwitchLeftInputAction);
+            inputManager.unbindAction('UISwitchRight', handleUISwitchRightInputAction);
+        };
+    }, [handleUISwitchLeftInputAction, handleUISwitchRightInputAction]);
 
     return (
         <div className="screen-theatre-filters">

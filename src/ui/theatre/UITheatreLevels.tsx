@@ -8,6 +8,7 @@ import UITheatreLevelsItem from './UITheatreLevelsItem';
 import UICircularMaskTransition from '../UICircularMaskTransition';
 import UIEditorSharedValues from '../editor/UIEditorSharedValues';
 import useSharedValue from '../lib/useSharedValue';
+import InputManager from '../../core/input/InputManager';
 
 export default function UITheatreLevels() {
     const [past, setPast] = useState(false);
@@ -17,6 +18,7 @@ export default function UITheatreLevels() {
     const [isFetchingMoreLevels, setIsFetchingMoreLevels] = useState(false);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [theaterFilter, setTheaterFilter] = useSharedValue(UIEditorSharedValues.TheaterFilter, 'MostPopular');
+    const playButtonElement = useRef(null);
 
     const fetchMoreLevels = (index: number) => {
         if (index === items.length - 4) {
@@ -40,35 +42,63 @@ export default function UITheatreLevels() {
     };
 
     const handleNavigateLeftClick = useCallback(() => {
-        if (currentLevelIndex === 0) {
+        if (currentLevelIndex <= 0) {
             return;
         }
 
         setCurrentLevelIndex(currentLevelIndex - 1);
         fetchMoreLevels(currentLevelIndex - 1);
-    }, [currentLevelIndex]);
+    }, [items, currentLevelIndex]);
 
     const handleNavigateRightClick = useCallback(() => {
-        if (currentLevelIndex === items.length - 1) {
+        if (currentLevelIndex >= items.length - 1) {
             return;
         }
 
         setCurrentLevelIndex(currentLevelIndex + 1);
         fetchMoreLevels(currentLevelIndex + 1);
-    }, [currentLevelIndex]);
+    }, [items, currentLevelIndex]);
 
-    const handlePlayButtonClick = useCallback(event => {
-        const element = event.target;
-        const rect = element.getBoundingClientRect();
+    const handlePlayButtonClick = useCallback(() => {
+        const rect = playButtonElement.current.getBoundingClientRect();
         UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, ((rect.top / window.innerHeight) * 100) + 4.5, () => {
             Tapotan.getInstance().loadAndStartLevel(items[currentLevelIndex].public_id);
         });
-    }, [currentLevelIndex]);
+    }, [items, currentLevelIndex]);
+
+    const handleUIMoveLeftInputAction = useCallback(() => {
+        handleNavigateLeftClick();
+    }, [items, currentLevelIndex]);
+
+    const handleUIMoveRightInputAction = useCallback(() => {
+        handleNavigateRightClick();
+    }, [items, currentLevelIndex]);
+
+    const handleUIEnterAction = useCallback(() => {
+        handlePlayButtonClick();
+    }, [items, currentLevelIndex]);
 
     useEffect(() => {
-        setTimeout(() => {
+        const inputManager = InputManager.instance;
+        inputManager.bindAction('UIMoveLeft', handleUIMoveLeftInputAction);
+        inputManager.bindAction('UIMoveRight', handleUIMoveRightInputAction);
+        inputManager.bindAction('UIEnter', handleUIEnterAction);
+
+        return () => {
+            inputManager.unbindAction('UIMoveLeft', handleUIMoveLeftInputAction);
+            inputManager.unbindAction('UIMoveRight', handleUIMoveRightInputAction);
+            inputManager.unbindAction('UIEnter', handleUIEnterAction);
+        };
+    }, [handleUIMoveLeftInputAction, handleUIMoveRightInputAction]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
             setPast(true);
         }, 3000);
+
+        return () => {
+            clearTimeout(timeout);
+        }
     }, []);
 
     useEffect(() => {
@@ -99,7 +129,7 @@ export default function UITheatreLevels() {
                 </div>
             )}
 
-            <div className="screen-theatre-play-button" onClick={handlePlayButtonClick}>
+            <div className="screen-theatre-play-button" onClick={handlePlayButtonClick} ref={element => playButtonElement.current = element}>
                 <img src={getBundledResourceAsDataURL('Graphics/Theatre/LevelPlayButton.svg', false)} />
             </div>
 

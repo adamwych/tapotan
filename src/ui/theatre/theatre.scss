@@ -37,54 +37,5 @@
     .screen-theatre-layer-ui {
         @extend .screen-theatre-layer;
         z-index: 0;
-
-        .screen-theatre-back-button {
-            position: absolute;
-            bottom: -80px;
-            left: calc((100% - 180px) / 2);
-            z-index: 2;
-
-            width: 170px;
-            height: 70px;
-
-            background-repeat: no-repeat;
-            
-            color: #663333;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 40px;
-            line-height: 0;
-
-            transition: all 150ms;
-            transform: rotate(2deg);
-
-            animation-name: screen-theatre-back-button--enter;
-            animation-duration: 500ms;
-            animation-delay: 1700ms;
-            animation-fill-mode: forwards;
-
-            &:hover {
-                transform: scale(1.05);
-            }
-
-            &:active, &:focus {
-                transform: scale(0.95);
-            }
-
-            @keyframes screen-theatre-back-button--enter {
-                to {
-                    bottom: 10px;
-                }
-            }
-
-            > span {
-                display: block;
-                position: relative;
-                top: -7px;
-            }
-        }
     }
 }

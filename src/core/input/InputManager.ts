@@ -88,13 +88,16 @@ export default class InputManager {
         X: 2,
         Y: 3,
 
+        L1: 4,
+        R1: 5,
+
         Select: 8,
         Start: 9,
 
-        DPADUp: 12,
-        DPADDown: 13,
-        DPADLeft: 14,
-        DPADRight: 15
+        DPadUp: 12,
+        DPadDown: 13,
+        DPadLeft: 14,
+        DPadRight: 15
     };
 
     public static instance: InputManager;
@@ -162,6 +165,32 @@ export default class InputManager {
         const buttonJumpUpAction = new InputAction('JumpButtonUp', this);
         buttonJumpUpAction.attachKeyboardKeyUpEvent(InputManager.KeyCodes.KeySpacebar);
         buttonJumpUpAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.A);
+
+        // =====================
+
+        const uiMoveLeftAction = new InputAction('UIMoveLeft', this);
+        uiMoveLeftAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowLeft);
+        uiMoveLeftAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadLeft);
+
+        const uiMoveRightAction = new InputAction('UIMoveRight', this);
+        uiMoveRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowRight);
+        uiMoveRightAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadRight);
+
+        const uiEscapeAction = new InputAction('UIEscape', this);
+        uiEscapeAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyEscape);
+        uiEscapeAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.Start);
+
+        const uiEnterAction = new InputAction('UIEnter', this);
+        uiEnterAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyEnter);
+        uiEnterAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.A);
+
+        const uiSwitchLeftAction = new InputAction('UISwitchLeft', this);
+        uiSwitchLeftAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyQ);
+        uiSwitchLeftAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.L1);
+
+        const uiSwitchRightAction = new InputAction('UISwitchRight', this);
+        uiSwitchRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyQ);
+        uiSwitchRightAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.R1);
     }
 
     public handleActionExecuted = (actionName: string, ...args) => {
@@ -180,6 +209,17 @@ export default class InputManager {
         }
 
         listeners.push(callback);
+        this.actionListeners[name] = listeners;
+    }
+
+    public unbindAction(name: string, callback: Function) {
+        let listeners = this.actionListeners[name];
+        if (!listeners) {
+            return;
+        }
+
+        let idx = listeners.indexOf(callback);
+        listeners.splice(idx, 1);
         this.actionListeners[name] = listeners;
     }
 
