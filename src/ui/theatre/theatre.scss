@@ -1,0 +1,90 @@
+@import './theatre-audience.scss';
+@import './theatre-curtains.scss';
+@import './theatre-filters.scss';
+@import './theatre-levels.scss';
+@import './theatre-title.scss';
+
+.screen-theatre {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+
+    .screen-theatre-layer {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .screen-theatre-layer-background {
+        @extend .screen-theatre-layer;
+
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center 100%;
+    }
+
+    .screen-theatre-layer-spotlight {
+        @extend .screen-theatre-layer;
+        z-index: 2;
+        pointer-events: none;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .screen-theatre-layer-ui {
+        @extend .screen-theatre-layer;
+        z-index: 0;
+
+        .screen-theatre-back-button {
+            position: absolute;
+            bottom: -80px;
+            left: calc((100% - 180px) / 2);
+            z-index: 2;
+
+            width: 170px;
+            height: 70px;
+
+            background-repeat: no-repeat;
+            
+            color: #663333;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 40px;
+            line-height: 0;
+
+            transition: all 150ms;
+            transform: rotate(2deg);
+
+            animation-name: screen-theatre-back-button--enter;
+            animation-duration: 500ms;
+            animation-delay: 1700ms;
+            animation-fill-mode: forwards;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+
+            &:active, &:focus {
+                transform: scale(0.95);
+            }
+
+            @keyframes screen-theatre-back-button--enter {
+                to {
+                    bottom: 10px;
+                }
+            }
+
+            > span {
+                display: block;
+                position: relative;
+                top: -7px;
+            }
+        }
+    }
+}

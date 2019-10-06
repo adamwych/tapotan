@@ -17,7 +17,7 @@ export default function UIMainMenuIslandWrapper() {
 
     const handlePlayButtonClick = useCallback(event => {
         playUICircularMaskTransition(event.target, () => {
-            
+            Tapotan.getInstance().getScreenManager().startTheatre();
         });
     }, []);
 
@@ -29,7 +29,7 @@ export default function UIMainMenuIslandWrapper() {
 
     const playUICircularMaskTransition = (element: HTMLElement, callback: Function) => {
         const rect = element.getBoundingClientRect();
-        UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, (rect.top / window.innerHeight) * 100, () => {
+        UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, (rect.top / window.innerHeight) * 100 + 4, () => {
             callback();
         });
     }

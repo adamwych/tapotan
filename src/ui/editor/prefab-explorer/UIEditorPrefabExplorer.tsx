@@ -9,6 +9,10 @@ import UIEditorPrefabExplorerPopupWrapper from './UIEditorPrefabExplorerPopupWra
 import UIEditorPrefabExplorerTile from './UIEditorPrefabExplorerTile';
 
 export default function UIEditorPrefabExplorer() {
+    if (Tapotan.getInstance().getGameManager() === null) {
+        return <React.Fragment></React.Fragment>;
+    }
+
     const tileset = useRef(Tapotan.getInstance().getGameManager().getWorld().getTileset());
     const [levelSettingsPopupVisible, setLevelSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.LevelSettingsPopupVisible, false);
     const [editorSettingsPopupVisible, setEditorSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.EditorSettingsPopupVisible, false);

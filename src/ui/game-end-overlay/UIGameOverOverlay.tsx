@@ -4,6 +4,7 @@ import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
 import LevelEditorUIAgent from '../../editor/LevelEditorUIAgent';
 import Tapotan from '../../core/Tapotan';
 import { GameState } from '../../core/GameManager';
+import UICircularMaskTransition from '../UICircularMaskTransition';
 
 require('./game-end-overlay.scss');
 require('./game-over-overlay.scss');
@@ -19,8 +20,12 @@ export default function UIGameOverOverlay(props: UIGameOverOverlayProps) {
 
     }, []);
 
-    const handleBackToMainMenuButtonClick = useCallback(() => {
-
+    const handleBackToMainMenuButtonClick = useCallback(event => {
+        const element = event.target;
+        const rect = element.getBoundingClientRect();
+        UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, ((rect.top / window.innerHeight) * 100) + 4.5, () => {
+            Tapotan.getInstance().getScreenManager().startMainMenu();
+        });
     }, []);
 
     const handleCloseButtonClick = useCallback(() => {

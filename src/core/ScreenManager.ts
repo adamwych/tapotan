@@ -5,6 +5,7 @@ import Screen from "../screens/Screen";
 import World from "../world/World";
 import GameManager, { GameState } from "./GameManager";
 import Tapotan from "./Tapotan";
+import ScreenTheatre from "../screens/ScreenTheatre";
 
 export default class ScreenManager extends EventEmitter {
 
@@ -22,11 +23,6 @@ export default class ScreenManager extends EventEmitter {
         this.game.setIsInEditor(false);
         window.location.hash = '';
 
-        this.popScreen();
-        this.pushScreen(new ScreenMainMenu(this.game));
-
-        this.game.getAudioManager().playBackgroundMusic('pixelart__main_theme', 1500);
-        
         if (this.game.getGameManager()) {
             if (this.game.getGameManager().getWorld()) {
                 this.game.getGameManager().getWorld().destroy();
@@ -34,6 +30,30 @@ export default class ScreenManager extends EventEmitter {
 
             this.game.setGameManager(null);
         }
+
+        this.popScreen();
+        this.pushScreen(new ScreenMainMenu(this.game));
+
+        this.game.getAudioManager().playBackgroundMusic('pixelart__main_theme', 1500);
+    }
+
+    public startTheatre() {
+        this.game.setIsInEditor(false);
+        window.location.hash = '';
+
+        if (this.game.getGameManager()) {
+            if (this.game.getGameManager().getWorld()) {
+                this.game.getGameManager().getWorld().destroy();
+            }
+
+            this.game.setGameManager(null);
+        }
+
+        this.popScreen();
+        this.pushScreen(new ScreenTheatre(this.game));
+
+        // todo: theatre music
+        // this.game.getAudioManager().playBackgroundMusic('pixelart__main_theme', 1500);
     }
 
     public startEditor(world: World = null) {

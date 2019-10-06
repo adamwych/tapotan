@@ -146,10 +146,6 @@ export default class Tapotan extends EventEmitter {
             this.viewport.resize(Tapotan.getGameWidth(), Tapotan.getGameHeight(), 1000, 1000);
             this.viewport.fit(false, Tapotan.getViewportWidth(), Tapotan.getViewportHeight());
 
-            if (this.gameManager.getWorld()) {
-                //this.gameManager.getWorld().getObjects().forEach(x => x.setPosition(x.getPosition().x, x.getPosition().y));
-            }
-
             if (this.screenManager.getTopScreen()) {
                 this.screenManager.getTopScreen().onGameResized(Tapotan.getGameWidth(), Tapotan.getGameHeight());
             }
@@ -282,8 +278,9 @@ export default class Tapotan extends EventEmitter {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
         
-                        //this.startMainMenu();
-                        this.screenManager.startEditor();
+                        this.screenManager.startMainMenu();
+                        // this.screenManager.startTheatre();
+                        // this.screenManager.startEditor();
                     }, 200);
 
                 }

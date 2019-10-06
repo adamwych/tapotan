@@ -8,6 +8,7 @@ import GameObject from '../world/GameObject';
 import Prefabs from '../world/prefabs/Prefabs';
 import World from '../world/World';
 import Screen from "./Screen";
+import GameManager from '../core/GameManager';
 
 export default class ScreenMainMenu extends Screen {
 
@@ -96,6 +97,10 @@ export default class ScreenMainMenu extends Screen {
         });
 
         this.addChild(this.world);
+
+        const manager = new GameManager(this.game);
+        manager.setWorld(this.world);
+        this.game.setGameManager(manager);
     }
 
     private generateFakeWorldObjects(world: World) {

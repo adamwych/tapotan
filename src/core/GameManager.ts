@@ -36,11 +36,6 @@ export default class GameManager {
         this.hasEnded = true;
         this.endReason = reason;
 
-        let topScreen = this.game.getScreenManager().getTopScreen();
-        if (topScreen instanceof ScreenIngame) {
-            (topScreen as any).handleGameEnd(reason);
-        }
-
         if (reason === GameEndReason.Death) {
             this.game.emit('gameOver');
             this.game.getAudioManager().playSoundEffect('death');

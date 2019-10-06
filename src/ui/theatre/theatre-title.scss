@@ -1,0 +1,67 @@
+.screen-theatre-title {
+    position: absolute;
+    width: 100%;
+    height: 20%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    animation-name: screen-theatre-title--enter;
+    animation-duration: 500ms;
+    animation-delay: 1700ms;
+    animation-fill-mode: forwards;
+
+    transform: translateY(-180%);
+    pointer-events: none;
+
+    will-change: transform;
+
+    @keyframes screen-theatre-title--enter {
+        80% {
+            transform: translateY(8px);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+    }
+
+    .screen-theatre-title-line-1 {
+        width: 14px;
+        height: 100%;
+        background: #562c2c;
+
+        position: relative;
+        left: -150px;
+    }
+
+    .screen-theatre-title-line-2 {
+        width: 14px;
+        height: 100%;
+        background: #562c2c;
+        
+        position: relative;
+        left: 150px;
+    }
+
+    .screen-theatre-title-text {
+        position: absolute;
+        bottom: -121px;
+
+        width: 470px;
+        height: 162px;
+
+        background-repeat: no-repeat;
+
+        color: #f9d7c7;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 88px;
+
+        transform: rotate(4deg);
+    }
+}

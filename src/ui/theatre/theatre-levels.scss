@@ -1,0 +1,279 @@
+.screen-theatre-layer-levels {
+    @extend .screen-theatre-layer;
+    z-index: 0;
+    pointer-events: none;
+
+    .screen-theatre-levels {
+        position: absolute;
+        bottom: 80px;
+
+        width: 100%;
+        height: 35%;
+
+        display: flex;
+        align-content: center;
+
+        animation-name: screen-theatre-levels--enter;
+        animation-duration: 500ms;
+        animation-delay: 1500ms;
+        animation-fill-mode: forwards;
+
+        transform: translateX(100%);
+        transition: all 150ms;
+
+        opacity: 0;
+
+        @keyframes screen-theatre-levels--enter {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    }
+
+    .screen-theatre-level {
+        position: relative;
+        
+        width: 12%;
+        height: 100%;
+
+        background: white;
+        border: 10px solid #663333;
+
+        flex-shrink: 0;
+
+        margin-right: 100px;
+
+        pointer-events: all;
+
+        animation-name: screen-theatre-level--enter;
+        animation-duration: 250ms;
+        animation-fill-mode: forwards;
+
+        @keyframes screen-theatre-level--enter {
+            from {
+                opacity: 0;
+                transform: translateX(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .screen-theatre-level-bg {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center bottom;
+        }
+
+        > img {
+            position: absolute;
+            bottom: -9%;
+            z-index: 0;
+
+            width: 125%;
+            margin-left: -12.5%;
+        }
+
+        &::after {
+            content: ' ';
+
+            position: absolute;
+            top: 0;
+
+            display: block;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.66);
+            z-index: 1;
+
+            opacity: 0;
+
+            transition: all 200ms;
+        }
+
+        &.attr--faded {
+            border-color: #3f2222;
+
+            &::after {
+                opacity: 1;
+            }
+        }
+
+        &.attr--past {
+            .screen-theatre-level-navigation-left,
+            .screen-theatre-level-navigation-right {
+                animation-delay: 0ms !important;
+            }
+        }
+
+        .screen-theatre-level-navigation-left {
+            position: absolute;
+            top: calc((100% - 80px) / 2);
+            left: 0;
+            width: 80px;
+            height: 80px;
+            background: #663333;
+            border-radius: 50%;
+
+            animation-name: screen-theatre-level-navigation-left--enter;
+            animation-duration: 300ms;
+            animation-delay: 2100ms;
+            animation-fill-mode: forwards;
+    
+            @keyframes screen-theatre-level-navigation-left--enter {
+                to {
+                    left: -48px;
+                }
+            }
+        }
+
+        .screen-theatre-level-navigation-right {
+            position: absolute;
+            top: calc((100% - 80px) / 2);
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: #663333;
+            border-radius: 50%;
+
+            animation-name: screen-theatre-level-navigation-right--enter;
+            animation-duration: 300ms;
+            animation-delay: 2100ms;
+            animation-fill-mode: forwards;
+    
+            @keyframes screen-theatre-level-navigation-right--enter {
+                to {
+                    right: -48px;
+                }
+            }
+        }
+
+        .screen-theatre-level-navigation-left,
+        .screen-theatre-level-navigation-right {
+            pointer-events: all;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: all 150ms;
+            
+            > div {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                > img {
+                    width: 33.34%;
+                }
+            }
+
+            &:hover {
+                transform: scale(1.1);
+            }
+
+            &:active, &:focus {
+                transform: scale(0.9);
+            }
+        }
+
+        .screen-theatre-level-navigation-left img {
+            margin-left: -32px;
+        }
+
+        .screen-theatre-level-navigation-right img {
+            margin-left: 32px;
+            transform: scale(-1);
+        }
+    }
+
+    .screen-theatre-current-level-title {
+        width: 100%;
+        position: absolute;
+        bottom: calc(50% - 42px);
+
+        color: #f9d7c7;
+        font-size: 50px;
+
+        white-space: nowrap;
+        text-align: center;
+
+        animation-name: screen-theatre-current-level-title--enter;
+        animation-duration: 500ms;
+        animation-delay: 1800ms;
+        animation-fill-mode: forwards;
+
+        transform: translateY(12px);
+        opacity: 0;
+
+        line-height: 35px;
+
+        @keyframes screen-theatre-current-level-title--enter {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        &.attr--past {
+            animation-delay: 0ms !important;
+        }
+
+        > div:nth-child(2) {
+            font-size: 26px;
+            opacity: 0.66;
+        }
+    }
+    
+    .screen-theatre-play-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        position: absolute;
+        bottom: 60px;
+        left: calc(50% - 45px);
+
+        z-index: 2;
+
+        img {
+            width: 90px;
+        }
+
+        animation-name: screen-theatre-play-button--enter;
+        animation-duration: 300ms;
+        animation-delay: 2100ms;
+        animation-fill-mode: forwards;
+
+        opacity: 0;
+
+        pointer-events: all;
+
+        transition: all 150ms;
+        
+        @keyframes screen-theatre-play-button--enter {
+            to {
+                bottom: 40px;
+                opacity: 1;
+            }
+        }
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        &:active, &:focus {
+            transform: scale(0.95);
+        }
+    }
+}

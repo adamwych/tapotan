@@ -1,0 +1,257 @@
+$initialDelay: 1800ms;
+
+.screen-theatre-layer-audience {
+    @extend .screen-theatre-layer;
+
+    z-index: 1;
+    pointer-events: none;
+
+    img {
+        width: 100%;
+    }
+
+    .screen-theatre-audience-person-1,
+    .screen-theatre-audience-person-2,
+    .screen-theatre-audience-person-3,
+    .screen-theatre-audience-person-4,
+    .screen-theatre-audience-person-5,
+    .screen-theatre-audience-person-6 {
+        &.attr--stage-2 {
+            animation-name: screen-theatre-audience-person--continuous;
+            animation-duration: 5000ms;
+            animation-iteration-count: infinite;
+
+            transform: translate(0, 0);
+
+            @keyframes screen-theatre-audience-person--continuous {
+                0% {
+                    transform: translate(0, 0);
+                }
+    
+                50% {
+                    transform: translate(0, -24px);
+                }
+
+                100% {
+                    transform: translate(0, 0);
+                }
+            }
+        }
+    }
+
+    .screen-theatre-audience-person-1 {
+        width: 138px;
+        position: absolute;
+        left: 310px;
+        bottom: -156px;
+
+        animation-name: screen-theatre-audience-person-1--enter;
+        animation-duration: 1000ms;
+        animation-delay: $initialDelay + 500ms;
+        animation-fill-mode: forwards;
+
+        transform: translate(-500px, 0) rotate(-5deg);
+
+        &.attr--stage-2 {
+            animation-delay: 500ms;
+        }
+
+        @keyframes screen-theatre-audience-person-1--enter {
+            0% {
+                transform: translate(-500px, 0) rotate(-5deg);
+            }
+
+            33% {
+                transform: translate(-250px, 0) rotate(8deg);
+            }
+
+            66% {
+                transform: translate(-125px, 0) rotate(-5deg);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+    }
+
+    .screen-theatre-audience-person-2 {
+        width: 228px;
+        position: absolute;
+        left: 110px;
+        bottom: -170px;
+
+        animation-name: screen-theatre-audience-person-2--enter;
+        animation-duration: 1000ms;
+        animation-delay: $initialDelay + 700ms;
+        animation-fill-mode: forwards;
+
+        transform: translate(-500px, 0) rotate(-5deg);
+
+        &.attr--stage-2 {
+            animation-delay: 700ms;
+        }
+
+        @keyframes screen-theatre-audience-person-2--enter {
+            0% {
+                transform: translate(-500px, 0) rotate(-3deg);
+            }
+
+            33% {
+                transform: translate(-250px, 0) rotate(14deg);
+            }
+
+            66% {
+                transform: translate(-125px, 0) rotate(-3deg);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+    }
+
+    .screen-theatre-audience-person-3 {
+        width: 164px;
+        position: absolute;
+        left: 2px;
+        bottom: -177px;
+
+        animation-name: screen-theatre-audience-person-3--enter;
+        animation-duration: 1000ms;
+        animation-delay: $initialDelay + 800ms;
+        animation-fill-mode: forwards;
+
+        transform: translate(-400px, 0) rotate(-5deg);
+
+        &.attr--stage-2 {
+            animation-delay: 800ms;
+        }
+
+        @keyframes screen-theatre-audience-person-3--enter {
+            0% {
+                transform: translate(-400px, 0) rotate(-3deg);
+            }
+
+            33% {
+                transform: translate(-250px, 0) rotate(14deg);
+            }
+
+            66% {
+                transform: translate(-125px, 0) rotate(-3deg);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+    }
+
+    .screen-theatre-audience-person-4 {
+        width: 138px;
+        position: absolute;
+        right: 239px;
+        bottom: -145px;
+
+        animation-name: screen-theatre-audience-person-4--enter;
+        animation-duration: 1000ms;
+        animation-delay: $initialDelay + 400ms;
+        animation-fill-mode: forwards;
+
+        transform: translate(400px, 0) rotate(-5deg);
+
+        &.attr--stage-2 {
+            animation-delay: 400ms;
+        }
+
+        @keyframes screen-theatre-audience-person-4--enter {
+            0% {
+                transform: translate(400px, 0) rotate(-3deg);
+            }
+
+            33% {
+                transform: translate(250px, 0) rotate(14deg);
+            }
+
+            66% {
+                transform: translate(125px, 0) rotate(-3deg);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+    }
+
+    .screen-theatre-audience-person-5 {
+        width: 162px;
+        position: absolute;
+        right: 144px;
+        bottom: -166px;
+
+        animation-name: screen-theatre-audience-person-5--enter;
+        animation-duration: 1000ms;
+        animation-delay: $initialDelay + 700ms;
+        animation-fill-mode: forwards;
+
+        transform: translate(400px, 0) rotate(-5deg);
+
+        &.attr--stage-2 {
+            animation-delay: 700ms;
+        }
+
+        @keyframes screen-theatre-audience-person-5--enter {
+            0% {
+                transform: translate(400px, 0) rotate(-3deg);
+            }
+
+            33% {
+                transform: translate(250px, 0) rotate(14deg);
+            }
+
+            66% {
+                transform: translate(125px, 0) rotate(-3deg);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+    }
+
+    .screen-theatre-audience-person-6 {
+        width: 170px;
+        position: absolute;
+        right: -23px;
+        bottom: -139px;
+
+        animation-name: screen-theatre-audience-person-6--enter;
+        animation-duration: 1000ms;
+        animation-delay: $initialDelay + 800ms;
+        animation-fill-mode: forwards;
+
+        transform: translate(400px, 0) rotate(-5deg);
+
+        &.attr--stage-2 {
+            animation-delay: 800ms;
+        }
+
+        @keyframes screen-theatre-audience-person-6--enter {
+            0% {
+                transform: translate(400px, 0) rotate(-3deg);
+            }
+
+            33% {
+                transform: translate(250px, 0) rotate(14deg);
+            }
+
+            66% {
+                transform: translate(125px, 0) rotate(-3deg);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+    }
+}

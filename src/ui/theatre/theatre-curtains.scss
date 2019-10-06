@@ -1,0 +1,76 @@
+.screen-theatre-layer-curtains {
+    @extend .screen-theatre-layer;
+
+    z-index: 1;
+    pointer-events: none;
+
+    .screen-theatre-curtain-1 {
+        position: absolute;
+        left: 0;
+        height: 100%;
+
+        animation-name: theatre-curtain-1--enter;
+        animation-duration: 1000ms;
+        animation-fill-mode: forwards;
+        animation-delay: 600ms;
+
+        transform: scale(3.5, 1.5) translateX(-25%) rotate(-10deg);
+        transform-origin: 0 center;
+        z-index: 1;
+
+        will-change: transform;
+
+        @keyframes theatre-curtain-1--enter {
+            to {
+                transform: scale(1.5, 1.5) translateX(-58.5%);
+            }
+        }
+    }
+
+    .screen-theatre-curtain-2 {
+        position: absolute;
+        right: 0;
+        height: 100%;
+
+        animation-name: theatre-curtain-2--enter;
+        animation-duration: 1000ms;
+        animation-fill-mode: forwards;
+        animation-delay: 600ms;
+
+        transform: scale(-3.5, 1.5) translateX(-55%) rotate(-10deg);
+        transform-origin: 0 center;
+        z-index: 1;
+
+        will-change: transform;
+
+        @keyframes theatre-curtain-2--enter {
+            to {
+                transform: scale(-1.5, 1.5) translateX(-125%);
+            }
+        }
+    }
+
+    .screen-theatre-curtain-top {
+        position: absolute;
+        top: 0;
+        width: 100%;
+
+        transform: translateY(-100%);
+
+        animation-name: theatre-curtain-top--enter;
+        animation-duration: 400ms;
+        animation-delay: 1300ms;
+        animation-fill-mode: forwards;
+
+        transform: translateY(-100%);
+        transform-origin: 0 center;
+
+        will-change: transform;
+
+        @keyframes theatre-curtain-top--enter {
+            to {
+                transform: translateY(-87.5%);
+            }
+        }
+    }
+}
