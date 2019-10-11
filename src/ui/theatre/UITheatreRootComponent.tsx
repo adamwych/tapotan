@@ -14,7 +14,7 @@ import InputManager from '../../core/input/InputManager';
 require('./theatre.scss');
 
 export default function UITheatreRootComponent() {
-    const [theaterFilter, setTheaterFilter] = useSharedValue(UIEditorSharedValues.TheaterFilter, 'MostPopular');
+    const [theaterFilter, setTheaterFilter] = useSharedValue(UIEditorSharedValues.TheaterFilter, ['MostPopular', null]);
     const backButtonElement = useRef(null);
 
     const handleBackButtonClick = useCallback(() => {
@@ -24,8 +24,8 @@ export default function UITheatreRootComponent() {
         });
     }, []);
 
-    const handleFilterChange = useCallback(filter => {
-        setTheaterFilter(filter);
+    const handleFilterChange = useCallback((filter, searchQuery) => {
+        setTheaterFilter([filter, searchQuery]);
     }, []);
 
     const handleEscapeKeyPress = useCallback(() => {

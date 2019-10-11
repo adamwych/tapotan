@@ -133,6 +133,10 @@
         &:focus:not(.attr--active) {
             transform: scale(0.95);
         }
+
+        &.attr--active {
+            transform: scale(1.05);
+        }
     }
 
     .screen-theatre-filters-button--MostPopular {
@@ -163,5 +167,38 @@
         bottom: -71px;
 
         transform: rotate(-3deg);
+
+        &.attr--active {
+            transform: scale(1.05);
+
+            input {
+                color: #f9d7c7;
+                
+                &::placeholder {
+                    color: #f9d7c7;
+                }
+            }
+        }
+
+        input {
+            width: 90%;
+            display: inline-block;
+
+            font-family: 'bradybunch';
+            font-size: 60px;
+            text-align: center;
+
+            border: none;
+            background: transparent;
+
+            outline: none;
+            color: #663333;
+
+            user-select: none;
+
+            &::placeholder {
+                color: #663333;
+            }
+        }
     }
 }

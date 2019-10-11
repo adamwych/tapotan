@@ -4,11 +4,12 @@ import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
 import InputManager from '../../core/input/InputManager';
 
 interface UITheatreFiltersProps {
-    onChange(filter: 'MostPopular' | 'Newest');
+    onChange(filter: 'MostPopular' | 'Newest' | 'Search', value?: string): void;
 }
 
 export default function UITheatreFilters(props: UITheatreFiltersProps) {
     const [activeFilterID, setActiveFilterID] = useState('MostPopular');
+    const [searchValue, setSearchValue] = useState('');
     const buttons = [
         ['MostPopular', 'Most popular'],
         ['Newest', 'Newest'],
@@ -18,10 +19,17 @@ export default function UITheatreFilters(props: UITheatreFiltersProps) {
     const handleButtonClick = useCallback(button => {
         if (['MostPopular', 'Newest'].includes(button[0])) {
             props.onChange(button[0]);
+        } else {
+            props.onChange(button[0], searchValue);
         }
 
         setActiveFilterID(button[0]);
-    }, [activeFilterID]);
+    }, [activeFilterID, searchValue]);
+
+    const handleSearchInputChange = useCallback(event => {
+        setSearchValue(event.target.value);
+        props.onChange('Search', event.target.value);
+    }, []);
 
     const handleUISwitchLeftInputAction = useCallback(() => {
         if (activeFilterID === 'Newest') {
@@ -67,7 +75,11 @@ export default function UITheatreFilters(props: UITheatreFiltersProps) {
                         style={{ backgroundImage: getBundledResourceAsDataURL('Graphics/Theatre/' + (activeFilterID === button[0] ? 'FilterButtonBackgroundActive' : 'FilterButtonBackgroundInactive') + '.svg') }}
                         onClick={() => handleButtonClick(button)}
                     >
-                        <span>{button[1]}</span>
+                        {button[0] === 'Search' ? (
+                            <input type="text" placeholder="Search..." value={searchValue} onChange={handleSearchInputChange} />
+                        ) : (
+                            <span>{button[1]}</span>
+                        )}
                     </div>
                 ))}
             </div>

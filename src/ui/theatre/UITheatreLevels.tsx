@@ -30,7 +30,8 @@ export default function UITheatreLevels() {
 
             APIRequest.get('/levels', {
                 pageIndex: currentPageIndex + 1,
-                filter: theaterFilter
+                filter: theaterFilter[0],
+                query: theaterFilter[1]
             }).then(response => {
                 if (response.data.success) {
                     setCurrentPageIndex(currentPageIndex + 1);
@@ -104,7 +105,8 @@ export default function UITheatreLevels() {
     useEffect(() => {
         APIRequest.get('/levels', {
             pageIndex: 0,
-            filter: theaterFilter
+            filter: theaterFilter[0],
+            query: theaterFilter[1]
         }).then(response => {
             if (response.data.success) {
                 ReactDOM.unstable_batchedUpdates(() => {
