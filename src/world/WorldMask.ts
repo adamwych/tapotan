@@ -27,7 +27,7 @@ export default class WorldMask {
         this.size = size;
 
         // Remove current mask.
-        if (this.viewport.mask) {
+        if (this.viewport.mask && this.viewport.mask.transform) {
             this.viewport.mask.destroy({ children: true });
         }
 
@@ -38,8 +38,9 @@ export default class WorldMask {
     }
 
     public destroy() {
-        if (this.mask && this.mask.transform) {
-            this.mask.destroy({ children: true });
+        if (this.viewport.mask && this.viewport.mask.transform) {
+            this.viewport.mask.destroy({ children: true });
+            this.viewport.mask = null;
         }
     }
 

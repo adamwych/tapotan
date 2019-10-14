@@ -17,8 +17,10 @@ export default class GameObjectComponentParallaxBackground extends GameObjectCom
         this.speed = speed;
 
         TickHelper.nextTick(() => {
-            this.startX = this.gameObject.transformComponent.getPositionX();
-            this.startY = this.gameObject.transformComponent.getPositionY();
+            if (this.gameObject && this.gameObject.transformComponent) {
+                this.startX = this.gameObject.transformComponent.getPositionX();
+                this.startY = this.gameObject.transformComponent.getPositionY();
+            }
         });
     }
 

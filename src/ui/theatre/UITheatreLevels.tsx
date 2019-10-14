@@ -138,6 +138,7 @@ export default function UITheatreLevels() {
             <div className="screen-theatre-levels" style={{ left: `calc(50% - ${(currentLevelIndex * (singleItemWidth + spacing)) + (singleItemWidth / 2)}px)` }}>
                 {items.map((item, index) => (
                     <UITheatreLevelsItem key={item.public_id}
+                        level={item}
                         faded={index !== idx + 3}
                         showNavigation={index === idx + 3}
                         past={past}

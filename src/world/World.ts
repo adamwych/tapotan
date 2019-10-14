@@ -84,6 +84,11 @@ export default class World extends PIXI.Container {
     private paused: boolean = false;
 
     // ================
+
+    /**
+     * Whether the physics engine is enabled for this world.
+     */
+    private physicsEnabled: boolean;
     
     /**
      * List of all game objects in this world.
@@ -109,15 +114,18 @@ export default class World extends PIXI.Container {
      */
     private _duringRemove: boolean = false;
 
-    constructor(game: Tapotan, width: number, height: number, tileset: Tileset) {
+    constructor(game: Tapotan, width: number, height: number, tileset: Tileset, physics: boolean = true) {
         super();
 
         this.game = game;
         this.tileset = tileset;
         this.behaviourRules = new WorldBehaviourRules();
         this.backgroundMusicId = 'pixelart__main_theme';
-        
-        this.initializePhysics();
+
+        this.physicsEnabled = physics;
+        if (this.physicsEnabled) {
+            this.initializePhysics();
+        }
 
         this.sky = new PIXI.Graphics();
         this.sky.name = '__sky';
@@ -215,7 +223,9 @@ export default class World extends PIXI.Container {
         });
 
         if (!this.paused) {
-            this.physicsWorld.step(1 / 60, dt * 1000, 10);
+            if (this.physicsEnabled) {
+                this.physicsWorld.step(1 / 60, dt * 1000, 10);
+            }
 
             this.gameObjects.forEach(gameObject => {
                 gameObject.tick(dt);
@@ -233,9 +243,10 @@ export default class World extends PIXI.Container {
 
     /**
      * Spawns the player at its spawn position.
+     * @returns The player.
      */
-    public spawnPlayer() {
-        this.spawnPlayerAt(this.playerSpawnPoint.x, this.playerSpawnPoint.y, this.playerLayer);
+    public spawnPlayer(): GameObject {
+        return this.spawnPlayerAt(this.playerSpawnPoint.x, this.playerSpawnPoint.y, this.playerLayer);
     }
 
     /**
@@ -244,8 +255,9 @@ export default class World extends PIXI.Container {
      * @param x 
      * @param y 
      * @param layer (optional) 
+     * @returns The player.
      */
-    public spawnPlayerAt(x: number, y: number, layer: number = -1) {
+    public spawnPlayerAt(x: number, y: number, layer: number = -1): GameObject {
         if (this.player) {
             this.player.destroy();
             this.removeGameObject(this.player);
@@ -258,14 +270,24 @@ export default class World extends PIXI.Container {
         this.player.on('destroyed', () => {
             this.player = null;
         });
+
+        return this.player;
     }
 
     public addPhysicsBody(parent: any, body: p2.Body) {
+        if (!this.physicsEnabled) {
+            return;
+        }
+
         this.physicsBodies[body.id] = parent;
         this.physicsWorld.addBody(body);
     }
 
     public removePhysicsBody(body: p2.Body) {
+        if (!this.physicsEnabled) {
+            return;
+        }
+
         this.physicsWorld.removeBody(body);
         delete this.physicsBodies[body.id];
     }

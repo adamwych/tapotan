@@ -278,8 +278,8 @@ export default class Tapotan extends EventEmitter {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
         
-                        this.screenManager.startMainMenu();
-                        // this.screenManager.startTheatre();
+                        // this.screenManager.startMainMenu();
+                        this.screenManager.startTheatre();
                         // this.screenManager.startEditor();
                     }, 200);
 
@@ -300,7 +300,11 @@ export default class Tapotan extends EventEmitter {
         APIRequest.get('/level', {
             id: publicID
         }).then(response => {
-            const world = WorldLoader.load(response.data.data, response.data.authorName);
+            const world = WorldLoader.load(response.data.data, response.data.authorName, {
+                compressed: true,
+                mask: true,
+                physics: true
+            });
             world.setLevelPublicID(publicID);
             this.startLevel(world);
         });
@@ -445,7 +449,11 @@ export default class Tapotan extends EventEmitter {
     }
 
     public static getViewportHeight(): number {
-        return 24 * (Tapotan.getGameHeight() / Tapotan.getGameWidth());
+        return 24 * Tapotan.getHeightRatio();
+    }
+
+    public static getHeightRatio(): number {
+        return (Tapotan.getGameHeight() / Tapotan.getGameWidth());
     }
 
     public static getInstance(): Tapotan {

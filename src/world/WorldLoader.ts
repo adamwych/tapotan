@@ -13,12 +13,24 @@ interface WorldLoaderInput {
     data: any[];
 }
 
+export interface WorldLoaderOptions {
+    compressed: boolean;
+    physics?: boolean;
+    mask?: boolean;
+}
+
+const defaultWorldLoaderOptions: WorldLoaderOptions = {
+    compressed: true,
+    physics: true,
+    mask: true
+};
+
 export default class WorldLoader {
-    public static load(data: WorldLoaderInput | string, authorName: string, compressed: boolean = true): World {
+    public static load(data: WorldLoaderInput | string, authorName: string, options: WorldLoaderOptions = defaultWorldLoaderOptions): World {
         let levelData = null;
         let rawData = null;
 
-        if (compressed) {
+        if (options.compressed) {
             let decoded = pako.inflateRaw((data as any).data, {
                 to: 'string'
             });
@@ -38,7 +50,7 @@ export default class WorldLoader {
             return null;
         }
 
-        let world = new World(Tapotan.getInstance(), 1000, 1000, tileset);
+        let world = new World(Tapotan.getInstance(), 1000, 1000, tileset, options.physics);
 
         world.setAuthorName(authorName);
         world.setRawData(rawData);
@@ -57,7 +69,7 @@ export default class WorldLoader {
         );
         world.setBackgroundMusicID(levelData.world.backgroundMusic);
         
-        if (levelData.world.worldMaskSize !== 'none') {
+        if (options.mask && levelData.world.worldMaskSize !== 'none') {
             let size = 0;
 
             switch (levelData.world.worldMaskSize) {

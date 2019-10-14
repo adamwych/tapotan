@@ -33,7 +33,11 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
             props.onCloseRequest();
 
             const currentWorld = Tapotan.getInstance().getGameManager().getWorld();
-            const world = WorldLoader.load(currentWorld.getRawData(), currentWorld.getAuthorName(), false);
+            const world = WorldLoader.load(currentWorld.getRawData(), currentWorld.getAuthorName(), {
+                compressed: false,
+                mask: true,
+                physics: false
+            });
             world.setLevelPublicID(currentWorld.getLevelPublicID())
             world.setUserRating(currentWorld.getUserRating() || -1);
             Tapotan.getInstance().startLevel(world);

@@ -113,6 +113,13 @@ export default class InputManager {
      */
     private activelyUsingGamepad: boolean = false;
 
+    /**
+     * Whether all calls to `bindAction` method should be ignored.
+     * This is used by theatre level renderer to not unnecessarily
+     * add bindings that will not be used anyway.
+     */
+    private ignoreNextActionBindings: boolean = false;
+
     constructor() {
         InputManager.instance = this;
 
@@ -203,6 +210,10 @@ export default class InputManager {
     }
 
     public bindAction(name: string, callback: Function) {
+        if (this.ignoreNextActionBindings) {
+            return;
+        }
+
         let listeners = this.actionListeners[name];
         if (!listeners) {
             listeners = [];
@@ -213,6 +224,10 @@ export default class InputManager {
     }
 
     public unbindAction(name: string, callback: Function) {
+        if (this.ignoreNextActionBindings) {
+            return;
+        }
+        
         let listeners = this.actionListeners[name];
         if (!listeners) {
             return;
@@ -241,6 +256,14 @@ export default class InputManager {
 
     public isActivelyUsingGamepad(): boolean {
         return this.activelyUsingGamepad;
+    }
+
+    public setIgnoreNextActionBindings(ignore: boolean) {
+        this.ignoreNextActionBindings = ignore;
+    }
+
+    public willIgnoreNextActionBindings(): boolean {
+        return this.ignoreNextActionBindings;
     }
 
     public getMouseX(): number {
