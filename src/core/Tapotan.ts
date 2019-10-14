@@ -278,8 +278,8 @@ export default class Tapotan extends EventEmitter {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
         
-                        // this.screenManager.startMainMenu();
-                        this.screenManager.startTheatre();
+                        this.screenManager.startMainMenu();
+                        // this.screenManager.startTheatre();
                         // this.screenManager.startEditor();
                     }, 200);
 

@@ -58,6 +58,36 @@
             }
         }
 
+        .main-menu-island-button-scoreboards,
+        .main-menu-island-button-play,
+        .main-menu-island-button-level-maker {
+            &.attr--gamepad-active {
+                animation-name: main-menu-island-button--gamepad;
+                animation-duration: 1000ms;
+                animation-fill-mode: forwards;
+                animation-iteration-count: infinite;
+
+                @keyframes main-menu-island-button--gamepad {
+                    0% {
+                        transform: scale(0.9);
+                    }
+
+                    50% {
+                        transform: scale(1);
+                    }
+
+                    100% {
+                        transform: scale(0.9);
+                    }
+                }
+
+                .main-menu-island-button-description {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
+
         .main-menu-island-button-scoreboards {
             position: absolute;
             top: 284px;
