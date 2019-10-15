@@ -42,7 +42,7 @@ export default class UICircularMaskTransition extends React.Component {
         const width = Tapotan.getGameWidth();
         const height = Tapotan.getGameHeight();
         const d = Math.sqrt((width ** 2) + (height ** 2));
-        const radius = d;
+        const radius = d / (2 * (45 / Math.round(x)));
 
         this.timer = 0;
         this.stage = 0;
@@ -63,7 +63,7 @@ export default class UICircularMaskTransition extends React.Component {
     private handleTick = (dt: number) => {
         this.timer += dt;
 
-        let alpha = Math.min(1, this.timer / 0.5);
+        let alpha = Math.min(1, this.timer / 0.4);
         if (alpha === 1) {
             this.timer = 0;
 

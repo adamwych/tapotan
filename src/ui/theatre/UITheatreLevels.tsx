@@ -61,8 +61,7 @@ export default function UITheatreLevels() {
     }, [items, currentLevelIndex]);
 
     const handlePlayButtonClick = useCallback(() => {
-        const rect = playButtonElement.current.getBoundingClientRect();
-        UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, ((rect.top / window.innerHeight) * 100) + 4.5, () => {
+        UICircularMaskTransition.instance.start(50, 50, () => {
             Tapotan.getInstance().loadAndStartLevel(items[currentLevelIndex].public_id);
         });
     }, [items, currentLevelIndex]);

@@ -4,6 +4,7 @@ import Screen from '../screens/Screen';
 import UICircularMaskTransition from './UICircularMaskTransition';
 import UIVictoryOverlay from './game-end-overlay/UIVictoryOverlay';
 import UIGameOverOverlay from './game-end-overlay/UIGameOverOverlay';
+import UITransitionBlocks from './UITransitionBlocks';
 
 interface TapotanUIApplicationState {
     screens: Array<Screen>;
@@ -90,6 +91,7 @@ export default class TapotanUIApplication extends React.Component<any, TapotanUI
                 )}
 
                 <UICircularMaskTransition />
+                <UITransitionBlocks />
             </div>
         );
     }

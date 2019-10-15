@@ -1,0 +1,56 @@
+.ui-transition-blocks {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 4;
+
+    pointer-events: none;
+
+    .ui-transition-blocks-block {
+        position: absolute;
+
+        width: 96px;
+        height: 96px;
+        background: #000000;
+
+        will-change: opacity;
+
+        animation-duration: 60ms;
+        animation-fill-mode: forwards;
+        animation-timing-function: linear;
+
+        &.attr--stage-0 {
+            animation-name: ui-transition-blocks-block--enter;
+            opacity: 0;
+    
+            @keyframes ui-transition-blocks-block--enter {
+                from {
+                    opacity: 0;
+                }
+    
+                to {
+                    opacity: 1;
+                }
+            }
+        }
+        
+        &.attr--stage-1 {
+            animation-name: ui-transition-blocks-block--exit;
+            opacity: 1;
+    
+            @keyframes ui-transition-blocks-block--exit {
+                from {
+                    opacity: 1;
+                }
+    
+                to {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}

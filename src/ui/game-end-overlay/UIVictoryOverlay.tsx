@@ -80,7 +80,7 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
 
     const playUICircularMaskTransition = (element: HTMLElement, callback: Function) => {
         const rect = element.getBoundingClientRect();
-        UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, (rect.top / window.innerHeight) * 100, () => {
+        UICircularMaskTransition.instance.start(50, 50, () => {
             callback();
         });
     }
