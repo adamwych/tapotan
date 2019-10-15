@@ -13,6 +13,8 @@ import Prefabs from './prefabs/Prefabs';
 import Tileset from './tileset/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
+import GameObjectComponentCollectableCollector from './components/GameObjectComponentCollectableCollector';
+import CollectableCategory from './CollectableCategory';
 
 export default class World extends PIXI.Container {
 
@@ -94,6 +96,8 @@ export default class World extends PIXI.Container {
      * List of all game objects in this world.
      */
     private gameObjects: Array<GameObject> = [];
+
+    private playerMaxX: number = 0;
 
     /**
      * List of functions that will be called before
@@ -214,7 +218,7 @@ export default class World extends PIXI.Container {
             }
         }
 
-        if (this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
+        if (!this.paused && this.game.getGameManager().getGameState() === GameState.Playing && !this.game.getGameManager().hasGameEnded()) {
             this.playTimer += dt;
         }
 
@@ -230,6 +234,10 @@ export default class World extends PIXI.Container {
             this.gameObjects.forEach(gameObject => {
                 gameObject.tick(dt);
             });
+
+            if (this.player) {
+                this.playerMaxX = Math.max(this.playerMaxX, this.player.position.x - this.playerSpawnPoint.x);
+            }
         }
 
         if (this.sky.transform) {
@@ -364,9 +372,13 @@ export default class World extends PIXI.Container {
             return;
         }
 
-        let now = new Date().getTime();
-        let result = Math.floor(((this.player.position.x - this.playerSpawnPoint.x) * 70) - ((now - this.startTime) / 257)) + (this.game.getGameManager().getCoins() * 48);
+        let result = Math.floor(((this.playerMaxX * 70) - (this.playTimer * 5)) + (this.getCoinsCollectedByPlayerCount() * 100));
         return result < 0 ? 0 : result;
+    }
+
+    public getCoinsCollectedByPlayerCount() {
+        let collector = this.player.getComponentByType<GameObjectComponentCollectableCollector>(GameObjectComponentCollectableCollector);
+        return collector.getCollectables().filter(collectable => collectable.getCategory() === CollectableCategory.Coin).length;
     }
 
     public addLockConnection(connection: LockDoorKeyConnection) {
