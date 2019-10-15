@@ -1,6 +1,7 @@
 import Tapotan from "../core/Tapotan";
 import World from '../world/World';
 import Screen from "./Screen";
+import UIIngameRootComponent from "../ui/ingame/UIIngameRootComponent";
 
 export default class ScreenIngame extends Screen {
 
@@ -17,4 +18,9 @@ export default class ScreenIngame extends Screen {
         super.onRemovedFromScreenManager();
         this.destroy({ children: true });
     }
+
+    public getUIRootComponent() {
+        return UIIngameRootComponent;
+    }
+
 }

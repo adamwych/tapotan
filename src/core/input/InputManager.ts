@@ -175,9 +175,17 @@ export default class InputManager {
 
         // =====================
 
+        const uiMoveUpAction = new InputAction('UIMoveUp', this);
+        uiMoveUpAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowUp);
+        uiMoveUpAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadUp);
+
         const uiMoveLeftAction = new InputAction('UIMoveLeft', this);
         uiMoveLeftAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowLeft);
         uiMoveLeftAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadLeft);
+
+        const uiMoveDownAction = new InputAction('UIMoveDown', this);
+        uiMoveDownAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowDown);
+        uiMoveDownAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadDown);
 
         const uiMoveRightAction = new InputAction('UIMoveRight', this);
         uiMoveRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowRight);
@@ -196,8 +204,16 @@ export default class InputManager {
         uiSwitchLeftAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.L1);
 
         const uiSwitchRightAction = new InputAction('UISwitchRight', this);
-        uiSwitchRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyQ);
+        uiSwitchRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyE);
         uiSwitchRightAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.R1);
+
+        const uiGamepadAnythingAction = new InputAction('UIGamepadAnything', this);
+        uiGamepadAnythingAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadLeft);
+        uiGamepadAnythingAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadRight);
+        uiGamepadAnythingAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.L1);
+        uiGamepadAnythingAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.R1);
+        uiGamepadAnythingAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.A);
+        uiGamepadAnythingAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.Start);
     }
 
     public handleActionExecuted = (actionName: string, ...args) => {

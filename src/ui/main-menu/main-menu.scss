@@ -143,4 +143,48 @@
             image-rendering: pixelated;
         }
     }
+
+    .main-menu-gamepad-help {
+        position: absolute;
+        left: 1.5rem;
+        bottom: 1.5rem;
+
+        background: #1c1c1c;
+        padding: 1rem;
+        color: #ffffff;
+
+        font-size: 24px;
+
+        animation-name: main-menu-gamepad-help--enter;
+        animation-duration: 250ms;
+        animation-fill-mode: forwards;
+
+        @keyframes main-menu-gamepad-help--enter {
+            from {
+                transform: translateX(-4px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .main-menu-gamepad-help-text {
+            display: flex;
+            align-items: center;
+    
+            svg {
+                display: block;
+                width: 96px;
+                height: 32px;
+            }
+    
+            .main-menu-gamepad-help-icon {
+                display: inline-block;
+                margin: 0 1rem;
+            }
+        }
+    }
 }

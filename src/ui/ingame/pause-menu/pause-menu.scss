@@ -1,0 +1,126 @@
+.ingame-pause-menu {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.5);
+
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    pointer-events: none;
+    
+    transition: all 150ms;
+
+    &.attr--visible {
+        opacity: 1;
+        pointer-events: all;
+
+        .ingame-pause-menu-modal {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .ingame-pause-menu-modal {
+        width: 600px;
+        height: 450px;
+
+        border-radius: 20px;
+
+        transform: scale(0.9);
+        opacity: 0;
+
+        transition: all 150ms;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+
+        padding: 0rem 0;
+    }
+
+    .ingame-pause-menu-modal-title {
+        font-size: 8rem;
+        color: #ffffff;
+        line-height: 0.5;
+
+        animation-name: ingame-pause-menu-modal-title--infinite;
+        animation-duration: 700ms;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+
+        @keyframes ingame-pause-menu-modal-title--infinite {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+    }
+
+    .ingame-pause-menu-modal-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .ingame-pause-menu-modal-button {
+        width: 420px;
+        display: inline-block;
+        font-size: 3.5rem;
+        line-height: 1;
+        margin-top: 1rem;
+        transition: all 100ms;
+        text-align: center;
+
+        border: 6px solid #c13e21;
+        background: #f9542d;
+        color: #ffffff;
+        padding: 0.75rem 1.25rem;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        &:active, &:focus {
+            transform: scale(0.95);
+        }
+
+        &.attr--gamepad-focus {
+            border: 6px solid #d64e2f;
+            background: #ff6c4b;
+            
+            animation-name: ingame-pause-menu-modal-button--infinite;
+            animation-duration: 700ms;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+
+            @keyframes ingame-pause-menu-modal-button--infinite {
+                0% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.05);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+        }
+    }
+
+}
