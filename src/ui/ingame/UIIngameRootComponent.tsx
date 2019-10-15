@@ -1,14 +1,34 @@
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import InputManager from '../../core/input/InputManager';
 import Tapotan from '../../core/Tapotan';
 import UIPauseMenu from './pause-menu/UIPauseMenu';
 import UICircularMaskTransition from '../UICircularMaskTransition';
 import WorldLoader from '../../world/WorldLoader';
+import TickHelper from '../../core/TickHelper';
+
+require('./ingame.scss');
 
 export default function UIIngameRootComponent() {
     const world = Tapotan.getInstance().getGameManager().getWorld();
     const [pauseMenuVisible, setPauseMenuVisible] = useState(false);
+    const scoreValueElement = useRef(null);
+    const timeValueElement = useRef(null);
+    const coinsValueElement = useRef(null);
+
+    const handleTick = useCallback(() => {
+        if (scoreValueElement.current) {
+            scoreValueElement.current.innerHTML = world.calculatePlayerScore();
+        }
+
+        if (timeValueElement.current) {
+            timeValueElement.current.innerHTML = Math.floor(world.getTimeSinceStart());
+        }
+
+        if (coinsValueElement.current) {
+            coinsValueElement.current.innerHTML = world.getCoinsCollectedByPlayerCount();
+        }
+    }, [scoreValueElement.current, timeValueElement.current, coinsValueElement.current]);
 
     const handleEscapeKeyPress = useCallback(() => {
         if (Tapotan.getInstance().getGameManager().hasGameEnded()) {
@@ -56,6 +76,14 @@ export default function UIIngameRootComponent() {
     }, []);
 
     useEffect(() => {
+        TickHelper.add(handleTick);
+
+        return () => {
+            TickHelper.remove(handleTick);
+        };
+    }, [handleTick]);
+
+    useEffect(() => {
         const inputManager = InputManager.instance;
         inputManager.bindAction('UIEscape', handleEscapeKeyPress);
 
@@ -66,6 +94,23 @@ export default function UIIngameRootComponent() {
 
     return (
         <div className="screen-ingame">
+            <div className="ingame-stats">
+                <div className="ingame-stats-value">
+                    <span>SCORE:</span>
+                    <span ref={element => scoreValueElement.current = element}>0</span>
+                </div>
+
+                <div className="ingame-stats-value attr--small">
+                    <span>TIME:</span>
+                    <span ref={element => timeValueElement.current = element}>00:00</span>
+                </div>
+
+                <div className="ingame-stats-value attr--small">
+                    <span>COINS:</span>
+                    <span ref={element => coinsValueElement.current = element}>0</span>
+                </div>
+            </div>
+
             <UIPauseMenu
                 visible={pauseMenuVisible}
                 onResumeButtonClick={handlePauseResumeButtonClick}
