@@ -7,6 +7,7 @@ require('./pause-menu.scss');
 interface UIPauseMenuProps {
     visible: boolean;
     onResumeButtonClick: React.MouseEventHandler;
+    onRestartButtonClick: React.MouseEventHandler;
     onGoToTheatreButtonClick: React.MouseEventHandler;
     onGoToMainMenuButtonClick: React.MouseEventHandler;
 }
@@ -27,7 +28,7 @@ export default function UIPauseMenu(props: UIPauseMenuProps) {
     }, [props.visible, gamepadFocusedButtonIndex]);
 
     const handleUIMoveDownAction = useCallback(() => {
-        if (!props.visible || gamepadFocusedButtonIndex === 2) {
+        if (!props.visible || gamepadFocusedButtonIndex === 3) {
             return;
         }
 
@@ -50,11 +51,16 @@ export default function UIPauseMenu(props: UIPauseMenuProps) {
             }
 
             case 1: {
-                props.onGoToTheatreButtonClick(null);
+                props.onRestartButtonClick(null);
                 break;
             }
 
             case 2: {
+                props.onGoToTheatreButtonClick(null);
+                break;
+            }
+
+            case 3: {
                 props.onGoToMainMenuButtonClick(null);
                 break;
             }
@@ -82,9 +88,10 @@ export default function UIPauseMenu(props: UIPauseMenuProps) {
                 </div>
 
                 <div className="ingame-pause-menu-modal-buttons">
-                    <div className={`ingame-pause-menu-modal-button ${gamepadFocusedButtonIndex === 0 ? 'attr--gamepad-focus' : ''}`} onClick={props.onResumeButtonClick}>Resume</div>
-                    <div className={`ingame-pause-menu-modal-button ${gamepadFocusedButtonIndex === 1 ? 'attr--gamepad-focus' : ''}`} onClick={props.onGoToTheatreButtonClick}>Go to theatre</div>
-                    <div className={`ingame-pause-menu-modal-button ${gamepadFocusedButtonIndex === 2 ? 'attr--gamepad-focus' : ''}`} onClick={props.onGoToMainMenuButtonClick}>Go to main menu</div>
+                    <div className={`ingame-pause-menu-modal-button ${gamepadFocusedButtonIndex === 0 ? 'attr--gamepad-focus' : ''}`} onClick={props.onResumeButtonClick}><span>Resume</span></div>
+                    <div className={`ingame-pause-menu-modal-button ${gamepadFocusedButtonIndex === 1 ? 'attr--gamepad-focus' : ''}`} onClick={props.onRestartButtonClick}><span>Restart</span></div>
+                    <div className={`ingame-pause-menu-modal-button ${gamepadFocusedButtonIndex === 2 ? 'attr--gamepad-focus' : ''}`} onClick={props.onGoToTheatreButtonClick}><span>Go to theatre</span></div>
+                    <div className={`ingame-pause-menu-modal-button ${gamepadFocusedButtonIndex === 3 ? 'attr--gamepad-focus' : ''}`} onClick={props.onGoToMainMenuButtonClick}><span>Go to main menu</span></div>
                 </div>
             </div>
         </div>

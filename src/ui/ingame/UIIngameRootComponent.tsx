@@ -4,6 +4,7 @@ import InputManager from '../../core/input/InputManager';
 import Tapotan from '../../core/Tapotan';
 import UIPauseMenu from './pause-menu/UIPauseMenu';
 import UICircularMaskTransition from '../UICircularMaskTransition';
+import WorldLoader from '../../world/WorldLoader';
 
 export default function UIIngameRootComponent() {
     const world = Tapotan.getInstance().getGameManager().getWorld();
@@ -26,6 +27,20 @@ export default function UIIngameRootComponent() {
     const handlePauseResumeButtonClick = useCallback(() => {
         world.resume();
         setPauseMenuVisible(false);
+    }, [world]);
+
+    const handlePauseRestartButtonClick = useCallback(() => {
+        UICircularMaskTransition.instance.start(50, 50, () => {
+            const currentWorld = Tapotan.getInstance().getGameManager().getWorld();
+            const world = WorldLoader.load(currentWorld.getRawData(), currentWorld.getAuthorName(), {
+                compressed: false,
+                mask: true,
+                physics: true
+            });
+            world.setLevelPublicID(currentWorld.getLevelPublicID())
+            world.setUserRating(currentWorld.getUserRating() || -1);
+            Tapotan.getInstance().startLevel(world);
+        });
     }, [world]);
 
     const handleGoToTheatreButtonClick = useCallback(() => {
@@ -54,6 +69,7 @@ export default function UIIngameRootComponent() {
             <UIPauseMenu
                 visible={pauseMenuVisible}
                 onResumeButtonClick={handlePauseResumeButtonClick}
+                onRestartButtonClick={handlePauseRestartButtonClick}
                 onGoToMainMenuButtonClick={handleGoToMainMenuButtonClick}
                 onGoToTheatreButtonClick={handleGoToTheatreButtonClick}
             />

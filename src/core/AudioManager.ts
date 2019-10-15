@@ -84,7 +84,7 @@ export default class AudioManager {
     public playSoundEffect(name: string, fadeBackgroundMusic: boolean = false) {
         let howl = this.soundEffects[name];
         if (howl) {
-            howl.volume(this.currentVolume / 1.5);
+            howl.volume(this.currentVolume);
 
             if (fadeBackgroundMusic && !this.backgroundMusicFadeScheduled) {
                 this.playingBackgroundMusic.fade(this.currentVolume, 0.185, 200);

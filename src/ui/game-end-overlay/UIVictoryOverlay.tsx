@@ -36,7 +36,7 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
             const world = WorldLoader.load(currentWorld.getRawData(), currentWorld.getAuthorName(), {
                 compressed: false,
                 mask: true,
-                physics: false
+                physics: true
             });
             world.setLevelPublicID(currentWorld.getLevelPublicID())
             world.setUserRating(currentWorld.getUserRating() || -1);

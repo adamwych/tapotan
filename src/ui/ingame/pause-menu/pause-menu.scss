@@ -76,50 +76,39 @@
     }
 
     .ingame-pause-menu-modal-button {
-        width: 420px;
+        width: 350px;
         display: inline-block;
-        font-size: 3.5rem;
+        font-size: 3rem;
         line-height: 1;
-        margin-top: 1rem;
+        margin-top: -3px;
         transition: all 100ms;
         text-align: center;
+        border: 6px solid #c9c9c9;
+        background: #ffffff;
+        color: #c9c9c9;
+        padding: 0.5rem 1rem;
 
-        border: 6px solid #c13e21;
-        background: #f9542d;
-        color: #ffffff;
-        padding: 0.75rem 1.25rem;
+        &:first-child {
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
 
-        &:hover {
-            transform: scale(1.05);
+        &:last-child {
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        &:hover, &.attr--gamepad-focus {
+            border: 6px solid #d64e2f;
+            border-radius: 0;
+            background: #ff6c4b;
+            color: #ffffff;
+
+            transform: scale(1.1);
         }
 
         &:active, &:focus {
             transform: scale(0.95);
-        }
-
-        &.attr--gamepad-focus {
-            border: 6px solid #d64e2f;
-            background: #ff6c4b;
-            
-            animation-name: ingame-pause-menu-modal-button--infinite;
-            animation-duration: 700ms;
-            animation-fill-mode: forwards;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
-
-            @keyframes ingame-pause-menu-modal-button--infinite {
-                0% {
-                    transform: scale(1);
-                }
-
-                50% {
-                    transform: scale(1.05);
-                }
-
-                100% {
-                    transform: scale(1);
-                }
-            }
         }
     }
 
