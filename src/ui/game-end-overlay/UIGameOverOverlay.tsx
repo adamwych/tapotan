@@ -5,6 +5,8 @@ import LevelEditorUIAgent from '../../editor/LevelEditorUIAgent';
 import Tapotan from '../../core/Tapotan';
 import { GameState } from '../../core/GameManager';
 import UICircularMaskTransition from '../UICircularMaskTransition';
+import InputManager from '../../core/input/InputManager';
+import WorldLoader from '../../world/WorldLoader';
 
 require('./game-end-overlay.scss');
 require('./game-over-overlay.scss');
@@ -15,15 +17,30 @@ interface UIGameOverOverlayProps {
 }
 
 export default function UIGameOverOverlay(props: UIGameOverOverlayProps) {
+    const [gamepadActiveButtonIndex, setGamepadActiveButtonIndex] = useState(null);
 
     const handleTryAgainButtonClick = useCallback(() => {
-
+        UICircularMaskTransition.instance.start(50, 50, () => {
+            const currentWorld = Tapotan.getInstance().getGameManager().getWorld();
+            const world = WorldLoader.load(currentWorld.getRawData(), currentWorld.getAuthorName(), {
+                compressed: false,
+                mask: true,
+                physics: true
+            });
+            world.setLevelPublicID(currentWorld.getLevelPublicID())
+            world.setUserRating(currentWorld.getUserRating() || -1);
+            Tapotan.getInstance().startLevel(world);
+        });
     }, []);
 
-    const handleBackToMainMenuButtonClick = useCallback(event => {
-        const element = event.target;
-        const rect = element.getBoundingClientRect();
-        UICircularMaskTransition.instance.start(((rect.left + (rect.width / 2)) / window.innerWidth) * 100, ((rect.top / window.innerHeight) * 100) + 4.5, () => {
+    const handleGoToTheatreButtonClick = useCallback(() => {
+        UICircularMaskTransition.instance.start(50, 50, () => {
+            Tapotan.getInstance().getScreenManager().startTheatre();
+        });
+    }, []);
+
+    const handleGoToMainMenuButtonClick = useCallback(() => {
+        UICircularMaskTransition.instance.start(50, 50, () => {
             Tapotan.getInstance().getScreenManager().startMainMenu();
         });
     }, []);
@@ -35,11 +52,67 @@ export default function UIGameOverOverlay(props: UIGameOverOverlayProps) {
         props.onCloseRequest();
     }, []);
 
+    const handleUIEnterAction = useCallback(() => {
+        switch (gamepadActiveButtonIndex) {
+            case 0: {
+                handleTryAgainButtonClick();
+                break;
+            }
+
+            case 1: {
+                handleGoToTheatreButtonClick();
+                break;
+            }
+
+            case 2: {
+                handleGoToMainMenuButtonClick();
+                break;
+            }
+        }
+    }, [gamepadActiveButtonIndex]);
+
+    const handleUIMoveUpAction = useCallback(() => {
+        if (gamepadActiveButtonIndex === 0) {
+            return;
+        }
+
+        if (gamepadActiveButtonIndex === null) {
+            setGamepadActiveButtonIndex(0);
+        } else {
+            setGamepadActiveButtonIndex(gamepadActiveButtonIndex - 1);
+        }
+    }, [gamepadActiveButtonIndex]);
+
+    const handleUIMoveDownAction = useCallback(() => {
+        if (gamepadActiveButtonIndex === 2) {
+            return;
+        }
+
+        if (gamepadActiveButtonIndex === null) {
+            setGamepadActiveButtonIndex(0);
+        } else {
+            setGamepadActiveButtonIndex(gamepadActiveButtonIndex + 1);
+        }
+    }, [gamepadActiveButtonIndex]);
+
     useEffect(() => {
         if (props.inEditor) {
             LevelEditorUIAgent.setInteractionEnabled(false);
         }
     }, []);
+
+    useEffect(() => {
+        const inputManager = InputManager.instance;
+        inputManager.bindAction('UIEnter', handleUIEnterAction);
+        inputManager.bindAction('UIMoveUp', handleUIMoveUpAction);
+        inputManager.bindAction('UIMoveDown', handleUIMoveDownAction);
+
+        return () => {
+            inputManager.unbindAction('UIEnter', handleUIEnterAction);
+            inputManager.unbindAction('UIMoveUp', handleUIMoveUpAction);
+            inputManager.unbindAction('UIMoveDown', handleUIMoveDownAction);
+        };
+    }, [handleUIEnterAction, handleUIMoveUpAction, handleUIMoveDownAction]);
 
     return (
         <div className="game-over-overlay">
@@ -63,8 +136,9 @@ export default function UIGameOverOverlay(props: UIGameOverOverlayProps) {
                         <div className="game-over-overlay-modal-button" onClick={handleCloseButtonClick}>Close</div>
                     ) : (
                         <React.Fragment>
-                            <div className="game-over-overlay-modal-button" onClick={handleTryAgainButtonClick}>Try again</div>
-                            <div className="game-over-overlay-modal-button" onClick={handleBackToMainMenuButtonClick}>Back to main menu</div>
+                            <div className={`game-over-overlay-modal-button ${gamepadActiveButtonIndex === 0 ? 'attr--gamepad-focus' : ''}`} onClick={handleTryAgainButtonClick}>Try again</div>
+                            <div className={`game-over-overlay-modal-button ${gamepadActiveButtonIndex === 1 ? 'attr--gamepad-focus' : ''}`} onClick={handleGoToTheatreButtonClick}>Go to theatre</div>
+                            <div className={`game-over-overlay-modal-button ${gamepadActiveButtonIndex === 2 ? 'attr--gamepad-focus' : ''}`} onClick={handleGoToMainMenuButtonClick}>Go to main menu</div>
                         </React.Fragment>
                     )}
                 </div>
