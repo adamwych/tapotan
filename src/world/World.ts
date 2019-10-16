@@ -110,6 +110,8 @@ export default class World extends PIXI.Container {
      */
     private worldMask: WorldMask;
 
+    private startDelayTimer: number = 0;
+
     /**
      * Whether the world is being removed.
      * 
@@ -204,6 +206,11 @@ export default class World extends PIXI.Container {
                 if (viewport.left < 0) viewport.left = 0;
                 if (viewport.top > 0) viewport.top = 0;
             }
+        }
+
+        this.startDelayTimer += dt;
+        if (this.startDelayTimer < 0.5) {
+            return;
         }
 
         if (this.behaviourRules.getGameOverTimeout() !== WorldGameOverTimeout.Unlimited &&
