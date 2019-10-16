@@ -22,6 +22,10 @@ export default class InputControllerKeyboard {
     }
 
     private handleKeyDown = (event: KeyboardEvent) => {
+        if (this.keysDown.includes(event.keyCode)) {
+            return;
+        }
+
         this.internalEventEmitter.emit('keyDown' + event.keyCode, null);
         this.keysDown.push(event.keyCode);
         
@@ -38,7 +42,11 @@ export default class InputControllerKeyboard {
 
     private handleKeyUp = (event: KeyboardEvent) => {
         this.internalEventEmitter.emit('keyUp' + event.keyCode, null);
-        this.keysDown.splice(this.keysDown.indexOf(event.keyCode), 1);
+
+        let idx = this.keysDown.indexOf(event.keyCode);
+        if (idx > -1) {
+            this.keysDown.splice(idx, 1);
+        }
 
         this.manager.setActivelyUsingGamepad(false);
     }
@@ -53,6 +61,10 @@ export default class InputControllerKeyboard {
 
     public isKeyDown(key: number) {
         return this.keysDown.includes(key);
+    }
+
+    public getKeysDown() {
+        return this.keysDown;
     }
 
 }

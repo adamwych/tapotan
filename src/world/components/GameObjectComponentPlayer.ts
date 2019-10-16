@@ -55,7 +55,6 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         this.gameObject.on('livingEntity.died', this.handleLivingEntityDied);
 
         const inputManager = Tapotan.getInstance().getInputManager();
-
         inputManager.bindAction('MoveUp', this.handleInputMoveUpAction);
         inputManager.bindAction('MoveUpStop', this.handleInputMoveUpStopAction);
         inputManager.bindAction('MoveLeft', this.handleInputMoveLeftAction);
@@ -68,6 +67,16 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     
     protected destroy(): void {
         this.gameObject.off('livingEntity.died', this.handleLivingEntityDied);
+
+        const inputManager = Tapotan.getInstance().getInputManager();
+        inputManager.unbindAction('MoveUp', this.handleInputMoveUpAction);
+        inputManager.unbindAction('MoveUpStop', this.handleInputMoveUpStopAction);
+        inputManager.unbindAction('MoveLeft', this.handleInputMoveLeftAction);
+        inputManager.unbindAction('MoveLeftStop', this.handleInputMoveLeftStopAction);
+        inputManager.unbindAction('MoveRight', this.handleInputMoveRightAction);
+        inputManager.unbindAction('MoveRightStop', this.handleInputMoveRightStopAction);
+        inputManager.unbindAction('JumpButtonDown', this.handleInputJumpButtonDown);
+        inputManager.unbindAction('JumpButtonUp', this.handleInputJumpButtonUp);
     }
 
     public getDebugProperties(): Array<GameObjectComponentDebugProperty> {
