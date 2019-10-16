@@ -26,6 +26,8 @@ export default class InputControllerGamepad {
      */
     private supportsGamepads: boolean = false;
 
+    private lastButtonTickTimes = {};
+
     private activityTimer: number = 0;
 
     constructor(manager: InputManager) {
@@ -126,10 +128,17 @@ export default class InputControllerGamepad {
                             const currentButtonStateValue = button.value;
 
                             if (currentButtonStatePressed) {
-                                this.internalEventEmitter.emit('buttonDown' + buttonIndex, currentButtonStateValue);
-                                anyChange = true;
+                                let lastTickTime = this.lastButtonTickTimes[buttonIndex];
+                                let timeSinceLastTick = (new Date().getTime() - lastTickTime) / 1000;
+
+                                if (lastTickTime === undefined || timeSinceLastTick > 0.16) {
+                                    this.internalEventEmitter.emit('buttonDown' + buttonIndex, currentButtonStateValue);
+                                    this.lastButtonTickTimes[buttonIndex] = new Date().getTime();
+                                    anyChange = true;
+                                }
                             } else {
                                 if (previousButtonStatePressed) {
+                                    this.lastButtonTickTimes[buttonIndex] = undefined;
                                     this.internalEventEmitter.emit('buttonUp' + buttonIndex, currentButtonStateValue);
                                     anyChange = true;
                                 }

@@ -177,35 +177,35 @@ export default class InputManager {
 
         const uiMoveUpAction = new InputAction('UIMoveUp', this);
         uiMoveUpAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowUp);
-        uiMoveUpAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadUp);
+        uiMoveUpAction.attachGamepadButtonDown(InputManager.XboxGamepadButton.DPadUp);
 
         const uiMoveLeftAction = new InputAction('UIMoveLeft', this);
         uiMoveLeftAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowLeft);
-        uiMoveLeftAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadLeft);
+        uiMoveLeftAction.attachGamepadButtonDown(InputManager.XboxGamepadButton.DPadLeft);
 
         const uiMoveDownAction = new InputAction('UIMoveDown', this);
         uiMoveDownAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowDown);
-        uiMoveDownAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadDown);
+        uiMoveDownAction.attachGamepadButtonDown(InputManager.XboxGamepadButton.DPadDown);
 
         const uiMoveRightAction = new InputAction('UIMoveRight', this);
         uiMoveRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyArrowRight);
-        uiMoveRightAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadRight);
+        uiMoveRightAction.attachGamepadButtonDown(InputManager.XboxGamepadButton.DPadRight);
 
         const uiEscapeAction = new InputAction('UIEscape', this);
         uiEscapeAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyEscape);
-        uiEscapeAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.Start);
+        uiEscapeAction.attachGamepadButtonDown(InputManager.XboxGamepadButton.Start);
 
         const uiEnterAction = new InputAction('UIEnter', this);
         uiEnterAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyEnter);
-        uiEnterAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.A);
+        uiEnterAction.attachGamepadButtonDown(InputManager.XboxGamepadButton.A);
 
         const uiSwitchLeftAction = new InputAction('UISwitchLeft', this);
         uiSwitchLeftAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyQ);
-        uiSwitchLeftAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.L1);
+        uiSwitchLeftAction.attachGamepadButtonDown(InputManager.XboxGamepadButton.L1);
 
         const uiSwitchRightAction = new InputAction('UISwitchRight', this);
         uiSwitchRightAction.attachKeyboardKeyDownEvent(InputManager.KeyCodes.KeyE);
-        uiSwitchRightAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.R1);
+        uiSwitchRightAction.attachGamepadButtonDown(InputManager.XboxGamepadButton.R1);
 
         const uiGamepadAnythingAction = new InputAction('UIGamepadAnything', this);
         uiGamepadAnythingAction.attachGamepadButtonUp(InputManager.XboxGamepadButton.DPadLeft);
