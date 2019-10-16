@@ -99,10 +99,10 @@
         }
 
         &:hover, &.attr--gamepad-focus {
-            border: 6px solid #d64e2f;
+            border: 6px solid #ff9f59;
             border-radius: 0;
-            background: #ff6c4b;
-            color: #ffffff;
+            background: #ffffff;
+            color: #ff9f59;
 
             transform: scale(1.1);
         }

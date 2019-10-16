@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import InputManager from '../../core/input/InputManager';
 import Tapotan from '../../core/Tapotan';
-import UIPauseMenu from './pause-menu/UIPauseMenu';
-import UICircularMaskTransition from '../UICircularMaskTransition';
-import WorldLoader from '../../world/WorldLoader';
 import TickHelper from '../../core/TickHelper';
+import WorldLoader from '../../world/WorldLoader';
+import UICircularMaskTransition from '../UICircularMaskTransition';
+import UIPauseMenu from './pause-menu/UIPauseMenu';
+import UIIngameLevelInfoSlide from './UIIngameLevelInfoSlide';
 
 require('./ingame.scss');
 
@@ -110,6 +111,8 @@ export default function UIIngameRootComponent() {
                     <span ref={element => coinsValueElement.current = element}>0</span>
                 </div>
             </div>
+
+            <UIIngameLevelInfoSlide />
 
             <UIPauseMenu
                 visible={pauseMenuVisible}

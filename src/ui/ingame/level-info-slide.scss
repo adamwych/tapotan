@@ -1,0 +1,70 @@
+.ingame-level-info-slide {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    animation-name: ingame-slide--anim;
+    animation-duration: 2500ms;
+    animation-fill-mode: forwards;
+    animation-delay: 1350ms;
+
+    transform: translateY(-100%);
+
+    will-change: transform;
+
+    @keyframes ingame-slide--anim {
+        0% {
+            transform: translateY(-100%);
+        }
+
+        10% {
+            transform: translateY(6px);
+        }
+
+        14% {
+            transform: translateY(0);
+        }
+
+        90% {
+            transform: translateY(0);
+        }
+
+        100% {
+            transform: translateY(-100%);
+        }
+    }
+
+    .ingame-level-info-slide-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        border: 10px solid #ff9f59;
+        border-radius: 16px;
+        background: #ffffff;
+        padding: 1rem;
+        padding-top: 2rem;
+
+        position: relative;
+        top: -32px;
+
+        min-width: 33.33%;
+
+        line-height: 1;
+
+        > div:nth-child(1) {
+            font-size: 56px;
+            color: #ff9f59;
+        }
+
+        > div:nth-child(2) {
+            font-size: 30px;
+            color: #e5c3a9;
+        }
+    }
+}
