@@ -21,6 +21,8 @@ export default class ScreenManager extends EventEmitter {
 
     public startMainMenu() {
         this.game.setIsInEditor(false);
+        
+        window.onbeforeunload = null;
         window.location.hash = '';
 
         if (this.game.getGameManager()) {

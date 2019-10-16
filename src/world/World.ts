@@ -242,7 +242,7 @@ export default class World extends PIXI.Container {
                 gameObject.tick(dt);
             });
 
-            if (this.player) {
+            if (this.player && !this.player.isDestroyed()) {
                 this.playerMaxX = Math.max(this.playerMaxX, this.player.position.x - this.playerSpawnPoint.x);
             }
         }
