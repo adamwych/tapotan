@@ -1,14 +1,14 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import * as ReactDOM from 'react-dom';
 import APIRequest from '../../api/APIRequest';
-import Tapotan from '../../core/Tapotan';
-import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
-import UITheatreLevelsItem from './UITheatreLevelsItem';
-import UICircularMaskTransition from '../UICircularMaskTransition';
-import UIEditorSharedValues from '../editor/UIEditorSharedValues';
-import useSharedValue from '../lib/useSharedValue';
 import InputManager from '../../core/input/InputManager';
+import Tapotan from '../../core/Tapotan';
+import UIEditorSharedValues from '../editor/UIEditorSharedValues';
+import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
+import useSharedValue from '../lib/useSharedValue';
+import UICircularMaskTransition from '../UICircularMaskTransition';
+import UITheatreLevelsItem from './UITheatreLevelsItem';
 
 export default function UITheatreLevels() {
     const [past, setPast] = useState(false);
@@ -19,6 +19,11 @@ export default function UITheatreLevels() {
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [theaterFilter, setTheaterFilter] = useSharedValue(UIEditorSharedValues.TheaterFilter, 'MostPopular');
     const playButtonElement = useRef(null);
+    const startTime = useRef(new Date().getTime());
+
+    const timeSinceStart = () => {
+        return (new Date().getTime() - startTime.current) / 1000;
+    };
 
     const fetchMoreLevels = (index: number) => {
         if (index === items.length - 4) {
@@ -43,7 +48,7 @@ export default function UITheatreLevels() {
     };
 
     const handleNavigateLeftClick = useCallback(() => {
-        if (currentLevelIndex <= 0) {
+        if (timeSinceStart() < 2 || currentLevelIndex <= 0) {
             return;
         }
 
@@ -52,7 +57,7 @@ export default function UITheatreLevels() {
     }, [items, currentLevelIndex]);
 
     const handleNavigateRightClick = useCallback(() => {
-        if (currentLevelIndex >= items.length - 1) {
+        if (timeSinceStart() < 2 || currentLevelIndex >= items.length - 1) {
             return;
         }
 
@@ -61,6 +66,10 @@ export default function UITheatreLevels() {
     }, [items, currentLevelIndex]);
 
     const handlePlayButtonClick = useCallback(() => {
+        if (timeSinceStart() < 2) {
+            return;
+        }
+
         UICircularMaskTransition.instance.start(50, 50, () => {
             Tapotan.getInstance().loadAndStartLevel(items[currentLevelIndex].public_id);
         });
