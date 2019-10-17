@@ -54,14 +54,7 @@ export default class Tapotan extends EventEmitter {
     public static GameVersion: number = 5;
     public static Cursor = TapotanCursor;
 
-    constructor() {
-        super();
-        
-        Tapotan.instance = this;
-        this.init();
-    }
-
-    private init = async () => {
+    public init = async () => {
         PIXI.utils.skipHello();
 
         const helloResponse = await APIRequest.get('/hello');
@@ -139,9 +132,10 @@ export default class Tapotan extends EventEmitter {
             worldHeight: 1000
         });
 
+
         window.addEventListener('resize', () => {
-            document.getElementById('resizerefresh').style.display = 'flex';
-            document.getElementById('resizerefreshButton').onclick = this.handleResizeMessageReloadButtonClick;
+            // document.getElementById('resizerefresh').style.display = 'flex';
+            // document.getElementById('resizerefreshButton').onclick = this.handleResizeMessageReloadButtonClick;
 
             this.viewport.resize(Tapotan.getGameWidth(), Tapotan.getGameHeight(), 1000, 1000);
             this.viewport.fit(false, Tapotan.getViewportWidth(), Tapotan.getViewportHeight());
@@ -281,6 +275,7 @@ export default class Tapotan extends EventEmitter {
                         this.screenManager.startMainMenu();
                         // this.screenManager.startTheatre();
                         // this.screenManager.startEditor();
+                        // this.loadAndStartLevel(634974881521);
                     }, 200);
 
                 }
