@@ -69,7 +69,7 @@ export default class TapotanUIApplication extends React.Component<any, TapotanUI
 
     public render() {
         const screenRootComponents = this.state.screens.map(screen => screen.getUIRootComponent()).filter(component => component);
-
+        
         return (
             <div className="tapotan-ui-application">
                 {screenRootComponents.map((Component, index) => (

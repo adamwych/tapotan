@@ -1,5 +1,6 @@
-import Tapotan from './core/Tapotan';
+import Tapotan from "./core/Tapotan";
 
 window.onload = () => {
-    new Tapotan();
+    Tapotan.instance = new Tapotan();
+    Tapotan.instance.init();
 };

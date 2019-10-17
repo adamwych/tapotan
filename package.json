@@ -28,6 +28,7 @@
     "css-loader": "^3.2.0",
     "fast-png": "^4.0.1",
     "file-saver": "^2.0.2",
+    "hard-source-webpack-plugin": "^0.13.1",
     "howler": "^2.1.2",
     "ifdef-loader": "^2.1.4",
     "js-base64": "^2.5.1",
