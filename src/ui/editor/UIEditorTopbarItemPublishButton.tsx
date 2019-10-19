@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
 import UIEditorSharedValues from './UIEditorSharedValues';
 import useSharedValue from '../lib/useSharedValue';
+import LevelEditorUIAgent from '../../editor/LevelEditorUIAgent';
 
 export default function UIEditorTopbarItemPublishButton() {
     const [publishPopupVisible, setPublishPopupVisible] = useSharedValue(UIEditorSharedValues.PublishPopupVisible, false);
@@ -13,6 +14,7 @@ export default function UIEditorTopbarItemPublishButton() {
         setPublishPopupVisible(!publishPopupVisible);
         setPrefabExplorerActiveCategoryID(null);
         setLevelSettingsPopupVisible(false);
+        LevelEditorUIAgent.setInteractionEnabled(false);
     }, []);
 
     return (

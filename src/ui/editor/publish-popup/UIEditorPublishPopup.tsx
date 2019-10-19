@@ -18,6 +18,7 @@ export default function UIEditorPublishPopup() {
 
     const handleCloseButtonClick = useCallback(() => {
         setPublishPopupVisible(false);
+        LevelEditorUIAgent.setInteractionEnabled(true);
     }, []);
 
     const handleSubmitButtonClick = useCallback(() => {
@@ -50,7 +51,7 @@ export default function UIEditorPublishPopup() {
                 setBusy(false);
             });
         }, 200);
-    }, []);
+    }, [isBusy, levelTitleInputValue, levelAuthorInputValue, levelTagsInputValue]);
 
     return (
         <React.Fragment>
@@ -83,21 +84,21 @@ export default function UIEditorPublishPopup() {
                                 <div className="editor-publish-popup-field">
                                     <div className="editor-publish-popup-field-label">Level Title</div>
                                     <div className="editor-publish-popup-field-input">
-                                        <input type="text" value="My Amazing Level" onChange={e => setLevelTitleInputValue(e.target.value)} />
+                                        <input type="text" value={levelTitleInputValue} onChange={e => setLevelTitleInputValue(e.target.value)} />
                                     </div>
                                 </div>
 
                                 <div className="editor-publish-popup-field">
                                     <div className="editor-publish-popup-field-label">Your Name</div>
                                     <div className="editor-publish-popup-field-input">
-                                        <input type="text" value="An Awesome Human" onChange={e => setLevelAuthorInputValue(e.target.value)} />
+                                        <input type="text" value={levelAuthorInputValue} onChange={e => setLevelAuthorInputValue(e.target.value)} />
                                     </div>
                                 </div>
 
                                 <div className="editor-publish-popup-field">
                                     <div className="editor-publish-popup-field-label">Tags</div>
                                     <div className="editor-publish-popup-field-input">
-                                        <input type="text" value="" onChange={e => setLevelTagsInputValue(e.target.value)} />
+                                        <input type="text" value={levelTagsInputValue} onChange={e => setLevelTagsInputValue(e.target.value)} />
                                     </div>
                                 </div>
                             </div>
