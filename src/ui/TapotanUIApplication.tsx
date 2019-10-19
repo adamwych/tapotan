@@ -76,22 +76,24 @@ export default class TapotanUIApplication extends React.Component<any, TapotanUI
                     <Component key={index} />
                 ))}
 
-                {this.state.showVictoryOverlay && (
-                    <UIVictoryOverlay
-                        inEditor={Tapotan.getInstance().isInEditor()}
-                        onCloseRequest={() => this.setState({ showVictoryOverlay: false })}
-                    />
-                )}
+                <div style={{ width: 1920, height: 683 }}>
+                    {this.state.showVictoryOverlay && (
+                        <UIVictoryOverlay
+                            inEditor={Tapotan.getInstance().isInEditor()}
+                            onCloseRequest={() => this.setState({ showVictoryOverlay: false })}
+                        />
+                    )}
 
-                {this.state.showGameOverOverlay && (
-                    <UIGameOverOverlay
-                        inEditor={Tapotan.getInstance().isInEditor()}
-                        onCloseRequest={() => this.setState({ showGameOverOverlay: false })}
-                    />
-                )}
+                    {this.state.showGameOverOverlay && (
+                        <UIGameOverOverlay
+                            inEditor={Tapotan.getInstance().isInEditor()}
+                            onCloseRequest={() => this.setState({ showGameOverOverlay: false })}
+                        />
+                    )}
 
-                <UICircularMaskTransition />
-                <UITransitionBlocks />
+                    <UICircularMaskTransition />
+                    <UITransitionBlocks />
+                </div>
             </div>
         );
     }
