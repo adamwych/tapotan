@@ -2,7 +2,8 @@ import * as React from 'react';
 import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
 
 interface UIEditorObjectActionButtonProps {
-    type: 'Rotate' | 'Flip' | 'Remove';
+    label: string;
+    type: 'Rotate' | 'Flip' | 'Key' | 'Remove';
     onClick: React.MouseEventHandler;
 }
 
@@ -15,7 +16,7 @@ export default function UIEditorObjectActionButton(props: UIEditorObjectActionBu
 
     return (
         <div className="editor-object-action-button" onClick={props.onClick}>
-            <div className="editor-object-action-button-tooltip" style={{ background: backgroundColor }}>{props.type}</div>
+            <div className="editor-object-action-button-tooltip" style={{ background: backgroundColor }}>{props.label}</div>
             <div className="editor-object-action-button-icon">
                 <img src={getBundledResourceAsDataURL('Graphics/Editor/ObjectAction' + props.type + '.svg', false)} />
             </div>

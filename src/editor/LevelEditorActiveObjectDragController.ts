@@ -1,9 +1,9 @@
-import LevelEditorContext from "./LevelEditorContext";
-import screenPointToWorld from "../utils/screenPointToWorld";
 import InputManager from "../core/input/InputManager";
 import Tapotan from "../core/Tapotan";
-import LevelEditorCommandMoveObject from "./commands/LevelEditorCommandMoveObject";
+import screenPointToWorld from "../utils/screenPointToWorld";
 import GameObjectComponentPhysicsAwareTransform from "../world/components/GameObjectComponentPhysicsAwareTransform";
+import LevelEditorCommandMoveObject from "./commands/LevelEditorCommandMoveObject";
+import LevelEditorContext from "./LevelEditorContext";
 import LevelEditorUIAgent from "./LevelEditorUIAgent";
 
 export default class LevelEditorActiveObjectDragController {
@@ -13,16 +13,26 @@ export default class LevelEditorActiveObjectDragController {
     private offsetX: number = 0;
     private offsetY: number = 0;
 
+    private isDraggingObject: boolean = false;
+
     constructor(context: LevelEditorContext) {
         this.context = context;
 
-        this.context.getGame().getInputManager().getMouseController().listenDown(InputManager.MouseButton.Left, this.handleMouseDown);
-        this.context.getGame().getInputManager().getMouseController().listenDrag(InputManager.MouseButton.Left, this.handleMouseDrag);
+        const mouseController = this.context.getGame().getInputManager().getMouseController(); 
+        mouseController.listenDown(InputManager.MouseButton.Left, this.handleMouseDown);
+        mouseController.listenDown(InputManager.MouseButton.Left, this.handleMouseUp);
+        mouseController.listenDrag(InputManager.MouseButton.Left, this.handleMouseDrag);
     }
 
     public destroy() {
-        this.context.getGame().getInputManager().getMouseController().removeDownListener(InputManager.MouseButton.Left, this.handleMouseDown);
-        this.context.getGame().getInputManager().getMouseController().removeDragListener(InputManager.MouseButton.Left, this.handleMouseDrag);
+        const mouseController = this.context.getGame().getInputManager().getMouseController(); 
+        mouseController.removeDownListener(InputManager.MouseButton.Left, this.handleMouseDown);
+        mouseController.removeDownListener(InputManager.MouseButton.Left, this.handleMouseUp);
+        mouseController.removeDragListener(InputManager.MouseButton.Left, this.handleMouseDrag);
+    }
+
+    public handleMouseUp = () => {
+        this.isDraggingObject = false;
     }
 
     public handleMouseDown = (x, y) => {
@@ -33,7 +43,7 @@ export default class LevelEditorActiveObjectDragController {
                     mouseDownCoords.y = Tapotan.getViewportHeight() - mouseDownCoords.y - 1;
                     
                     const selectedObject = this.context.getSelectedObjects()[0];
-    
+
                     if (selectedObject.getWidth() > 1) {
                         this.offsetX = (mouseDownCoords.x - selectedObject.transformComponent.getPositionX());
                     } else {
@@ -49,13 +59,15 @@ export default class LevelEditorActiveObjectDragController {
                     } else {
                         this.offsetY = 0;
                     }
+
+                    this.isDraggingObject = true;
                 }
             });
         });
     }
 
     public handleMouseDrag = ({ x, y, deltaX, deltaY }) => {
-        if (!this.context.canInteractWithEditor() || !LevelEditorUIAgent.isWorldInteractionEnabled()) {
+        if (!this.isDraggingObject || !this.context.canInteractWithEditor() || !LevelEditorUIAgent.isWorldInteractionEnabled()) {
             return;
         }
 

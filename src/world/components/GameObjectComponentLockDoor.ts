@@ -63,5 +63,9 @@ export default class GameObjectComponentLockDoor extends GameObjectComponent {
         this.animator.playAnimation('unlocked');
         this.physicsBody.collisionResponse = false;
     }
+
+    public isLocked(): boolean {
+        return this.locked;
+    }
     
 }

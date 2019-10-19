@@ -44,13 +44,14 @@
         }
 
         .editor-object-action-button-tooltip {
-            width: 84px;
+            width: 104px;
 
             position: absolute;
             top: -100%;
-            left: -26px;
+            left: -32px;
             padding: 0.25rem 0.5rem;
             border-radius: 8px;
+            font-size: 1.5rem;
 
             text-align: center;
 
@@ -64,8 +65,8 @@
         }
 
         .editor-object-action-button-icon {
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
 
             img {
                 display: block;

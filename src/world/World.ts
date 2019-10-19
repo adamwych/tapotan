@@ -364,6 +364,10 @@ export default class World extends PIXI.Container {
             });
         }
 
+        this.lockConnections.forEach(lockConnection => {
+            lockConnection.reset();
+        });
+
         this.gameObjects.forEach(gameObject => {
             if (gameObject.hasCustomProperty('hasParallaxBackground')) {
                 gameObject.children.forEach(child => {

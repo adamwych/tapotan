@@ -4,4 +4,5 @@ export default {
     TheaterFilter: 'theaterFilter',
     PublishPopupVisible: 'publishPopupVisible',
     PrefabExplorerActiveCategoryID: 'prefabExplorerActiveCategoryID',
+    LockKeyTipVisible: 'lockKeyTipVisible'
 }

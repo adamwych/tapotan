@@ -16,6 +16,7 @@ import UIEditorSettingsPopup from './UIEditorSettingsPopup';
 require('./editor.scss');
 
 export default function UIEditorRootComponent() {
+    const [uiHidden, setUIHidden] = useState(false);
     const [playthroughInProgress, setPlaythroughInProgress] = useState(false);
     const [selectedGameObject, setSelectedGameObject] = useState(null);
     const [welcomePopupVisible, setWelcomePopupVisible] = useState(false);
@@ -23,16 +24,28 @@ export default function UIEditorRootComponent() {
     const [editorSettingsPopupVisible, setEditorSettingsPopupVisible] = useSharedValue(UIEditorSharedValues.EditorSettingsPopupVisible, false);
     const [publishPopupVisible, setPublishPopupVisible] = useSharedValue(UIEditorSharedValues.PublishPopupVisible, false);
     const [prefabExplorerActiveCategoryID, setPrefabExplorerActiveCategoryID] = useSharedValue(UIEditorSharedValues.PrefabExplorerActiveCategoryID, null);
+    const [lockKeyTipVisible, setLockKeyTipVisible] = useSharedValue(UIEditorSharedValues.LockKeyTipVisible, null);
+
+    const handleShowUI = useCallback(() => {
+        setUIHidden(false);
+        setLockKeyTipVisible(false);
+    }, []);
+
+    const handleHideUI = useCallback(() => {
+        setUIHidden(true);
+    }, []);
 
     const handlePlaythroughStarted = useCallback(() => {
         setPlaythroughInProgress(true);
         setLevelSettingsPopupVisible(false);
         setEditorSettingsPopupVisible(false);
         setPublishPopupVisible(false);
+        setUIHidden(true);
     }, []);
 
     const handlePlaythroughStopped = useCallback(() => {
         setPlaythroughInProgress(false);
+        setUIHidden(false);
     }, []);
 
     const handleGameObjectSelected = useCallback((object: GameObject) => {
@@ -65,6 +78,8 @@ export default function UIEditorRootComponent() {
         LevelEditorUIAgent.onPlaythroughStarted(handlePlaythroughStarted);
         LevelEditorUIAgent.onPlaythroughStopped(handlePlaythroughStopped);
         LevelEditorUIAgent.onObjectSelected(handleGameObjectSelected);
+        LevelEditorUIAgent.onHideUIEmitted(handleHideUI);
+        LevelEditorUIAgent.onShowUIEmitted(handleShowUI);
 
         return () => {
             window.removeEventListener('mousedown', handleWindowMouseDown);
@@ -72,10 +87,17 @@ export default function UIEditorRootComponent() {
     }, []);
 
     return (
-        <div className={`screen-editor ${playthroughInProgress ? 'attr--playthrough-started' : ''}`}>
+        <div className={`screen-editor ${uiHidden ? 'attr--ui-hidden' : ''}`}>
             <UIEditorTopbar commonActionsVisible={!playthroughInProgress} />
             <UIEditorPrefabExplorer />
             <UIEditorLayerSelector />
+
+            {lockKeyTipVisible && (
+                <div className="editor-lock-tip">
+                    Select doors you want this key to unlock.<br />
+                    Press RMB to cancel.
+                </div>
+            )}
 
             {welcomePopupVisible && (
                 <UIEditorWelcomePopup onClose={handleWelcomePopupClose} />

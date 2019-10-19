@@ -1,9 +1,13 @@
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useRef, useCallback, useEffect, useState } from 'react';
 import TickHelper from '../../core/TickHelper';
 import LevelEditorUIAgent from '../../editor/LevelEditorUIAgent';
 import GameObject from '../../world/GameObject';
 import UIEditorObjectActionButton from './UIEditorObjectActionButton';
+import Tapotan from '../../core/Tapotan';
+import GameObjectComponentLockKey from '../../world/components/GameObjectComponentLockKey';
+import useSharedValue from '../lib/useSharedValue';
+import UIEditorSharedValues from './UIEditorSharedValues';
 
 interface UIEditorObjectActionButtonsProps {
     gameObject: GameObject;
@@ -12,12 +16,17 @@ interface UIEditorObjectActionButtonsProps {
 export default function UIEditorObjectActionButtons(props: UIEditorObjectActionButtonsProps) {
     const [width, setWidth] = useState(0);
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [lockKeyTipVisible, setLockKeyTipVisible] = useSharedValue(UIEditorSharedValues.LockKeyTipVisible, null);
+    const showLinkDoorAction = useRef(props.gameObject.hasComponentOfType(GameObjectComponentLockKey));
+    let visibleButtonsNum = 3 + (showLinkDoorAction.current ? 1 : 0);
 
     const handleTick = useCallback(() => {
+        const scale = 974 / Tapotan.getGameHeight();
+
         setWidth(props.gameObject.getScreenWidth());
         setPosition({
             x: props.gameObject.transformComponent.getScreenX(),
-            y: props.gameObject.transformComponent.getScreenY()
+            y: props.gameObject.transformComponent.getScreenY() * scale
         });
     }, [props.gameObject]);
 
@@ -27,6 +36,11 @@ export default function UIEditorObjectActionButtons(props: UIEditorObjectActionB
 
     const handleFlipActionClick = useCallback(() => {
         LevelEditorUIAgent.emitObjectActionButtonClicked('Flip');
+    }, [props.gameObject]);
+
+    const handleLinkDoorActionClick = useCallback(() => {
+        LevelEditorUIAgent.emitObjectActionButtonClicked('LinkWithDoor');
+        setLockKeyTipVisible(true);
     }, [props.gameObject]);
 
     const handleRemoveActionClick = useCallback(() => {
@@ -41,13 +55,19 @@ export default function UIEditorObjectActionButtons(props: UIEditorObjectActionB
         };
     }, [props.gameObject]);
 
-    const positionX = position.x - (((3 * (36 + 4)) - 4 - width) / 2);
+    const singleButtonWidth = 42;
+    const positionX = position.x - (((visibleButtonsNum * (singleButtonWidth + 4)) - 4 - width) / 2);
 
     return (
-        <div className="editor-object-action-buttons" style={{ left: positionX + 'px', top: position.y + 'px' }}>
-            <UIEditorObjectActionButton type="Rotate" onClick={handleRotateActionClick} />
-            <UIEditorObjectActionButton type="Flip" onClick={handleFlipActionClick} />
-            <UIEditorObjectActionButton type="Remove" onClick={handleRemoveActionClick} />
+        <div className="editor-object-action-buttons" style={{ left: positionX + 'px', top: (position.y - 8) + 'px' }}>
+            <UIEditorObjectActionButton label="Rotate [R]" type="Rotate" onClick={handleRotateActionClick} />
+            <UIEditorObjectActionButton label="Flip" type="Flip" onClick={handleFlipActionClick} />
+
+            {showLinkDoorAction.current && (
+                <UIEditorObjectActionButton label="Link door" type="Key" onClick={handleLinkDoorActionClick} />
+            )}
+
+            <UIEditorObjectActionButton label="Remove" type="Remove" onClick={handleRemoveActionClick} />
         </div>
     )
 }

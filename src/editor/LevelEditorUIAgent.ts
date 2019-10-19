@@ -151,5 +151,33 @@ export default class LevelEditorUIAgent extends EventEmitter {
     public static offTogglePlaythroughEmitted(callback: CallbackFunction) {
         LevelEditorUIAgent.instance.off('togglePlaythroughAction', callback);
     }
+
+    // ============================================================
+
+    public static emitShowUI() {
+        LevelEditorUIAgent.instance.emit('showUI');
+    }
+
+    public static onShowUIEmitted(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.on('showUI', callback);
+    }
+
+    public static offShowUIEmitted(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.off('showUI', callback);
+    }
+
+    // ============================================================
+
+    public static emitHideUI() {
+        LevelEditorUIAgent.instance.emit('hideUI');
+    }
+
+    public static onHideUIEmitted(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.on('hideUI', callback);
+    }
+
+    public static offHideUIEmitted(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.off('hideUI', callback);
+    }
     
 }

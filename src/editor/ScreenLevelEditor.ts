@@ -390,6 +390,8 @@ export default class ScreenLevelEditor extends Screen {
                     connection.getDoors().forEach(door => {
                         door.getComponentByType<GameObjectComponentLockDoor>(GameObjectComponentLockDoor).setEditorOverlayVisible(true);
                     });
+
+                    this.linkWithDoorKeyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).remakeEditorAssistPath();
                 }
 
                 return;
@@ -488,6 +490,11 @@ export default class ScreenLevelEditor extends Screen {
 
                 if (this.lastHitObject) {
                     this.lastHitObject.emit('mousedown', e);
+
+                    if (this.context.getSelectedObjects().length > 0 && !this.canInteractWithGameObject(this.lastHitObject)) {
+                        this.clearSelectedObjects();
+                        this.handleRightMouseButtonClick();
+                    }
                 }
 
                 if (this.newGameObjectShade) {
@@ -682,12 +689,14 @@ export default class ScreenLevelEditor extends Screen {
 
         if (this.linkWithDoorActionActive) {
             this.linkWithDoorActionActive = false;
-            this.context.emit('showUI');
+            LevelEditorUIAgent.emitShowUI();
 
             const connection = this.linkWithDoorKeyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).getConnection();
             connection.getDoors().forEach(door => {
                 door.getComponentByType<GameObjectComponentLockDoor>(GameObjectComponentLockDoor).setEditorOverlayVisible(false);
             });
+
+            this.linkWithDoorKeyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).setEditorAssistPathVisible(false);
         }
 
         this.spawnPlayerAtPositionActionActive = false;
@@ -698,10 +707,9 @@ export default class ScreenLevelEditor extends Screen {
     }
 
     public handleGameStart = () => {
-        LevelEditorUIAgent.emitPlaythroughStarted();
-
         this.handleRightMouseButtonClick();
         this.blurActiveAndHoveredObjectOutline();
+        LevelEditorUIAgent.emitPlaythroughStarted();
     }
 
     private handlePlaythroughStopped = () => {
@@ -744,7 +752,9 @@ export default class ScreenLevelEditor extends Screen {
         this.handleRightMouseButtonClick();
         this.blurActiveAndHoveredObjectOutline();
 
-        this.context.emit('hideUI');
+        LevelEditorUIAgent.emitHideUI();
+
+        keyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).setEditorAssistPathVisible(true);
 
         const connection = keyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).getConnection();
         connection.getDoors().forEach(door => {
@@ -796,12 +806,19 @@ export default class ScreenLevelEditor extends Screen {
      * @param gameObject 
      */
     public canInteractWithGameObject(gameObject: GameObject): boolean {
-        return (
+        let basic = (
+            !gameObject.hasCustomProperty('background') &&
             LevelEditorUIAgent.isInteractionEnabled() &&
             this.context.canInteractWithEditor() &&
             this.newGameObjectShade === null &&
             gameObject.getLayer() === this.context.getCurrentLayerIndex()
         );
+
+        if (this.linkWithDoorActionActive) {
+            return basic && gameObject.hasComponentOfType(GameObjectComponentLockDoor);
+        }
+
+        return basic;
     }
 
     public getGridWidget(): WidgetLevelEditorGrid {

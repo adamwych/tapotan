@@ -45,6 +45,8 @@ export default class LockDoorKeyConnection {
                     connection.addDoor(object);
                 }
             });
+
+            world.addLockConnection(connection);
         });
 
         LockDoorKeyConnection.cache[json.id] = connection;

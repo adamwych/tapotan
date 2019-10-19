@@ -18,7 +18,7 @@
 
     pointer-events: none;
 
-    &.attr--playthrough-started {
+    &.attr--ui-hidden {
         .editor-prefab-explorer,
         .editor-layer-selector {
             bottom: -112px;
@@ -26,6 +26,36 @@
 
         .editor-topbar-common {
             top: -112px;
+        }
+    }
+
+    .editor-lock-tip {
+        position: absolute;
+        top: 42px;
+        width: 100%;
+        text-align: center;
+        font-size: 2.5rem;
+        color: #ffffff;
+        text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+
+        animation-name: editor-lock-tip--enter;
+        animation-duration: 250ms;
+        animation-fill-mode: forwards;
+
+        @keyframes editor-lock-tip--enter {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
     }
 }
