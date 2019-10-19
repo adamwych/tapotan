@@ -2,6 +2,8 @@ import GameObjectComponent from "../../GameObjectComponent";
 import GameObjectComponentPhysicsBody from "../GameObjectComponentPhysicsBody";
 import MonsterAINode from "../../ai/MonsterAINode";
 import GameObject from "../../GameObject";
+import GameObjectFaceDirection from "../../GameObjectFaceDirection";
+import GameObjectComponentAnimator from "../GameObjectComponentAnimator";
 
 export default class GameObjectComponentAI extends GameObjectComponent {
 
@@ -14,11 +16,13 @@ export default class GameObjectComponentAI extends GameObjectComponent {
         
         this.gameObject.on('collisionStart', this.handleCollisionStart);
         this.gameObject.on('collisionEnd', this.handleCollisionEnd);
+        this.gameObject.on('transform.faceDirectionChanged', this.handleFaceDirectionChanged);
     }
 
     protected destroy(): void {
         this.gameObject.off('collisionStart', this.handleCollisionStart);
         this.gameObject.off('collisionEnd', this.handleCollisionEnd);
+        this.gameObject.off('transform.faceDirectionChanged', this.handleFaceDirectionChanged);
     }
 
     public tick = (dt: number) => {
@@ -43,6 +47,17 @@ export default class GameObjectComponentAI extends GameObjectComponent {
                 node.handleCollisionEnd(another, event);
             });
         }
+    }
+
+    private handleFaceDirectionChanged = (direction: GameObjectFaceDirection) => {
+        if (this.aiEnabled) {
+            const animatorComponent = this.gameObject.getComponentByType<GameObjectComponentAnimator>(GameObjectComponentAnimator);
+            if (direction === GameObjectFaceDirection.Left) {
+                animatorComponent.playAnimation('run');
+            } else {
+                animatorComponent.playAnimation('run_right');
+            }
+        }   
     }
 
     public setAIEnabled(aiEnabled: boolean) {
