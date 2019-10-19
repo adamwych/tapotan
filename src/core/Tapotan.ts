@@ -295,7 +295,7 @@ export default class Tapotan extends EventEmitter {
         const scaleY = Tapotan.getGameHeight() / 974;
         const appRootElement = document.querySelector('.tapotan-ui-application') as HTMLElement;
         appRootElement.style.transformOrigin = '0 0';
-        appRootElement.style.transform = 'scale(' + scaleX + ', ' + scaleY + ')';
+        appRootElement.style.transform = 'scale(' + scaleX + ', ' + scaleY + ') translateZ(0)';
     }
 
     public loadAndStartLevel(publicID: number) {
