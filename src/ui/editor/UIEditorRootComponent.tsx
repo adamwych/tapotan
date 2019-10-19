@@ -94,7 +94,7 @@ export default function UIEditorRootComponent() {
 
             {lockKeyTipVisible && (
                 <div className="editor-lock-tip">
-                    Select doors you want this key to unlock.<br />
+                    Select doors that this key should unlock.<br />
                     Press RMB to cancel.
                 </div>
             )}
