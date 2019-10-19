@@ -18,6 +18,7 @@ export default function UITheatreLevels() {
     const [isFetchingMoreLevels, setIsFetchingMoreLevels] = useState(false);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [theaterFilter, setTheaterFilter] = useSharedValue(UIEditorSharedValues.TheaterFilter, 'MostPopular');
+    const [forceUpdate, setForceUpdate] = useState(false);
     const playButtonElement = useRef(null);
     const startTime = useRef(new Date().getTime());
 
@@ -100,6 +101,18 @@ export default function UITheatreLevels() {
         };
     }, [handleUIMoveLeftInputAction, handleUIMoveRightInputAction]);
 
+    const handleWindowResize = useCallback(() => {
+        setForceUpdate(!forceUpdate);
+    }, [forceUpdate]);
+
+    useEffect(() => {
+        window.addEventListener('resize', handleWindowResize);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
+    }, [forceUpdate]);
+
     useEffect(() => {
         const timeout = setTimeout(() => {
             setPast(true);
@@ -127,7 +140,7 @@ export default function UITheatreLevels() {
     }, [theaterFilter]);
 
     const idx = currentLevelIndex - 3;
-    const singleItemWidth = 230;
+    const singleItemWidth = Tapotan.getGameWidth() * 0.12;
     const spacing = 100;
 
     return (
