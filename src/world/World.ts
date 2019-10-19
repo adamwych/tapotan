@@ -15,6 +15,7 @@ import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from 
 import WorldMask from './WorldMask';
 import GameObjectComponentCollectableCollector from './components/GameObjectComponentCollectableCollector';
 import CollectableCategory from './CollectableCategory';
+import GameObjectComponentVictoryFlag from './components/GameObjectComponentVictoryFlag';
 
 export default class World extends PIXI.Container {
 
@@ -727,6 +728,10 @@ export default class World extends PIXI.Container {
 
     public removeWorldTickCallback(callback: Function) {
         this.worldTickCallbacks.splice(this.worldTickCallbacks.indexOf(callback, 1));
+    }
+
+    public getVictoryFlag(): GameObject | null {
+        return this.gameObjects.find(gameObject => gameObject.hasComponentOfType(GameObjectComponentVictoryFlag)) || null;
     }
 
 }

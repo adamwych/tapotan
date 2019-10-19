@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef } from 'react';
 import APIRequest from '../../../api/APIRequest';
 import LevelEditorUIAgent from '../../../editor/LevelEditorUIAgent';
 import WorldSerializer from '../../../world/WorldSerializer';
 import getBundledResourceAsDataURL from '../../lib/getBundledResourceAsDataURL';
 import useSharedValue from '../../lib/useSharedValue';
 import UIEditorSharedValues from '../UIEditorSharedValues';
+import Tapotan from '../../../core/Tapotan';
 
 export default function UIEditorPublishPopup() {
     const [isBusy, setBusy] = useState(false);
@@ -15,6 +16,7 @@ export default function UIEditorPublishPopup() {
     const [levelAuthorInputValue, setLevelAuthorInputValue] = useState('An Awesome Human');
     const [levelTagsInputValue, setLevelTagsInputValue] = useState('');
     const [publishPopupVisible, setPublishPopupVisible] = useSharedValue(UIEditorSharedValues.PublishPopupVisible, false);
+    const isVictoryFlagPlaced = useRef(LevelEditorUIAgent.getEditorContext().getWorld().getVictoryFlag() !== null);
 
     const handleCloseButtonClick = useCallback(() => {
         setPublishPopupVisible(false);
@@ -79,34 +81,46 @@ export default function UIEditorPublishPopup() {
                             </div>
                         </React.Fragment>
                     ) : (
-                        <React.Fragment>
-                            <div className="editor-publish-popup-fields">
-                                <div className="editor-publish-popup-field">
-                                    <div className="editor-publish-popup-field-label">Level Title</div>
-                                    <div className="editor-publish-popup-field-input">
-                                        <input type="text" value={levelTitleInputValue} onChange={e => setLevelTitleInputValue(e.target.value)} />
+                        isVictoryFlagPlaced.current ? (
+                            <React.Fragment>
+                                <div className="editor-publish-popup-fields">
+                                    <div className="editor-publish-popup-field">
+                                        <div className="editor-publish-popup-field-label">Level Title</div>
+                                        <div className="editor-publish-popup-field-input">
+                                            <input type="text" value={levelTitleInputValue} onChange={e => setLevelTitleInputValue(e.target.value)} />
+                                        </div>
+                                    </div>
+
+                                    <div className="editor-publish-popup-field">
+                                        <div className="editor-publish-popup-field-label">Your Name</div>
+                                        <div className="editor-publish-popup-field-input">
+                                            <input type="text" value={levelAuthorInputValue} onChange={e => setLevelAuthorInputValue(e.target.value)} />
+                                        </div>
+                                    </div>
+
+                                    <div className="editor-publish-popup-field">
+                                        <div className="editor-publish-popup-field-label">Tags</div>
+                                        <div className="editor-publish-popup-field-input">
+                                            <input type="text" value={levelTagsInputValue} onChange={e => setLevelTagsInputValue(e.target.value)} />
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="editor-publish-popup-field">
-                                    <div className="editor-publish-popup-field-label">Your Name</div>
-                                    <div className="editor-publish-popup-field-input">
-                                        <input type="text" value={levelAuthorInputValue} onChange={e => setLevelAuthorInputValue(e.target.value)} />
+                                <div className="editor-publish-popup-submit-button" onClick={handleSubmitButtonClick}>
+                                    {isBusy ? '...' : 'Publish'}
+                                </div>
+                            </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                <div className="editor-publish-popup-message">
+                                    You have to set a finish point before publishing your level.
+
+                                    <div className="editor-publish-popup-victory-flag">
+                                        <img src={getBundledResourceAsDataURL('Tilesets/Pixelart/UI/Editor/DrawerCategory/end_point.png', false)} />
                                     </div>
                                 </div>
-
-                                <div className="editor-publish-popup-field">
-                                    <div className="editor-publish-popup-field-label">Tags</div>
-                                    <div className="editor-publish-popup-field-input">
-                                        <input type="text" value={levelTagsInputValue} onChange={e => setLevelTagsInputValue(e.target.value)} />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="editor-publish-popup-submit-button" onClick={handleSubmitButtonClick}>
-                                {isBusy ? '...' : 'Publish'}
-                            </div>
-                        </React.Fragment>
+                            </React.Fragment>
+                        )
                     )}
                     
                 </div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
 import UIEditorSharedValues from './UIEditorSharedValues';
 import useSharedValue from '../lib/useSharedValue';

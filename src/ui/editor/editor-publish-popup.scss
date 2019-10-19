@@ -73,7 +73,7 @@
         height: 350px;
         position: absolute;
         top: 160px;
-        left: 65px;
+        left: 55px;
 
         padding-top: 2rem;
         
@@ -154,18 +154,31 @@
                 transform: translateY(0);
             }
         }
+    }
 
-        .editor-publish-popup-message {
-            font-size: 30px;
+    .editor-publish-popup-message {
+        font-size: 30px;
+        color: #ffffff;
+        text-align: center;
+
+        a {
+            text-decoration: none;
             color: #ffffff;
-            text-align: center;
+            border-bottom: 2px solid white;
+            user-select: all;
+        }
+    }
 
-            a {
-                text-decoration: none;
-                color: #ffffff;
-                border-bottom: 2px solid white;
-                user-select: all;
-            }
+    .editor-publish-popup-victory-flag {
+        margin-top: 2rem;
+
+        img {
+            width: 128px;
+            height: 128px;
+
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
     }
 
