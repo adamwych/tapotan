@@ -140,7 +140,7 @@ export default function UITheatreLevels() {
     }, [theaterFilter]);
 
     const idx = currentLevelIndex - 3;
-    const singleItemWidth = Tapotan.getGameWidth() * 0.12;
+    const singleItemWidth = 1920 * 0.12;
     const spacing = 100;
 
     return (

@@ -36,53 +36,6 @@
 
         position: relative;
         left: -150px;
-
-        @media screen and (min-width: 2100px) {
-            width: 16px;
-            left: -167px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 18px;
-            left: -188px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 20px;
-            left: -200px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 22px;
-            left: -228px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 27px;
-            left: -308px;
-        }
-
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            width: 12px;
-            left: -135px;
-        }
-
-        @media screen and (max-width: 1550px) {
-            width: 10px;
-            left: -118px;
-        }
-
-        @media screen and (max-width: 1300px) {
-            width: 8px;
-            left: -98px;
-        }
-
-        @media screen and (max-width: 1100px) {
-            width: 7px;
-            left: -84px;
-        }
     }
 
     .screen-theatre-title-line-2 {
@@ -92,53 +45,6 @@
         
         position: relative;
         left: 150px;
-
-        @media screen and (min-width: 2100px) {
-            width: 16px;
-            left: 167px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 18px;
-            left: 188px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 20px;
-            left: 200px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 22px;
-            left: 228px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 27px;
-            left: 308px;
-        }
-
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            width: 12px;
-            left: 135px;
-        }
-
-        @media screen and (max-width: 1550px) {
-            width: 10px;
-            left: 118px;
-        }
-
-        @media screen and (max-width: 1300px) {
-            width: 8px;
-            left: 98px;
-        }
-
-        @media screen and (max-width: 1100px) {
-            width: 7px;
-            left: 84px;
-        }
     }
 
     .screen-theatre-title-text {
@@ -159,71 +65,6 @@
         font-size: 88px;
 
         transform: rotate(4deg);
-
-        @media screen and (min-width: 2100px) {
-            width: 511px;
-            height: 175px;
-            bottom: -134px;
-            font-size: 96px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 560px;
-            height: 192px;
-            bottom: -150px;
-            font-size: 107px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 592px;
-            height: 204px;
-            bottom: -160px;
-            font-size: 114px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 661px;
-            height: 226px;
-            bottom: -178px;
-            font-size: 129px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 864px;
-            height: 298px;
-            bottom: -235px;
-            font-size: 171px;
-        }
-
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            width: 432px;
-            height: 148px;
-            bottom: -110px;
-            font-size: 80px;
-        }
-
-        @media screen and (max-width: 1550px) {
-            width: 379px;
-            height: 130px;
-            bottom: -97px;
-            font-size: 70px;
-        }
-
-        @media screen and (max-width: 1300px) {
-            width: 318px;
-            height: 109px;
-            bottom: -81px;
-            font-size: 59px;
-        }
-
-        @media screen and (max-width: 1100px) {
-            width: 276px;
-            height: 94px;
-            bottom: -70px;
-            font-size: 51px;
-        }
     }
 
     .screen-theatre-title-back-button {
@@ -251,62 +92,6 @@
 
         &:active, &:focus {
             transform: scale(0.9);
-        }
-
-        @media screen and (min-width: 2100px) {
-            width: 68px;
-            height: 68px;
-            bottom: -158px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 77px;
-            height: 77px;
-            bottom: -175px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 79px;
-            height: 79px;
-            bottom: -189px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 87px;
-            height: 87px;
-            bottom: -206px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 118px;
-            height: 118px;
-            bottom: -271px;
-        }
-
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            width: 57px;
-            height: 57px;
-            bottom: -132px;
-        }
-
-        @media screen and (max-width: 1550px) {
-            width: 49px;
-            height: 49px;
-            bottom: -112px;
-        }
-
-        @media screen and (max-width: 1300px) {
-            width: 42px;
-            height: 42px;
-            bottom: -96px;
-        }
-
-        @media screen and (max-width: 1100px) {
-            width: 36px;
-            height: 36px;
-            bottom: -82px;
         }
     }
 }

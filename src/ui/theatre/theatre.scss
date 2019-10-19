@@ -6,13 +6,14 @@
 
 .screen-theatre {
     position: relative;
-    width: 100vw;
-    height: 100vh;
+
+    width: 1920px;
+    height: 974px;
 
     .screen-theatre-layer {
         position: absolute;
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
     }
 
     .screen-theatre-layer-background {

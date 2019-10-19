@@ -1,8 +1,8 @@
 .screen-main-menu {
     position: relative;
 
-    width: 100vw;
-    height: 100vh;
+    width: 1920px;
+    height: 974px;
 
     display: flex;
     justify-content: center;
@@ -96,107 +96,9 @@
             top: 284px;
             left: -85px;
 
-            // ===
-
-            @media screen and (min-width: 2100px) {
-                top: 316px;
-                left: -120px;
-            }
-
-            @media screen and (min-width: 2350px) {
-                top: 350px;
-                left: -160px;
-            }
-
-            @media screen and (min-width: 2550px) {
-                top: 370px;
-                left: -212px;
-            }
-
-            @media screen and (min-width: 2800px) {
-                top: 414px;
-                left: -276px;
-            }
-
-            @media screen and (min-width: 3400px) {
-                top: 558px;
-                left: -432px;
-            }
-
-            // ===
-
-            @media screen and (max-width: 1750px) {
-                top: 255px;
-                left: -63px;
-            }
-
-            @media screen and (max-width: 1550px) {
-                top: 218px;
-                left: -34px;
-            }
-
-            @media screen and (max-width: 1300px) {
-                top: 176px;
-                left: -14px;
-            }
-
-            @media screen and (max-width: 1100px) {
-                top: 144px;
-                left: 5px;
-            }
-
             > .main-menu-island-button {
                 width: 270px;
                 height: 90px;
-
-                @media screen and (min-width: 2100px) {
-                    width: 282px;
-                    height: 96px;
-                    font-size: 46px;
-                }
-    
-                @media screen and (min-width: 2350px) {
-                    width: 292px;
-                    height: 100px;
-                    font-size: 50px;
-
-                    .main-menu-island-button-description {
-                        font-size: 20px;
-                    }
-                }
-    
-                @media screen and (min-width: 2550px) {
-                    width: 328px;
-                    height: 112px;
-                    font-size: 56px;
-
-                    .main-menu-island-button-description {
-                        font-size: 26px;
-                        padding: 0.85rem;
-                    }
-                }
-    
-                @media screen and (min-width: 2800px) {
-                    width: 358px;
-                    height: 122px;
-                    font-size: 59px;
-
-                    .main-menu-island-button-description {
-                        font-size: 30px;
-                        padding: 1.25rem;
-                    }
-                }
-    
-                @media screen and (min-width: 3400px) {
-                    width: 408px;
-                    height: 142px;
-                    font-size: 66px;
-
-                    .main-menu-island-button-description {
-                        font-size: 38px;
-                        padding: 1.75rem;
-                    }
-                }
 
                 > .main-menu-island-button-description {
                     background: #5ab188;
@@ -209,107 +111,9 @@
             top: 120px;
             right: 230px;
 
-            // ===
-
-            @media screen and (min-width: 2100px) {
-                top: 135px;
-                right: 212px;
-            }
-
-            @media screen and (min-width: 2350px) {
-                top: 158px;
-                right: 191px;
-            }
-
-            @media screen and (min-width: 2550px) {
-                top: 162px;
-                right: 170px;
-            }
-
-            @media screen and (min-width: 2800px) {
-                top: 181px;
-                right: 148px;
-            }
-
-            @media screen and (min-width: 3400px) {
-                top: 262px;
-                right: 86px;
-            }
-
-            // ===
-
-            @media screen and (max-width: 1750px) {
-                top: 105px;
-                right: 235px;
-            }
-
-            @media screen and (max-width: 1550px) {
-                top: 85px;
-                right: 245px;
-            }
-
-            @media screen and (max-width: 1300px) {
-                top: 58px;
-                right: 258px;
-            }
-
-            @media screen and (max-width: 1100px) {
-                top: 42px;
-                right: 264px;
-            }
-
             > .main-menu-island-button {
                 width: 160px;
                 height: 70px;
-
-                @media screen and (min-width: 2100px) {
-                    width: 180px;
-                    height: 79px;
-                    font-size: 52px;
-                }
-    
-                @media screen and (min-width: 2350px) {
-                    width: 200px;
-                    height: 87px;
-                    font-size: 62px;
-
-                    .main-menu-island-button-description {
-                        font-size: 20px;
-                    }
-                }
-    
-                @media screen and (min-width: 2550px) {
-                    width: 220px;
-                    height: 96px;
-                    font-size: 62px;
-
-                    .main-menu-island-button-description {
-                        font-size: 26px;
-                        padding: 0.85rem;
-                    }
-                }
-    
-                @media screen and (min-width: 2800px) {
-                    width: 240px;
-                    height: 105px;
-                    font-size: 66px;
-
-                    .main-menu-island-button-description {
-                        font-size: 30px;
-                        padding: 1.25rem;
-                    }
-                }
-    
-                @media screen and (min-width: 3400px) {
-                    width: 272px;
-                    height: 120px;
-                    font-size: 80px;
-
-                    .main-menu-island-button-description {
-                        font-size: 38px;
-                        padding: 1.75rem;
-                    }
-                }
 
                 > .main-menu-island-button-description {
                     background: #ea1313;
@@ -322,111 +126,9 @@
             top: 356px;
             right: 22px;
 
-            // ===
-
-            @media screen and (min-width: 2100px) {
-                top: 390px;
-                right: -14px;
-            }
-
-            @media screen and (min-width: 2350px) {
-                top: 440px;
-                right: -52px;
-            }
-
-            @media screen and (min-width: 2550px) {
-                top: 470px;
-                right: -70px;
-            }
-
-            @media screen and (min-width: 2800px) {
-                top: 530px;
-                right: -110px;
-            }
-
-            @media screen and (min-width: 3400px) {
-                top: 705px;
-                right: -280px;
-            }
-
-            // ===
-
-            @media screen and (max-width: 1750px) {
-                top: 320px;
-                right: 36px;
-            }
-
-            @media screen and (max-width: 1550px) {
-                top: 276px;
-                right: 55px;
-            }
-
-            @media screen and (max-width: 1300px) {
-                top: 228px;
-                right: 65px;
-            }
-
-            @media screen and (max-width: 1100px) {
-                top: 190px;
-                right: 70px;
-            }
-
             > .main-menu-island-button {
                 width: 236px;
                 height: 70px;
-
-                @media screen and (min-width: 2100px) {
-                    width: 266px;
-                    height: 80px;
-                    font-size: 48px;
-
-                    .main-menu-island-button-description {
-                        font-size: 18px;
-                    }
-                }
-    
-                @media screen and (min-width: 2350px) {
-                    width: 276px;
-                    height: 84px;
-                    font-size: 50px;
-
-                    .main-menu-island-button-description {
-                        font-size: 20px;
-                    }
-                }
-    
-                @media screen and (min-width: 2550px) {
-                    width: 286px;
-                    height: 88px;
-                    font-size: 50px;
-
-                    .main-menu-island-button-description {
-                        font-size: 26px;
-                        padding: 0.85rem;
-                    }
-                }
-    
-                @media screen and (min-width: 2800px) {
-                    width: 304px;
-                    height: 91px;
-                    font-size: 53px;
-
-                    .main-menu-island-button-description {
-                        font-size: 30px;
-                        padding: 1.25rem;
-                    }
-                }
-    
-                @media screen and (min-width: 3400px) {
-                    width: 406px;
-                    height: 122px;
-                    font-size: 72px;
-
-                    .main-menu-island-button-description {
-                        font-size: 38px;
-                        padding: 1.75rem;
-                    }
-                }
 
                 > .main-menu-island-button-description {
                     background: #0066ff;
@@ -442,26 +144,6 @@
         img {
             width: 480px;
             image-rendering: pixelated;
-
-            @media screen and (min-width: 2100px) {
-                width: 520px;
-            }
-
-            @media screen and (min-width: 2350px) {
-                width: 540px;
-            }
-
-            @media screen and (min-width: 2550px) {
-                width: 546px;
-            }
-
-            @media screen and (min-width: 2800px) {
-                width: 588px;
-            }
-
-            @media screen and (min-width: 3400px) {
-                width: 900px;
-            }
         }
     }
 

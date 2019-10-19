@@ -132,10 +132,11 @@ export default class Tapotan extends EventEmitter {
             worldHeight: 1000
         });
 
-
         window.addEventListener('resize', () => {
             // document.getElementById('resizerefresh').style.display = 'flex';
             // document.getElementById('resizerefreshButton').onclick = this.handleResizeMessageReloadButtonClick;
+
+            this.scaleUIContainer();
 
             this.viewport.resize(Tapotan.getGameWidth(), Tapotan.getGameHeight(), 1000, 1000);
             this.viewport.fit(false, Tapotan.getViewportWidth(), Tapotan.getViewportHeight());
@@ -208,6 +209,7 @@ export default class Tapotan extends EventEmitter {
                 this.audioManager.loadSoundEffectsFromBundle(bundle);
 
                 TapotanUIApplicationBootstrap.start();
+                this.scaleUIContainer();
 
                 const fonts = [
                     [ 18, 1 ],
@@ -273,9 +275,6 @@ export default class Tapotan extends EventEmitter {
                         document.getElementById('loading').style.pointerEvents = 'none';
         
                         this.screenManager.startMainMenu();
-                        // this.screenManager.startTheatre();
-                        // this.screenManager.startEditor();
-                        // this.loadAndStartLevel(634974881521);
                     }, 200);
 
                 }
@@ -289,6 +288,14 @@ export default class Tapotan extends EventEmitter {
                 console.error('Asset bundle load failed: ' + error);
             }
         });
+    }
+
+    private scaleUIContainer() {
+        const scaleX = Tapotan.getGameWidth() / 1920;
+        const scaleY = Tapotan.getGameHeight() / 974;
+        const appRootElement = document.querySelector('.tapotan-ui-application') as HTMLElement;
+        appRootElement.style.transformOrigin = '0 0';
+        appRootElement.style.transform = 'scale(' + scaleX + ', ' + scaleY + ')';
     }
 
     public loadAndStartLevel(publicID: number) {

@@ -30,53 +30,6 @@
                 transform: translateY(0);
             }
         }
-
-        @media screen and (min-width: 2100px) {
-            width: 1094px;
-            margin-top: 20px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 1227px;
-            margin-top: 31px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 1306px;
-            margin-top: 41px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 1471px;
-            margin-top: 52px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 1959px;
-            margin-top: 101px;
-        }
-
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            width: 896px;
-            margin-top: -20px;
-        }
-
-        @media screen and (max-width: 1550px) {
-            width: 789px;
-            margin-top: -31px;
-        }
-
-        @media screen and (max-width: 1300px) {
-            width: 661px;
-            margin-top: -41px;
-        }
-
-        @media screen and (max-width: 1100px) {
-            width: 569px;
-            margin-top: -52px;
-        }
     }
 
     .screen-theatre-filters-line-1 {
@@ -86,26 +39,6 @@
 
         position: absolute;
         left: 0;
-
-        @media screen and (min-width: 2100px) {
-            width: 11px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 11px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 13px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 14px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 17px;
-        }
     }
 
     .screen-theatre-filters-line-2 {
@@ -115,26 +48,6 @@
         
         position: absolute;
         right: 0;
-
-        @media screen and (min-width: 2100px) {
-            width: 11px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 11px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 13px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 14px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 17px;
-        }
     }
 
     .screen-theatre-filters-line-3 {
@@ -148,71 +61,6 @@
         left: 250px;
 
         transform: rotate(8deg);
-
-        @media screen and (min-width: 2100px) {
-            width: 129px;
-            height: 11px;
-            bottom: -8px;
-            left: 292px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 150px;
-            height: 11px;
-            bottom: -5px;
-            left: 313px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 157px;
-            height: 13px;
-            bottom: -5px;
-            left: 335px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 176px;
-            height: 14px;
-            bottom: 9px;
-            left: 370px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 250px;
-            height: 17px;
-            bottom: 30px;
-            left: 492px;
-        }
-
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            width: 104px;
-            height: 9px;
-            bottom: -22px;
-            left: 241px;
-        }
-
-        @media screen and (max-width: 1550px) {
-            width: 104px;
-            height: 8px;
-            bottom: -27px;
-            left: 218px;
-        }
-
-        @media screen and (max-width: 1300px) {
-            width: 104px;
-            height: 6px;
-            bottom: -27px;
-            left: 141px;
-        }
-
-        @media screen and (max-width: 1100px) {
-            width: 104px;
-            height: 5px;
-            bottom: -35px;
-            left: 141px;
-        }
     }
 
     .screen-theatre-filters-line-4 {
@@ -226,80 +74,6 @@
         right: 240px;
 
         transform: rotate(-14deg);
-
-        @media screen and (min-width: 2100px) {
-            width: 129px;
-            height: 11px;
-            bottom: -28px;
-            right: 292px;
-            transform: rotate(-8deg);
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 150px;
-            height: 11px;
-            bottom: -28px;
-            right: 313px;
-            transform: rotate(-8deg);
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 161px;
-            height: 13px;
-            bottom: -24px;
-            right: 328px;
-            transform: rotate(-4deg);
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 196px;
-            height: 14px;
-            bottom: -19px;
-            right: 358px;
-            transform: rotate(-4deg);
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 250px;
-            height: 17px;
-            bottom: 0px;
-            right: 492px;
-            transform: rotate(-8deg);
-        }
-        
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            width: 131px;
-            height: 9px;
-            bottom: -41px;
-            right: 240px;
-            transform: rotate(-11deg);
-        }
-
-        @media screen and (max-width: 1550px) {
-            width: 131px;
-            height: 8px;
-            bottom: -34px;
-            right: 165px;
-            transform: rotate(-12deg);
-        }
-
-        @media screen and (max-width: 1300px) {
-            width: 131px;
-            height: 6px;
-            bottom: -42px;
-            right: 140px;
-            transform: rotate(-9deg);
-        }
-
-        @media screen and (max-width: 1100px) {
-            width: 131px;
-            height: 5px;
-            bottom: -47px;
-            right: 127px;
-            transform: rotate(-9deg);
-        }
     }
 
     .screen-theatre-filters-button {
@@ -363,62 +137,6 @@
         &.attr--active {
             transform: scale(1.05);
         }
-
-        @media screen and (min-width: 2100px) {
-            width: 320px;
-            height: 115px;
-            font-size: 60px;
-        }
-
-        @media screen and (min-width: 2350px) {
-            width: 340px;
-            height: 119px;
-            font-size: 64px;
-        }
-
-        @media screen and (min-width: 2550px) {
-            width: 359px;
-            height: 126px;
-            font-size: 67px;
-        }
-
-        @media screen and (min-width: 2800px) {
-            width: 394px;
-            height: 138px;
-            font-size: 73px;
-        }
-
-        @media screen and (min-width: 3400px) {
-            width: 530px;
-            height: 183px;
-            font-size: 101px;
-        }
-
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            width: 286px;
-            height: 99px;
-            font-size: 54px;
-        }
-
-        @media screen and (max-width: 1550px) {
-            width: 248px;
-            height: 89px;
-            font-size: 46px;
-        }
-
-        @media screen and (max-width: 1300px) {
-            width: 217px;
-            height: 76px;
-            font-size: 40px;
-        }
-
-        @media screen and (max-width: 1100px) {
-            width: 191px;
-            height: 67px;
-            font-size: 35px;
-        }
     }
 
     .screen-theatre-filters-button--MostPopular {
@@ -439,44 +157,6 @@
         bottom: -68px;
 
         transform: rotate(4deg);
-
-        @media screen and (min-width: 2100px) {
-            left: calc((100% - 320px) / 2);
-        }
-
-        @media screen and (min-width: 2350px) {
-            left: calc((100% - 340px) / 2);
-        }
-
-        @media screen and (min-width: 2550px) {
-            left: calc((100% - 359px) / 2);
-        }
-
-        @media screen and (min-width: 2800px) {
-            left: calc((100% - 394px) / 2);
-        }
-
-        @media screen and (min-width: 3400px) {
-            left: calc((100% - 530px) / 2);
-        }
-
-        // ===
-
-        @media screen and (max-width: 1750px) {
-            left: calc((100% - 286px) / 2);
-        }
-
-        @media screen and (max-width: 1550px) {
-            left: calc((100% - 248px) / 2);
-        }
-
-        @media screen and (max-width: 1300px) {
-            left: calc((100% - 217px) / 2);
-        }
-
-        @media screen and (max-width: 1100px) {
-            left: calc((100% - 191px) / 2);
-        }
     }
 
     .screen-theatre-filters-button--Search {
@@ -518,44 +198,6 @@
 
             &::placeholder {
                 color: #663333;
-            }
-
-            @media screen and (min-width: 2100px) {
-                font-size: 60px;
-            }
-    
-            @media screen and (min-width: 2350px) {
-                font-size: 64px;
-            }
-    
-            @media screen and (min-width: 2550px) {
-                font-size: 67px;
-            }
-    
-            @media screen and (min-width: 2800px) {
-                font-size: 73px;
-            }
-    
-            @media screen and (min-width: 3400px) {
-                font-size: 101px;
-            }
-
-            // ===
-    
-            @media screen and (max-width: 1750px) {
-                font-size: 54px;
-            }
-    
-            @media screen and (max-width: 1550px) {
-                font-size: 46px;
-            }
-    
-            @media screen and (max-width: 1300px) {
-                font-size: 40px;
-            }
-    
-            @media screen and (max-width: 1100px) {
-                font-size: 35px;
             }
         }
     }
