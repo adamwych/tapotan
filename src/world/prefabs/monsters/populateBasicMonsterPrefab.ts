@@ -1,17 +1,18 @@
 import Spritesheet from "../../../graphics/Spritesheet";
+import SpritesheetAnimatorTimer from "../../../graphics/SpritesheetAnimatorTimer";
+import MonsterAINodeMoveSideToSide from "../../ai/MonsterAINodeMoveSideToSide";
 import GameObjectComponentAI from "../../components/ai/GameObjectComponentAI";
 import GameObjectComponentAnimator from "../../components/GameObjectComponentAnimator";
+import GameObjectComponentKillOnTouch from "../../components/GameObjectComponentKillOnTouch";
 import GameObjectComponentLivingEntity from "../../components/GameObjectComponentLivingEntity";
+import GameObjectComponentPhysicsAwareTransform from "../../components/GameObjectComponentPhysicsAwareTransform";
+import GameObjectComponentPhysicsBody from "../../components/GameObjectComponentPhysicsBody";
 import GameObject from "../../GameObject";
+import GameObjectFaceDirection from "../../GameObjectFaceDirection";
 import PhysicsBodyCollisionGroup, { PhysicsBodyCollisionMasks } from "../../physics/PhysicsBodyCollisionGroup";
 import PhysicsMaterials from "../../physics/PhysicsMaterials";
 import World from "../../World";
-import createPrefabDefaultTransform from "../createPrefabDefaultTransform";
 import { PrefabBasicProps } from "../Prefabs";
-import SpritesheetAnimatorTimer from "../../../graphics/SpritesheetAnimatorTimer";
-import GameObjectComponentKillOnTouch from "../../components/GameObjectComponentKillOnTouch";
-import MonsterAINodeMoveSideToSide from "../../ai/MonsterAINodeMoveSideToSide";
-import GameObjectFaceDirection from "../../GameObjectFaceDirection";
 
 export default function populateBasicMonsterPrefab(
     gameObject: GameObject,
@@ -40,15 +41,19 @@ export default function populateBasicMonsterPrefab(
 
     gameObject.createComponent<GameObjectComponentKillOnTouch>(GameObjectComponentKillOnTouch).initialize();
 
-    createPrefabDefaultTransform(gameObject, props, {
+    const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
+    body.initializeCircle(0.5, {
         mass: 5,
         fixedRotation: true,
         allowSleep: true
-    }, {},
-        PhysicsBodyCollisionGroup.Entity,
-        PhysicsBodyCollisionMasks.Monster,
-        PhysicsMaterials.Player
-    );
+    });
+
+    body.setMaterial(PhysicsMaterials.Player);
+    body.setCollisionGroup(PhysicsBodyCollisionGroup.Entity);
+    body.setCollisionMask(PhysicsBodyCollisionMasks.Monster);
+
+    const transformComponent = gameObject.createComponent<GameObjectComponentPhysicsAwareTransform>(GameObjectComponentPhysicsAwareTransform);
+    transformComponent.setPivot(0.5, 0.5);
 
     const aiComponent = gameObject.createComponent<GameObjectComponentAI>(GameObjectComponentAI);
     aiComponent.initialize();

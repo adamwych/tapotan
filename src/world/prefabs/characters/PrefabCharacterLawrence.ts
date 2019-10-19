@@ -1,5 +1,6 @@
 import Spritesheet from "../../../graphics/Spritesheet";
 import GameObjectComponentAnimator from "../../components/GameObjectComponentAnimator";
+import GameObjectComponentCollectableCollector from "../../components/GameObjectComponentCollectableCollector";
 import GameObjectComponentLivingEntity from "../../components/GameObjectComponentLivingEntity";
 import GameObjectComponentPhysicsAwareTransform from "../../components/GameObjectComponentPhysicsAwareTransform";
 import GameObjectComponentPhysicsBody from "../../components/GameObjectComponentPhysicsBody";
@@ -9,11 +10,10 @@ import PhysicsBodyCollisionGroup, { PhysicsBodyCollisionMasks } from "../../phys
 import PhysicsMaterials from "../../physics/PhysicsMaterials";
 import World from "../../World";
 import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
-import GameObjectComponentCollectableCollector from "../../components/GameObjectComponentCollectableCollector";
 
 export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameObject, world: World, props: any) => {
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-    body.initializeBox(0.5, 1, {
+    body.initializeCircle(0.5, {
         mass: 5,
         fixedRotation: true
     });
