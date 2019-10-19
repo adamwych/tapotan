@@ -5,9 +5,9 @@ import Tapotan from "../core/Tapotan";
 import World from "./World";
 
 enum WorldMaskSize {
-    Small = 64,
-    Medium = 48,
-    Big = 32
+    Small = 32,
+    Medium = 25,
+    Big = 20
 };
 
 export default class WorldMask {
@@ -26,9 +26,9 @@ export default class WorldMask {
         this.viewport = game.getViewport();
         this.size = size;
 
-        // Remove current mask.
-        if (this.viewport.mask && this.viewport.mask.transform) {
-            this.viewport.mask.destroy({ children: true });
+        if (this.viewport.mask) {
+            this.viewport.mask.removeChild(this.viewport.mask);
+            this.viewport.mask = null;
         }
 
         this.mask = new PIXI.Sprite(world.getTileset().getResourceById('world_mask'));
@@ -38,8 +38,8 @@ export default class WorldMask {
     }
 
     public destroy() {
-        if (this.viewport.mask && this.viewport.mask.transform) {
-            this.viewport.mask.destroy({ children: true });
+        if (this.viewport.mask) {
+            this.viewport.mask.removeChild(this.viewport.mask);
             this.viewport.mask = null;
         }
     }
