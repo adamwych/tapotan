@@ -32,20 +32,7 @@ export default function UIEditorLevelSettingsPopupTabBackground() {
         }
 
         setWorldSkyAnimation(tile.id);
-        
-        let objectsToRemove = [];
-
-        world.getGameObjects().forEach(gameObject => {
-            if (gameObject.hasCustomProperty('background')) {
-                objectsToRemove.push(gameObject);
-            }
-        });
-
-        objectsToRemove.forEach(gameObject => {
-            gameObject.destroy();
-            world.removeGameObject(gameObject); 
-        });
-        
+        world.removeAnimatedBackgroundObjects();
         world.setAnimatedBackgroundId(tile.id);
         tile.spawner(world);
     }, [world, worldSkyAnimation]);

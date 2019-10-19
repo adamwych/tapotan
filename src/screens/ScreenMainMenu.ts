@@ -45,6 +45,7 @@ export default class ScreenMainMenu extends Screen {
     private createFakeWorld() {
         const tileset = this.game.getAssetManager().getTilesetByName('Pixelart');
         this.world = new World(this.game, 1000, 1000, tileset);
+        this.world.spawnDefaultCloudsBackground();
         this.world.handleGameStart();
         this.generateFakeWorldObjects(this.world);
 

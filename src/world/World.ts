@@ -147,9 +147,6 @@ export default class World extends PIXI.Container {
         this.sortableChildren = true;
 
         this.startTime = new Date().getTime();
-
-        this.setAnimatedBackgroundId('clouds');
-        new WorldBackgrounds.Clouds.spawner(this);
     }
 
     public destroy() {
@@ -254,6 +251,11 @@ export default class World extends PIXI.Container {
         if (this.worldMask) {
             this.worldMask.tick(dt);
         }
+    }
+
+    public spawnDefaultCloudsBackground() {
+        this.setAnimatedBackgroundId('clouds');
+        new WorldBackgrounds.Clouds.spawner(this);
     }
 
     /**
@@ -635,6 +637,21 @@ export default class World extends PIXI.Container {
 
     public getAnimatedBackgroundId() {
         return this.animatedBackgroundId;
+    }
+
+    public removeAnimatedBackgroundObjects() {
+        let objectsToRemove = [];
+
+        this.gameObjects.forEach(gameObject => {
+            if (gameObject.hasCustomProperty('background')) {
+                objectsToRemove.push(gameObject);
+            }
+        });
+
+        objectsToRemove.forEach(gameObject => {
+            gameObject.destroy();
+            this.removeGameObject(gameObject); 
+        });
     }
 
     public setAnimatedBackgroundShouldFollowPlayer(animatedBackgroundShouldFollowPlayer: boolean) {

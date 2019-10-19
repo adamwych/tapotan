@@ -69,6 +69,10 @@ export default class ScreenManager extends EventEmitter {
         const gameManager = new GameManager(this.game);
         const editorWorld = world || new World(this.game, 1000, 1000, this.game.getAssetManager().getTilesetByName('Pixelart'));
 
+        if (!world) {
+            editorWorld.spawnDefaultCloudsBackground();
+        }
+
         this.game.setGameManager(gameManager);
 
         gameManager.setGameState(GameState.InEditor);
