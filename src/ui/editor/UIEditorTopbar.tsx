@@ -6,6 +6,7 @@ import useSharedValue from '../lib/useSharedValue';
 import UIEditorSharedValues from './UIEditorSharedValues';
 import UIEditorTopbarItemPublishButton from './UIEditorTopbarItemPublishButton';
 import UIEditorTopbarItemExitEditorButton from './UIEditorTopbarItemExitEditorButton';
+import UIEditorTopbarMusicToggleButton from './UIEditorTopbarMusicToggleButton';
 
 interface UIEditorTopbarProps {
     commonActionsVisible: boolean;
@@ -43,6 +44,7 @@ export default function UIEditorTopbar(props: UIEditorTopbarProps) {
 
                 <div>
                     <UIEditorTopbarItem icon="EditorSettings" actionName="EditorSettings" active={editorSettingsPopupVisible} onClick={handleEditorSettingsActionClick} />
+                    <UIEditorTopbarMusicToggleButton />
                     <UIEditorTopbarItemExitEditorButton />
                 </div>
             </div>
