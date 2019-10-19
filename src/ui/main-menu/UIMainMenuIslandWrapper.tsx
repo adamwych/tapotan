@@ -6,6 +6,7 @@ import TickHelper from '../../core/TickHelper';
 import ScreenMainMenu from '../../screens/ScreenMainMenu';
 import UICircularMaskTransition from '../UICircularMaskTransition';
 import UIMainMenuIslandButton from './UIMainMenuIslandButton';
+import UIMainMenuMusicToggle from './UIMainMenuMusicToggle';
 
 export default function UIMainMenuIslandWrapper() {
     const elementRef = useRef(null);

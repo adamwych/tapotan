@@ -76,7 +76,7 @@ export default class TapotanUIApplication extends React.Component<any, TapotanUI
                     <Component key={index} />
                 ))}
 
-                <div style={{ width: 1920, height: 683 }}>
+                <div style={{ width: 1920, height: 974, position: 'absolute', top: 0, zIndex: 4, pointerEvents: 'none' }}>
                     {this.state.showVictoryOverlay && (
                         <UIVictoryOverlay
                             inEditor={Tapotan.getInstance().isInEditor()}

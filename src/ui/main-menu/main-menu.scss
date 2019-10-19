@@ -138,6 +138,7 @@
     }
 
     .main-menu-logo {
+        position: relative;
         margin-top: 4rem;
         margin-right: 3.5rem;
 
@@ -195,5 +196,83 @@
         color: #ffffff;
         text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
         font-size: 1.75rem;
+    }
+}
+
+.main-menu-music-toggle-container {
+    position: absolute;
+    left: 0;
+    bottom: 100px;
+    z-index: 1;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding-right: 3.5rem;
+}
+
+.main-menu-music-toggle {
+    position: relative;
+    pointer-events: all;
+    width: 250px;
+
+    &:hover {
+        .main-menu-music-toggle-icon {
+            transform: scale(1.1);
+            left: 0;
+        }
+
+        .main-menu-music-toggle-text {
+            width: 100%;
+            opacity: 1;
+        }
+    }
+
+    &:active, &:focus {
+        .main-menu-music-toggle-icon {
+            transform: scale(0.95);
+        }
+
+        .main-menu-music-toggle-text {
+            background: #e0e0e0;
+        }
+    }
+
+    .main-menu-music-toggle-icon {
+        position: absolute;
+        left: calc((100% - 96px) / 2);
+        z-index: 1;
+
+        transition: all 150ms;
+
+        img {
+            width: 96px;
+        }
+    }
+
+    .main-menu-music-toggle-text {
+        opacity: 0;
+        white-space: nowrap;
+        overflow-x: hidden;
+
+        position: relative;
+        top: 10px;
+        left: 32px;
+
+        width: 0%;
+
+        background: #efefef;
+        border: 6px solid #ffffff;
+        color: #333333;
+        padding: 0.75rem 0;
+        padding-left: 3rem;
+        text-align: center;
+        font-size: 34px;
+        border-radius: 50px;
+
+        transition: all 150ms;
     }
 }

@@ -4,6 +4,7 @@ import UIMainMenuIslandWrapper from './UIMainMenuIslandWrapper';
 import Tapotan from '../../core/Tapotan';
 import InputManager from '../../core/input/InputManager';
 import UIMainMenuPlayersCounter from './UIMainMenuPlayersCounter';
+import UIMainMenuMusicToggle from './UIMainMenuMusicToggle';
 
 require('./main-menu.scss');
 
@@ -27,10 +28,14 @@ export default function UIMainMenuRootComponent() {
 
     return (
         <div className="screen-main-menu">
-            <div className="main-menu-logo">
-                <img src={`data:image/png;base64,${logoImage}`} />
+            <div>
+                <div className="main-menu-logo">
+                    <img src={`data:image/png;base64,${logoImage}`} />
 
-                <UIMainMenuPlayersCounter />
+                    <UIMainMenuPlayersCounter />
+                </div>
+
+                <UIMainMenuMusicToggle />
             </div>
 
             <UIMainMenuIslandWrapper />

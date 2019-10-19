@@ -1,5 +1,5 @@
 .ingame-pause-menu {
-    position: fixed;
+    position: absolute;
     background: rgba(0, 0, 0, 0.5);
 
     width: 100%;
@@ -112,4 +112,7 @@
         }
     }
 
+    .main-menu-music-toggle-container {
+        padding-right: 0;
+    }
 }

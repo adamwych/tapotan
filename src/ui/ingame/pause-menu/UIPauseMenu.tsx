@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import Tapotan from '../../../core/Tapotan';
+import UIMainMenuMusicToggle from '../../main-menu/UIMainMenuMusicToggle';
 
 require('./pause-menu.scss');
 
@@ -94,6 +95,8 @@ export default function UIPauseMenu(props: UIPauseMenuProps) {
                     <div className={`ingame-pause-menu-modal-button ${gamepadFocusedButtonIndex === 3 ? 'attr--gamepad-focus' : ''}`} onClick={props.onGoToMainMenuButtonClick}><span>Go to main menu</span></div>
                 </div>
             </div>
+
+            <UIMainMenuMusicToggle />
         </div>
     )
 }
