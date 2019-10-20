@@ -28,6 +28,7 @@ import LevelEditorUIAgent from './LevelEditorUIAgent';
 import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
+import GameObjectComponentNoteBlock from '../world/components/GameObjectComponentNoteBlock';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -205,6 +206,14 @@ export default class ScreenLevelEditor extends Screen {
             if (selectedObjects.length > 0) {
                 const selectedObject = selectedObjects[selectedObjects.length - 1];
                 this.beginLinkWithDoorAction(selectedObject);
+            }
+        });
+
+        LevelEditorUIAgent.onObjectActionButtonClicked('ChangeNote', () => {
+            let selectedObjects = this.context.getSelectedObjects();
+            if (selectedObjects.length > 0) {
+                const selectedObject = selectedObjects[selectedObjects.length - 1];
+                selectedObject.getComponentByType<GameObjectComponentNoteBlock>(GameObjectComponentNoteBlock).increaseNote();
             }
         });
 
@@ -492,6 +501,11 @@ export default class ScreenLevelEditor extends Screen {
                     this.lastHitObject.emit('mousedown', e);
 
                     if (this.context.getSelectedObjects().length > 0 && !this.canInteractWithGameObject(this.lastHitObject)) {
+                        this.clearSelectedObjects();
+                        this.handleRightMouseButtonClick();
+                    }
+                } else {
+                    if (this.context.getSelectedObjects().length > 0) {
                         this.clearSelectedObjects();
                         this.handleRightMouseButtonClick();
                     }

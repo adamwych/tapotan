@@ -3,7 +3,7 @@ import getBundledResourceAsDataURL from '../lib/getBundledResourceAsDataURL';
 
 interface UIEditorObjectActionButtonProps {
     label: string;
-    type: 'Rotate' | 'Flip' | 'Key' | 'Remove';
+    type: 'Rotate' | 'Flip' | 'Key' | 'NoteChange' | 'Remove';
     onClick: React.MouseEventHandler;
 }
 

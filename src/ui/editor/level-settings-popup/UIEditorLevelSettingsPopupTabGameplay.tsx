@@ -19,6 +19,10 @@ export default function UIEditorLevelSettingsPopupTabGameplay() {
     ];
 
     const musicDropdownItems = tileset.getBackgroundMusic();
+    musicDropdownItems.splice(0, 0, {
+        id: 'none',
+        label: 'None'
+    });
 
     const maskDropdownItems = [
         { id: 'none', label: 'None' }

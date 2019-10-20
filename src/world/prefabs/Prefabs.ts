@@ -21,6 +21,7 @@ import PrefabBasicBlock from "./PrefabBasicBlock";
 import PrefabSpawnPointShade from "./PrefabSpawnPointShade";
 import PrefabVictoryFlag from "./PrefabVictoryFlag";
 import PrefabSkyStar from "./sky/PrefabSkyStar";
+import PrefabEnvironmentNoteBlock from "./environment/PrefabEnvironmentNoteBlock";
 
 export interface PrefabBasicProps {
 
@@ -44,6 +45,7 @@ export default {
 
     'sky_stars_variation0': PrefabSkyStar,
 
+    'environment_noteblock': PrefabEnvironmentNoteBlock,
     'environment_lava': PrefabEnvironmentLava,
     'environment_water': PrefabEnvironmentWater,
     'environment_waterblock': PrefabEnvironmentWaterBlock,

@@ -12,7 +12,33 @@ const SFX_NAMES = [
     'step',
     'victory',
     'coin',
-    'lock_door_open'
+    'lock_door_open',
+
+    'noteblock_note_c1',
+    'noteblock_note_cs1',
+    'noteblock_note_d1',
+    'noteblock_note_ds1',
+    'noteblock_note_e1',
+    'noteblock_note_f1',
+    'noteblock_note_fs1',
+    'noteblock_note_g1',
+    'noteblock_note_gs1',
+    'noteblock_note_a1',
+    'noteblock_note_as1',
+    'noteblock_note_b1',
+    'noteblock_note_c2',
+    'noteblock_note_cs2',
+    'noteblock_note_d2',
+    'noteblock_note_ds2',
+    'noteblock_note_e2',
+    'noteblock_note_f2',
+    'noteblock_note_fs2',
+    'noteblock_note_g2',
+    'noteblock_note_gs2',
+    'noteblock_note_a2',
+    'noteblock_note_as2',
+    'noteblock_note_b2',
+    'noteblock_note_c3'
 ];
 
 export default class AudioManager {
@@ -78,6 +104,9 @@ export default class AudioManager {
 
             this.playingBackgroundMusic = howl;
             this.playingBackgroundMusicName = name;
+        } else {
+            this.playingBackgroundMusic = null;
+            this.playingBackgroundMusicName = null;
         }
     }
 
