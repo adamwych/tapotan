@@ -51,7 +51,7 @@ export default class GameObjectComponentNoteBlock extends GameObjectComponent {
 
     public getCustomSerializationProperties() {
         return {
-            note: 'c1'
+            note: this.note
         }
     }
 
