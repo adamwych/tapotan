@@ -22,14 +22,14 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
     const [scoreboard, setScoreboard] = useState(null);
 
     const handleMainMenuButtonClick = useCallback(event => {
-        playUICircularMaskTransition(event.target, () => {
+        playUICircularMaskTransition(() => {
             props.onCloseRequest();
             Tapotan.getInstance().getScreenManager().startMainMenu();
         });
     }, []);
 
     const handlePlayAgainButtonClick = useCallback(event => {
-        playUICircularMaskTransition(event.target, () => {
+        playUICircularMaskTransition(() => {
             props.onCloseRequest();
 
             const currentWorld = Tapotan.getInstance().getGameManager().getWorld();
@@ -51,7 +51,7 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
             Tapotan.getInstance().getGameManager().setGameState(GameState.InEditor);
             props.onCloseRequest();
         } else {
-            playUICircularMaskTransition(event.target, () => {
+            playUICircularMaskTransition(() => {
                 props.onCloseRequest();
 
                 APIRequest.get('/next_level', {
@@ -78,8 +78,7 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
 
     }, []);
 
-    const playUICircularMaskTransition = (element: HTMLElement, callback: Function) => {
-        const rect = element.getBoundingClientRect();
+    const playUICircularMaskTransition = (callback: Function) => {
         UICircularMaskTransition.instance.start(50, 50, () => {
             callback();
         });
@@ -100,7 +99,7 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
         } else {
             setTimeout(() => {
                 setScoreboard([
-                    {
+                    /*{
                         place: 1,
                         name: 'Unknown Player',
                         score: 999
@@ -108,21 +107,21 @@ export default function UIVictoryOverlay(props: UIVictoryOverlayProps) {
     
                     {
                         divider: true
-                    },
+                    },*/
     
                     {
-                        place: 153,
+                        place: 1,
                         name: 'You',
                         score: Tapotan.getInstance().getGameManager().getWorld().calculatePlayerScore(),
                         divider: false,
                         player: true
                     },
     
-                    {
+                    /*{
                         place: 154,
                         name: 'human',
                         score: 23
-                    },
+                    },*/
                 ]);
                 setIsLoadingScoreboard(false);
             }, 2500);
