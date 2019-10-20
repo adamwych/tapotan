@@ -24,10 +24,13 @@ export default class World extends PIXI.Container {
         'blue': ['1bf3ff', 0x1bf3ff],
         'dark-blue': ['16a4f6', 0x16a4f6],
         'navy-blue': ['0a2152', 0x0a2152],
-        'red': ['ff6666', 0xff6666],
+        'red': ['f29c9c', 0xf29c9c],
         'dark-red': ['631a1a', 0x631a1a],
         'pink': ['ff66d6', 0xff66d6],
-        'black': ['000000', 0x000000]
+        'beige': ['d4aca2', 0xd4aca2],
+        'light-green': ['b3e59b', 0xb3e59b],
+        'black': ['000000', 0x000000],
+        'white': ['ffffff', 0xffffff]
     };
 
     public static MaskSizes = {
