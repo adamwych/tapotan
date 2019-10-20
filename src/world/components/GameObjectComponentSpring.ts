@@ -33,8 +33,8 @@ export default class GameObjectComponentSpring extends GameObjectComponent {
                 let body = physicsBodyComponent.getBody();
 
                 let equation = event.contactEquations[0];
-                let normalX = equation.normalA[0];
-                let normalY = equation.normalA[1];
+                let normalX = Math.round(equation.normalA[0]);
+                let normalY = Math.round(equation.normalA[1]);
 
                 let strength = 60;
 
@@ -83,6 +83,7 @@ export default class GameObjectComponentSpring extends GameObjectComponent {
                 this.animator.playAnimation('idle');
             });
 
+            forceX *= 350;
             forceY *= 350;
 
             body.applyForce(p2.vec2.fromValues(forceX, forceY));

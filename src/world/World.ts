@@ -4,8 +4,11 @@ import { GameEndReason, GameState } from '../core/GameManager';
 import Tapotan from '../core/Tapotan';
 import WorldBackgrounds from './backgrounds/WorldBackgrounds';
 import CameraShake from './CameraShake';
+import CollectableCategory from './CollectableCategory';
 import GameObjectComponentParallaxBackground from './components/backgrounds/GameObjectComponentParallaxBackground';
+import GameObjectComponentCollectableCollector from './components/GameObjectComponentCollectableCollector';
 import { GameObjectVerticalAlignment } from './components/GameObjectComponentTransform';
+import GameObjectComponentVictoryFlag from './components/GameObjectComponentVictoryFlag';
 import GameObject from './GameObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
 import PhysicsMaterials from './physics/PhysicsMaterials';
@@ -13,9 +16,6 @@ import Prefabs from './prefabs/Prefabs';
 import Tileset from './tileset/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
-import GameObjectComponentCollectableCollector from './components/GameObjectComponentCollectableCollector';
-import CollectableCategory from './CollectableCategory';
-import GameObjectComponentVictoryFlag from './components/GameObjectComponentVictoryFlag';
 
 export default class World extends PIXI.Container {
 

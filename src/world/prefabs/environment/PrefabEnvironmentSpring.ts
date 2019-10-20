@@ -28,7 +28,7 @@ export default createPrefabSpawnFunction('environment_spring', (gameObject: Game
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(0.35, 0.35, {
+        body.initializeBox(0.5, 0.35, {
             mass: 0,
             fixedRotation: true
         });
