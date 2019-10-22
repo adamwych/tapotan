@@ -133,8 +133,8 @@ export default class Tapotan extends EventEmitter {
         });
 
         window.addEventListener('resize', () => {
-            // document.getElementById('resizerefresh').style.display = 'flex';
-            // document.getElementById('resizerefreshButton').onclick = this.handleResizeMessageReloadButtonClick;
+            document.getElementById('resizerefresh').style.display = 'flex';
+            document.getElementById('resizerefreshButton').onclick = this.handleResizeMessageReloadButtonClick;
 
             this.scaleUIContainer();
 
@@ -274,7 +274,13 @@ export default class Tapotan extends EventEmitter {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
         
+                        /// #if ENV_PRODUCTION
                         this.screenManager.startMainMenu();
+                        /// #else
+                        // this.screenManager.startMainMenu();
+                        this.screenManager.startEditor();
+                        // this.loadAndStartLevel(634974881521);
+                        /// #endif
                     }, 200);
 
                 }
@@ -292,7 +298,7 @@ export default class Tapotan extends EventEmitter {
 
     private scaleUIContainer() {
         const scaleX = Tapotan.getGameWidth() / 1920;
-        const scaleY = Tapotan.getGameHeight() / 974;
+        const scaleY = Tapotan.getGameHeight() / 1080;
         const appRootElement = document.querySelector('.tapotan-ui-application') as HTMLElement;
         appRootElement.style.transformOrigin = '0 0';
         appRootElement.style.transform = 'scale(' + scaleX + ', ' + scaleY + ') translateZ(0)';
