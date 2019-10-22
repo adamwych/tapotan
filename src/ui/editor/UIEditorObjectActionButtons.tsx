@@ -23,7 +23,7 @@ export default function UIEditorObjectActionButtons(props: UIEditorObjectActionB
     let visibleButtonsNum = 3 + (showLinkDoorAction ? 1 : 0) + (noteComponent ? 1 : 0);
 
     const handleTick = useCallback(() => {
-        const scale = 974 / Tapotan.getGameHeight();
+        const scale = 1080 / Tapotan.getGameHeight();
 
         setWidth(props.gameObject.getScreenWidth());
         setPosition({
