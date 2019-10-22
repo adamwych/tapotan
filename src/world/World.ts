@@ -125,6 +125,8 @@ export default class World extends PIXI.Container {
 
     private disabledBodyCollisions = [];
 
+    private lastTickTime: number = 0;
+
     /**
      * Whether the world is being removed.
      * 
@@ -184,6 +186,9 @@ export default class World extends PIXI.Container {
         if (this._duringRemove) {
             return;
         }
+
+        let realDeltaTime = ((new Date().getTime()) - this.lastTickTime);
+        this.lastTickTime = new Date().getTime();
 
         if (this.shake) {
             this.shake.tick(dt);
@@ -262,7 +267,11 @@ export default class World extends PIXI.Container {
 
         if (!this.paused) {
             if (this.physicsEnabled) {
-                this.physicsWorld.step(1 / 60, dt, 10);
+                if (realDeltaTime > 1000) {
+                    this.physicsWorld.step(realDeltaTime / 1000, realDeltaTime / 1000, 40);
+                } else {
+                    this.physicsWorld.step(1 / 60, dt, 10);
+                }
             }
 
             this.gameObjects.forEach(gameObject => {
