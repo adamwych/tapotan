@@ -8,8 +8,8 @@ export default {
     Player: MaterialPlayer,
 
     setupContactMaterials: function (world: p2.World) {
-        const playerGroundContactMaterial = new p2.ContactMaterial(MaterialGround, MaterialPlayer, {
-            friction: 0.33
+        const playerGroundContactMaterial = new p2.ContactMaterial(MaterialPlayer, MaterialGround, {
+            friction: 1,
         });
 
         world.addContactMaterial(playerGroundContactMaterial);

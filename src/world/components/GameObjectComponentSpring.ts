@@ -36,7 +36,7 @@ export default class GameObjectComponentSpring extends GameObjectComponent {
                 let normalX = Math.round(equation.normalA[0]);
                 let normalY = Math.round(equation.normalA[1]);
 
-                let strength = 60;
+                let strength = 450;
 
                 switch (this.gameObject.transformComponent.getAngle()) {
                     case 0: {

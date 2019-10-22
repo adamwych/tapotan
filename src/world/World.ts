@@ -16,6 +16,10 @@ import Prefabs from './prefabs/Prefabs';
 import Tileset from './tileset/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
+import Interpolation from '../utils/Interpolation';
+import GameObjectComponentPhysicsBody from './components/GameObjectComponentPhysicsBody';
+import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
+import GameObjectComponentLivingEntity from './components/GameObjectComponentLivingEntity';
 
 export default class World extends PIXI.Container {
 
@@ -55,7 +59,7 @@ export default class World extends PIXI.Container {
     private tileset: Tileset;
     
     private physicsWorld: p2.World;
-    public static PHYSICS_SCALE = 16;
+    public static PHYSICS_SCALE = 1;
     private physicsBodies = {};
 
     private playerSpawnPoint: PIXI.Point = new PIXI.Point();
@@ -103,6 +107,9 @@ export default class World extends PIXI.Container {
 
     private playerMaxX: number = 0;
 
+    private targetCameraX = 0;
+    private targetCameraY = 0;
+
     /**
      * List of functions that will be called before
      * updating game objects.
@@ -115,6 +122,8 @@ export default class World extends PIXI.Container {
     private worldMask: WorldMask;
 
     private startDelayTimer: number = 0;
+
+    private disabledBodyCollisions = [];
 
     /**
      * Whether the world is being removed.
@@ -185,8 +194,8 @@ export default class World extends PIXI.Container {
                 switch (this.behaviourRules.getCameraBehaviour()) {
                     case WorldCameraBehaviour.FollowingPlayer: {
                         if (this.player) {
-                            viewport.top = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
-                            viewport.left = (this.player.transformComponent.getUnalignedPositionX() - Tapotan.getViewportWidth() / 2) + 2;
+                            this.targetCameraY = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
+                            this.targetCameraX = (this.player.transformComponent.getUnalignedPositionX() - Tapotan.getViewportWidth() / 2) + 2;
                         }
 
                         break;
@@ -195,17 +204,34 @@ export default class World extends PIXI.Container {
                     case WorldCameraBehaviour.EverMoving: {
                         let playerScreenY = this.player.transformComponent.getUnalignedPositionY();
                         if (playerScreenY <= (Tapotan.getViewportHeight() / 2) + 1) {
-                            viewport.top = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
+                            this.targetCameraY = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
                         }
 
-                        viewport.left += this.behaviourRules.getCameraSpeed() * dt;
+                        this.targetCameraX += this.behaviourRules.getCameraSpeed() * dt;
 
                         break;
                     }
                 }
 
-                if (viewport.left < 0) viewport.left = 0;
-                if (viewport.top > 0) viewport.top = 0;
+                if (this.targetCameraX < 0) this.targetCameraX = 0;
+                if (this.targetCameraY > 0) this.targetCameraY = 0;
+
+                if (this.behaviourRules.shouldSmoothenCameraMovement()) {
+                    if (Math.abs(this.targetCameraX - viewport.left) < 0.005) {
+                        viewport.left = this.targetCameraX;
+                    } else {
+                        viewport.left = Interpolation.smooth(viewport.left, this.targetCameraX, dt * 10);
+                    }
+
+                    if (Math.abs(this.targetCameraY - viewport.top) < 0.005) {
+                        viewport.top = this.targetCameraY;
+                    } else {
+                        viewport.top = Interpolation.smooth(viewport.top, this.targetCameraY, dt * 10);
+                    }
+                } else {
+                    viewport.top = this.targetCameraY;
+                    viewport.left = this.targetCameraX;
+                }
             }
         }
 
@@ -236,7 +262,7 @@ export default class World extends PIXI.Container {
 
         if (!this.paused) {
             if (this.physicsEnabled) {
-                this.physicsWorld.step(1 / 60, dt * 1000, 10);
+                this.physicsWorld.step(1 / 60, dt, 10);
             }
 
             this.gameObjects.forEach(gameObject => {
@@ -315,10 +341,10 @@ export default class World extends PIXI.Container {
 
     private initializePhysics() {
         this.physicsWorld = new p2.World({
-            gravity: [0, 9.82]
+            gravity: [0, 40]
         });
 
-        PhysicsMaterials.setupContactMaterials(this.physicsWorld);
+        // PhysicsMaterials.setupContactMaterials(this.physicsWorld);
 
         this.physicsWorld.on('beginContact', (event) => {
             let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.id) as GameObject;
@@ -356,6 +382,26 @@ export default class World extends PIXI.Container {
                     }
                 });
             }
+
+            // Disable collision between this object and objects from other layers.
+            if (this.physicsEnabled && gameObject.hasComponentOfType(GameObjectComponentLivingEntity)) {
+                const physicsBodyComponent = gameObject.getComponentByType<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
+                if (physicsBodyComponent) {
+                    this.gameObjects.forEach(gameObject2 => {
+                        if (gameObject2.getId() === gameObject.getId()) {
+                            return;
+                        }
+
+                        if (gameObject2.getLayer() !== gameObject.getLayer()) {
+                            const physicsBodyComponent2 = gameObject2.getComponentByType<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
+                            if (physicsBodyComponent2) {
+                                this.disabledBodyCollisions.push([physicsBodyComponent.getBody(), physicsBodyComponent2.getBody()]);
+                                this.physicsWorld.disableBodyCollision(physicsBodyComponent.getBody(), physicsBodyComponent2.getBody());
+                            }
+                        }
+                    });
+                }
+            }
         });
     }
 
@@ -382,6 +428,14 @@ export default class World extends PIXI.Container {
                 });
             }
         });
+
+        if (this.physicsEnabled) {
+            this.disabledBodyCollisions.forEach(entry => {
+                this.physicsWorld.enableBodyCollision(entry[0], entry[1]);
+            });
+
+            this.disabledBodyCollisions = [];
+        }
     }
 
     public calculatePlayerScore() {

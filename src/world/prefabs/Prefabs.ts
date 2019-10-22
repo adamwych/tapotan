@@ -56,6 +56,8 @@ export default {
     'environment_spring': PrefabEnvironmentSpring,
     'environment_speeder': PrefabEnvironmentAccelerator,
     'environment_ladder': PrefabEnvironmentLadder,
+    'environment_ladder1': PrefabEnvironmentLadder,
+    'environment_ladder2': PrefabEnvironmentLadder,
     'environment_sign_variation0': PrefabEnvironmentSign,
     'environment_sign_variation1': PrefabEnvironmentSign,
     'environment_sign_variation2': PrefabEnvironmentSign,

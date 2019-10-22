@@ -14,7 +14,7 @@ import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
 export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameObject, world: World, props: any) => {
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
     body.initializeCircle(0.5, {
-        mass: 5,
+        mass: 90,
         fixedRotation: true
     });
 

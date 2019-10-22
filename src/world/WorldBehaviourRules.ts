@@ -23,6 +23,7 @@ export default class WorldBehaviourRules {
 
     private cameraBehaviour: WorldCameraBehaviour = WorldCameraBehaviour.FollowingPlayer;
     private cameraSpeed: number = WorldCameraSpeed.Slow;
+    private smoothenCameraMovement: boolean = true;
     private gameOverTimeout: number = WorldGameOverTimeout.Unlimited;
 
     public setCameraBehaviour(behaviour: WorldCameraBehaviour): void {
@@ -48,4 +49,13 @@ export default class WorldBehaviourRules {
     public getGameOverTimeout(): number {
         return this.gameOverTimeout;
     }
+
+    public setSmoothenCameraMovement(smoothen: boolean) {
+        this.smoothenCameraMovement = smoothen;
+    }
+
+    public shouldSmoothenCameraMovement() {
+        return this.smoothenCameraMovement;
+    }
+
 }

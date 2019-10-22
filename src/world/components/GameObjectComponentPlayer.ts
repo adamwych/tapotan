@@ -23,11 +23,11 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private canJump: boolean = false;
     private duringJump: boolean = false;
 
-    private speed: number = 8.5;
-    private speedForce: number = 400;
-    private airSpeedForce: number = 250;
-    private jumpForce: number = 125;
-    private jumpContinueForce: number = 320;
+    private speed: number = 7;
+    private speedForce: number = 2700;
+    private airSpeedForce: number = this.speedForce / 1.25;
+    private jumpForce: number = 1200;
+    private jumpContinueForce: number = 1500;
 
     private touchingSide: GameObjectFaceDirection = null;
     private faceDirection: GameObjectFaceDirection = null;
@@ -183,7 +183,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             if (this.wantsToMoveUp) {
                 ignoreAnimationSet = true;
                 this.animator.playAnimation('climb', 0);
-                this.physicsBody.velocity[1] = -12;
+                this.physicsBody.velocity[1] = -7;
                 this.isClimbingLadder = true;
             } else {
                 this.isClimbingLadder = false;
@@ -193,6 +193,14 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         }
 
         this.isClimbingLadder = false;
+
+        if (Math.abs(this.physicsBody.velocity[0]) > this.speed) {
+            if (this.physicsBody.velocity[0] < 0) {
+                this.physicsBody.velocity[0] = -this.speed;
+            } else {
+                this.physicsBody.velocity[0] = this.speed;
+            }
+        }
 
         if (Math.abs(this.physicsBody.velocity[0]) < this.speed) {
             let speed = (this.touchingGround ? this.speedForce : this.airSpeedForce);
@@ -271,11 +279,14 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
 
         // Each foot checked individually.
 
+        let gameObjectA = this.gameObject;
+        let gameObjectB;
+
         let rayStartPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1]);
         let rayEndPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1] + (World.PHYSICS_SCALE / 2));
 
-        rayStartPositionLeft[0] -= World.PHYSICS_SCALE / 8;
-        rayEndPositionLeft[0] -= World.PHYSICS_SCALE / 8;
+        rayStartPositionLeft[0] -= World.PHYSICS_SCALE / 2;
+        rayEndPositionLeft[0] -= World.PHYSICS_SCALE / 2;
 
         const rayLeft = new p2.Ray({
             from: rayStartPositionLeft,
@@ -292,8 +303,8 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             let rayStartPositionRight = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1]);
             let rayEndPositionRight = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1] + (World.PHYSICS_SCALE / 2));
 
-            rayStartPositionRight[0] += World.PHYSICS_SCALE / 8;
-            rayEndPositionRight[0] += World.PHYSICS_SCALE / 8;
+            rayStartPositionRight[0] += World.PHYSICS_SCALE / 2;
+            rayEndPositionRight[0] += World.PHYSICS_SCALE / 2;
 
             const rayRight = new p2.Ray({
                 from: rayStartPositionRight,
@@ -305,9 +316,17 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             let rayRightSuccess = this.gameObject.getWorld().getPhysicsWorld().raycast(result, rayRight);
             if (rayRightSuccess) {
                 touching = true;
+                gameObjectB = this.gameObject.getWorld().getGameObjectByPhysicsBodyId(result.body.id);
             }
         } else {
             touching = true;
+            gameObjectB = this.gameObject.getWorld().getGameObjectByPhysicsBodyId(result.body.id);
+        }
+
+        if (touching && gameObjectA && gameObjectB) {
+            if (gameObjectA.getLayer() !== gameObjectB.getLayer()) {
+                touching = false;
+            }
         }
 
         let isTouchingGroundNow = touching;

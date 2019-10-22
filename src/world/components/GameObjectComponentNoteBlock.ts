@@ -5,6 +5,8 @@ import Tapotan from "../../core/Tapotan";
 
 export default class GameObjectComponentNoteBlock extends GameObjectComponent {
 
+    protected type = 'noteblock';
+
     private note: string;
     private canPlaySound: boolean = true;
 
