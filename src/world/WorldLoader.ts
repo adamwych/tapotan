@@ -62,6 +62,7 @@ export default class WorldLoader {
         world.getBehaviourRules().setCameraBehaviour(levelData.world.behaviourRules.cameraBehaviour);
         world.getBehaviourRules().setCameraSpeed(levelData.world.behaviourRules.cameraSpeed);
         world.getBehaviourRules().setGameOverTimeout(levelData.world.behaviourRules.timeout);
+        world.getBehaviourRules().setSmoothenCameraMovement(levelData.world.behaviourRules.smoothCamera);
         world.setSpawnPointPosition(
             levelData.world.spawnPoint.x,
             levelData.world.spawnPoint.y,

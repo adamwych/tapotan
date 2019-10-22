@@ -63,7 +63,8 @@ export default class WorldSerializer {
                 behaviourRules: {
                     cameraBehaviour: world.getBehaviourRules().getCameraBehaviour(),
                     cameraSpeed: world.getBehaviourRules().getCameraSpeed(),
-                    timeout: world.getBehaviourRules().getGameOverTimeout()
+                    timeout: world.getBehaviourRules().getGameOverTimeout(),
+                    smoothCamera: world.getBehaviourRules().shouldSmoothenCameraMovement()
                 }
             }
         });
