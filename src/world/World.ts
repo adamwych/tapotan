@@ -54,7 +54,7 @@ export default class World extends PIXI.Container {
     private authorName: string = '';
 
     private player: GameObject;
-    private playerLayer: number = 0;
+    private playerLayer: number = 6;
 
     private tileset: Tileset;
     
