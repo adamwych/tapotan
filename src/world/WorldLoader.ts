@@ -7,6 +7,7 @@ import Prefabs from './prefabs/Prefabs';
 import World from './World';
 import GameObjectComponentAI from './components/ai/GameObjectComponentAI';
 import WorldMask from './WorldMask';
+import GameObjectComponentTransform from './components/GameObjectComponentTransform';
 
 interface WorldLoaderInput {
     type: string;
@@ -95,6 +96,12 @@ export default class WorldLoader {
                     return;
                 }
 
+                // There's no point in making physics bodies for static blocks
+                // that player can not interact with anyway.
+                if (prefabName === 'BasicBlock' && object.layer !== world.getPlayerLayer()) {
+                    prefabProperties.ignoresPhysics = true;
+                }
+
                 let gameObject = spawner(world, 0, 0, prefabProperties) as GameObject;
 
                 gameObject.setId(object.id);
@@ -107,6 +114,16 @@ export default class WorldLoader {
                         gameObject.getComponentByType<GameObjectComponentAI>(GameObjectComponentAI).setAIEnabled(true);
                     }
                 });
+
+                // PhysicsAwareTransform and Transform have cross-compatible properties
+                // and we need to use the regular one in case PhysicsAwareTransform was not
+                // loaded due to optimization.
+                if ('physics_aware_transform' in object.customComponentProperties) {
+                    if (gameObject.hasComponentOfType(GameObjectComponentTransform)) {
+                        gameObject.getComponentByType(GameObjectComponentTransform)
+                            .readCustomSerializationProperties(object.customComponentProperties['physics_aware_transform']);
+                    }
+                }
 
                 for (let [k, v] of object.customProperties) {
                     gameObject.setCustomProperty(k, v);
