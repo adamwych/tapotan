@@ -8,5 +8,5 @@ import SpritesheetAnimatorTimer from "../../../graphics/SpritesheetAnimatorTimer
 const monsterAnimatorTimer = new SpritesheetAnimatorTimer();
 
 export default createPrefabSpawnFunction('monsters_ghost', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
-    populateBasicMonsterPrefab(gameObject, world, props, 0.95, 600, 500, monsterAnimatorTimer);
+    populateBasicMonsterPrefab(gameObject, world, props, 0.66, 500, 500, monsterAnimatorTimer);
 });
