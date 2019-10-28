@@ -28,7 +28,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private speedForce: number = 2700;
     private airSpeedForce: number = this.speedForce / 1.25;
     private jumpForce: number = 1350;
-    private jumpContinueForce: number = 1200;
+    private jumpContinueForce: number = 1120;
     private ladderSlowdown: number = 2;
 
     private touchingSide: GameObjectFaceDirection = null;
@@ -48,6 +48,9 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private wantsToMoveLeft: boolean = false;
     private wantsToMoveRight: boolean = false;
     private wantsToJump: boolean = false;
+
+    private groundParticleAnimationTimer: number = 0;
+    private groundParticleAnimationDelayTimer: number = 0;
 
     public initialize(): void {
         this.physicsBody = this.gameObject.getComponentByType<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody).getBody();
@@ -220,6 +223,30 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
                 this.faceDirection = GameObjectFaceDirection.Right;
                 this.physicsBody.applyForce([speed, 0]);
             }
+        }
+
+        if (this.touchingGround && (this.wantsToMoveLeft || this.wantsToMoveRight)) {
+            this.groundParticleAnimationDelayTimer += dt;
+            this.groundParticleAnimationTimer += dt;
+
+            if (this.groundParticleAnimationDelayTimer > 0.15 && this.groundParticleAnimationTimer >= 0.085) {
+                this.groundParticleAnimationTimer = 0;
+
+                let x = this.wantsToMoveLeft ? 0.5 : -0.5;
+
+                const particle = Prefabs.ParticleSprint(
+                    this.gameObject.getWorld(),
+                    this.gameObject.transformComponent.getPositionX() + x,
+                    this.gameObject.transformComponent.getPositionY() - 0.45,
+                    { }
+                );
+    
+                particle.transformComponent.setVerticalAlignment(this.gameObject.transformComponent.getVerticalAlignment());
+                particle.transformComponent.setHorizontalAlignment(this.gameObject.transformComponent.getHorizontalAlignment());
+                particle.setLayer(this.gameObject.getLayer() - 1);
+            }
+        } else {
+            this.groundParticleAnimationDelayTimer = 0;
         }
 
         if (ignoreAnimationSet) {

@@ -23,6 +23,7 @@ import PrefabVictoryFlag from "./PrefabVictoryFlag";
 import PrefabSkyStar from "./sky/PrefabSkyStar";
 import PrefabEnvironmentNoteBlock from "./environment/PrefabEnvironmentNoteBlock";
 import PrefabParticleCoinCollect from "./particles/PrefabParticleCoinCollect";
+import PrefabParticleSprint from "./particles/PrefabParticleSprint";
 
 export interface PrefabBasicProps {
 
@@ -84,6 +85,7 @@ export default {
     CharacterDeathBubbles: PrefabParticlesPlayerDeathBubbles,
 
     ParticleCoinCollect: PrefabParticleCoinCollect,
+    ParticleSprint: PrefabParticleSprint,
 
     ComplexBackgroundClouds: PrefabComplexBackgroundClouds
 };

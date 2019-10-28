@@ -43,6 +43,7 @@ export default class GameObjectComponentCollectable extends GameObjectComponent 
     
                 particle.transformComponent.setVerticalAlignment(this.gameObject.transformComponent.getVerticalAlignment());
                 particle.transformComponent.setHorizontalAlignment(this.gameObject.transformComponent.getHorizontalAlignment());
+                particle.setLayer(this.gameObject.getLayer());
             }, 50);
 
             this.gameObject.emit('collectable.collected', this.collectable);
