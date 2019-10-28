@@ -24,6 +24,7 @@ import PrefabSkyStar from "./sky/PrefabSkyStar";
 import PrefabEnvironmentNoteBlock from "./environment/PrefabEnvironmentNoteBlock";
 import PrefabParticleCoinCollect from "./particles/PrefabParticleCoinCollect";
 import PrefabParticleSprint from "./particles/PrefabParticleSprint";
+import PrefabEnvironmentSeesaw from "./environment/PrefabEnvironmentSeesaw";
 
 export interface PrefabBasicProps {
 
@@ -74,6 +75,7 @@ export default {
     'environment_sign_variation11': PrefabEnvironmentSign,
     'environment_lock_key': PrefabEnvironmentLockKey,
     'environment_lock_door': PrefabEnvironmentLockDoor,
+    'environment_seesaw': PrefabEnvironmentSeesaw,
 
     'monsters_apple': PrefabMonsterCuddlyApple,
     'monsters_carrot': PrefabMonsterHappyCarrot,

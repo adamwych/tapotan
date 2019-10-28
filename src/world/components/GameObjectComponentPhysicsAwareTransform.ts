@@ -116,4 +116,8 @@ export default class GameObjectComponentPhysicsAwareTransform extends GameObject
         return y + this.getPivotY();
     }
 
+    public getPosition(): [number, number] {
+        return [this.getPositionX(), this.getPositionY()];
+    }
+
 }
