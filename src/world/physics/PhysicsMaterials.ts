@@ -9,7 +9,8 @@ export default {
 
     setupContactMaterials: function (world: p2.World) {
         const playerGroundContactMaterial = new p2.ContactMaterial(MaterialPlayer, MaterialGround, {
-            friction: 1,
+            friction: 0.345,
+            restitution: 0
         });
 
         world.addContactMaterial(playerGroundContactMaterial);

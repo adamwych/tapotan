@@ -2,11 +2,14 @@ import * as p2 from 'p2';
 import * as PIXI from 'pixi.js';
 import { GameEndReason, GameState } from '../core/GameManager';
 import Tapotan from '../core/Tapotan';
+import Interpolation from '../utils/Interpolation';
 import WorldBackgrounds from './backgrounds/WorldBackgrounds';
 import CameraShake from './CameraShake';
 import CollectableCategory from './CollectableCategory';
 import GameObjectComponentParallaxBackground from './components/backgrounds/GameObjectComponentParallaxBackground';
 import GameObjectComponentCollectableCollector from './components/GameObjectComponentCollectableCollector';
+import GameObjectComponentLivingEntity from './components/GameObjectComponentLivingEntity';
+import GameObjectComponentPhysicsBody from './components/GameObjectComponentPhysicsBody';
 import { GameObjectVerticalAlignment } from './components/GameObjectComponentTransform';
 import GameObjectComponentVictoryFlag from './components/GameObjectComponentVictoryFlag';
 import GameObject from './GameObject';
@@ -16,10 +19,6 @@ import Prefabs from './prefabs/Prefabs';
 import Tileset from './tileset/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
-import Interpolation from '../utils/Interpolation';
-import GameObjectComponentPhysicsBody from './components/GameObjectComponentPhysicsBody';
-import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
-import GameObjectComponentLivingEntity from './components/GameObjectComponentLivingEntity';
 
 export default class World extends PIXI.Container {
 
@@ -54,7 +53,7 @@ export default class World extends PIXI.Container {
     private authorName: string = '';
 
     private player: GameObject;
-    private playerLayer: number = 6;
+    private playerLayer: number = 5;
 
     private tileset: Tileset;
     
@@ -330,7 +329,7 @@ export default class World extends PIXI.Container {
         return this.player;
     }
 
-    public addPhysicsBody(parent: any, body: p2.Body) {
+    public addPhysicsBody(parent: GameObject, body: p2.Body) {
         if (!this.physicsEnabled) {
             return;
         }
@@ -345,7 +344,10 @@ export default class World extends PIXI.Container {
         }
 
         this.physicsWorld.removeBody(body);
-        delete this.physicsBodies[body.id];
+
+        if (body.id in this.physicsBodies) {
+            delete this.physicsBodies[body.id];
+        }
     }
 
     private initializePhysics() {
@@ -353,7 +355,7 @@ export default class World extends PIXI.Container {
             gravity: [0, 40]
         });
 
-        // PhysicsMaterials.setupContactMaterials(this.physicsWorld);
+        PhysicsMaterials.setupContactMaterials(this.physicsWorld);
 
         this.physicsWorld.on('beginContact', (event) => {
             let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.id) as GameObject;
@@ -457,6 +459,10 @@ export default class World extends PIXI.Container {
     }
 
     public getCoinsCollectedByPlayerCount() {
+        if (!!this.player) {
+            return 0;
+        }
+
         let collector = this.player.getComponentByType<GameObjectComponentCollectableCollector>(GameObjectComponentCollectableCollector);
         return collector.getCollectables().filter(collectable => collectable.getCategory() === CollectableCategory.Coin).length;
     }

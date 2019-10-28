@@ -1,6 +1,7 @@
 import * as p2 from 'p2';
 import GameManager, { GameEndReason } from '../../core/GameManager';
 import Tapotan from '../../core/Tapotan';
+import GameObject from '../GameObject';
 import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 import GameObjectFaceDirection from '../GameObjectFaceDirection';
 import PhysicsBodyCollisionGroup from '../physics/PhysicsBodyCollisionGroup';
@@ -26,8 +27,9 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private speed: number = 7;
     private speedForce: number = 2700;
     private airSpeedForce: number = this.speedForce / 1.25;
-    private jumpForce: number = 1200;
-    private jumpContinueForce: number = 1500;
+    private jumpForce: number = 1350;
+    private jumpContinueForce: number = 1200;
+    private ladderSlowdown: number = 2;
 
     private touchingSide: GameObjectFaceDirection = null;
     private faceDirection: GameObjectFaceDirection = null;
@@ -206,7 +208,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             let speed = (this.touchingGround ? this.speedForce : this.airSpeedForce);
             
             if (this.isOnLadder() && Math.abs(this.physicsBody.velocity[0]) > 3) {
-                speed /= 2;
+                speed /= this.ladderSlowdown;
             }
 
             if (this.wantsToMoveLeft) {
@@ -232,13 +234,13 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             if (this.wantsToMoveLeft || this.wantsToMoveRight) {
                 if (this.faceDirection === GameObjectFaceDirection.Left) {
                     if (this.touchingGround) {
-                        this.animator.playAnimation('run_left', this.wasInAirInPreviousFrame ? 0 : 1);
+                        this.animator.playAnimation('run_left', this.wasInAirInPreviousFrame ? 3 : 1);
                     } else {
                         this.animator.playAnimation('midair_left');
                     }
                 } else {
                     if (this.touchingGround) {
-                        this.animator.playAnimation('run', this.wasInAirInPreviousFrame ? 0 : 1);
+                        this.animator.playAnimation('run', this.wasInAirInPreviousFrame ? 3 : 1);
                     } else {
                         this.animator.playAnimation('midair');
                     }
@@ -280,10 +282,10 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         // Each foot checked individually.
 
         let gameObjectA = this.gameObject;
-        let gameObjectB;
+        let gameObjectB: GameObject;
 
         let rayStartPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1]);
-        let rayEndPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1] + (World.PHYSICS_SCALE / 2));
+        let rayEndPositionLeft = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1] + (World.PHYSICS_SCALE / 1.25));
 
         rayStartPositionLeft[0] -= World.PHYSICS_SCALE / 2;
         rayEndPositionLeft[0] -= World.PHYSICS_SCALE / 2;
@@ -301,7 +303,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             result.reset();
 
             let rayStartPositionRight = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1]);
-            let rayEndPositionRight = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1] + (World.PHYSICS_SCALE / 2));
+            let rayEndPositionRight = p2.vec2.fromValues(this.physicsBody.position[0], this.physicsBody.position[1] + (World.PHYSICS_SCALE / 1.25));
 
             rayStartPositionRight[0] += World.PHYSICS_SCALE / 2;
             rayEndPositionRight[0] += World.PHYSICS_SCALE / 2;
@@ -398,6 +400,10 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
 
     public incrementLadderCounter() {
         this.ladderCounter++;
+
+        if (this.ladderCounter === 1) {
+            this.physicsBody.velocity[0] /= this.ladderSlowdown;
+        }
     }
 
     public decrementLadderCounter() {
