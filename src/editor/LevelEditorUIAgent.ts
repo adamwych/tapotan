@@ -179,5 +179,19 @@ export default class LevelEditorUIAgent extends EventEmitter {
     public static offHideUIEmitted(callback: CallbackFunction) {
         LevelEditorUIAgent.instance.off('hideUI', callback);
     }
+
+    // ============================================================
+
+    public static emitLevelCleared() {
+        LevelEditorUIAgent.instance.emit('levelCleared');
+    }
+
+    public static onLevelClearedEmitted(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.on('levelCleared', callback);
+    }
+
+    public static offLevelClearedEmitted(callback: CallbackFunction) {
+        LevelEditorUIAgent.instance.off('levelCleared', callback);
+    }
     
 }

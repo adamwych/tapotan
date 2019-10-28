@@ -64,4 +64,18 @@
             letter-spacing: 1px;
         }
     }
+
+    .editor-settings-popup-button {
+        padding: 4px 8px;
+        text-align: center;
+        color: #ffffff;
+        font-size: 26px;
+        border: 2px dashed #ffffff;
+        transition: all 100ms;
+        pointer-events: all;
+
+        transform-origin: center center;
+
+        @include scale-hover-animation;
+    }
 }

@@ -228,6 +228,10 @@ export default class ScreenLevelEditor extends Screen {
         LevelEditorUIAgent.onSetEndTileClicked(() => {
             this.handleSetEndPointTileClick();
         });
+
+        LevelEditorUIAgent.onLevelClearedEmitted(() => {
+            this.handleSpawnPointSet(this.world.getSpawnPointPosition());
+        });
     }
 
     /**
