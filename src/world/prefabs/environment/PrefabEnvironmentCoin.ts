@@ -10,6 +10,7 @@ import World from "../../World";
 import createPrefabDefaultTransform from "../createPrefabDefaultTransform";
 import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
 import { PrefabBasicProps } from "../Prefabs";
+import PrefabParticleCoinCollect from "../particles/PrefabParticleCoinCollect";
 
 const coinAnimationTimer = new SpritesheetAnimatorTimer();
 
@@ -40,5 +41,5 @@ export default createPrefabSpawnFunction('environment_coin', (gameObject: GameOb
     }, PhysicsBodyCollisionGroup.Collectable);
 
     gameObject.setCustomProperty('sensor', true);
-    gameObject.createComponent<GameObjectComponentCollectable>(GameObjectComponentCollectable).initialize(CollectableCategory.Coin);
+    gameObject.createComponent<GameObjectComponentCollectable>(GameObjectComponentCollectable).initialize(CollectableCategory.Coin, PrefabParticleCoinCollect);
 });

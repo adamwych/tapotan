@@ -22,6 +22,7 @@ import PrefabSpawnPointShade from "./PrefabSpawnPointShade";
 import PrefabVictoryFlag from "./PrefabVictoryFlag";
 import PrefabSkyStar from "./sky/PrefabSkyStar";
 import PrefabEnvironmentNoteBlock from "./environment/PrefabEnvironmentNoteBlock";
+import PrefabParticleCoinCollect from "./particles/PrefabParticleCoinCollect";
 
 export interface PrefabBasicProps {
 
@@ -81,6 +82,8 @@ export default {
     CharacterLawrence: PrefabCharacterLawrence,
     CharacterMainMenuLawrence: PrefabCharacterMainMenuLawrence,
     CharacterDeathBubbles: PrefabParticlesPlayerDeathBubbles,
+
+    ParticleCoinCollect: PrefabParticleCoinCollect,
 
     ComplexBackgroundClouds: PrefabComplexBackgroundClouds
 };

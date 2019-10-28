@@ -3,6 +3,7 @@ import CollectableCategory from "../CollectableCategory";
 import GameObject from "../GameObject";
 import GameObjectComponent from "../GameObjectComponent";
 import GameObjectComponentCollectableCollector from "./GameObjectComponentCollectableCollector";
+import { PrefabSpawnFunction } from "../prefabs/createPrefabSpawnFunction";
 
 export default class GameObjectComponentCollectable extends GameObjectComponent {
 
@@ -10,7 +11,10 @@ export default class GameObjectComponentCollectable extends GameObjectComponent 
 
     private collectable: Collectable;
 
-    public initialize(category: CollectableCategory): void {
+    private collectAnimationPrefab: PrefabSpawnFunction;
+
+    public initialize(category: CollectableCategory, collectAnimationPrefab: PrefabSpawnFunction = null): void {
+        this.collectAnimationPrefab = collectAnimationPrefab;
         this.collectable = new Collectable(this.gameObject, category);
         this.gameObject.on('collisionStart', this.handleCollisionStart);
     }
@@ -27,7 +31,20 @@ export default class GameObjectComponentCollectable extends GameObjectComponent 
         let collector = another.getComponentByType<GameObjectComponentCollectableCollector>(GameObjectComponentCollectableCollector);
         if (collector) {
             collector.collect(this.collectable);
-            
+         
+            // Emit particles.
+            setTimeout(() => {
+                const particle = this.collectAnimationPrefab(
+                    this.gameObject.getWorld(),
+                    this.gameObject.transformComponent.getPositionX(),
+                    this.gameObject.transformComponent.getPositionY(),
+                    { }
+                );
+    
+                particle.transformComponent.setVerticalAlignment(this.gameObject.transformComponent.getVerticalAlignment());
+                particle.transformComponent.setHorizontalAlignment(this.gameObject.transformComponent.getHorizontalAlignment());
+            }, 50);
+
             this.gameObject.emit('collectable.collected', this.collectable);
             this.gameObject.visible = false;
         }
