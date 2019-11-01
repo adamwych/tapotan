@@ -53,6 +53,11 @@ export default function UIGameOverOverlay(props: UIGameOverOverlayProps) {
     }, []);
 
     const handleUIEnterAction = useCallback(() => {
+        if (props.inEditor) {
+            handleCloseButtonClick();
+            return;
+        }
+
         switch (gamepadActiveButtonIndex) {
             case 0: {
                 handleTryAgainButtonClick();
@@ -69,7 +74,7 @@ export default function UIGameOverOverlay(props: UIGameOverOverlayProps) {
                 break;
             }
         }
-    }, [gamepadActiveButtonIndex]);
+    }, [gamepadActiveButtonIndex, props.inEditor]);
 
     const handleUIMoveUpAction = useCallback(() => {
         if (gamepadActiveButtonIndex === 0) {
