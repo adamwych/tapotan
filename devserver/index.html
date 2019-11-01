@@ -120,8 +120,10 @@
 
         #loadingBar {
             position: relative;
-            width: 50%;
-            height: 4px;
+            width: 25%;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         #loadingBar > div:nth-child(1) {
@@ -137,6 +139,10 @@
             height: 100%;
             background: #8df52d;
             transition: width 200ms;
+        }
+
+        #loadingBarLabel {
+            margin-top: 3rem;
         }
 
         @keyframes fade-and-scale {
@@ -233,11 +239,12 @@
     </div>
 
     <div id="loading">
-        <div>Loading...</div>
+        <div>LOADING...</div>
         <div id="loadingBar">
             <div></div>
             <div id="loadingBarForeground"></div>
         </div>
+        <div id="loadingBarLabel"></div>
     </div>
 
     <div id="resizerefresh">

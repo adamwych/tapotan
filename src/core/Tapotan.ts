@@ -200,8 +200,13 @@ export default class Tapotan extends EventEmitter {
 
             const downloadPercentage = (downloadProgress * 100);
             const loadPercentage = (loadedResources / allResources) * 100;
-            
-            LoadProgress.setBaseBundleLoadProgress((downloadPercentage + loadPercentage) / 2);
+            const progress = (downloadPercentage + loadPercentage) / 2;
+
+            if (Math.round(downloadPercentage) < 100) {
+                LoadProgress.setBaseBundleLoadProgress(progress, 'Downloading... ' + downloadPercentage.toFixed(1) + '%');
+            } else {
+                LoadProgress.setBaseBundleLoadProgress(progress, 'Loading resources... ' + loadPercentage.toFixed(1) + '%');
+            }
         };
 
         this.assetManager.loadBaseBundle(baseBundleLoadProgressCallback).then(bundle => {
@@ -270,7 +275,7 @@ export default class Tapotan extends EventEmitter {
     
                 if (!isLoadingSnapshot) {
 
-                    // Wait 200ms to let CPU cool down and ensure smooth transition.
+                    // Wait 500ms to let CPU cool down and ensure smooth transition.
                     setTimeout(() => {
                         document.getElementById('loading').style.opacity = '0';
                         document.getElementById('loading').style.pointerEvents = 'none';
@@ -283,7 +288,7 @@ export default class Tapotan extends EventEmitter {
                         this.screenManager.startEditor();
                         // this.loadAndStartLevel(60357134801);
                         /// #endif
-                    }, 200);
+                    }, 500);
 
                 }
             } catch (error) {
