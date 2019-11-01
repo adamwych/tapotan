@@ -595,7 +595,6 @@ export default class ScreenLevelEditor extends Screen {
         }
         
         if (!this.newGameObjectShade) {
-            console.warn('newGameObjectShade === null');
             return;
         }
 

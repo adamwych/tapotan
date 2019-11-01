@@ -126,6 +126,10 @@ export default class MonsterAINodeMoveSideToSide extends MonsterAINode {
     }
     
     public handleCollisionStart(another, event): void {
+        if (event.contactEquations.length < 1) {
+            return;
+        }
+        
         let equation = event.contactEquations[0];
         let normalX = equation.normalA[0];
         let normalY = equation.normalA[1];
