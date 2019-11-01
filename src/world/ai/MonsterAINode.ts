@@ -11,4 +11,6 @@ export default abstract class MonsterAINode {
     public tick(dt: number): void {}
     public handleCollisionStart(another: GameObject, event): void { }
     public handleCollisionEnd(another: GameObject, event): void { }
+    public handleGameStarted(): void { }
+    public handleGameEnded(): void { }
 }

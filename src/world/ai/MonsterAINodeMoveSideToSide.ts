@@ -7,6 +7,7 @@ export default class MonsterAINodeMoveSideToSide extends MonsterAINode {
 
     private speed: number;
     private speedForce: number;
+    private startFaceDirection: GameObjectFaceDirection;
 
     constructor(gameObject: GameObject, speed: number, speedForce: number) {
         super(gameObject);
@@ -40,6 +41,14 @@ export default class MonsterAINodeMoveSideToSide extends MonsterAINode {
                 this.gameObject.transformComponent.setFaceDirection(GameObjectFaceDirection.Left);
             }
         }
+    }
+
+    public handleGameStarted(): void {
+        this.startFaceDirection = this.gameObject.transformComponent.getFaceDirection();
+    }
+
+    public handleGameEnded(): void {
+        this.gameObject.transformComponent.setFaceDirection(this.startFaceDirection);
     }
 
 }

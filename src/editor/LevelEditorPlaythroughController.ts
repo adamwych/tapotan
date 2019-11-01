@@ -73,6 +73,8 @@ export default class LevelEditorPlaythroughController {
 
         const world = this.context.getWorld();
         const player = world.getPlayer();
+        
+        world.handleGameEnd(null);
 
         world.getGameObjects().forEach(gameObject => {
             if (gameObject.hasComponentOfType(GameObjectComponentAI)) {
@@ -109,8 +111,6 @@ export default class LevelEditorPlaythroughController {
             viewport.left = this.playthroughStartCameraX;
             viewport.top = this.playthroughStartCameraY;
         }
-
-        world.handleGameEnd(null);
     }
 
 }

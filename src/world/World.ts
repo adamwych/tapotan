@@ -381,6 +381,7 @@ export default class World extends PIXI.Container {
     }
 
     public handleGameStart() {
+        this.emit('gameStart');
         this.timeoutTimer = 0;
 
         this.gameObjects.forEach(gameObject => {
@@ -417,6 +418,7 @@ export default class World extends PIXI.Container {
     }
 
     public handleGameEnd(reason: GameEndReason) {
+        this.emit('gameEnd', { reason: reason });
         if (reason === GameEndReason.Death) {
             this.shake = new CameraShake();
             this.shake.setDoneCallback(() => {

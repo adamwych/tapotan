@@ -14,12 +14,16 @@ export default class GameObjectComponentAI extends GameObjectComponent {
     public initialize(): void {
         this.setAIEnabled(false);
         
+        this.gameObject.getWorld().on('gameStart', this.handleGameStart);
+        this.gameObject.getWorld().on('gameEnd', this.handleGameEnd);
         this.gameObject.on('collisionStart', this.handleCollisionStart);
         this.gameObject.on('collisionEnd', this.handleCollisionEnd);
         this.gameObject.on('transform.faceDirectionChanged', this.handleFaceDirectionChanged);
     }
 
     protected destroy(): void {
+        this.gameObject.getWorld().off('gameStart', this.handleGameStart);
+        this.gameObject.getWorld().off('gameEnd', this.handleGameEnd);
         this.gameObject.off('collisionStart', this.handleCollisionStart);
         this.gameObject.off('collisionEnd', this.handleCollisionEnd);
         this.gameObject.off('transform.faceDirectionChanged', this.handleFaceDirectionChanged);
@@ -29,6 +33,22 @@ export default class GameObjectComponentAI extends GameObjectComponent {
         if (this.aiEnabled) {
             this.aiNodes.forEach(node => {
                 node.tick(dt);
+            });
+        }
+    }
+
+    private handleGameStart = () => {
+        if (this.aiEnabled) {
+            this.aiNodes.forEach(node => {
+                node.handleGameStarted();
+            });
+        }
+    }
+
+    private handleGameEnd = () => {
+        if (this.aiEnabled) {
+            this.aiNodes.forEach(node => {
+                node.handleGameEnded();
             });
         }
     }
