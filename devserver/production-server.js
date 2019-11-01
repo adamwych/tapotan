@@ -38,7 +38,9 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')));
-app.get('/favicon.jpg', (req, res) => res.sendFile(path.join(__dirname + '/favicon.jpg')));
+app.get('/favicon.png', (req, res) => res.sendFile(path.join(__dirname + '/favicon.png')));
+app.get('/manifest.json', (req, res) => res.sendFile(path.join(__dirname + '/manifest.json')));
+app.get('/app_icon.png', (req, res) => res.sendFile(path.join(__dirname + '/app_icon.png')));
 app.use('/build', express.static(path.join(__dirname, './build')));
 app.use('/assets', express.static(path.join(__dirname, './assets')));
 

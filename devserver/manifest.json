@@ -1,0 +1,14 @@
+{
+    "short_name": "TAPOTAN",
+    "name": "TAPOTAN",
+    "display": "fullscreen",
+    "orientation": "landscape",
+    "start_url": "/?utm_source=app",
+    "icons": [
+        {
+            "src": "/app_icon.png",
+            "type": "image/png",
+            "sizes": "256x256"
+        }
+    ]
+}
