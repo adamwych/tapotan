@@ -24,6 +24,7 @@ export default class PhysicsDebugRenderer {
 
         document.body.appendChild(canvas);
         let shouldStop = false;
+        let scale = 16;
 
         const render = () => {
             if (shouldStop) {
@@ -34,7 +35,7 @@ export default class PhysicsDebugRenderer {
 
             window.requestAnimationFrame(render);
 
-            context.fillStyle = '#000000';
+            context.fillStyle = '#d0d0d0';
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.beginPath();
 
@@ -45,10 +46,10 @@ export default class PhysicsDebugRenderer {
                 let b1 = body.aabb.upperBound[0];
                 let b2 = body.aabb.upperBound[1];
 
-                let x1 = [a1, a2];
-                let x2 = [b1, a2];
-                let x3 = [b1, b2];
-                let x4 = [a1, b2];
+                let x1 = [a1 * scale, a2 * scale];
+                let x2 = [b1 * scale, a2 * scale];
+                let x3 = [b1 * scale, b2 * scale];
+                let x4 = [a1 * scale, b2 * scale];
 
                 context.moveTo(x1[0], x1[1]);
                 context.lineTo(x2[0], x2[1]);
@@ -58,7 +59,7 @@ export default class PhysicsDebugRenderer {
             }
 
             context.lineWidth = 1;
-            context.strokeStyle = '#000000';
+            context.strokeStyle = '#d0d0d0';
             context.stroke();
         };
         render();

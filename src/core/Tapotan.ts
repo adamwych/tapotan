@@ -18,6 +18,7 @@ import LoadProgress from './LoadProgress';
 import TapotanUIApplicationBootstrap from '../ui/TapotanUIApplicationBootstrap';
 import { EventEmitter } from 'events';
 import TickHelper from './TickHelper';
+import DebugCanvas from '../graphics/DebugCanvas';
 
 export enum TapotanCursor {
     Default = 'Default',
@@ -277,9 +278,10 @@ export default class Tapotan extends EventEmitter {
                         /// #if ENV_PRODUCTION
                         this.screenManager.startMainMenu();
                         /// #else
+                        DebugCanvas.create();
                         // this.screenManager.startMainMenu();
                         this.screenManager.startEditor();
-                        // this.loadAndStartLevel(634974881521);
+                        // this.loadAndStartLevel(60357134801);
                         /// #endif
                     }, 200);
 
