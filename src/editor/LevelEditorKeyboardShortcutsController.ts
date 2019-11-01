@@ -71,7 +71,16 @@ export default class LevelEditorKeyboardShortcutsController {
     }
 
     private handleRotateObjectShortcutClick = () => {
-        this.context.getSelectedObjects().forEach(object => {
+        let objectsToRotate = [];
+
+        let newGameObjectShade = this.context.getEditorScreen().getNewGameObjectShade();
+        if (newGameObjectShade) {
+            objectsToRotate = [newGameObjectShade];
+        } else {
+            objectsToRotate = this.context.getSelectedObjects();
+        }
+
+        objectsToRotate.forEach(object => {
             let angle = object.transformComponent.getAngle() + 90;
             if (angle === 360) {
                 angle = 0;

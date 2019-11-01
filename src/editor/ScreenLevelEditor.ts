@@ -641,6 +641,7 @@ export default class ScreenLevelEditor extends Screen {
                     ignoresPhysics: this.world.getTileset().isResourceConsideredBackground(objectName)
                 });
                 
+                gameObject.transformComponent.setAngle(this.newGameObjectShade.transformComponent.getAngle());
                 gameObject.transformComponent.setVerticalAlignment(GameObjectVerticalAlignment.Bottom);
                 gameObject.setLayer(this.context.getCurrentLayerIndex());
                 
@@ -853,6 +854,10 @@ export default class ScreenLevelEditor extends Screen {
 
     public getSpawnPointShadeObject(): GameObject {
         return this.spawnPointShadeObject;
+    }
+
+    public getNewGameObjectShade(): GameObject {
+        return this.newGameObjectShade;
     }
 
     public getUIRootComponent() {

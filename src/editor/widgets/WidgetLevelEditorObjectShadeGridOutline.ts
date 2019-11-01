@@ -41,6 +41,12 @@ export default class WidgetLevelEditorObjectShadeGridOutline extends PIXI.Contai
         } else {
             this.position.y = (worldCoords.y * blockSize) - (viewport.top * blockSize);
         }
+
+        this.pivot.x = this.object.transformComponent.getPivotX() * blockSize;
+        this.pivot.y = this.object.transformComponent.getPivotY() * blockSize;
+        this.angle = this.object.transformComponent.getAngle();
+        this.position.x += this.pivot.x;
+        this.position.y += this.pivot.y;
     }
 
     public getObject() {
