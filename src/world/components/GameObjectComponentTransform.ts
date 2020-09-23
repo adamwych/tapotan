@@ -222,6 +222,10 @@ export default class GameObjectComponentTransform extends GameObjectComponent {
         return this.getPositionY();
     }
 
+    public getUnalignedPosition(): [number, number] {
+        return [this.getUnalignedPositionX(), this.getUnalignedPositionY()];
+    }
+
     /**
      * Checks whether current position is equal to specified one.
      * 

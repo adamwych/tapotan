@@ -17,6 +17,7 @@ export default class Tileset {
     private resources: {[k: string]: TilesetResource} = {};
     private editorCategories: TilesetEditorCategory[] = [];
     private backgroundResources: string[] = [];
+    private halfBlockResources: string[] = [];
     private textureFiltering: string = 'linear';
 
     constructor(id: string, name: string) {
@@ -50,6 +51,14 @@ export default class Tileset {
 
     public isResourceConsideredBackground(resource: string) {
         return this.backgroundResources.includes(resource);
+    }
+
+    public setResourceAsHalfBlock(resource: string) {
+        this.halfBlockResources.push(resource);
+    }
+
+    public isResourceConsideredHalfBlock(resource: string) {
+        return this.halfBlockResources.includes(resource);
     }
 
     public addEditorCategory(category: TilesetEditorCategory) {
@@ -142,6 +151,10 @@ export default class Tileset {
 
             if (resourceNode.getAttribute('background') === 'true') {
                 tileset.setResourceAsBackground(resourceID);
+            }
+
+            if (resourceNode.getAttribute('halfblock') === 'true') {
+                tileset.setResourceAsHalfBlock(resourceID);
             }
 
             tileset.getEditorCategoryById(categoryID).resources.push(resourceID);

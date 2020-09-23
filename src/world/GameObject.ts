@@ -373,6 +373,20 @@ export default class GameObject extends PIXI.Container {
         return this._transformComponent;
     }
 
+    public distanceTo(another: GameObject): number {
+        if (this.transformComponent && another.transformComponent) {
+            const positionA = this.transformComponent.getUnalignedPosition();
+            const positionB = another.transformComponent.getUnalignedPosition();
+
+            return Math.sqrt(
+                (positionA[0] - positionB[0]) * (positionA[0] - positionB[0]) + 
+                (positionA[1] - positionB[1]) * (positionA[1] - positionB[1])
+            );
+        }
+
+        return Infinity;
+    }
+
     public setDebuggerAttached(debuggerAttached: boolean) {
         this.debuggerAttached = debuggerAttached;
     }

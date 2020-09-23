@@ -7,10 +7,16 @@ export default class CameraShake {
     private viewportStartLeft: number = 0;
     private viewportStartTop: number = 0;
     private timer: number = 0;
+    private strength: number = 0;
+    private time: number = 0;
+
+    private stage: number = 0;
 
     private doneCallback: Function;
 
-    constructor() {
+    constructor(strength: number = 1, time: number = 0.25) {
+        this.strength = strength;
+        this.time = time;
         this.viewport = Tapotan.getInstance().getViewport();
         this.viewportStartLeft = this.viewport.left;
         this.viewportStartTop = this.viewport.top;
@@ -19,17 +25,29 @@ export default class CameraShake {
     public tick = (dt: number) => {
         this.timer += dt;
 
-        if (this.timer >= 0.25) {
-            this.viewport.left = this.viewportStartLeft;
-            this.viewport.top = this.viewportStartTop;
+        let alpha = Math.min(1, this.timer / (this.time / 2));
 
-            this.doneCallback();
+        if (this.stage === 0) {
+            if (alpha === 1) {
+                this.stage = 1;
+                this.timer = 0;
+            }
+        } else {
+            alpha = -alpha;
+            if (alpha === -1) {
+                this.viewport.left = this.viewportStartLeft;
+                this.viewport.top = this.viewportStartTop;
 
-            return;
+                this.doneCallback();
+                return;
+            }
         }
 
-        this.viewport.left = this.viewportStartLeft + (Math.sin(this.timer * 40) / 3);
-        this.viewport.top = this.viewportStartTop + (-Math.sin(this.timer * 40) / 3);
+        let valX = Math.sin(alpha * 180 * (Math.PI / 180)) * this.strength;
+        let valY = Math.sin(alpha * 180 * (Math.PI / 180)) * (this.strength * (-alpha));
+
+        this.viewport.left = this.viewportStartLeft - valX;
+        this.viewport.top = this.viewportStartTop + valY;
     }
 
     public setDoneCallback(callback: Function) {

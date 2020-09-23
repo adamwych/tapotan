@@ -25,6 +25,9 @@ import PrefabEnvironmentNoteBlock from "./environment/PrefabEnvironmentNoteBlock
 import PrefabParticleCoinCollect from "./particles/PrefabParticleCoinCollect";
 import PrefabParticleSprint from "./particles/PrefabParticleSprint";
 import PrefabEnvironmentSeesaw from "./environment/PrefabEnvironmentSeesaw";
+import PrefabEnvironmentCannon from "./environment/PrefabEnvironmentCannon";
+import PrefabEnvironmentCannonBall from "./environment/PrefabEnvironmentCannonBall";
+import PrefabParticleCannonSmoke from "./particles/PrefabParticleCannonSmoke";
 
 export interface PrefabBasicProps {
 
@@ -76,6 +79,10 @@ export default {
     'environment_lock_key': PrefabEnvironmentLockKey,
     'environment_lock_door': PrefabEnvironmentLockDoor,
     'environment_seesaw': PrefabEnvironmentSeesaw,
+    'environment_cannon_variation0': PrefabEnvironmentCannon.Variation0,
+    'environment_cannon_variation0_ball': PrefabEnvironmentCannonBall.Variation0,
+    'environment_cannon_variation1': PrefabEnvironmentCannon.Variation1,
+    'environment_cannon_variation1_ball': PrefabEnvironmentCannonBall.Variation1,
 
     'monsters_apple': PrefabMonsterCuddlyApple,
     'monsters_carrot': PrefabMonsterHappyCarrot,
@@ -88,6 +95,7 @@ export default {
 
     ParticleCoinCollect: PrefabParticleCoinCollect,
     ParticleSprint: PrefabParticleSprint,
+    ParticleCannonSmoke: PrefabParticleCannonSmoke,
 
     ComplexBackgroundClouds: PrefabComplexBackgroundClouds
 };

@@ -8,4 +8,5 @@ import { PrefabBasicProps } from "../Prefabs";
 export default createPrefabSpawnFunction('ParticlesCharacterDeathBubbles', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
     gameObject.createComponent<GameObjectComponentPlayerDeathBubbles>(GameObjectComponentPlayerDeathBubbles).initialize();
     gameObject.createComponent(GameObjectComponentTransform);
+    gameObject.setCustomProperty('__particle', true);
 });

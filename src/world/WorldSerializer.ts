@@ -9,7 +9,9 @@ export default class WorldSerializer {
             let result = [];
 
             objects.forEach((object: GameObject) => {
-                if (object.hasCustomProperty('__editorOnly')) {
+                if (object.hasCustomProperty('__projectile') ||
+                    object.hasCustomProperty('__particle') ||
+                    object.hasCustomProperty('__editorOnly')) {
                     return;
                 }
 

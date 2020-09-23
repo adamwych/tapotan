@@ -21,4 +21,6 @@ export default createPrefabSpawnFunction('ParticleCoinCollect', (gameObject: Gam
     gameObject.createComponent(GameObjectComponentTransform);
     gameObject.transformComponent.setPivot(0.5, 0.5);
     gameObject.transformComponent.setScale(0.9, 0.9);
+
+    gameObject.setCustomProperty('__particle', true);
 });

@@ -19,6 +19,7 @@ import Prefabs from './prefabs/Prefabs';
 import Tileset from './tileset/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
+import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
 
 export default class World extends PIXI.Container {
 
@@ -786,6 +787,17 @@ export default class World extends PIXI.Container {
 
     public getPlayerLayer() {
         return this.playerLayer;
+    }
+
+    public shakeCamera(strength: number, time: number) {
+        if (this.shake) {
+            return;
+        }
+
+        this.shake = new CameraShake(strength, time);
+        this.shake.setDoneCallback(() => {
+            this.shake = null;
+        });
     }
 
     public setWorldMask(mask: WorldMask) {
