@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Tapotan from '../../core/Tapotan';
 import TickHelper from '../../core/TickHelper';
 import LevelEditorUIAgent from '../../editor/LevelEditorUIAgent';
+import GameObjectComponentPortal from '../../world/components/GameObjectComponentPortal';
 import GameObjectComponentLockKey from '../../world/components/GameObjectComponentLockKey';
 import GameObjectComponentNoteBlock from '../../world/components/GameObjectComponentNoteBlock';
 import GameObject from '../../world/GameObject';
@@ -17,8 +18,10 @@ interface UIEditorObjectActionButtonsProps {
 export default function UIEditorObjectActionButtons(props: UIEditorObjectActionButtonsProps) {
     const [width, setWidth] = useState(0);
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [lockKeyTipVisible, setLockKeyTipVisible] = useSharedValue(UIEditorSharedValues.LockKeyTipVisible, null);
+    const [_, setLockKeyTipVisible] = useSharedValue(UIEditorSharedValues.LockKeyTipVisible, null);
+    const [_2, setPortalDestinationTipVisible] = useSharedValue(UIEditorSharedValues.PortalDestinationTipVisible, null);
     const showLinkDoorAction = props.gameObject.hasComponentOfType(GameObjectComponentLockKey);
+    const showLinkPortalAction = props.gameObject.hasComponentOfType(GameObjectComponentPortal);
     const noteComponent = props.gameObject.getComponentByType<GameObjectComponentNoteBlock>(GameObjectComponentNoteBlock);
     let visibleButtonsNum = 3 + (showLinkDoorAction ? 1 : 0) + (noteComponent ? 1 : 0);
 
@@ -43,6 +46,11 @@ export default function UIEditorObjectActionButtons(props: UIEditorObjectActionB
     const handleLinkDoorActionClick = useCallback(() => {
         LevelEditorUIAgent.emitObjectActionButtonClicked('LinkWithDoor');
         setLockKeyTipVisible(true);
+    }, [props.gameObject]);
+
+    const handleSetPortalDestinationActionClick = useCallback(() => {
+        LevelEditorUIAgent.emitObjectActionButtonClicked('SetPortalDestination');
+        setPortalDestinationTipVisible(true);
     }, [props.gameObject]);
 
     const handleChangeNoteActionClick = useCallback(() => {
@@ -71,6 +79,10 @@ export default function UIEditorObjectActionButtons(props: UIEditorObjectActionB
 
             {showLinkDoorAction && (
                 <UIEditorObjectActionButton label="Link door" type="Key" onClick={handleLinkDoorActionClick} />
+            )}
+
+            {showLinkPortalAction && (
+                <UIEditorObjectActionButton label="Set destination" type="Key" onClick={handleSetPortalDestinationActionClick} />
             )}
 
             {noteComponent && (

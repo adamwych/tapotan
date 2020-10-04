@@ -3,7 +3,6 @@ import WidgetSignTextBubble from "../screens/widgets/WidgetSignTextBubble";
 import GameObjectComponentAI from "../world/components/ai/GameObjectComponentAI";
 import GameObjectComponentCollectableCollector from "../world/components/GameObjectComponentCollectableCollector";
 import LevelEditorContext from "./LevelEditorContext";
-import Tapotan from "../core/Tapotan";
 
 export default class LevelEditorPlaythroughController {
 

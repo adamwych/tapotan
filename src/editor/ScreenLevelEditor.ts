@@ -29,6 +29,8 @@ import WidgetLevelEditorGrid from "./widgets/WidgetLevelEditorGrid";
 import WidgetLevelEditorObjectOutline from './widgets/WidgetLevelEditorObjectOutline';
 import WidgetLevelEditorObjectShadeGridOutline from './widgets/WidgetLevelEditorObjectShadeGridOutline';
 import GameObjectComponentNoteBlock from '../world/components/GameObjectComponentNoteBlock';
+import GameObjectComponentPortal from '../world/components/GameObjectComponentPortal';
+import PortalConnection from '../world/PortalConnection';
 
 export default class ScreenLevelEditor extends Screen {
 
@@ -66,6 +68,8 @@ export default class ScreenLevelEditor extends Screen {
     private spawnPlayerAtPositionActionActive: boolean = false;
     private linkWithDoorActionActive: boolean = false;
     private linkWithDoorKeyObject: GameObject = null;
+    private setDestinationActionActive: boolean = false;
+    private setDestinationFirstPortal: GameObject = null;
 
     private lastHitObject: GameObject = null;
 
@@ -206,6 +210,14 @@ export default class ScreenLevelEditor extends Screen {
             if (selectedObjects.length > 0) {
                 const selectedObject = selectedObjects[selectedObjects.length - 1];
                 this.beginLinkWithDoorAction(selectedObject);
+            }
+        });
+
+        LevelEditorUIAgent.onObjectActionButtonClicked('SetPortalDestination', () => {
+            let selectedObjects = this.context.getSelectedObjects();
+            if (selectedObjects.length > 0) {
+                const selectedObject = selectedObjects[selectedObjects.length - 1];
+                this.beginSetDestinationPortalAction(selectedObject);
             }
         });
 
@@ -413,7 +425,19 @@ export default class ScreenLevelEditor extends Screen {
             }
         }
 
+        if (this.setDestinationActionActive) {
+            const connection = new PortalConnection();
+            connection.fromPortal = this.setDestinationFirstPortal;
+            connection.toPortal = gameObject;
+            this.setDestinationFirstPortal.getComponentByType<GameObjectComponentPortal>(GameObjectComponentPortal).setConnection(connection);
+
+            this.handleRightMouseButtonClick();
+            this.context.emit('showUI');
+            return;
+        }
+
         this.linkWithDoorActionActive = false;
+        this.setDestinationActionActive = false;
 
         this.context.markObjectAsSelected(gameObject);
 
@@ -717,6 +741,11 @@ export default class ScreenLevelEditor extends Screen {
             this.linkWithDoorKeyObject.getComponentByType<GameObjectComponentLockKey>(GameObjectComponentLockKey).setEditorAssistPathVisible(false);
         }
 
+        if (this.setDestinationActionActive) {
+            this.setDestinationActionActive = false;
+            LevelEditorUIAgent.emitShowUI();
+        }
+
         this.spawnPlayerAtPositionActionActive = false;
         this.isSettingSpawnPoint = false;
         this.isSettingEndPoint = false;
@@ -783,6 +812,16 @@ export default class ScreenLevelEditor extends Screen {
         this.linkWithDoorKeyObject = keyObject;
     }
 
+    public beginSetDestinationPortalAction(portalObject: GameObject) {
+        this.handleRightMouseButtonClick();
+        this.blurActiveAndHoveredObjectOutline();
+
+        LevelEditorUIAgent.emitHideUI();
+
+        this.setDestinationActionActive = true;
+        this.setDestinationFirstPortal = portalObject;
+    }
+
     protected tick(dt: number): void {
         this.objectOutlineActive.forEach(outline => {
             outline.tick(dt);
@@ -834,6 +873,10 @@ export default class ScreenLevelEditor extends Screen {
 
         if (this.linkWithDoorActionActive) {
             return basic && gameObject.hasComponentOfType(GameObjectComponentLockDoor);
+        }
+
+        if (this.setDestinationActionActive) {
+            return basic && gameObject.hasComponentOfType(GameObjectComponentPortal) && gameObject !== this.setDestinationFirstPortal;
         }
 
         return basic;

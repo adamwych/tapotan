@@ -25,10 +25,12 @@ export default function UIEditorRootComponent() {
     const [publishPopupVisible, setPublishPopupVisible] = useSharedValue(UIEditorSharedValues.PublishPopupVisible, false);
     const [prefabExplorerActiveCategoryID, setPrefabExplorerActiveCategoryID] = useSharedValue(UIEditorSharedValues.PrefabExplorerActiveCategoryID, null);
     const [lockKeyTipVisible, setLockKeyTipVisible] = useSharedValue(UIEditorSharedValues.LockKeyTipVisible, null);
+    const [portalDestinationTipVisible, setPortalDestinationTipVisible] = useSharedValue(UIEditorSharedValues.PortalDestinationTipVisible, null);
 
     const handleShowUI = useCallback(() => {
         setUIHidden(false);
         setLockKeyTipVisible(false);
+        setPortalDestinationTipVisible(false);
     }, []);
 
     const handleHideUI = useCallback(() => {
@@ -95,6 +97,13 @@ export default function UIEditorRootComponent() {
             {lockKeyTipVisible && (
                 <div className="editor-lock-tip">
                     Select doors that this key should unlock.<br />
+                    Press RMB to cancel.
+                </div>
+            )}
+
+            {portalDestinationTipVisible && (
+                <div className="editor-lock-tip">
+                    Select destination portal.<br />
                     Press RMB to cancel.
                 </div>
             )}

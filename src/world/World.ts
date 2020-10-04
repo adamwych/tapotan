@@ -20,6 +20,7 @@ import Tileset from './tileset/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
 import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
+import PortalConnection from './PortalConnection';
 
 export default class World extends PIXI.Container {
 
@@ -87,7 +88,8 @@ export default class World extends PIXI.Container {
     private timeoutTimer: number = 0;
     private playTimer: number = 0;
 
-    private lockConnections: LockDoorKeyConnection[] = [];
+    private lockConnections: Array<LockDoorKeyConnection> = [];
+    private portalConnections: Array<PortalConnection> = [];
 
     private backgroundMusicId: string = null;
 
@@ -169,6 +171,7 @@ export default class World extends PIXI.Container {
         this._duringRemove = true;
 
         this.lockConnections = [];
+        this.portalConnections = [];
 
         this.gameObjects.forEach(object => {
             object.destroy();
@@ -485,6 +488,17 @@ export default class World extends PIXI.Container {
         }
     }
 
+    public addPortalConnection(connection: PortalConnection) {
+        this.portalConnections.push(connection);
+    }
+
+    public removePortalConnection(connection: PortalConnection) {
+        let idx = this.portalConnections.indexOf(connection);
+        if (idx > 1) {
+            this.portalConnections.splice(idx, 1);
+        }
+    }
+
     /**
      * Creates a new {@link GameObject} and adds it to this world.
      * @return {GameObject}
@@ -612,6 +626,10 @@ export default class World extends PIXI.Container {
 
     public getLockConnections() {
         return this.lockConnections;
+    }
+
+    public getPortalConnections() {
+        return this.portalConnections;
     }
 
     public getPlayer(): GameObject {

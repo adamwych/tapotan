@@ -2,11 +2,16 @@ import PrefabCharacterLawrence from "./characters/PrefabCharacterLawrence";
 import PrefabCharacterMainMenuLawrence from "./characters/PrefabCharacterMainMenuLawrence";
 import PrefabComplexBackgroundClouds from "./complex-backgrounds/PrefabComplexBackgroundClouds";
 import PrefabEnvironmentAccelerator from "./environment/PrefabEnvironmentAccelerator";
+import PrefabEnvironmentCannon from "./environment/PrefabEnvironmentCannon";
+import PrefabEnvironmentCannonBall from "./environment/PrefabEnvironmentCannonBall";
 import PrefabEnvironmentCoin from "./environment/PrefabEnvironmentCoin";
 import PrefabEnvironmentLadder from "./environment/PrefabEnvironmentLadder";
 import PrefabEnvironmentLava from "./environment/PrefabEnvironmentLava";
 import PrefabEnvironmentLockDoor from "./environment/PrefabEnvironmentLockDoor";
 import PrefabEnvironmentLockKey from "./environment/PrefabEnvironmentLockKey";
+import PrefabEnvironmentNoteBlock from "./environment/PrefabEnvironmentNoteBlock";
+import PrefabEnvironmentPortal from './environment/PrefabEnvironmentPortal';
+import PrefabEnvironmentSeesaw from "./environment/PrefabEnvironmentSeesaw";
 import PrefabEnvironmentSign from "./environment/PrefabEnvironmentSign";
 import PrefabEnvironmentSpike from "./environment/PrefabEnvironmentSpike";
 import PrefabEnvironmentSpring from "./environment/PrefabEnvironmentSpring";
@@ -16,18 +21,14 @@ import PrefabMonsterCuddlyApple from "./monsters/PrefabMonsterCuddlyApple";
 import PrefabMonsterGhost from "./monsters/PrefabMonsterGhost";
 import PrefabMonsterHappyCarrot from "./monsters/PrefabMonsterHappyCarrot";
 import PrefabMonsterSnake from "./monsters/PrefabMonsterSnake";
+import PrefabParticleCannonSmoke from "./particles/PrefabParticleCannonSmoke";
+import PrefabParticleCoinCollect from "./particles/PrefabParticleCoinCollect";
 import PrefabParticlesPlayerDeathBubbles from "./particles/PrefabParticlesPlayerDeathBubbles";
+import PrefabParticleSprint from "./particles/PrefabParticleSprint";
 import PrefabBasicBlock from "./PrefabBasicBlock";
 import PrefabSpawnPointShade from "./PrefabSpawnPointShade";
 import PrefabVictoryFlag from "./PrefabVictoryFlag";
 import PrefabSkyStar from "./sky/PrefabSkyStar";
-import PrefabEnvironmentNoteBlock from "./environment/PrefabEnvironmentNoteBlock";
-import PrefabParticleCoinCollect from "./particles/PrefabParticleCoinCollect";
-import PrefabParticleSprint from "./particles/PrefabParticleSprint";
-import PrefabEnvironmentSeesaw from "./environment/PrefabEnvironmentSeesaw";
-import PrefabEnvironmentCannon from "./environment/PrefabEnvironmentCannon";
-import PrefabEnvironmentCannonBall from "./environment/PrefabEnvironmentCannonBall";
-import PrefabParticleCannonSmoke from "./particles/PrefabParticleCannonSmoke";
 
 export interface PrefabBasicProps {
 
@@ -84,6 +85,7 @@ export default {
     'environment_cannon_variation0_ball': PrefabEnvironmentCannonBall.Variation0,
     'environment_cannon_variation1': PrefabEnvironmentCannon.Variation1,
     'environment_cannon_variation1_ball': PrefabEnvironmentCannonBall.Variation1,
+    'environment_portal': PrefabEnvironmentPortal,
 
     'monsters_apple': PrefabMonsterCuddlyApple,
     'monsters_carrot': PrefabMonsterHappyCarrot,
