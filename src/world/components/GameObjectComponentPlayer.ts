@@ -52,6 +52,9 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private groundParticleAnimationTimer: number = 0;
     private groundParticleAnimationDelayTimer: number = 0;
 
+    private justUsedPortal = true;
+    private portalUseExpireTimer = 0;
+
     public initialize(): void {
         this.physicsBody = this.gameObject.getComponentByType<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody).getBody();
         this.animator = this.gameObject.getComponentByType<GameObjectComponentAnimator>(GameObjectComponentAnimator);
@@ -167,13 +170,21 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             // Game over if player is out of camera bounds.
             // Skip first tick because the camera may not be positioned correctly, yet, so
             // the player would "die" instantly.
-            if (!this.firstTick) {
+            if (!this.firstTick && !this.justUsedPortal) {
                 if (
                     transform.getPositionX() < viewport.left || 
                     transform.getPositionX() > viewport.left + Tapotan.getViewportWidth() ||
                     transform.getPositionY() < -1
                 ) {
                     this.livingEntity.die();
+                }
+            }
+
+            if (this.justUsedPortal) {
+                this.portalUseExpireTimer += dt;
+
+                if (this.portalUseExpireTimer >= 1) {
+                    this.justUsedPortal = false;
                 }
             }
         }
@@ -439,6 +450,15 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
 
     private isOnLadder() {
         return this.ladderCounter > 0;
+    }
+
+    public setJustUsedPortal(justUsedPortal: boolean) {
+        this.justUsedPortal = justUsedPortal;
+        this.portalUseExpireTimer = 0;
+    }
+
+    public didJustUsePortal() {
+        return this.justUsedPortal;
     }
 
 }

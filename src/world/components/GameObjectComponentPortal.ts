@@ -40,6 +40,8 @@ export default class GameObjectComponentPortal extends GameObjectComponent {
         let playerComponent = another.getComponentByType<GameObjectComponentPlayer>(GameObjectComponentPlayer);
         if (playerComponent) {
             if (this.connection) {
+                another.getComponentByType<GameObjectComponentPlayer>(GameObjectComponentPlayer)?.setJustUsedPortal(true);
+
                 let targetPortal = this.connection.toPortal.getComponentByType<GameObjectComponentPortal>(GameObjectComponentPortal);
                 targetPortal.setCanBeUsed(false);
 
