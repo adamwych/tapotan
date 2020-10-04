@@ -18,7 +18,7 @@ export default function UIEditorLevelSettingsPopupTabGameplay() {
         { id: WorldGameOverTimeout.Minutes2, label: '2 minutes' },
     ];
 
-    const musicDropdownItems = tileset.getBackgroundMusic();
+    const musicDropdownItems = [...tileset.getBackgroundMusic()];
     musicDropdownItems.splice(0, 0, {
         id: 'none',
         label: 'None'
