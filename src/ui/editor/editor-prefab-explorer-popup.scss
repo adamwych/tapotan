@@ -123,6 +123,13 @@
                 
                 transition: all 100ms;
             }
+
+            &.editor-prefab-explorer-grid-group-item--invert {
+                img {
+                    width: auto;
+                    height: 100%;
+                }
+            }
         }
     }
 
