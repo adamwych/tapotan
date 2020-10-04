@@ -1,8 +1,7 @@
-import * as PIXI from 'pixi.js';
-import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
+import Spritesheet from '../../graphics/Spritesheet';
 import SpritesheetAnimator from '../../graphics/SpritesheetAnimator';
 import SpritesheetAnimatorTimer from '../../graphics/SpritesheetAnimatorTimer';
-import Spritesheet from '../../graphics/Spritesheet';
+import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 
 const emptyFunction = () => {};
 
@@ -40,6 +39,10 @@ export default class GameObjectComponentAnimator extends GameObjectComponent {
 
     public stopAnimating() {
         this.animator.stopAnimating();
+    }
+
+    public freezeAtFrame(animationName: string, frame: number) {
+        this.animator.freezeAtFrame(animationName, frame);
     }
 
     public setCellWidth(cellWidth: number) {

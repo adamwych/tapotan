@@ -1,7 +1,6 @@
 import * as PIXI from 'pixi.js';
-import SpritesheetAnimatorTimer from './SpritesheetAnimatorTimer';
 import Spritesheet from './Spritesheet';
-import GameObjectComponentSpring from '../world/components/GameObjectComponentSpring';
+import SpritesheetAnimatorTimer from './SpritesheetAnimatorTimer';
 
 type SpritesheetAnimatorAnimation = {
     spritesheet: Spritesheet;
@@ -122,6 +121,30 @@ export default class SpritesheetAnimator extends PIXI.Container {
         if (this.sprite) {
             this.sprite.removeChild(this.sprite.mask as PIXI.Graphics);
             this.sprite.mask = null;
+        }
+    }
+
+    public freezeAtFrame(animationName: string, frame: number) {
+        if (this.currentAnimation) {
+            this.stopAnimating();
+        }
+
+        let animation = this.animations[animationName];
+        if (animation) {
+            this.timer.restartAnimation(0, animation.cells, frame);
+            this.timer.stop();
+            
+            this.currentAnimationCellIndex = frame;
+            this.lastCurrentAnimationCellIndex = -1;
+
+            this.sprite = animation.sprite;
+            this.sprite.mask = new PIXI.Graphics();
+            this.sprite.addChild(this.sprite.mask);
+
+            this.currentAnimation = animationName;
+
+            this.updateMask();
+            this.addChild(this.sprite);
         }
     }
 
