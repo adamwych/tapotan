@@ -17,12 +17,14 @@ export default class GameObjectComponentLockKey extends GameObjectComponent {
     }
 
     public readCustomSerializationProperties(props: any) {
-        this.connection = LockDoorKeyConnection.fromSerialized(this.gameObject.getWorld(), props.connection);
+        if (props.connection) {
+            this.connection = LockDoorKeyConnection.fromSerialized(this.gameObject.getWorld(), props.connection);
+        }
     }
 
     public getCustomSerializationProperties() {
         return {
-            connection: this.connection.serialize()
+            connection: this.connection?.serialize()
         }
     }
 

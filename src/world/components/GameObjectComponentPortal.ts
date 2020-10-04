@@ -21,12 +21,14 @@ export default class GameObjectComponentPortal extends GameObjectComponent {
     }
 
     public readCustomSerializationProperties(props: any) {
-        this.connection = PortalConnection.fromSerialized(this.gameObject.getWorld(), props.connection);
+        if (props.connection) {
+            this.connection = PortalConnection.fromSerialized(this.gameObject.getWorld(), props.connection);
+        }
     }
 
     public getCustomSerializationProperties() {
         return {
-            connection: this.connection.serialize()
+            connection: this.connection?.serialize()
         };
     }
 
