@@ -39,6 +39,7 @@ export default createPrefabSpawnFunction('ComplexBackgroundClouds', (gameObject:
         gameObject.addChild(layerGameObject);
     });
 
+    gameObject.setCustomProperty('background', true);
     gameObject.setCustomProperty('hasParallaxBackground', true);
     gameObject.createComponent(GameObjectComponentTransform);
 });
