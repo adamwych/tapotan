@@ -233,9 +233,7 @@ export default class Tapotan extends EventEmitter {
                         textures.push(bundle.getFile('Fonts/Joystix_' + size + '_' + i + '.png').resource);
                     }
 
-                    PIXI.BitmapText.registerFont(
-                        bundle.getFile('Fonts/Joystix_' + size + '.xml').resource, textures
-                    );
+                    PIXI.BitmapFont.install(bundle.getFile('Fonts/Joystix_' + size + '.xml').resource, textures);
                 });
 
                 this.assetManager.addTileset(Tileset.loadFromXMLDocument(bundle.getFile('Tilesets/Pixelart/data.xml').resource));

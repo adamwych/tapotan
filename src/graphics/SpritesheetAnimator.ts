@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import SpritesheetAnimatorTimer from './SpritesheetAnimatorTimer';
 import Spritesheet from './Spritesheet';
+import GameObjectComponentSpring from '../world/components/GameObjectComponentSpring';
 
 type SpritesheetAnimatorAnimation = {
     spritesheet: Spritesheet;
@@ -56,7 +57,7 @@ export default class SpritesheetAnimator extends PIXI.Container {
 
         let mask = this.sprite.mask as PIXI.Graphics;
         mask.clear();
-        mask.beginFill(0xff0000);
+        mask.beginFill(0xff0000, 0.4);
         mask.drawRect(this.currentAnimationCellIndex * this.cellWidth, 0, this.cellWidth, this.cellHeight);
         mask.endFill();
 
@@ -77,7 +78,8 @@ export default class SpritesheetAnimator extends PIXI.Container {
 
             if (this.currentAnimation) {
                 this.removeChild(this.sprite);
-                this.sprite.removeChild(this.sprite.mask);
+                this.sprite.removeChild(this.sprite.mask as PIXI.Graphics);
+                this.sprite.mask = null;
             }
 
             this.sprite = animation.sprite;
@@ -118,7 +120,8 @@ export default class SpritesheetAnimator extends PIXI.Container {
         this.removeChild(this.sprite);
 
         if (this.sprite) {
-            this.sprite.removeChild(this.sprite.mask);
+            this.sprite.removeChild(this.sprite.mask as PIXI.Graphics);
+            this.sprite.mask = null;
         }
     }
 

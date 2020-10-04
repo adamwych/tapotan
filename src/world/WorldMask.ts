@@ -27,7 +27,7 @@ export default class WorldMask {
         this.size = size;
 
         if (this.viewport.mask) {
-            this.viewport.mask.removeChild(this.viewport.mask);
+            this.viewport.removeChild(this.viewport.mask as PIXI.Sprite);
             this.viewport.mask = null;
         }
 
@@ -39,7 +39,7 @@ export default class WorldMask {
 
     public destroy() {
         if (this.viewport.mask) {
-            this.viewport.mask.removeChild(this.viewport.mask);
+            this.viewport.removeChild(this.viewport.mask as PIXI.Sprite);
             this.viewport.mask = null;
         }
     }

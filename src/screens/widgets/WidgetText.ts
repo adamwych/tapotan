@@ -25,10 +25,8 @@ export default class WidgetText extends PIXI.Container {
 
         this.text = new PIXI.BitmapText(text, {
             tint: color,
-            font: {
-                name: 'Joystix ' + size,
-                size: size
-            }
+            fontName: 'Joystix ' + size,
+            fontSize: size
         });
 
         this.text.zIndex = 2;
@@ -70,8 +68,8 @@ export default class WidgetText extends PIXI.Container {
     }
     
     public setSize(size: WidgetTextSize) {
-        this.text.font.name = 'Joystix ' + size;
-        this.text.font.size = size;
+        this.text.fontName = 'Joystix ' + size;
+        this.text.fontSize = size;
     }
 
     public setUnderlined(underlined: boolean) {
@@ -121,7 +119,8 @@ export default class WidgetText extends PIXI.Container {
     private createShadow(color: number, padding, alpha = 1) {
         this.shadowText = new PIXI.BitmapText(this.text.text, {
             tint: color,
-            font: this.text.font
+            fontName: this.text.fontName,
+            fontSize: this.text.fontSize
         });
 
         this.shadowText.alpha = alpha;

@@ -1,4 +1,4 @@
-import { Howler } from 'howler';
+import { Howl, Howler } from 'howler';
 import TAPOAssetBundle from './asset-bundle/TAPOAssetBundle';
 
 const BACKGROUND_MUSIC_NAMES = [
