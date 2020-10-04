@@ -77,6 +77,7 @@ export default {
     'environment_sign_variation10': PrefabEnvironmentSign,
     'environment_sign_variation11': PrefabEnvironmentSign,
     'environment_lock_key': PrefabEnvironmentLockKey,
+    'environment_lock_key_outlined': PrefabEnvironmentLockKey,
     'environment_lock_door': PrefabEnvironmentLockDoor,
     'environment_seesaw': PrefabEnvironmentSeesaw,
     'environment_cannon_variation0': PrefabEnvironmentCannon.Variation0,
