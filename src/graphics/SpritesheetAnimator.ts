@@ -57,7 +57,7 @@ export default class SpritesheetAnimator extends PIXI.Container {
 
         let mask = this.sprite.mask as PIXI.Graphics;
         mask.clear();
-        mask.beginFill(0xff0000, 0.4);
+        mask.beginFill(0xff0000);
         mask.drawRect(this.currentAnimationCellIndex * this.cellWidth, 0, this.cellWidth, this.cellHeight);
         mask.endFill();
 
