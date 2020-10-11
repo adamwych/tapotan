@@ -115,7 +115,7 @@ export default class PhysicsWorld extends EventEmitter {
                 // If there is any body that is a sensor, then we need to do
                 // more calculations, because body<->sensor collision must be reported
                 // but not acted upon.
-                if (allCollisions.findIndex(x => x.bodyB.isSensor())) {
+                if (collisions.some(x => x.bodyB.isSensor())) {
                     let collisionsWithoutSensors = collisions.filter(x => !x.bodyB.isSensor());
                     finalCollisions = this.findMostPreferrableCollision(body, collisionsWithoutSensors);
                 } else {
