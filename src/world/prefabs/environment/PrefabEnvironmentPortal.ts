@@ -29,12 +29,9 @@ export default createPrefabSpawnFunction('environment_portal', (gameObject: Game
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(gameObject.getWidth() / 8, gameObject.getHeight(), {
-            mass: 0,
-            fixedRotation: true
-        }, {
-            sensor: true
-        });
+        body.initializeBox(world.getPhysicsWorld(), gameObject.getWidth() / 8, gameObject.getHeight(), 0);
+        body.getBody().setStatic(true);
+        body.getBody().setSensor(true);
 
         body.setMaterial(PhysicsMaterials.Ground);
         body.setCollisionGroup(PhysicsBodyCollisionGroup.Block);

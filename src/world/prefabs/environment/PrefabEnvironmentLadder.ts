@@ -23,12 +23,9 @@ export default createPrefabSpawnFunction('environment_ladder', (gameObject: Game
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(0.5, 1, {
-            mass: 0,
-            fixedRotation: true
-        }, {
-            sensor: true
-        });
+        body.initializeBox(world.getPhysicsWorld(), 0.5, 1, 0);
+        body.getBody().setStatic(true);
+        body.getBody().setSensor(true);
 
         body.setMaterial(PhysicsMaterials.Ground);
         body.setCollisionGroup(PhysicsBodyCollisionGroup.Sensor);

@@ -1,11 +1,11 @@
 import Tapotan from '../core/Tapotan';
-import * as p2 from 'p2';
+import PhysicsWorld from '../world/physics-engine/PhysicsWorld';
 
 export default class PhysicsDebugRenderer {
 
     public static current = null;
 
-    public static create(world: p2.World) {
+    public static create(world: PhysicsWorld) {
         if (PhysicsDebugRenderer.current) {
             PhysicsDebugRenderer.current.destroy();
         }
@@ -31,7 +31,7 @@ export default class PhysicsDebugRenderer {
                 return;
             }
             
-            let bodies = world.bodies;
+            let bodies = world.getBodies();
 
             window.requestAnimationFrame(render);
 
@@ -39,24 +39,28 @@ export default class PhysicsDebugRenderer {
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.beginPath();
 
-            for (var i = 0; i < bodies.length; i += 1) {
-                let body = bodies[i];
-                let a1 = body.aabb.lowerBound[0];
-                let a2 = body.aabb.lowerBound[1];
-                let b1 = body.aabb.upperBound[0];
-                let b2 = body.aabb.upperBound[1];
+            bodies.forEach(body => {
+                body.renderDebugShape(context);
+            });
 
-                let x1 = [a1 * scale, a2 * scale];
-                let x2 = [b1 * scale, a2 * scale];
-                let x3 = [b1 * scale, b2 * scale];
-                let x4 = [a1 * scale, b2 * scale];
+            // for (var i = 0; i < bodies.length; i += 1) {
+            //     let body = bodies[i];
+            //     let a1 = body.aabb.lowerBound[0];
+            //     let a2 = body.aabb.lowerBound[1];
+            //     let b1 = body.aabb.upperBound[0];
+            //     let b2 = body.aabb.upperBound[1];
 
-                context.moveTo(x1[0], x1[1]);
-                context.lineTo(x2[0], x2[1]);
-                context.lineTo(x3[0], x3[1]);
-                context.lineTo(x4[0], x4[1]);
-                context.lineTo(x1[0], x1[1]);
-            }
+            //     let x1 = [a1 * scale, a2 * scale];
+            //     let x2 = [b1 * scale, a2 * scale];
+            //     let x3 = [b1 * scale, b2 * scale];
+            //     let x4 = [a1 * scale, b2 * scale];
+
+            //     context.moveTo(x1[0], x1[1]);
+            //     context.lineTo(x2[0], x2[1]);
+            //     context.lineTo(x3[0], x3[1]);
+            //     context.lineTo(x4[0], x4[1]);
+            //     context.lineTo(x1[0], x1[1]);
+            // }
 
             context.lineWidth = 1;
             context.strokeStyle = '#d0d0d0';

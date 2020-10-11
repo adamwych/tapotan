@@ -1,6 +1,6 @@
-import * as p2 from 'p2';
 import GameObject from "../GameObject";
 import GameObjectComponent from "../GameObjectComponent";
+import PhysicsBody from '../physics-engine/PhysicsBody';
 import GameObjectComponentLivingEntity from './GameObjectComponentLivingEntity';
 import GameObjectComponentPhysicsBody from './GameObjectComponentPhysicsBody';
 
@@ -9,7 +9,7 @@ export default class GameObjectComponentAccelerator extends GameObjectComponent 
     protected type = 'accelerator';
 
     private timer: number = 0;
-    private collidingWith: p2.Body;
+    private collidingWith: PhysicsBody;
 
     public initialize(): void {
         this.gameObject.on('collisionStart', this.handleCollisionStart);
@@ -60,7 +60,7 @@ export default class GameObjectComponentAccelerator extends GameObjectComponent 
                 }
             }
 
-            this.collidingWith.applyForce(p2.vec2.fromValues(x, y));
+            this.collidingWith.applyForce({ x: x, y: y });
         }
     }
 

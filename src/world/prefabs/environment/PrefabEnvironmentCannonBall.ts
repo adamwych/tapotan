@@ -25,9 +25,9 @@ const cannonBallBaseSpawnFunction = createPrefabSpawnFunction('environment_canno
     gameObject.createComponent<GameObjectComponentCannonBall>(GameObjectComponentCannonBall);
 
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-    body.initializeCircle(0.5, {
-        mass: 100
-    });
+    // body.initializeCircle(0.5, {
+    //     mass: 100
+    // });
 
     body.setMaterial(PhysicsMaterials.Ground);
     body.setCollisionGroup(PhysicsBodyCollisionGroup.Block);

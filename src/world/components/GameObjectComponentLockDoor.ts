@@ -1,13 +1,13 @@
 import * as PIXI from 'pixi.js';
 import GameObjectComponent from "../GameObjectComponent";
 import GameObjectComponentAnimator from './GameObjectComponentAnimator';
-import * as p2 from 'p2';
 import GameObjectComponentPhysicsBody from './GameObjectComponentPhysicsBody';
+import PhysicsBody from '../physics-engine/PhysicsBody';
 
 export default class GameObjectComponentLockDoor extends GameObjectComponent {
 
     private animator: GameObjectComponentAnimator;
-    private physicsBody: p2.Body;
+    private physicsBody: PhysicsBody;
 
     private editorOverlay: PIXI.Graphics;
     private editorFadeTimer: number = 0;
@@ -55,13 +55,13 @@ export default class GameObjectComponentLockDoor extends GameObjectComponent {
     public lock() {
         this.locked = true;
         this.animator.playAnimation('locked');
-        this.physicsBody.collisionResponse = true;
+        this.physicsBody.setCollisionsEnabled(true);
     }
 
     public unlock() {
         this.locked = false;
         this.animator.playAnimation('unlocked');
-        this.physicsBody.collisionResponse = false;
+        this.physicsBody.setCollisionsEnabled(false);
     }
 
     public isLocked(): boolean {

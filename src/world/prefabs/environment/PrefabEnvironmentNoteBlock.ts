@@ -14,10 +14,7 @@ export default createPrefabSpawnFunction('environment_note', (gameObject: GameOb
     const noteComponent = gameObject.createComponent<GameObjectComponentNoteBlock>(GameObjectComponentNoteBlock);
     noteComponent.initialize();
 
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    });
+    createPrefabDefaultTransform(gameObject, props, 0, true);
 
     gameObject.setCustomProperty('__prefab', props.resource);
 });

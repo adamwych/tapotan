@@ -33,12 +33,7 @@ export default createPrefabSpawnFunction('environment_coin', (gameObject: GameOb
     gameObject2.transformComponent.setScale(0.5, 0.5);
     gameObject.addChild(gameObject2);
 
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    }, {
-        sensor: true
-    }, PhysicsBodyCollisionGroup.Collectable);
+    createPrefabDefaultTransform(gameObject, props, 0, true, true, PhysicsBodyCollisionGroup.Collectable);
 
     gameObject.setCustomProperty('sensor', true);
     gameObject.createComponent<GameObjectComponentCollectable>(GameObjectComponentCollectable).initialize(CollectableCategory.Coin, PrefabParticleCoinCollect);

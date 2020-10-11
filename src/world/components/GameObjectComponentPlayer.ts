@@ -1,9 +1,9 @@
-import * as p2 from 'p2';
 import GameManager, { GameEndReason } from '../../core/GameManager';
 import Tapotan from '../../core/Tapotan';
 import GameObject from '../GameObject';
 import GameObjectComponent, { GameObjectComponentDebugProperty } from "../GameObjectComponent";
 import GameObjectFaceDirection from '../GameObjectFaceDirection';
+import PhysicsBody from '../physics-engine/PhysicsBody';
 import PhysicsBodyCollisionGroup from '../physics/PhysicsBodyCollisionGroup';
 import Prefabs from '../prefabs/Prefabs';
 import World from '../World';
@@ -19,16 +19,16 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     private livingEntity: GameObjectComponentLivingEntity;
     private animator: GameObjectComponentAnimator;
     private gameManager: GameManager;
-    private physicsBody: p2.Body;
+    private physicsBody: PhysicsBody;
 
     private canJump: boolean = false;
     private duringJump: boolean = false;
 
-    private speed: number = 7;
-    private speedForce: number = 2700;
-    private airSpeedForce: number = this.speedForce / 1.25;
-    private jumpForce: number = 1350;
-    private jumpContinueForce: number = 1120;
+    public speed: number = 0.35;
+    public speedForce: number = 2.75;
+    public airSpeedForce: number = this.speedForce / 1.25;
+    public jumpForce: number = 60;
+    public jumpContinueForce: number = 220;
     private ladderSlowdown: number = 2;
 
     private touchingSide: GameObjectFaceDirection = null;
@@ -151,6 +151,9 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     }
 
     public tick(dt: number) {
+        // this.physicsBody.applyForce({ x: 70, y: 0 });
+        // return;
+
         const transform = this.gameObject.transformComponent;
         const viewport = Tapotan.getInstance().getViewport();
 
@@ -199,7 +202,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             if (this.wantsToMoveUp) {
                 ignoreAnimationSet = true;
                 this.animator.playAnimation('climb', 0);
-                this.physicsBody.velocity[1] = -7;
+                this.physicsBody.setVelocityY(-7);
                 this.isClimbingLadder = true;
             } else {
                 this.isClimbingLadder = false;
@@ -210,29 +213,29 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
 
         this.isClimbingLadder = false;
 
-        if (Math.abs(this.physicsBody.velocity[0]) > this.speed) {
-            if (this.physicsBody.velocity[0] < 0) {
-                this.physicsBody.velocity[0] = -this.speed;
+        if (Math.abs(this.physicsBody.getVelocityX()) > this.speed) {
+            if (this.physicsBody.getVelocityX() < 0) {
+                this.physicsBody.setVelocityX(-this.speed);
             } else {
-                this.physicsBody.velocity[0] = this.speed;
+                this.physicsBody.setVelocityX(this.speed);
             }
         }
 
-        if (Math.abs(this.physicsBody.velocity[0]) < this.speed) {
+        if (Math.abs(this.physicsBody.getVelocityX()) < this.speed) {
             let speed = (this.touchingGround ? this.speedForce : this.airSpeedForce);
             
-            if (this.isOnLadder() && Math.abs(this.physicsBody.velocity[0]) > 3) {
+            if (this.isOnLadder() && Math.abs(this.physicsBody.getVelocityX()) > 3) {
                 speed /= this.ladderSlowdown;
             }
 
             if (this.wantsToMoveLeft) {
                 this.faceDirection = GameObjectFaceDirection.Left;
-                this.physicsBody.applyForce([-speed, 0]);
+                this.physicsBody.applyForce({ x: -speed, y: 0 });
             }
     
             if (this.wantsToMoveRight) {
                 this.faceDirection = GameObjectFaceDirection.Right;
-                this.physicsBody.applyForce([speed, 0]);
+                this.physicsBody.applyForce({ x: speed, y: 0 });
             }
         }
 
@@ -263,6 +266,8 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         if (ignoreAnimationSet) {
             return;
         }
+
+        this.touchingGround = true;
 
         if (this.touchingSide === GameObjectFaceDirection.Left) {
             this.animator.playAnimation('wallslide_left');
@@ -302,11 +307,11 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             if (this.canJump && this.touchingGround) {
                 this.duringJump = true;
                 this.canJump = false;
-                this.physicsBody.applyImpulse([0, -this.jumpForce]);
+                this.physicsBody.applyForce({ x: 0, y: -this.jumpForce });
             }
 
             if (this.duringJump && !this.touchingGround && !this.touchingSide) {
-                this.physicsBody.applyForce([0, -(this.touchingSide === null ? this.jumpContinueForce : this.jumpContinueForce * 0.75)]);
+                this.physicsBody.applyForce({ x: 0, y: -(this.touchingSide === null ? this.jumpContinueForce : this.jumpContinueForce * 0.75) });
             }
         } else {
             this.canJump = true;
@@ -315,7 +320,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
     }
 
     private tickGroundCollisionCheck(): void {
-        const result = new p2.RaycastResult();
+        /*const result = new p2.RaycastResult();
 
         // Each foot checked individually.
 
@@ -375,11 +380,11 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         }
 
         this.wasInAirInPreviousFrame = !this.touchingGround;
-        this.touchingGround = isTouchingGroundNow;
+        this.touchingGround = isTouchingGroundNow;*/
     }
 
     private tickSideCollisionCheck(): void {
-        const result = new p2.RaycastResult();
+        /*const result = new p2.RaycastResult();
 
         this.touchingSide = null;
 
@@ -420,7 +425,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
             if (touchingBody.getLayer() !== this.gameObject.getLayer() || touchingBody.hasCustomProperty('sensor')) {
                 this.touchingSide = null;
             }
-        }
+        }*/
     }
 
     private handleLivingEntityDied = () => {
@@ -440,7 +445,7 @@ export default class GameObjectComponentPlayer extends GameObjectComponent {
         this.ladderCounter++;
 
         if (this.ladderCounter === 1) {
-            this.physicsBody.velocity[0] /= this.ladderSlowdown;
+            this.physicsBody.setVelocityX(this.physicsBody.getVelocityX() / this.ladderSlowdown);
         }
     }
 

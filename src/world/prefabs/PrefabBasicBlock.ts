@@ -22,10 +22,8 @@ export default createPrefabSpawnFunction<PrefabBasicBlockProps>('BasicBlock', (g
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(gameObject.getWidth(), gameObject.getHeight(), {
-            mass: 0,
-            fixedRotation: true
-        });
+        body.initializeBox(world.getPhysicsWorld(), gameObject.getWidth(), gameObject.getHeight(), 0);
+        body.getBody().setStatic(true);
 
         body.setCollisionGroup(PhysicsBodyCollisionGroup.Block);
         body.setMaterial(PhysicsMaterials.Ground);

@@ -10,8 +10,9 @@ export default function createPrefabDefaultTransform(
     gameObject: GameObject,
     props: PrefabBasicProps,
 
-    bodyOptions: p2.BodyOptions,
-    shapeOptions: p2.ShapeOptions = {},
+    mass: number,
+    _static: boolean = false,
+    sensor: boolean = false,
 
     collisionGroup: number = PhysicsBodyCollisionGroup.Block,
     collisionMask: number = (PhysicsBodyCollisionGroup.Entity | PhysicsBodyCollisionGroup.Player),
@@ -21,7 +22,15 @@ export default function createPrefabDefaultTransform(
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(gameObject.getWidth(), gameObject.getHeight(), bodyOptions, shapeOptions);
+        body.initializeBox(gameObject.getWorld().getPhysicsWorld(), gameObject.getWidth(), gameObject.getHeight(), mass);
+
+        if (_static) {
+            body.getBody().setStatic(true);
+        }
+
+        if (sensor) {
+            body.getBody().setSensor(true);
+        }
 
         body.setMaterial(material);
         body.setCollisionGroup(collisionGroup);

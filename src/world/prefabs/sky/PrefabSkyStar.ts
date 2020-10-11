@@ -17,10 +17,5 @@ export default createPrefabSpawnFunction('sky_stars_variation0', (gameObject: Ga
     animatorComponent.addAnimation('animation', new Spritesheet(texture, 16, 16), 300);
     animatorComponent.playAnimation('animation');
 
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    }, {
-        sensor: true
-    });
+    createPrefabDefaultTransform(gameObject, props, 0, true, true);
 });

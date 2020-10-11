@@ -19,10 +19,5 @@ export default createPrefabSpawnFunction('environment_lock_key', (gameObject: Ga
     gameObject.setCustomProperty('sensor', true);
     gameObject.setCustomProperty('lockKey', true);
     
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    }, {
-        sensor: true
-    });
+    createPrefabDefaultTransform(gameObject, props, 0, true, true);
 });

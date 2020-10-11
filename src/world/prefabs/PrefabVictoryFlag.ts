@@ -16,12 +16,9 @@ export default createPrefabSpawnFunction('VictoryFlag', (gameObject: GameObject,
         gameObject.createComponent(GameObjectComponentTransform);
     } else {
         const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-        body.initializeBox(1, 1, {
-            mass: 0,
-            fixedRotation: true,
-        }, {
-            sensor: true
-        });
+        body.initializeBox(world.getPhysicsWorld(), 1, 1, 0);
+        body.getBody().setStatic(true);
+        body.getBody().setSensor(true);
     
         body.setMaterial(PhysicsMaterials.Ground);
         body.setCollisionGroup(PhysicsBodyCollisionGroup.Sensor);

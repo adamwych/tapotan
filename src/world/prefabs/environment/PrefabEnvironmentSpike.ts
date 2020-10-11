@@ -13,12 +13,7 @@ export default createPrefabSpawnFunction('environment_spike', (gameObject: GameO
 
     gameObject.createComponent<GameObjectComponentKillOnTouch>(GameObjectComponentKillOnTouch).initialize();
 
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    }, {
-        sensor: true
-    });
+    createPrefabDefaultTransform(gameObject, props, 0, true, true);
 
     gameObject.setCustomProperty('__prefab', props.resource);
 });

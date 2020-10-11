@@ -1,22 +1,21 @@
-import * as p2 from 'p2';
 import GameObjectComponent from "../GameObjectComponent";
+import Material from '../physics-engine/Material';
+import PhysicsBody from '../physics-engine/PhysicsBody';
+import PhysicsBodyShape, { PhysicsBodyShapeBox } from '../physics-engine/PhysicsBodyShape';
+import PhysicsWorld from '../physics-engine/PhysicsWorld';
 import World from '../World';
 
 export default class GameObjectComponentPhysicsBody extends GameObjectComponent {
 
     protected type = 'physics_body';
 
-    protected body: p2.Body;
-    protected shape: p2.Shape;
+    protected body: PhysicsBody;
+    protected shape: PhysicsBodyShape;
 
-    public initialize(bodyOptions: p2.BodyOptions, shape: p2.Shape): void {
+    public initialize(world: PhysicsWorld, shape: PhysicsBodyShape, mass: number): void {
         this.shape = shape;
-        this.body = new p2.Body({
-            ...bodyOptions,
-            id: this.gameObject.getId()
-        });
-
-        this.body.addShape(shape);
+        this.body = new PhysicsBody(world, shape, mass);
+        this.body.setId(this.gameObject.getId());
 
         this.gameObject.getWorld().addPhysicsBody(this.gameObject, this.body);
         this.gameObject.on('transform.scaleChanged', this.handleTransformScaleChanged);
@@ -29,12 +28,8 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
      * @param height Height in world scale.
      * @param options 
      */
-    public initializeBox(width: number, height: number, options: p2.BodyOptions, shapeOptions: p2.ShapeOptions = {}) {
-        this.initialize(options, new p2.Box({
-            ...shapeOptions,
-            width: width * World.PHYSICS_SCALE,
-            height: height * World.PHYSICS_SCALE,
-        }));
+    public initializeBox(world: PhysicsWorld, width: number, height: number, mass: number) {
+        this.initialize(world, new PhysicsBodyShapeBox(width * World.PHYSICS_SCALE, height * World.PHYSICS_SCALE), mass);
     }
 
     /**
@@ -46,11 +41,11 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
      * @param shapeOptions 
      */
     public initializeCapsule(radius: number, length: number, options: p2.BodyOptions, shapeOptions: p2.ShapeOptions = {}) {
-        this.initialize(options, new p2.Capsule({
-            ...shapeOptions,
-            radius: radius * World.PHYSICS_SCALE,
-            length: length * World.PHYSICS_SCALE
-        }));
+        // this.initialize(options, new p2.Capsule({
+        //     ...shapeOptions,
+        //     radius: radius * World.PHYSICS_SCALE,
+        //     length: length * World.PHYSICS_SCALE
+        // }));
     }
 
     /**
@@ -60,11 +55,11 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
      * @param options 
      * @param shapeOptions 
      */
-    public initializeCircle(radius: number, options: p2.BodyOptions, shapeOptions: p2.ShapeOptions = {}) {
-        this.initialize(options, new p2.Circle({
-            ...shapeOptions,
-            radius: radius * World.PHYSICS_SCALE
-        }));
+    public __initializeCircle(world: PhysicsWorld, radius: number, options: p2.BodyOptions, shapeOptions: p2.ShapeOptions = {}) {
+        // this.initialize(options, new p2.Circle({
+        //     ...shapeOptions,
+        //     radius: radius * World.PHYSICS_SCALE
+        // }));
     }
 
     protected destroy(): void {
@@ -72,28 +67,30 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
         this.gameObject.off('transform.scaleChanged', this.handleTransformScaleChanged);
     }
 
-    public setMaterial(material: p2.Material) {
-        this.shape.material = material;
+    public setMaterial(material: Material) {
+        this.body.setMaterial(material);
     }
 
     public getMaterial() {
-        return this.shape.material;
+        return this.body.getMaterial();
     }
 
     public setCollisionGroup(collisionGroup: number) {
-        this.shape.collisionGroup = collisionGroup;
+        // this.shape.collisionGroup = collisionGroup;
     }
 
     public getCollisionGroup(): number {
-        return this.shape.collisionGroup;
+        // return this.shape.collisionGroup;
+        return 0;
     }
 
     public setCollisionMask(collisionMask: number) {
-        this.shape.collisionMask = collisionMask;
+        // this.shape.collisionMask = collisionMask;
     }
 
     public getCollisionMask(): number {
-        return this.shape.collisionMask;
+        // return this.shape.collisionMask;
+        return 0;
     }
 
     private handleTransformScaleChanged = (scaleX: number, scaleY: number) => {
@@ -104,14 +101,14 @@ export default class GameObjectComponentPhysicsBody extends GameObjectComponent 
     /**
      * Returns the physical body.
      */
-    public getBody(): p2.Body {
+    public getBody(): PhysicsBody {
         return this.body;
     }
 
     /**
      * Returns shape of the physical body.
      */
-    public getShape(): p2.Shape {
+    public getShape(): PhysicsBodyShape {
         return this.shape;
     }
 

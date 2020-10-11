@@ -1,6 +1,6 @@
-import * as p2 from 'p2';
 import GameObject from "../GameObject";
 import GameObjectComponent from "../GameObjectComponent";
+import PhysicsBody from '../physics-engine/PhysicsBody';
 import GameObjectComponentLivingEntity from './GameObjectComponentLivingEntity';
 import GameObjectComponentPhysicsBody from './GameObjectComponentPhysicsBody';
 
@@ -11,7 +11,7 @@ export default class GameObjectComponentSeesaw extends GameObjectComponent {
 
     protected type = 'seesaw';
 
-    private body: p2.Body;
+    private body: PhysicsBody;
     private timer: number = 0;
     private collidingWith: GameObject;
 
@@ -34,20 +34,20 @@ export default class GameObjectComponentSeesaw extends GameObjectComponent {
             entityPosition[0] += 0.5;
             seesawPosition[0] += 2;
 
-            let distanceFromCenter = p2.vec2.distance(entityPosition, seesawPosition) - 1;
-            if (entityPosition[0] < seesawPosition[0]) {
-                distanceFromCenter = -distanceFromCenter;
-            }
+            // let distanceFromCenter = p2.vec2.distance(entityPosition, seesawPosition) - 1;
+            // if (entityPosition[0] < seesawPosition[0]) {
+            //     distanceFromCenter = -distanceFromCenter;
+            // }
 
-            this.body.angle += (distanceFromCenter * 500 * DEGREES_TO_RADIANS) * dt;
+            // this.body.angle += (distanceFromCenter * 500 * DEGREES_TO_RADIANS) * dt;
 
-            if (this.body.angle > 0.5) {
-                this.body.angle = 0.5;
-            }
+            // if (this.body.angle > 0.5) {
+            //     this.body.angle = 0.5;
+            // }
 
-            if (this.body.angle < -0.5) {
-                this.body.angle = -0.5;
-            }
+            // if (this.body.angle < -0.5) {
+            //     this.body.angle = -0.5;
+            // }
         }
     }
 

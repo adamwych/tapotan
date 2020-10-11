@@ -18,10 +18,7 @@ export default createPrefabSpawnFunction('environment_lock_door', (gameObject: G
     animatorComponent.addAnimation('unlocked', new Spritesheet(unlockedTexture, 16, 16), 99999);
     animatorComponent.playAnimation('locked');
     
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    });
+    createPrefabDefaultTransform(gameObject, props, 0, true);
 
     gameObject.createComponent<GameObjectComponentLockDoor>(GameObjectComponentLockDoor).initialize();
 });

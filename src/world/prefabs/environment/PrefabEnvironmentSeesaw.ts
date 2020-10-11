@@ -7,7 +7,6 @@ import GameObjectComponentPhysicsAwareTransform from "../../components/GameObjec
 import PhysicsBodyCollisionGroup from "../../physics/PhysicsBodyCollisionGroup";
 import PhysicsMaterials from "../../physics/PhysicsMaterials";
 import GameObjectComponentPhysicsBody from "../../components/GameObjectComponentPhysicsBody";
-import * as p2 from 'p2';
 import GameObjectComponentSeesaw from "../../components/GameObjectComponentSeesaw";
 
 export default createPrefabSpawnFunction('environment_seesaw', (gameObject: GameObject, world: World, props: PrefabBasicProps) => {
@@ -16,12 +15,8 @@ export default createPrefabSpawnFunction('environment_seesaw', (gameObject: Game
     spriteComponent.initialize(texture);
 
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-    body.initializeBox(gameObject.getWidth(), gameObject.getHeight(), {
-        mass: 0,
-        fixedRotation: false,
-    }, {
-        type: p2.Body.KINEMATIC
-    });
+    body.initializeBox(world.getPhysicsWorld(), gameObject.getWidth(), gameObject.getHeight(), 0);
+    body.getBody().setStatic(true);
 
     body.setMaterial(PhysicsMaterials.Ground);
     body.setCollisionGroup(PhysicsBodyCollisionGroup.Block);

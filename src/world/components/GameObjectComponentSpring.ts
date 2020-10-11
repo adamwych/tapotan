@@ -1,7 +1,7 @@
-import * as p2 from 'p2';
 import TickHelper from "../../core/TickHelper";
 import GameObject from "../GameObject";
 import GameObjectComponent from "../GameObjectComponent";
+import PhysicsBody from '../physics-engine/PhysicsBody';
 import GameObjectComponentAnimator from "./GameObjectComponentAnimator";
 import GameObjectComponentLivingEntity from "./GameObjectComponentLivingEntity";
 import GameObjectComponentPhysicsBody from "./GameObjectComponentPhysicsBody";
@@ -75,7 +75,7 @@ export default class GameObjectComponentSpring extends GameObjectComponent {
         }
     }
 
-    private scheduleBounce = (body: p2.Body, forceX: number, forceY: number) => {
+    private scheduleBounce = (body: PhysicsBody, forceX: number, forceY: number) => {
         this.bounceScheduled = true;
     
         TickHelper.nextTick(() => {
@@ -86,7 +86,7 @@ export default class GameObjectComponentSpring extends GameObjectComponent {
             forceX *= 350;
             forceY *= 350;
 
-            body.applyForce(p2.vec2.fromValues(forceX, forceY));
+            body.applyForce({ x: forceX, y: forceY });
             this.bounceScheduled = false;
         });
     }

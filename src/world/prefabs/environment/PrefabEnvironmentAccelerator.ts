@@ -22,10 +22,5 @@ export default createPrefabSpawnFunction('environment_speeder', (gameObject: Gam
 
     gameObject.createComponent<GameObjectComponentAccelerator>(GameObjectComponentAccelerator).initialize();
 
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    }, {
-        sensor: true
-    });
+    createPrefabDefaultTransform(gameObject, props, 0, true, true);
 });

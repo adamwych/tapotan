@@ -1,4 +1,3 @@
-import * as p2 from 'p2';
 import GameObjectComponentPhysicsBody from '../components/GameObjectComponentPhysicsBody';
 import GameObject from "../GameObject";
 import GameObjectFaceDirection from '../GameObjectFaceDirection';
@@ -56,17 +55,17 @@ export default class MonsterAINodeMoveSideToSide extends MonsterAINode {
             }
 
             let body = physicsBodyComponent.getBody();
-            if (Math.abs(body.velocity[0]) < this.speed) {
-                body.applyForce([
-                    (this.gameObject.transformComponent.getFaceDirection() === GameObjectFaceDirection.Left ? -1 : 1) * (this.speedForce),
-                    0
-                ]);
+            if (Math.abs(body.getVelocityX()) < this.speed) {
+                body.applyForce({
+                    x: (this.gameObject.transformComponent.getFaceDirection() === GameObjectFaceDirection.Left ? -1 : 1) * (this.speedForce),
+                    y: 0
+                });
             }
         }
     }
 
     private raycast(rayStartX: number, rayStartY: number, rayEndX: number, rayEndY: number) {
-        const result = new p2.RaycastResult();
+        /*const result = new p2.RaycastResult();
 
         let rayStartPosition = p2.vec2.fromValues(rayStartX, rayStartY);
         let rayEndPosition = p2.vec2.fromValues(rayEndX, rayEndY);
@@ -78,7 +77,8 @@ export default class MonsterAINodeMoveSideToSide extends MonsterAINode {
             collisionMask: PhysicsBodyCollisionGroup.Block
         }));
 
-        return raySuccess;
+        return raySuccess;*/
+        return false;
     }
 
     private checkIfAtEdgeLeft(): boolean {

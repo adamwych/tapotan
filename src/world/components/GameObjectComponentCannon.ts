@@ -146,9 +146,9 @@ export default class GameObjectComponentCannon extends GameObjectComponent {
 
         if (newAngle > 0) {
             console.log(newAngle * force, newAngle * -force / 1.5);
-            ballPhysicsBody.getBody().applyForce([newAngle * force, newAngle * -force / 1.5], [0.5, 0.5]);
+            ballPhysicsBody.getBody().applyForce({ x: newAngle * force, y: newAngle * -force / 1.5 });
         } else {
-            ballPhysicsBody.getBody().applyForce([newAngle * force, newAngle * force / 1.5], [0.5, 0.5]);
+            ballPhysicsBody.getBody().applyForce({ x: newAngle * force, y: newAngle * force / 1.5 });
         }
 
         const distanceToPlayer = this.getGameObject().getWorld().getPlayer().distanceTo(this.gameObject);

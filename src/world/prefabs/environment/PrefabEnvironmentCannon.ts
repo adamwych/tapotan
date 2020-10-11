@@ -46,10 +46,7 @@ const cannonBaseSpawnFunction = createPrefabSpawnFunction('environment_cannon', 
 
     gameObject.createComponent<GameObjectComponentCannon>(GameObjectComponentCannon).initialize(props.variation, cannon);
 
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    });
+    createPrefabDefaultTransform(gameObject, props, 0, true);
 });
 
 export default {

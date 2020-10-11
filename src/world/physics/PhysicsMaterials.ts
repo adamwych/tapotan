@@ -1,14 +1,16 @@
-import * as p2 from 'p2';
+import ContactMaterial from '../physics-engine/ContactMaterial';
+import Material from '../physics-engine/Material';
+import PhysicsWorld from '../physics-engine/PhysicsWorld';
 
-const MaterialGround = new p2.Material();
-const MaterialPlayer = new p2.Material();
+const MaterialGround = new Material();
+const MaterialPlayer = new Material();
 
 export default {
     Ground: MaterialGround,
     Player: MaterialPlayer,
 
-    setupContactMaterials: function (world: p2.World) {
-        const playerGroundContactMaterial = new p2.ContactMaterial(MaterialPlayer, MaterialGround, {
+    setupContactMaterials: function (world: PhysicsWorld) {
+        const playerGroundContactMaterial = new ContactMaterial(MaterialPlayer, MaterialGround, {
             friction: 0.345,
             restitution: 0
         });

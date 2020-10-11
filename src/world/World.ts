@@ -1,7 +1,7 @@
-import * as p2 from 'p2';
 import * as PIXI from 'pixi.js';
 import { GameEndReason, GameState } from '../core/GameManager';
 import Tapotan from '../core/Tapotan';
+import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
 import Interpolation from '../utils/Interpolation';
 import WorldBackgrounds from './backgrounds/WorldBackgrounds';
 import CameraShake from './CameraShake';
@@ -14,13 +14,14 @@ import { GameObjectVerticalAlignment } from './components/GameObjectComponentTra
 import GameObjectComponentVictoryFlag from './components/GameObjectComponentVictoryFlag';
 import GameObject from './GameObject';
 import LockDoorKeyConnection from './LockDoorKeyConnection';
+import PhysicsBody from './physics-engine/PhysicsBody';
+import PhysicsWorld from './physics-engine/PhysicsWorld';
 import PhysicsMaterials from './physics/PhysicsMaterials';
+import PortalConnection from './PortalConnection';
 import Prefabs from './prefabs/Prefabs';
 import Tileset from './tileset/Tileset';
 import WorldBehaviourRules, { WorldCameraBehaviour, WorldGameOverTimeout } from './WorldBehaviourRules';
 import WorldMask from './WorldMask';
-import PhysicsDebugRenderer from '../graphics/PhysicsDebugRenderer';
-import PortalConnection from './PortalConnection';
 
 export default class World extends PIXI.Container {
 
@@ -59,7 +60,7 @@ export default class World extends PIXI.Container {
 
     private tileset: Tileset;
     
-    private physicsWorld: p2.World;
+    private physicsWorld: PhysicsWorld;
     public static PHYSICS_SCALE = 1;
     private physicsBodies = {};
 
@@ -137,8 +138,12 @@ export default class World extends PIXI.Container {
      */
     private _duringRemove: boolean = false;
 
+    public static instance: World;
+
     constructor(game: Tapotan, width: number, height: number, tileset: Tileset, physics: boolean = true) {
         super();
+
+        World.instance = this;
 
         this.game = game;
         this.tileset = tileset;
@@ -202,8 +207,8 @@ export default class World extends PIXI.Container {
                 switch (this.behaviourRules.getCameraBehaviour()) {
                     case WorldCameraBehaviour.FollowingPlayer: {
                         if (this.player) {
-                            this.targetCameraY = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
                             this.targetCameraX = (this.player.transformComponent.getUnalignedPositionX() - Tapotan.getViewportWidth() / 2) + 2;
+                            this.targetCameraY = (this.player.transformComponent.getUnalignedPositionY() - Tapotan.getViewportHeight() / 2) + 1;
                         }
 
                         break;
@@ -270,11 +275,12 @@ export default class World extends PIXI.Container {
 
         if (!this.paused) {
             if (this.physicsEnabled) {
-                if (realDeltaTime > 1000) {
-                    this.physicsWorld.step(realDeltaTime / 1000, realDeltaTime / 1000, 40);
-                } else {
-                    this.physicsWorld.step(1 / 60, dt, 10);
-                }
+                this.physicsWorld.tick(1 / 60);
+                // if (realDeltaTime > 1000) {
+                //     this.physicsWorld.step(realDeltaTime / 1000, realDeltaTime / 1000, 40);
+                // } else {
+                //     this.physicsWorld.step(1 / 60, dt, 10);
+                // }
             }
 
             this.gameObjects.forEach(gameObject => {
@@ -333,37 +339,37 @@ export default class World extends PIXI.Container {
         return this.player;
     }
 
-    public addPhysicsBody(parent: GameObject, body: p2.Body) {
+    public addPhysicsBody(parent: GameObject, body: PhysicsBody) {
         if (!this.physicsEnabled) {
             return;
         }
 
-        this.physicsBodies[body.id] = parent;
+        this.physicsBodies[body.getId()] = parent;
         this.physicsWorld.addBody(body);
     }
 
-    public removePhysicsBody(body: p2.Body) {
+    public removePhysicsBody(body: PhysicsBody) {
         if (!this.physicsEnabled) {
             return;
         }
 
         this.physicsWorld.removeBody(body);
 
-        if (body.id in this.physicsBodies) {
-            delete this.physicsBodies[body.id];
+        if (body.getId() in this.physicsBodies) {
+            delete this.physicsBodies[body.getId()];
         }
     }
 
     private initializePhysics() {
-        this.physicsWorld = new p2.World({
-            gravity: [0, 40]
-        });
+        this.physicsWorld = new PhysicsWorld({ x: 0, y: 2.8 });
+        this.physicsWorld.setAirFriction({ x: 1.1, y: 1.001 });
+        this.physicsWorld.setDefaultRestitution(10);
 
         PhysicsMaterials.setupContactMaterials(this.physicsWorld);
 
         this.physicsWorld.on('beginContact', (event) => {
-            let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.id) as GameObject;
-            let worldObjectB = this.getGameObjectByPhysicsBodyId(event.bodyB.id) as GameObject;
+            let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.getId()) as GameObject;
+            let worldObjectB = this.getGameObjectByPhysicsBodyId(event.bodyB.getId()) as GameObject;
 
             if (worldObjectA && worldObjectB) {
                 worldObjectA.onCollisionStart(worldObjectB, event);
@@ -372,8 +378,8 @@ export default class World extends PIXI.Container {
         });
 
         this.physicsWorld.on('endContact', (event) => {
-            let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.id) as GameObject;
-            let worldObjectB = this.getGameObjectByPhysicsBodyId(event.bodyB.id) as GameObject;
+            let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.getId()) as GameObject;
+            let worldObjectB = this.getGameObjectByPhysicsBodyId(event.bodyB.getId()) as GameObject;
 
             if (worldObjectA && worldObjectB) {
                 worldObjectA.onCollisionEnd(worldObjectB, event);
@@ -381,7 +387,7 @@ export default class World extends PIXI.Container {
             }
         });
 
-        // PhysicsDebugRenderer.create(this.physicsWorld);
+        PhysicsDebugRenderer.create(this.physicsWorld);
     }
 
     public handleGameStart() {

@@ -13,10 +13,9 @@ import createPrefabSpawnFunction from "../createPrefabSpawnFunction";
 
 export default createPrefabSpawnFunction('CharacterLawrence', (gameObject: GameObject, world: World, props: any) => {
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-    body.initializeCircle(0.5, {
-        mass: 90,
-        fixedRotation: true
-    });
+    body.initializeBox(world.getPhysicsWorld(), 1, 1, 1);
+    body.getBody().setId(123321);
+    body.getBody().setContinuousDetection(true);
 
     body.setMaterial(PhysicsMaterials.Player);
     body.setCollisionGroup(PhysicsBodyCollisionGroup.Player);

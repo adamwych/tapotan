@@ -16,12 +16,7 @@ export default createPrefabSpawnFunction('environment_sign', (gameObject: GameOb
 
     gameObject.setCustomProperty('sensor', true);
     
-    createPrefabDefaultTransform(gameObject, props, {
-        mass: 0,
-        fixedRotation: true
-    }, {
-        sensor: true
-    });
+    createPrefabDefaultTransform(gameObject, props, 0, true, false);
 
     gameObject.setCustomProperty('__prefab', props.resource);
 });

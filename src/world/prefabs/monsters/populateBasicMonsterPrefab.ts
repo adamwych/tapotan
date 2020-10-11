@@ -42,11 +42,12 @@ export default function populateBasicMonsterPrefab(
     gameObject.createComponent<GameObjectComponentKillOnTouch>(GameObjectComponentKillOnTouch).initialize();
 
     const body = gameObject.createComponent<GameObjectComponentPhysicsBody>(GameObjectComponentPhysicsBody);
-    body.initializeCircle(0.5, {
-        mass: 5,
-        fixedRotation: true,
-        allowSleep: true
-    });
+    body.initializeBox(world.getPhysicsWorld(), 1, 1, 5);
+    // body.initializeCircle(0.5, {
+    //     mass: 5,
+    //     fixedRotation: true,
+    //     allowSleep: true
+    // });
 
     body.setMaterial(PhysicsMaterials.Player);
     body.setCollisionGroup(PhysicsBodyCollisionGroup.Entity);

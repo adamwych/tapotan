@@ -1,0 +1,33 @@
+.editor-devtools {
+    position: absolute;
+    top: 200px;
+    right: 0;
+    background-color: #000000;
+    width: 300px;
+    height: 650px;
+    color: #ffffff;
+    pointer-events: all;
+    overflow-y: auto;
+
+    * {
+        pointer-events: all;
+    }
+}
+
+.editor-devtools label {
+    font-family: 'Segoe UI';
+    display: block;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 23px;
+}
+
+.editor-devtools-field {
+    display: block;
+    padding: 1rem;
+}
+
+.editor-devtools-field input {
+    font-family: 'Segoe UI';
+    width: 100%;
+}

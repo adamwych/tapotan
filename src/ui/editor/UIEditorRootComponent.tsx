@@ -12,6 +12,7 @@ import UIEditorPublishPopup from './publish-popup/UIEditorPublishPopup';
 import UIEditorLayerSelector from './UIEditorLayerSelector';
 import UIEditorWelcomePopup from './UIEditorWelcomePopup';
 import UIEditorSettingsPopup from './UIEditorSettingsPopup';
+import UIEditorDevTools from './UIEditorDevTools';
 
 require('./editor.scss');
 
@@ -93,6 +94,8 @@ export default function UIEditorRootComponent() {
             <UIEditorTopbar commonActionsVisible={!playthroughInProgress} />
             <UIEditorPrefabExplorer />
             <UIEditorLayerSelector />
+
+            <UIEditorDevTools />
 
             {lockKeyTipVisible && (
                 <div className="editor-lock-tip">
