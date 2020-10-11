@@ -344,6 +344,7 @@ export default class World extends PIXI.Container {
             return;
         }
 
+        body.setUserData(parent);
         this.physicsBodies[body.getId()] = parent;
         this.physicsWorld.addBody(body);
     }
@@ -353,6 +354,7 @@ export default class World extends PIXI.Container {
             return;
         }
 
+        body.setUserData(null);
         this.physicsWorld.removeBody(body);
 
         if (body.getId() in this.physicsBodies) {
@@ -368,8 +370,8 @@ export default class World extends PIXI.Container {
         PhysicsMaterials.setupContactMaterials(this.physicsWorld);
 
         this.physicsWorld.on('beginContact', (event) => {
-            let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.getId()) as GameObject;
-            let worldObjectB = this.getGameObjectByPhysicsBodyId(event.bodyB.getId()) as GameObject;
+            let worldObjectA = event.bodyA.getUserData();
+            let worldObjectB = event.bodyB.getUserData();
 
             if (worldObjectA && worldObjectB) {
                 worldObjectA.onCollisionStart(worldObjectB, event);
@@ -378,8 +380,8 @@ export default class World extends PIXI.Container {
         });
 
         this.physicsWorld.on('endContact', (event) => {
-            let worldObjectA = this.getGameObjectByPhysicsBodyId(event.bodyA.getId()) as GameObject;
-            let worldObjectB = this.getGameObjectByPhysicsBodyId(event.bodyB.getId()) as GameObject;
+            let worldObjectA = event.bodyA.getUserData();
+            let worldObjectB = event.bodyB.getUserData();
 
             if (worldObjectA && worldObjectB) {
                 worldObjectA.onCollisionEnd(worldObjectB, event);
